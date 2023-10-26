@@ -1,20 +1,58 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react'
+import "react-native-gesture-handler";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import {NavigationContainer} from '@react-navigation/native'
+import ProfileScreen from "./src/screens/ProfileScreen";
+import AddWorksiteScreen from "./src/screens/AddWorksiteScreen";
+import { StatusBar } from "expo-status-bar";
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function DrawerNavigator () {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Drawer.Navigator>
+      <Drawer.Screen name="Worksites" component={AddWorksiteScreen} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
+    </Drawer.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    // <>
+    //   <StatusBar style="dark" />
+    //   <NavigationContainer>
+    //     <ProfileScreen />
+    //   </NavigationContainer>
+    // </>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="Drawer" 
+          component={DrawerNavigator} 
+          options= {{
+            title: "Rakval"
+          }}
+          
+          />
+          
+      </Stack.Navigator>
+      
+    </NavigationContainer>
+    
+  )
+}
+
+// function MyDrawer () {
+//   return (
+//     <Drawer.Navigator>
+//       <Drawer.Screen name="profile" component={ProfileScreen}/>
+//       <Drawer.Screen name="addworksite" component={AddWorkSite}/>
+//     </Drawer.Navigator>
+//   )
+// }
+
+
+
