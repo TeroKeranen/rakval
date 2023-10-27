@@ -7,8 +7,11 @@ import AuthForm from "../components/AuthForm";
 import NavLink from "../components/NavLink";
 
 const SignupScreen = ({navigation}) => {
-  const { state, signup, clearErrorMessage } = useContext(AuthContext);
-  // const navigation = useNavigation();
+  const { state, signup, clearErrorMessage, tryLocalSignin } = useContext(AuthContext);
+  
+  // useEffect(() => {
+  //   tryLocalSignin();
+  // }, [])
 
   // Käytetään tätä tyhjentämään errormessage jos tulee virhe ja vaihdetaan toiselle sivulle, Näin virhe ei seuraa mukana
   useEffect(() => {

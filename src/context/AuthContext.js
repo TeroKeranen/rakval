@@ -21,6 +21,16 @@ const authReducer = (state, action) => {
   }
 };
 
+const tryLocalSignin = dispatch => async () => {
+
+  const token = await AsyncStorage.getItem('token');
+
+  if (token) {
+    dispatch({type: 'signin', payload: token})
+    
+  }
+
+}
 
 // Käytetään puhdistamaan error message
 const clearErrorMessage = dispatch => () => {
@@ -88,4 +98,4 @@ const signout = (dispatch) => {
   };
 };
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage }, { token: null, errorMessage: "" });
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin }, { token: null, errorMessage: "" });

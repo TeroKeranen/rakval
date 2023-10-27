@@ -1,6 +1,6 @@
 
 import "react-native-gesture-handler";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Context as AuthContext } from "./src/context/AuthContext";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import {NavigationContainer} from '@react-navigation/native'
@@ -12,8 +12,9 @@ import TestiScreen from './src/screens/TestiScreen';
 import AddNewWorksite from './src/screens/workisiteScreens/AddNewWorksite';
 import SigninScreen from "./src/screens/SigninScreen";
 import SignupScreen from "./src/screens/SignupScreen";
+import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
 import { Provider as AuthProvider} from './src/context/AuthContext'
-import { useState } from "react";
+
 import { navigationRef } from "./src/navigationRef";
 
 
@@ -66,12 +67,31 @@ function EtusivuMain() {
 
 function App() {
 
-  const { state, signin } = useContext(AuthContext);
+  const { state, tryLocalSignin } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
+  const [loading, setLoading] = useState(true); // asetetaan loading
+
+
+  useEffect(() => {
+
+    const checkAuthState = async () => {
+      await tryLocalSignin();
+      setLoading(false);
+    }
+    checkAuthState();
+
+  },[])
+
+  // Jos löytää käyttäjän niin se näyttää tämän sivun supernopeasti ennenkuin siirtyy pääsivulle
+  
+  if (loading) {
+    return <ResolveAuthScreen />
+  }
   
   
   
     return (
       <NavigationContainer ref={navigationRef}>
+        <Stack.Screen name="resolveAuth" component={ResolveAuthScreen} />
       {state.token == null ? (
           <Stack.Navigator>
             <Stack.Screen name="signup" component={SignupScreen} />
