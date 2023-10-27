@@ -1,58 +1,87 @@
-import * as React from 'react'
+
 import "react-native-gesture-handler";
+
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import {NavigationContainer} from '@react-navigation/native'
-import ProfileScreen from "./src/screens/ProfileScreen";
-import AddWorksiteScreen from "./src/screens/AddWorksiteScreen";
-import { StatusBar } from "expo-status-bar";
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import ProfileScreen from "./src/screens/ProfileScreen";
+import WorkSite from './src/screens/workisiteScreens/WorkSite';
+import TestiScreen from './src/screens/TestiScreen';
+import AddNewWorksite from './src/screens/workisiteScreens/AddNewWorksite';
+import SigninScreen from "./src/screens/SigninScreen";
+import SignupScreen from "./src/screens/SignupScreen";
+import { Provider as AuthProvider} from './src/context/AuthContext'
+import { useState } from "react";
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
-function DrawerNavigator () {
+
+
+
+function signIn () {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="Worksites" component={AddWorksiteScreen} />
-      <Drawer.Screen name="Profile" component={ProfileScreen} />
-    </Drawer.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen name="login" component={SigninScreen} />
+    </Stack.Navigator>
+  )
+}
+// Tässä on etusivulla näkyvät alapainikkeet
+function EtusivuBottomTabs() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="testi2" component={TestiScreen} />
+    </Tab.Navigator>
   );
 }
 
-export default function App() {
+// Tässä on workistes sivulla näkyvät alapainikkeet
+function WorksitesBottomTab () {
   return (
-    // <>
-    //   <StatusBar style="dark" />
-    //   <NavigationContainer>
-    //     <ProfileScreen />
-    //   </NavigationContainer>
-    // </>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen 
-          name="Drawer" 
-          component={DrawerNavigator} 
-          options= {{
-            title: "Rakval"
-          }}
-          
-          />
-          
-      </Stack.Navigator>
-      
-    </NavigationContainer>
-    
+    <Tab.Navigator>
+      <Tab.Screen name="worksites" component={WorkSite}/>
+      <Tab.Screen name="addnew" component={AddNewWorksite}/>
+    </Tab.Navigator>
   )
 }
 
-// function MyDrawer () {
-//   return (
-//     <Drawer.Navigator>
-//       <Drawer.Screen name="profile" component={ProfileScreen}/>
-//       <Drawer.Screen name="addworksite" component={AddWorkSite}/>
-//     </Drawer.Navigator>
-//   )
-// }
+
+
+function App() {
+  
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="signup" component={SignupScreen} />
+          <Stack.Screen name="signin" component={SigninScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  
+
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator>
+        <Drawer.Screen name="Etusivu" component={EtusivuBottomTabs} />
+        <Drawer.Screen name="Worksites" component={WorksitesBottomTab} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+
+  );
+}
+
+export default () => {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  )
+}
+
 
 
 

@@ -1,12 +1,12 @@
 import { Text } from "react-native";
 import { View } from "react-native";
 
-const AddWorkSite = () => {
+const WorkSite = () => {
   return (
     <View>
-      <Text>AddWorkSite</Text>
+      <Text>WorkSites</Text>
     </View>
   );
 };
 
-export default AddWorkSite;
+export default WorkSite;
