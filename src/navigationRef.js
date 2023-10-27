@@ -14,3 +14,14 @@ export const navigate = (name, params) => {
         )
     }
 }
+
+export const resetAndNavigate = (name) => {
+    if (navigationRef.isReady()) {
+        navigationRef.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{name}]
+            })
+        )
+    }
+}
