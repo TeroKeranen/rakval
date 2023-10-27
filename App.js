@@ -13,6 +13,7 @@ import SigninScreen from "./src/screens/SigninScreen";
 import SignupScreen from "./src/screens/SignupScreen";
 import { Provider as AuthProvider} from './src/context/AuthContext'
 import { useState } from "react";
+import { navigationRef } from "./src/navigationRef";
 
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +40,17 @@ function EtusivuBottomTabs() {
   );
 }
 
+function EtusivuMain () {
+  return (
+    
+      <Drawer.Navigator>
+        <Drawer.Screen name="Etusivu" component={EtusivuBottomTabs} />
+        <Drawer.Screen name="Worksites" component={WorksitesBottomTab} />
+      </Drawer.Navigator>
+    
+  );
+}
+
 // Tässä on workistes sivulla näkyvät alapainikkeet
 function WorksitesBottomTab () {
   return (
@@ -54,24 +66,15 @@ function WorksitesBottomTab () {
 function App() {
   
     return (
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator>
           <Stack.Screen name="signup" component={SignupScreen} />
           <Stack.Screen name="signin" component={SigninScreen} />
+          <Stack.Screen name="testi" component={EtusivuMain} />
         </Stack.Navigator>
       </NavigationContainer>
     );
-  
 
-  return (
-    <NavigationContainer>
-      <Drawer.Navigator>
-        <Drawer.Screen name="Etusivu" component={EtusivuBottomTabs} />
-        <Drawer.Screen name="Worksites" component={WorksitesBottomTab} />
-      </Drawer.Navigator>
-    </NavigationContainer>
-
-  );
 }
 
 export default () => {
