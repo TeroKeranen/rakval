@@ -12,12 +12,20 @@ const authReducer = (state, action) => {
       return { errorMessage: "", token: action.payload };
     case "signin":
       return {errorMessage: "", token: action.payload};
+    case 'clear_error_message':
+      return {...state, errorMessage: ''}
     case "fetch_user":
       return {...state, user: action.payload}
     default:
       return state;
   }
 };
+
+
+// Käytetään puhdistamaan error message
+const clearErrorMessage = dispatch => () => {
+  dispatch({type: 'clear_error_message'})
+}
 
 const signup = (dispatch) => {
   return async ({ email, password }) => {
@@ -54,17 +62,17 @@ const signin = (dispatch) => {
 };
 
 
+// Haetaan käyttäjän tiedot 
 const fetchUser = (dispatch) => async () => {
   try {
 
     const token = await AsyncStorage.getItem('token');
-    console.log(token);
 
     if (token) {
       const response = await rakval.get('/profile', {
         headers: {Authorization: `Bearer ${token}`}
       })
-      console.log(response.data);
+      
       dispatch({type: 'fetch_user', payload: response.data})
     }
     
@@ -80,4 +88,4 @@ const signout = (dispatch) => {
   };
 };
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser }, { token: null, errorMessage: "" });
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage }, { token: null, errorMessage: "" });

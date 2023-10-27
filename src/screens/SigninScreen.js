@@ -1,12 +1,26 @@
 import { Text, View, StyleSheet } from "react-native";
+
 import AuthForm from "../components/AuthForm";
 import NavLink from "../components/NavLink";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Context as AuthContext } from "../context/AuthContext";
 
-const SigninScreen = () => {
+const SigninScreen = ({navigation}) => {
 
-  const { state, signin } = useContext(AuthContext);
+  const { state, signin, clearErrorMessage } = useContext(AuthContext);
+  
+
+  // Käytetään tätä tyhjentämään errormessage jos tulee virhe ja vaihdetaan toiselle sivulle, Näin virhe ei seuraa mukana
+  useEffect(() => {
+    const focus = navigation.addListener('focus', clearErrorMessage)
+
+    const blur = navigation.addListener('blur', clearErrorMessage)
+
+    return () => {
+      focus();
+      blur();
+    }
+  }, [navigation])
   
   return (
     <>
