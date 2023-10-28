@@ -11,11 +11,15 @@ const authReducer = (state, action) => {
     case "signup":
       return { errorMessage: "", token: action.payload };
     case "signin":
-      return {errorMessage: "", token: action.payload};
+      return {errorMessage: "", token: action.payload.token, user:action.payload.user};
+    case "autosignin":
+      return {errorMessage: "", token:action.payload};
     case 'clear_error_message':
       return {...state, errorMessage: ''}
     case "fetch_user":
       return {...state, user: action.payload}
+    case "signout":
+      return {token: null, errorMessage: ''};
     default:
       return state;
   }
@@ -24,9 +28,9 @@ const authReducer = (state, action) => {
 const tryLocalSignin = dispatch => async () => {
 
   const token = await AsyncStorage.getItem('token');
-
+  
   if (token) {
-    dispatch({type: 'signin', payload: token})
+    dispatch({type: 'autosignin', payload: token})
     
   }
 
@@ -59,8 +63,11 @@ const signin = (dispatch) => {
   return async ({ email, password }) => {
     try {
       const response = await rakval.post("/signin", { email, password });
-      await AsyncStorage.setItem("token", response.data.token);
-      dispatch({ type: "signin", payload: response.data.token });
+        
+      await AsyncStorage.setItem("token", response.data.token); // tallennetaan token
+      await AsyncStorage.setItem('user', JSON.stringify(response.data.user)) // tallennetaan rooli
+
+      dispatch({ type: "signin", payload: {token: response.data.token, user: response.data.user.role} });
       
     } catch (error) {
       dispatch({
@@ -77,11 +84,15 @@ const fetchUser = (dispatch) => async () => {
   try {
 
     const token = await AsyncStorage.getItem('token');
+    const storedUser = await AsyncStorage.getItem('user');
+    const user = JSON.parse(storedUser)
+    
 
     if (token) {
       const response = await rakval.get('/profile', {
         headers: {Authorization: `Bearer ${token}`}
       })
+      
       
       dispatch({type: 'fetch_user', payload: response.data})
     }
@@ -93,9 +104,12 @@ const fetchUser = (dispatch) => async () => {
 }
 
 const signout = (dispatch) => {
-  return () => {
-    // somehow sign out!!!
+  return async () => {
+    await AsyncStorage.removeItem('token');
+    dispatch({type: 'signout'})
+    
+    
   };
 };
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin }, { token: null, errorMessage: "" });
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin }, { token: null, errorMessage: "", user: null });

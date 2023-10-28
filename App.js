@@ -12,6 +12,7 @@ import TestiScreen from './src/screens/TestiScreen';
 import AddNewWorksite from './src/screens/workisiteScreens/AddNewWorksite';
 import SigninScreen from "./src/screens/SigninScreen";
 import SignupScreen from "./src/screens/SignupScreen";
+import AdminScreen from "./src/screens/AdminScreen";
 import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
 import { Provider as AuthProvider} from './src/context/AuthContext'
 
@@ -25,19 +26,23 @@ const Tab = createBottomTabNavigator();
 
 
 
-function signIn () {
+function AdminNavigation () {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="login" component={SigninScreen} />
-    </Stack.Navigator>
-  )
+    <Tab.Navigator>
+      <Tab.Screen name="worksites" component={WorkSite} />
+      <Tab.Screen name="addnew" component={AddNewWorksite} />
+      <Tab.Screen name="admin" component={AdminScreen} />
+    </Tab.Navigator>
+  );
 }
+
+
 // Tässä on etusivulla näkyvät alapainikkeet
 function EtusivuBottomTabs() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-      <Tab.Screen name="testi2" component={TestiScreen} options={{headerShown: false}}/>
+      <Tab.Screen name="testi2" component={TestiScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 }
@@ -70,7 +75,7 @@ function App() {
   const { state, tryLocalSignin } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
   const [loading, setLoading] = useState(true); // asetetaan loading
 
-
+ 
   useEffect(() => {
 
     const checkAuthState = async () => {
@@ -82,11 +87,10 @@ function App() {
   },[])
 
   // Jos löytää käyttäjän niin se näyttää tämän sivun supernopeasti ennenkuin siirtyy pääsivulle
-  
+
   if (loading) {
     return <ResolveAuthScreen />
   }
-  
   
   
     return (
@@ -94,14 +98,25 @@ function App() {
         <Stack.Screen name="resolveAuth" component={ResolveAuthScreen} />
       {state.token == null ? (
           <Stack.Navigator>
-            <Stack.Screen name="signup" component={SignupScreen} />
             <Stack.Screen name="signin" component={SigninScreen} />
+            <Stack.Screen name="signup" component={SignupScreen} />
             {/* <Stack.Screen name="testi" component={EtusivuMain} /> */}
           </Stack.Navigator>
         ) : (
           <Drawer.Navigator>
-            <Drawer.Screen name="testi" component={EtusivuBottomTabs} />
-            <Drawer.Screen name="Worksites" component={WorksitesBottomTab} />
+            {state.user && state.user.role === 'admin' ? (
+              <>
+              <Drawer.Screen name="etusivu" component={EtusivuBottomTabs} />
+              <Drawer.Screen name="Worksites" component={WorksitesBottomTab} />
+              <Drawer.Screen name="admin" component={AdminScreen} />
+              </>
+            ) : (
+              <>
+              <Drawer.Screen name="etusivu" component={EtusivuBottomTabs} />
+              <Drawer.Screen name="Worksites" component={WorksitesBottomTab} />
+              </>
+            
+            )}
           </Drawer.Navigator>
         )}
       </NavigationContainer>
