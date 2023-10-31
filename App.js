@@ -8,15 +8,20 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import WorkSite from './src/screens/workisiteScreens/WorkSite';
-import TestiScreen from './src/screens/TestiScreen';
+import Etusivu from "./src/screens/Etusivu";
 import AddNewWorksite from './src/screens/workisiteScreens/AddNewWorksite';
 import SigninScreen from "./src/screens/SigninScreen";
 import SignupScreen from "./src/screens/SignupScreen";
 import AdminScreen from "./src/screens/AdminScreen";
 import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
 import { Provider as AuthProvider} from './src/context/AuthContext'
+import {Ionicons} from '@expo/vector-icons'
+
+
 
 import { navigationRef } from "./src/navigationRef";
+
+
 
 
 const Stack = createNativeStackNavigator();
@@ -25,103 +30,158 @@ const Tab = createBottomTabNavigator();
 
 
 
-
-function AdminNavigation () {
+// Tämä näytetään etusivulla
+function HomeTabs() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="worksites" component={WorkSite} />
-      <Tab.Screen name="addnew" component={AddNewWorksite} />
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: "#f48b28",
+        tabBarInactiveTintColor: "#a3845c",
+        tabBarStyle: {
+          backgroundColor: "#351301",
+        },
+
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "Profile") {
+            iconName = focused ? "person" : "person-outline";
+          } else if (route.name === "AloitusSivu") {
+            iconName = focused ? "home" : "home-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+
+        // activeTintColor: "tomato", // väri kun välilehti on aktiivinen
+        // inactiveTintColor: "white",
+      })}
+    >
+      <Tab.Screen name="AloitusSivu" component={Etusivu} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+}
+
+function WorksiteTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: "#f48b28",
+        tabBarInactiveTintColor: "#a3845c",
+        tabBarStyle: {
+          backgroundColor: "#351301",
+          
+        },
+
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "add new") {
+            iconName = focused ? "add-circle" : "add-circle-outline";
+          } else if (route.name === "Työmaat") {
+            iconName = focused ? "list" : "list-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+
+        // activeTintColor: "tomato", // väri kun välilehti on aktiivinen
+        // inactiveTintColor: "white",
+      })}
+    >
+      <Tab.Screen name="Työmaat" component={WorkSite} />
+      <Tab.Screen name="add new" component={AddNewWorksite} />
+    </Tab.Navigator>
+  );
+}
+// Adminille näkyvät alatabit
+function AdminTabs() {
+  return (
+    <Tab.Navigator screenOptions={{
+      headerShown: false,
+    }}>
       <Tab.Screen name="admin" component={AdminScreen} />
-    </Tab.Navigator>
-  );
-}
-
-
-// Tässä on etusivulla näkyvät alapainikkeet
-function EtusivuBottomTabs() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen name="testi2" component={TestiScreen} options={{ headerShown: false }} />
-      <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
-    </Tab.Navigator>
-  );
-}
-
-
-
-// Tässä on workistes sivulla näkyvät alapainikkeet
-function WorksitesBottomTab () {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen name="worksites" component={WorkSite}/>
-      <Tab.Screen name="addnew" component={AddNewWorksite}/>
     </Tab.Navigator>
   )
 }
 
-function EtusivuMain() {
+// Päänäkymä joosa katsotaan onko käyttäjä admin vai normi user
+function MainStack() {
+   const { state} = useContext(AuthContext);
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="Etusivu" component={EtusivuBottomTabs} />
-      <Drawer.Screen name="Worksites" component={WorksitesBottomTab} />
+    <Drawer.Navigator screenOptions={{
+      headerStyle: {backgroundColor: '#351301'}, // Headerin väri
+      headerTintColor: 'white', // Headerin title ja burderin väri
+      sceneContainerStyle: {backgroundColor: '#3f2f25'}, // mikä tämä on ??
+      drawerContentStyle: {backgroundColor: '#351301'}, // sivulta tulevan listan background color
+      drawerInactiveTintColor: 'white', // sivulla olevien linkkien väri
+      drawerActiveTintColor: '#351401', // sivulla olevan linkin väri kun aktiicinen
+      drawerActiveBackgroundColor: '#e4baa1' // sivulla olevan linkin laatikon väri kun aktiivinen
+
+    }}>
+      {state.user && state.user.role === 'admin' ? (
+        <>
+          <Drawer.Screen name="etusivu" component={HomeTabs} />
+          <Drawer.Screen name="työmaat" component={WorksiteTabs} />
+          <Drawer.Screen name="Oikeudet" component={AdminTabs} />
+        </>
+        ) : (
+        <>
+          <Drawer.Screen name="etusivu" component={HomeTabs} />
+          <Drawer.Screen name="työmaat" component={WorksiteTabs} />
+        </>
+        )
+      }
+
     </Drawer.Navigator>
+  )
+}
+
+// Tämä renderöidään appin sisällä jos käyttäjä löytyy
+function SignedInNavigator() {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerShown: false,
+    }}>
+      <Stack.Screen name="Main" component={MainStack} />
+      {/* muut ruudut, jos niitä on */}
+    </Stack.Navigator>
   );
 }
 
-
+// Tämä näkyy jos ei ole kirjautunut sisään
+function SignedOutNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="SignIn" component={SigninScreen} />
+      <Stack.Screen name="SignUp" component={SignupScreen} />
+      {/* muut ruudut, jos niitä on */}
+    </Stack.Navigator>
+  );
+}
 
 function App() {
-
-  const { state, tryLocalSignin } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
+  
+  const { state, tryLocalSignin, fetchUser } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
   const [loading, setLoading] = useState(true); // asetetaan loading
 
- 
   useEffect(() => {
-
+    
     const checkAuthState = async () => {
       await tryLocalSignin();
       setLoading(false);
-    }
+    };
     checkAuthState();
-
-  },[])
-
-  // Jos löytää käyttäjän niin se näyttää tämän sivun supernopeasti ennenkuin siirtyy pääsivulle
+  }, []);
 
   if (loading) {
     return <ResolveAuthScreen />
   }
-  
-  
-    return (
-      <NavigationContainer ref={navigationRef}>
-        <Stack.Screen name="resolveAuth" component={ResolveAuthScreen} />
-      {state.token == null ? (
-          <Stack.Navigator>
-            <Stack.Screen name="signin" component={SigninScreen} />
-            <Stack.Screen name="signup" component={SignupScreen} />
-            {/* <Stack.Screen name="testi" component={EtusivuMain} /> */}
-          </Stack.Navigator>
-        ) : (
-          <Drawer.Navigator>
-            {state.user && state.user.role === 'admin' ? (
-              <>
-              <Drawer.Screen name="etusivu" component={EtusivuBottomTabs} />
-              <Drawer.Screen name="Worksites" component={WorksitesBottomTab} />
-              <Drawer.Screen name="admin" component={AdminScreen} />
-              </>
-            ) : (
-              <>
-              <Drawer.Screen name="etusivu" component={EtusivuBottomTabs} />
-              <Drawer.Screen name="Worksites" component={WorksitesBottomTab} />
-              </>
-            
-            )}
-          </Drawer.Navigator>
-        )}
-      </NavigationContainer>
-    );
-
+  return (
+    <NavigationContainer>
+      <Stack.Screen name="resolveAuth" component={ResolveAuthScreen} />
+      {state.token == null ? <SignedOutNavigator /> : <SignedInNavigator />}
+    </NavigationContainer>
+  );
 }
 
 export default () => {

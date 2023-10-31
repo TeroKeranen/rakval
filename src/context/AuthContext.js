@@ -10,8 +10,10 @@ const authReducer = (state, action) => {
       return { ...state, errorMessage: action.payload };
     case "signup":
       return { errorMessage: "", token: action.payload };
-    case "signin":
-      return {errorMessage: "", token: action.payload.token, user:action.payload.user};
+    // case "signin":
+    //   return {errorMessage: "", token: action.payload.token, user:action.payload.user};
+    case "signin": 
+      return {...state, errorMessage: "", token: action.payload.token, user: action.payload.user}
     case "autosignin":
       return {errorMessage: "", token:action.payload};
     case 'clear_error_message':
@@ -29,6 +31,7 @@ const tryLocalSignin = dispatch => async () => {
 
   const token = await AsyncStorage.getItem('token');
   
+
   if (token) {
     dispatch({type: 'autosignin', payload: token})
     
@@ -67,8 +70,8 @@ const signin = (dispatch) => {
       await AsyncStorage.setItem("token", response.data.token); // tallennetaan token
       await AsyncStorage.setItem('user', JSON.stringify(response.data.user)) // tallennetaan rooli
 
-      dispatch({ type: "signin", payload: {token: response.data.token, user: response.data.user.role} });
-      
+      dispatch({ type: "signin", payload: {token: response.data.token, user: response.data.user} });
+      navigate('main');
     } catch (error) {
       dispatch({
         type: "add_error",
@@ -93,7 +96,7 @@ const fetchUser = (dispatch) => async () => {
         headers: {Authorization: `Bearer ${token}`}
       })
       
-      
+      console.log("FETCHUSER FUNKTION " + response.data.role)
       dispatch({type: 'fetch_user', payload: response.data})
     }
     
