@@ -15,6 +15,7 @@ import SignupScreen from "./src/screens/SignupScreen";
 import AdminScreen from "./src/screens/AdminScreen";
 import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
 import { Provider as AuthProvider} from './src/context/AuthContext'
+import {Provider as WorksiteProvider} from './src/context/WorksiteContext'
 import {Ionicons} from '@expo/vector-icons'
 
 
@@ -187,7 +188,9 @@ function App() {
 export default () => {
   return (
     <AuthProvider>
-      <App />
+      <WorksiteProvider>
+        <App />
+      </WorksiteProvider>
     </AuthProvider>
   )
 }
