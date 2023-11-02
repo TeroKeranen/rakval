@@ -12,10 +12,11 @@ import Etusivu from "./src/screens/Etusivu";
 import AddNewWorksite from './src/screens/workisiteScreens/AddNewWorksite';
 import SigninScreen from "./src/screens/SigninScreen";
 import SignupScreen from "./src/screens/SignupScreen";
-import AdminScreen from "./src/screens/AdminScreen";
+import AdminScreen from "./src/screens/adminScreens/AdminScreen";
 import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
 import { Provider as AuthProvider} from './src/context/AuthContext'
 import {Provider as WorksiteProvider} from './src/context/WorksiteContext'
+import {Provider as CompanyProvider} from './src/context/CompanyContext'
 import {Ionicons} from '@expo/vector-icons'
 
 
@@ -62,9 +63,10 @@ function HomeTabs() {
     </Tab.Navigator>
   );
 }
-
-function WorksiteTabs() {
+// adminin workistetab
+function AdminWorksiteTabs() {
   return (
+    
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: "#f48b28",
@@ -94,6 +96,39 @@ function WorksiteTabs() {
     </Tab.Navigator>
   );
 }
+
+//userin worksitetab
+function UserWorksiteTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: "#f48b28",
+        tabBarInactiveTintColor: "#a3845c",
+        tabBarStyle: {
+          backgroundColor: "#351301",
+        },
+
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "add new") {
+            iconName = focused ? "add-circle" : "add-circle-outline";
+          } else if (route.name === "Työmaat") {
+            iconName = focused ? "list" : "list-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+
+        // activeTintColor: "tomato", // väri kun välilehti on aktiivinen
+        // inactiveTintColor: "white",
+      })}
+    >
+      <Tab.Screen name="Työmaat" component={WorkSite} />
+      
+    </Tab.Navigator>
+  );
+}
+
 // Adminille näkyvät alatabit
 function AdminTabs() {
   return (
@@ -122,13 +157,13 @@ function MainStack() {
       {state.user && state.user.role === 'admin' ? (
         <>
           <Drawer.Screen name="etusivu" component={HomeTabs} />
-          <Drawer.Screen name="työmaat" component={WorksiteTabs} />
+          <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} />
           <Drawer.Screen name="Oikeudet" component={AdminTabs} />
         </>
         ) : (
         <>
           <Drawer.Screen name="etusivu" component={HomeTabs} />
-          <Drawer.Screen name="työmaat" component={WorksiteTabs} />
+          <Drawer.Screen name="työmaat" component={UserWorksiteTabs} />
         </>
         )
       }
@@ -153,8 +188,8 @@ function SignedInNavigator() {
 function SignedOutNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="SignIn" component={SigninScreen} />
-      <Stack.Screen name="SignUp" component={SignupScreen} />
+      <Stack.Screen name="signin" component={SigninScreen} />
+      <Stack.Screen name="signup" component={SignupScreen} />
       {/* muut ruudut, jos niitä on */}
     </Stack.Navigator>
   );
@@ -189,7 +224,9 @@ export default () => {
   return (
     <AuthProvider>
       <WorksiteProvider>
-        <App />
+        <CompanyProvider>
+          <App />
+        </CompanyProvider>
       </WorksiteProvider>
     </AuthProvider>
   )

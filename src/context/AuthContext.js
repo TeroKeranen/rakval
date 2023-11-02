@@ -1,7 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import createDataContext from "./createDataContext";
 import rakval from "../api/rakval";
+import { useContext } from "react";
 import { navigate, resetAndNavigate } from '../navigationRef';
+import {Context as CompanyContext} from './CompanyContext'
+
 
 
 const authReducer = (state, action) => {
@@ -9,7 +12,7 @@ const authReducer = (state, action) => {
     case "add_error":
       return { ...state, errorMessage: action.payload };
     case "signup":
-      return { errorMessage: "", token: action.payload };
+      return { errorMessage: "", token: action.payload, user: action.payload.user };
     // case "signin":
     //   return {errorMessage: "", token: action.payload.token, user:action.payload.user};
     case "signin": 
@@ -19,6 +22,8 @@ const authReducer = (state, action) => {
     case 'clear_error_message':
       return {...state, errorMessage: ''}
     case "fetch_user":
+      return {...state, user: action.payload}
+    case 'join_company':
       return {...state, user: action.payload}
     case "signout":
       return {token: null, errorMessage: ''};
@@ -47,10 +52,14 @@ const clearErrorMessage = dispatch => () => {
 const signup = (dispatch) => {
   return async ({ email, password }) => {
     try {
+      
       const response = await rakval.post("/signup", { email, password });
       await AsyncStorage.setItem("token", response.data.token);
-      console.log(response.data.token);
-      dispatch({ type: "signup", payload: response.data.token });
+      await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
+      
+      
+      
+      dispatch({ type: "signup", payload: { token: response.data.token, user: response.data.user } });
       // resetAndNavigate('testi');
     } catch (err) {
       console.log(err);
@@ -66,7 +75,7 @@ const signin = (dispatch) => {
   return async ({ email, password }) => {
     try {
       const response = await rakval.post("/signin", { email, password });
-        
+      
       await AsyncStorage.setItem("token", response.data.token); // tallennetaan token
       await AsyncStorage.setItem('user', JSON.stringify(response.data.user)) // tallennetaan rooli
 
@@ -81,22 +90,41 @@ const signin = (dispatch) => {
   };
 };
 
+const joinCompany = (dispatch) => async (companyCode) => {
+  try {
+      
+      const token = await AsyncStorage.getItem('token');
+      const userJson = await AsyncStorage.getItem('user')
+      const user = JSON.parse(userJson)
+      
+     
+      const response = await rakval.post('/join-company', {userId: user._id, companyCode}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      
+      await AsyncStorage.setItem('user', JSON.stringify(response.data))
+      dispatch({type: 'join_company', payload: updatedUser})
+  } catch (error) {
+      console.log(error);
+  }
+}
 
 // Haetaan käyttäjän tiedot 
 const fetchUser = (dispatch) => async () => {
   try {
 
     const token = await AsyncStorage.getItem('token');
-    const storedUser = await AsyncStorage.getItem('user');
-    const user = JSON.parse(storedUser)
-    
+    // const storedUser = await AsyncStorage.getItem('user');
+    // const user = JSON.parse(storedUser)
+    console.log(token);
 
     if (token) {
       const response = await rakval.get('/profile', {
         headers: {Authorization: `Bearer ${token}`}
       })
-      
-      console.log("FETCHUSER FUNKTION " + response.data.role)
+     
       dispatch({type: 'fetch_user', payload: response.data})
     }
     
@@ -109,10 +137,11 @@ const fetchUser = (dispatch) => async () => {
 const signout = (dispatch) => {
   return async () => {
     await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('user');
     dispatch({type: 'signout'})
     
     
   };
 };
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin }, { token: null, errorMessage: "", user: null });
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany }, { token: null, errorMessage: "", user: null });

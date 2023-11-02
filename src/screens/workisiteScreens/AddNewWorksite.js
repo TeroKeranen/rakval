@@ -2,37 +2,29 @@
 import { Text, View, StyleSheet, TextInput, Button } from "react-native";
 import {Context as WorksiteContext} from '../../context/WorksiteContext'
 import { useContext, useState } from "react";
+import WorksiteForm from "../../components/WorksiteForm";
 
 
 const AddNewWorksite = ({navigation}) => {
 
   const {state, newWorksite} = useContext(WorksiteContext);
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
+  
   return (
-    <View>
-      <Text style={styles.text}>add new work site</Text>
-
-      <TextInput style={styles.input} placeholder="address" value={address} onChangeText={setAddress} />
-
-      <TextInput style={styles.input} placeholder="city" value={city} onChangeText={setCity} />
-
-      <Button title="add worksite" onPress={() => newWorksite({ address, city })} />
+    <View style={styles.container}>
+      <WorksiteForm errorMessage={state.errorMessage} onSubmit={(data) => newWorksite({...data, navigation})}/>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  text: {
-    color: "black",
-  },
-  input: {
-    height: 40,
-    borderColor: "gray",
+  container: {
+    flex: 1,
+    marginTop: 100,
     borderWidth: 1,
-    marginBottom: 16,
-    paddingHorizontal: 8,
+    borderColor: 'red',
   },
+  
+  
 });
 
 export default AddNewWorksite;
