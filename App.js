@@ -59,8 +59,8 @@ function HomeTabs() {
         // inactiveTintColor: "white",
       })}
     >
-      <Tab.Screen name="AloitusSivu" component={Etusivu} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="AloitusSivu" component={Etusivu} options={{ headerShown: false }} />
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 }
@@ -100,14 +100,12 @@ function AdminWorksiteTabNoCompany() {
 function AdminWorksiteTabs() {
   
   return (
-    
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: "#f48b28",
         tabBarInactiveTintColor: "#a3845c",
         tabBarStyle: {
           backgroundColor: "#351301",
-          
         },
 
         tabBarIcon: ({ focused, color, size }) => {
@@ -125,8 +123,8 @@ function AdminWorksiteTabs() {
         // inactiveTintColor: "white",
       })}
     >
-      <Tab.Screen name="Työmaat" component={WorkSite} />
-      <Tab.Screen name="add new" component={AddNewWorksite} />
+      <Tab.Screen name="Työmaat" component={WorkSite} options={{ headerShown: false }} />
+      <Tab.Screen name="add new" component={AddNewWorksite} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 }
@@ -157,8 +155,7 @@ function UserWorksiteTabs() {
         // inactiveTintColor: "white",
       })}
     >
-      <Tab.Screen name="Työmaat" component={WorkSite} />
-      
+      <Tab.Screen name="Työmaat" component={WorkSite} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 }
