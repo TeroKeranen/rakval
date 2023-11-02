@@ -8,10 +8,10 @@ import {Context as CompanyContext} from '../context/CompanyContext'
 
 //RU52jfh7aF
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
 
-    const { state, fetchUser, signout, joinCompany } = useContext(AuthContext); 
-    const {fetchCompany} = useContext(CompanyContext)
+    const { state,fetchUser, signout, joinCompany } = useContext(AuthContext); 
+    const { clearCompany } = useContext(CompanyContext);
     const {clearWorksites, fetchWorksites} = useContext(WorksiteContext);
     const [email, setEmail] = useState('');
     const [testi, setTesti] = useState('');
@@ -19,9 +19,15 @@ const ProfileScreen = () => {
     
     
     useEffect(()=> {
-        fetchUser();
+      const unsubscribe = navigation.addListener('focus', () => {
+          fetchUser();
+          console.log("fokuuus");
+          console.log("profilescreen", state);
+        })
+
+        return unsubscribe
         
-    },[])
+    },[navigation])
     
     useEffect(() => {
       if (state.user) {
@@ -30,7 +36,9 @@ const ProfileScreen = () => {
         
       }
     }, [state]);
+    
 
+    // Käytetään tätä kun liitytään yritykseen
     const handleJoinCompany = async () => {
       
         await joinCompany(companyCode)
@@ -39,8 +47,11 @@ const ProfileScreen = () => {
       
     }
 
+    // käytetään tätä uloskirjautumiseen
     const handleSignout = async () => {
-      await clearWorksites();
+
+      await clearWorksites(); // pyyhitään työmaatiedot statesta
+      await clearCompany(); // pyyhitään company tiedot statesta
       signout();
     }
 
@@ -51,16 +62,33 @@ const ProfileScreen = () => {
         </Text>
         <Text style={styles.text}>ProfileScreen</Text>
 
-        {state.user.company ? (
+        {/* admin käyttäjä */}
+        {state.user.role === "admin" ? (
+          <Text>Olet admin käyttäjä</Text>
+        ) : (
+          // normi käyttäjä
+          <>
+            {state.user.company ? (
+              <Text>Olet liittynyt yritykseen {state.user.company.name}</Text>
+            ) : (
+              // jos käyttäjä ei ole liittynyt yritykseen
+              <>
+                <TextInput placeholder="Enter company code" value={companyCode} onChangeText={setCompanyCode} style={styles.input} />
+                <Button title="Lisää yritys" onPress={handleJoinCompany} />
+              </>
+            )}
+          </>
+        )}
+
+        {/* {state.user.company  ? (
           <Text>Olet liittynyt yritykseen {state.user.company.name}</Text>
-        ): (
+        ) : (
           <>
           
           <TextInput placeholder="Enter company code" value={companyCode} onChangeText={setCompanyCode} style={styles.input} />
           <Button title="Lisää yritys" onPress={handleJoinCompany} />
           </>
-        )}
-
+        )} */}
 
         <Button title="Sign out" onPress={handleSignout} />
       </View>

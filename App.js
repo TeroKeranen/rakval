@@ -18,6 +18,7 @@ import { Provider as AuthProvider} from './src/context/AuthContext'
 import {Provider as WorksiteProvider} from './src/context/WorksiteContext'
 import {Provider as CompanyProvider} from './src/context/CompanyContext'
 import {Ionicons} from '@expo/vector-icons'
+import {Context as CompanyContext} from './src/context/CompanyContext'
 
 
 
@@ -63,8 +64,41 @@ function HomeTabs() {
     </Tab.Navigator>
   );
 }
-// adminin workistetab
+
+function AdminWorksiteTabNoCompany() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: "#f48b28",
+        tabBarInactiveTintColor: "#a3845c",
+        tabBarStyle: {
+          backgroundColor: "#351301",
+        },
+
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "add new") {
+            iconName = focused ? "add-circle" : "add-circle-outline";
+          } else if (route.name === "Työmaat") {
+            iconName = focused ? "list" : "list-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+
+        // activeTintColor: "tomato", // väri kun välilehti on aktiivinen
+        // inactiveTintColor: "white",
+      })}
+    >
+      <Tab.Screen name="Työmaat" component={WorkSite} />
+      
+    </Tab.Navigator>
+  );
+}
+
+// adminin workistetab if admin have a company
 function AdminWorksiteTabs() {
+  
   return (
     
     <Tab.Navigator
@@ -143,6 +177,15 @@ function AdminTabs() {
 // Päänäkymä joosa katsotaan onko käyttäjä admin vai normi user
 function MainStack() {
    const { state} = useContext(AuthContext);
+   
+  useEffect(() => {
+    // console.log("app.js", state);
+  },[state])
+   const isAdmin = state.user && state.user.role === 'admin';
+   const hasCompany = state.user && state.user.company;
+ 
+   
+   
   return (
     <Drawer.Navigator screenOptions={{
       headerStyle: {backgroundColor: '#351301'}, // Headerin väri
@@ -154,10 +197,11 @@ function MainStack() {
       drawerActiveBackgroundColor: '#e4baa1' // sivulla olevan linkin laatikon väri kun aktiivinen
 
     }}>
-      {state.user && state.user.role === 'admin' ? (
+      {isAdmin ? (
         <>
           <Drawer.Screen name="etusivu" component={HomeTabs} />
-          <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} />
+          <Drawer.Screen name="työmaat" component={hasCompany ? AdminWorksiteTabs : AdminWorksiteTabNoCompany} />
+          {/* <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} /> */}
           <Drawer.Screen name="Oikeudet" component={AdminTabs} />
         </>
         ) : (
@@ -208,7 +252,7 @@ function App() {
     };
     checkAuthState();
   }, []);
-
+  
   if (loading) {
     return <ResolveAuthScreen />
   }
@@ -231,6 +275,7 @@ export default () => {
     </AuthProvider>
   )
 }
+
 
 
 

@@ -9,6 +9,7 @@ const Etusivu = () => {
   // Haetaan AuthCOntect.js avulla tiedot käyttäjästä.
   useEffect(() => {
     fetchUser();
+    // console.log("etusivu state", state)
     
 
   },[])

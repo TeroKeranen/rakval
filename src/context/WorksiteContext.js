@@ -42,10 +42,6 @@ const fetchWorksites = (dispatch) => {
         },
       });
 
-      
-      
-
-      
       dispatch({ type: "fetch_worksites", payload: response.data });
 
     } catch (error) {
@@ -71,7 +67,7 @@ const newWorksite = (dispatch) => {
                     Authorization: `Bearer ${token}`
                 }
             })
-            console.log("vastaus työmaalta", response.data);
+            
             
             dispatch({type: 'add_worksite', payload:response.data})
             navigation.navigate("Työmaat");

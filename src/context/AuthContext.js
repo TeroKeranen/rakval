@@ -26,7 +26,7 @@ const authReducer = (state, action) => {
     case 'join_company':
       return {...state, user: action.payload}
     case "signout":
-      return {token: null, errorMessage: ''};
+      return {token: null,user: null,company: null, errorMessage: ''};
     default:
       return state;
   }
@@ -118,13 +118,13 @@ const fetchUser = (dispatch) => async () => {
     const token = await AsyncStorage.getItem('token');
     // const storedUser = await AsyncStorage.getItem('user');
     // const user = JSON.parse(storedUser)
-    console.log(token);
+    
 
     if (token) {
       const response = await rakval.get('/profile', {
         headers: {Authorization: `Bearer ${token}`}
       })
-     
+      console.log("fetchcompanydata", response.data);
       dispatch({type: 'fetch_user', payload: response.data})
     }
     
@@ -138,10 +138,13 @@ const signout = (dispatch) => {
   return async () => {
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('user');
+    await AsyncStorage.removeItem('company');
+    await AsyncStorage.clear();
+     console.log("User logged out and data removed from AsyncStorage");
     dispatch({type: 'signout'})
     
     
   };
 };
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany }, { token: null, errorMessage: "", user: null });
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany }, { token: null, errorMessage: "", user: null,company: null });

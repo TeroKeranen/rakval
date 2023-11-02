@@ -10,7 +10,9 @@ const WorkSite = () => {
   const {state, fetchWorksites} = useContext(WorksiteContext);
 
  
-
+  const handler = () => {
+    fetchWorksites();
+  }
   useEffect(() => {
 
     
@@ -18,7 +20,9 @@ const WorkSite = () => {
       fetchWorksites()
        
   }, [state.length])
+
   console.log(state); 
+
    const renderItem = ({ item }) => {
      return (
        <View style={styles.worksiteContainer}>
@@ -40,6 +44,7 @@ const WorkSite = () => {
       ) : (
         <Text style={styles.noWorksiteText}>Ei työmaita</Text>
       )}
+      <Button title="päivitä" onPress={handler}/>
     </View>
   );
 };

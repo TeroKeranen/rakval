@@ -9,13 +9,13 @@ const SigninScreen = ({navigation}) => {
 
   const { state, signin, clearErrorMessage } = useContext(AuthContext);
   
-
+  
   // Käytetään tätä tyhjentämään errormessage jos tulee virhe ja vaihdetaan toiselle sivulle, Näin virhe ei seuraa mukana
   useEffect(() => {
     const focus = navigation.addListener('focus', clearErrorMessage)
 
     const blur = navigation.addListener('blur', clearErrorMessage)
-
+    
     return () => {
       focus();
       blur();
