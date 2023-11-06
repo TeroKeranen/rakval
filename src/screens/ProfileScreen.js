@@ -23,6 +23,7 @@ const ProfileScreen = ({navigation}) => {
           fetchUser();
           console.log("fokuuus");
           console.log("profilescreen", state);
+          
         })
 
         return unsubscribe
@@ -42,8 +43,8 @@ const ProfileScreen = ({navigation}) => {
     const handleJoinCompany = async () => {
       
         await joinCompany(companyCode)
-        fetchUser();
-        fetchWorksites();
+        fetchUser(); //tarvitaanko tätä?
+        fetchWorksites(); // Tarvitaanko tätä?
       
     }
 
@@ -52,15 +53,19 @@ const ProfileScreen = ({navigation}) => {
 
       await clearWorksites(); // pyyhitään työmaatiedot statesta
       await clearCompany(); // pyyhitään company tiedot statesta
-      signout();
+      signout(); // Kutsutaan signout functio
     }
 
     return (
       <View>
-        <Text>
-          {email} ja {testi}
-        </Text>
-        <Text style={styles.text}>ProfileScreen</Text>
+
+        <View style={styles.userInfo}>
+
+          <Text style={styles.text}>Sähköposti: {state.user.email}</Text>
+          <Text style={styles.text}>Rooli : {state.user.role}</Text>
+
+        </View>
+        
 
         {/* admin käyttäjä */}
         {state.user.role === "admin" ? (
@@ -98,6 +103,14 @@ const ProfileScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   text: {
     color: "black",
+    margin: 4,
+  },
+  userInfo: {
+    margin: 10,
+    alignItems: 'center',
+    backgroundColor: '#dad1d1',
+    borderRadius: 5,
+
   },
   input: {
     height: 40,

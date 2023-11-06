@@ -10,10 +10,14 @@ const worksiteReducer = (state, action) => {
         return { ...state, worksites: [...state.worksites, action.payload] };
       case "fetch_worksites":
         return { ...state, worksites: action.payload };
+      case 'set_current_worksite':
+        return {...state, currentWorksite: action.payload}
       case "set_error":
         return { ...state, errorMessage: action.payload };
       case "clear_worksites":
         return { ...state, worksites: [] };
+      case 'reset_current_worksite':
+        return {...state, currentWorksite:null}
       default:
         return state;
     }
@@ -25,6 +29,40 @@ const clearWorksites = (dispatch) => {
   }
 }
 
+// Käytetään WorksiteDetails.js sivustolla tyhjentämään edellisen työmaantiedot näkyvistä
+const resetCurrentWorksite = (dispatch) => {
+  return () => {
+    dispatch({ type: "reset_current_worksite" });
+
+  }
+}
+
+
+// Kun työmaalistasta painetaan työmaata niin tällä saadaan avattua tietyn työmaan
+const fetchWorksiteDetails = (dispatch) => {
+  return async (worksiteId) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (token) {
+        const response = await rakval.get(`/worksites/${worksiteId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        
+        dispatch({type: 'set_current_worksite', payload: response.data})
+      }
+      
+    } catch (error) {
+      dispatch({type: 'set_error', payload: 'työmään tietojen haku epäonnistui'})
+      console.log(error);
+      
+    }
+  }
+}
+
+// Käytetään tätä hakemaan työmaat Worksite.js sivustolle
 const fetchWorksites = (dispatch) => {
   return async () => {
     try {
@@ -82,4 +120,4 @@ const newWorksite = (dispatch) => {
 }
 
 
-export const {Provider, Context} = createDataContext(worksiteReducer, {newWorksite,fetchWorksites, clearWorksites}, {worksites:[], errorMessage: ""})
+export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite }, { worksites: [], errorMessage: "", currentWorksite: [] });

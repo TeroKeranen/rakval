@@ -12,16 +12,13 @@ import {  Input } from "react-native-elements";
 const AdminScreen = ({navigation}) => {
   const { state, createCompany, fetchCompany } = useContext(CompanyContext);
   const {fetchUser} = useContext(AuthContext)
-  console.log("adminscreen state",state);
+  
+  
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
 
-  // useEffect(() => {
-  //   // console.log("adminscreen state", state);
-  //   fetchCompany();
-    
-  // }, []);
+  
 
   useEffect(() => {
     fetchCompany();

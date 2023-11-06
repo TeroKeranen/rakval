@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import WorkSite from './src/screens/workisiteScreens/WorkSite';
+import WorksiteDetails from './src/screens/workisiteScreens/WorksiteDetails'
 import Etusivu from "./src/screens/Etusivu";
 import AddNewWorksite from './src/screens/workisiteScreens/AddNewWorksite';
 import SigninScreen from "./src/screens/SigninScreen";
@@ -171,46 +172,71 @@ function AdminTabs() {
   )
 }
 
-// Päänäkymä joosa katsotaan onko käyttäjä admin vai normi user
-function MainStack() {
-   const { state} = useContext(AuthContext);
+//mUUTOS 3.11
+function MainDrawer () {
+
+  const { state} = useContext(AuthContext);
    
   useEffect(() => {
     // console.log("app.js", state);
   },[state])
    const isAdmin = state.user && state.user.role === 'admin';
    const hasCompany = state.user && state.user.company;
- 
-   
-   
-  return (
-    <Drawer.Navigator screenOptions={{
-      headerStyle: {backgroundColor: '#351301'}, // Headerin väri
-      headerTintColor: 'white', // Headerin title ja burderin väri
-      sceneContainerStyle: {backgroundColor: '#3f2f25'}, // mikä tämä on ??
-      drawerContentStyle: {backgroundColor: '#351301'}, // sivulta tulevan listan background color
-      drawerInactiveTintColor: 'white', // sivulla olevien linkkien väri
-      drawerActiveTintColor: '#351401', // sivulla olevan linkin väri kun aktiicinen
-      drawerActiveBackgroundColor: '#e4baa1' // sivulla olevan linkin laatikon väri kun aktiivinen
-
-    }}>
+   return (
+    <Drawer.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: "#351301" }, // Headerin väri
+        headerTintColor: "white", // Headerin title ja burderin väri
+        sceneContainerStyle: { backgroundColor: "#3f2f25" }, // mikä tämä on ??
+        drawerContentStyle: { backgroundColor: "#351301" }, // sivulta tulevan listan background color
+        drawerInactiveTintColor: "white", // sivulla olevien linkkien väri
+        drawerActiveTintColor: "#351401", // sivulla olevan linkin väri kun aktiicinen
+        drawerActiveBackgroundColor: "#e4baa1", // sivulla olevan linkin laatikon väri kun aktiivinen
+      }}
+    >
       {isAdmin ? (
         <>
           <Drawer.Screen name="etusivu" component={HomeTabs} />
           <Drawer.Screen name="työmaat" component={hasCompany ? AdminWorksiteTabs : AdminWorksiteTabNoCompany} />
           {/* <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} /> */}
           <Drawer.Screen name="Oikeudet" component={AdminTabs} />
+          
         </>
-        ) : (
+      ) : (
         <>
           <Drawer.Screen name="etusivu" component={HomeTabs} />
           <Drawer.Screen name="työmaat" component={UserWorksiteTabs} />
         </>
-        )
-      }
-
+      )}
     </Drawer.Navigator>
-  )
+   )
+  
+}
+//MUUTOS 3.11
+
+
+// Päänäkymä joosa katsotaan onko käyttäjä admin vai normi user
+function MainStack() {
+ 
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        headerStyle: { backgroundColor: "#351301",  },
+        headerTintColor: 'white',
+      }}
+    >
+      <Stack.Screen name="MainDrawer" component={MainDrawer} />
+      <Stack.Screen
+        name="WorksiteDetails"
+        component={WorksiteDetails}
+        options={{
+          headerShown: true,
+          headerTitle: "Työmaan tiedot",
+        }}
+      />
+    </Stack.Navigator>
+  );
 }
 
 // Tämä renderöidään appin sisällä jos käyttäjä löytyy
