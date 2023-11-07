@@ -90,26 +90,60 @@ const signin = (dispatch) => {
   };
 };
 
+// const joinCompany = (dispatch) => async (companyCode) => {
+//   try {
+      
+//       const token = await AsyncStorage.getItem('token');
+//       const userJson = await AsyncStorage.getItem('user')
+//       const user = JSON.parse(userJson)
+      
+     
+//       const response = await rakval.post('/join-company', {userId: user._id, companyCode}, {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//       })
+      
+//       await AsyncStorage.setItem('user', JSON.stringify(response.data))
+//       dispatch({type: 'join_company', payload: updatedUser})
+//   } catch (error) {
+//       dispatch({
+//         type: 'add_error',
+//         payload: "Tarkista yrityskoodi"
+//       })
+//   }
+// }
 const joinCompany = (dispatch) => async (companyCode) => {
   try {
-      
+    // ... tokenin ja käyttäjän haun koodi ...
       const token = await AsyncStorage.getItem('token');
       const userJson = await AsyncStorage.getItem('user')
       const user = JSON.parse(userJson)
-      
-     
-      const response = await rakval.post('/join-company', {userId: user._id, companyCode}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      
-      await AsyncStorage.setItem('user', JSON.stringify(response.data))
-      dispatch({type: 'join_company', payload: updatedUser})
+
+    const response = await rakval.post(
+      "/join-company",
+      { userId: user._id, companyCode },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    // Tarkista, että palvelimen vastauksessa on data-kenttä
+    if (response.data) {
+      const updatedUser = response.data; // Tämä on oletettu päivitetty käyttäjä
+      await AsyncStorage.setItem("user", JSON.stringify(updatedUser));
+      dispatch({ type: "join_company", payload: updatedUser });
+      return { success: true }; // Palauta onnistumisen merkki
+    } else {
+      // Ei dataa vastauksessa
+      dispatch({ type: "add_error", payload: "Palvelin ei palauttanut dataa." });
+      return { success: false }; // Palauta epäonnistumisen merkki
+    }
   } catch (error) {
-      console.log(error);
+    dispatch({ type: "add_error", payload: "Tarkista yrityskoodi" });
+    return { success: false, error }; // Palauta virheen tiedot
   }
-}
+};
 
 // Haetaan käyttäjän tiedot 
 const fetchUser = (dispatch) => async () => {
@@ -124,7 +158,7 @@ const fetchUser = (dispatch) => async () => {
       const response = await rakval.get('/profile', {
         headers: {Authorization: `Bearer ${token}`}
       })
-      console.log("fetchcompanydata", response.data);
+      console.log("FETCHUSER ", response.data);
       dispatch({type: 'fetch_user', payload: response.data})
     }
     

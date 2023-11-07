@@ -1,32 +1,50 @@
 
 import {View, Text, StyleSheet, ActivityIndicator} from 'react-native'
 import {Context as WorksiteContext} from '../../context/WorksiteContext'
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import DownloadScreen from '../../components/DownloadScreen';
 
 
 const WorksiteDetails = ({route}) => {
     
+    const [isLoading, setIsLoading] = useState(false);
     const {worksiteId} = route.params;
     const { state, fetchWorksiteDetails, resetCurrentWorksite } = useContext(WorksiteContext);
 
     useEffect(() => {
-      resetCurrentWorksite(); // tyhjennetään edellisen työmaantiedot näkyvistä
-      fetchWorksiteDetails(worksiteId) // Etsitään työmaantiedot
+
+      async function loadDetails () {
+        try {
+          setIsLoading(true);
+          await fetchWorksiteDetails(worksiteId);
+        } catch (error) {
+          console.log(error);
+
+          
+        } finally {
+          setIsLoading(false);
+        }
+        
+      }
+      loadDetails();
+      
       
     },[worksiteId])
     
-    if (!state.currentWorksite) {
+    if (isLoading) {
       return (
-        <View style={styles.container}>
-          <ActivityIndicator size="large" color="#0000ff" /> 
-          <Text>Ladataan työmaan tietoja...</Text>
-        </View>
-      );
+
+        <DownloadScreen message="Ladataan työmaan tietoja" />
+      )
+           
     }
+    
+
     return (
       <View>
         <Text>Osoite:{state.currentWorksite.address} </Text>
-        <Text>Kaupunki: {state.currentWorksite.city} </Text>
+        {/* <Text>Kaupunki: {state.currentWorksite.city} </Text> */}
+        <Text>Kaypunki</Text>
         {/* Lisää muita yksityiskohtia tähän */}
       </View>
     );
@@ -34,12 +52,7 @@ const WorksiteDetails = ({route}) => {
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center", // Keskittää sisällön pystysuunnassa
-    alignItems: "center", // Keskittää sisällön vaakasuunnassa
-    padding: 20,
-  },
+  
 });
 
 export default WorksiteDetails;

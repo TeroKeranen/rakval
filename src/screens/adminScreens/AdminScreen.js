@@ -3,17 +3,20 @@ import { useContext, useState, useEffect } from "react";
 import { Context as CompanyContext } from "../../context/CompanyContext";
 import {Context as AuthContext} from '../../context/AuthContext'
 
-import { StyleSheet, View, Button, Text } from "react-native";
+import { StyleSheet, View, Button, Text, ActivityIndicator } from "react-native";
 import {  Input } from "react-native-elements";
+import DownloadScreen from "../../components/DownloadScreen";
 
 
 
 
 const AdminScreen = ({navigation}) => {
+
+  const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
   const { state, createCompany, fetchCompany } = useContext(CompanyContext);
   const {fetchUser} = useContext(AuthContext)
   
-  
+
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -21,12 +24,27 @@ const AdminScreen = ({navigation}) => {
   
 
   useEffect(() => {
-    fetchCompany();
+    const loadCompany = async () => {
+      setIsLoading(true);
+      await fetchCompany();
+      setIsLoading(false);
+    }
+    loadCompany();
   }, []);
   
+ 
+
   const handleCreateCompany = async () => {
-    await createCompany({name,address,city})
-    fetchUser();
+    setIsLoading(true);
+    await createCompany({name, address, city})
+    await fetchUser();
+    setIsLoading(false);
+  }
+
+  if (isLoading) {
+    return (
+      <DownloadScreen message="Haetaan yrityksen tietoja" />
+    )
   }
   const renderCompanyInfo = () => {
     return (

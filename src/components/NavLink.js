@@ -1,4 +1,6 @@
-
+/*
+NavLink komponenttia käytetään signup ja signin sivuilla siirtymään toiselle sivulle
+*/
 
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import { useNavigation } from '@react-navigation/native';

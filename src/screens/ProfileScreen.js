@@ -4,100 +4,95 @@ import { useContext, useEffect, useState } from "react";
 import { Context as AuthContext } from "../context/AuthContext";
 import {Context as WorksiteContext} from '../context/WorksiteContext'
 import {Context as CompanyContext} from '../context/CompanyContext'
+import DownloadScreen from "../components/DownloadScreen";
 
 
-//RU52jfh7aF
+//TO6b2PchlA
+
+// admi2 JH6xHY2UEK
 
 const ProfileScreen = ({navigation}) => {
 
-    const { state,fetchUser, signout, joinCompany } = useContext(AuthContext); 
-    const { clearCompany } = useContext(CompanyContext);
-    const {clearWorksites, fetchWorksites} = useContext(WorksiteContext);
-    const [email, setEmail] = useState('');
-    const [testi, setTesti] = useState('');
-    const [companyCode, setCompanyCode] = useState('');
-    
-    
-    useEffect(()=> {
-      const unsubscribe = navigation.addListener('focus', () => {
-          fetchUser();
-          console.log("fokuuus");
-          console.log("profilescreen", state);
-          
-        })
+  const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
+  const { state, fetchUser, signout, joinCompany, clearErrorMessage } = useContext(AuthContext);
+  const { clearCompany } = useContext(CompanyContext);
+  const { clearWorksites, fetchWorksites } = useContext(WorksiteContext);
+  const [companyCode, setCompanyCode] = useState("");
 
-        return unsubscribe
-        
-    },[navigation])
-    
-    useEffect(() => {
-      if (state.user) {
-        setEmail(state.user.email);
-        setTesti(state.user.role)
-        
-      }
-    }, [state]);
-    
-
-    // Käytetään tätä kun liitytään yritykseen
-    const handleJoinCompany = async () => {
+  // päivitetään tällä fechUser tiedot aina kun menemme sivulle
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      // fetchUser(); // Otettu pois mutta jos tulee ongelmia käyttäjätietojen kanssa
+      clearErrorMessage();
       
-        await joinCompany(companyCode)
-        fetchUser(); //tarvitaanko tätä?
-        fetchWorksites(); // Tarvitaanko tätä?
-      
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+
+
+  const handleJoinCompany = async () => {
+
+    setIsLoading(true);
+    const result = await joinCompany(companyCode);
+    setIsLoading(false);
+
+    if (result.success) {
+     // Onnistunut liittyminen
+      clearErrorMessage();
+      fetchUser(); // jos tulee ongelmia niin laitettaan takaisin
+      // fetchWorksites(); // Jos tulee ongelmia niin laitetaan takaisin
+     
+    } else {
+     // Näytä virheilmoitus käyttäjälle
+      console.log("Liittymisessä yritykseen tapahtui virhe:", result.error);
     }
+  };
 
-    // käytetään tätä uloskirjautumiseen
-    const handleSignout = async () => {
 
-      await clearWorksites(); // pyyhitään työmaatiedot statesta
-      await clearCompany(); // pyyhitään company tiedot statesta
-      signout(); // Kutsutaan signout functio
-    }
+  // käytetään tätä uloskirjautumiseen
+  const handleSignout = async () => {
+    await clearWorksites(); // pyyhitään työmaatiedot statesta
+    await clearCompany(); // pyyhitään company tiedot statesta
+    signout(); // Kutsutaan signout functio
+  };
 
-    return (
-      <View>
 
-        <View style={styles.userInfo}>
+  // Latauskuvake jos etsii tietoja
+  if (isLoading) {
+    <DownloadScreen message="ladataan" />
+  }
 
-          <Text style={styles.text}>Sähköposti: {state.user.email}</Text>
-          <Text style={styles.text}>Rooli : {state.user.role}</Text>
-
-        </View>
-        
-
-        {/* admin käyttäjä */}
-        {state.user.role === "admin" ? (
-          <Text>Olet admin käyttäjä</Text>
-        ) : (
-          // normi käyttäjä
-          <>
-            {state.user.company ? (
-              <Text>Olet liittynyt yritykseen {state.user.company.name}</Text>
-            ) : (
-              // jos käyttäjä ei ole liittynyt yritykseen
-              <>
-                <TextInput placeholder="Enter company code" value={companyCode} onChangeText={setCompanyCode} style={styles.input} />
-                <Button title="Lisää yritys" onPress={handleJoinCompany} />
-              </>
-            )}
-          </>
-        )}
-
-        {/* {state.user.company  ? (
-          <Text>Olet liittynyt yritykseen {state.user.company.name}</Text>
-        ) : (
-          <>
-          
-          <TextInput placeholder="Enter company code" value={companyCode} onChangeText={setCompanyCode} style={styles.input} />
-          <Button title="Lisää yritys" onPress={handleJoinCompany} />
-          </>
-        )} */}
-
-        <Button title="Sign out" onPress={handleSignout} />
+  return (
+    <View>
+      <View style={styles.userInfo}>
+        <Text style={styles.text}>Sähköposti: {state.user.email}</Text>
+        <Text style={styles.text}>Rooli : {state.user.role}</Text>
       </View>
-    );
+
+      {/* admin käyttäjä */}
+      {state.user.role === "admin" ? (
+        <Text>Olet admin käyttäjä</Text>
+      ) : (
+        // normi käyttäjä
+        <>
+          {state.user.company ? (
+            <Text>Olet liittynyt yritykseen {state.user.company.name}</Text>
+          ) : (
+            // jos käyttäjä ei ole liittynyt yritykseen
+            <>
+              {state.errorMessage != "" ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
+              <TextInput placeholder="Enter company code" value={companyCode} onChangeText={setCompanyCode} style={styles.input} />
+              <Button title="Lisää yritys" onPress={handleJoinCompany} />
+            </>
+          )}
+        </>
+      )}
+
+      <Button title="Sign out" onPress={handleSignout} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -107,10 +102,9 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     margin: 10,
-    alignItems: 'center',
-    backgroundColor: '#dad1d1',
+    alignItems: "center",
+    backgroundColor: "#dad1d1",
     borderRadius: 5,
-
   },
   input: {
     height: 40,
@@ -119,6 +113,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     paddingLeft: 8,
+  },
+  errorMessage: {
+    fontSize: 16,
+    color: "red",
   },
 });
 

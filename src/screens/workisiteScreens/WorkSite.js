@@ -2,32 +2,54 @@ import { useContext, useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { Context as WorksiteContext } from "../../context/WorksiteContext";
 import {Context as AuthContext} from '../../context/AuthContext'
+import DownloadScreen from "../../components/DownloadScreen";
 
 import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity } from "react-native";
 
 const WorkSite = ({navigation}) => {
 
-  const {state, fetchWorksites} = useContext(WorksiteContext);
+  const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
+  const { state, fetchWorksites } = useContext(WorksiteContext);
 
-  // Käytetään päivittämään työmaalista nappia käyttämällä
-  const handler = () => {
-    fetchWorksites();
-  }
+  // // Käytetään päivittämään työmaalista nappia käyttämällä
+  // const handler = () => {
+  //   fetchWorksites();
+  // };
+
+
+  // Käytetään navigation focusta joka hakee työmaat uudestaan kun palataan tälle sivulle. // Kommentoin päivitys napin tätä varten jos tulevaisuudessa tulee ongelmia sekä handler function
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchWorksites();
+      
+      
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
 
   useEffect(() => {
-
-      fetchWorksites()
-       
-  }, [state.length])
-
+    const loadWorksites = async () => {
+      setIsLoading(true);
+      await fetchWorksites();
+      setIsLoading(false);
+    }
+    loadWorksites();
+  }, []);
 
   // Käytetään tätä funktiota kun painetaan tietystä työmaasta
   const handlePressWorksite = (worksiteId) => {
-    navigation.navigate('WorksiteDetails', {worksiteId})
-  } 
+    navigation.navigate("WorksiteDetails", { worksiteId });
+  };
 
- 
- 
+  // Jos
+  if (isLoading) {
+    return (
+      <DownloadScreen message="Haetaan työmaita"/>
+    )
+  }
+
   return (
     <View>
       <Text style={styles.headerText}>WorkSites</Text>
@@ -48,7 +70,7 @@ const WorkSite = ({navigation}) => {
       ) : (
         <Text style={styles.noWorksiteText}>Ei työmaita</Text>
       )}
-      <Button title="päivitä" onPress={handler} />
+      {/* <Button title="päivitä" onPress={handler} /> */}
     </View>
   );
 };

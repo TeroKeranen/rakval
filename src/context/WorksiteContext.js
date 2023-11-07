@@ -10,8 +10,9 @@ const worksiteReducer = (state, action) => {
         return { ...state, worksites: [...state.worksites, action.payload] };
       case "fetch_worksites":
         return { ...state, worksites: action.payload };
-      case 'set_current_worksite':
-        return {...state, currentWorksite: action.payload}
+      case 'set_current_worksite': 
+      console.log("Asetetaan currentWorksite:", action.payload);
+        return {...state, currentWorksite: action.payload} 
       case "set_error":
         return { ...state, errorMessage: action.payload };
       case "clear_worksites":
@@ -25,6 +26,7 @@ const worksiteReducer = (state, action) => {
 
 const clearWorksites = (dispatch) => {
   return () => {
+
     dispatch({type:'clear_worksites'})
   }
 }
@@ -32,6 +34,7 @@ const clearWorksites = (dispatch) => {
 // Käytetään WorksiteDetails.js sivustolla tyhjentämään edellisen työmaantiedot näkyvistä
 const resetCurrentWorksite = (dispatch) => {
   return () => {
+    console.log("resecurrentworksite");
     dispatch({ type: "reset_current_worksite" });
 
   }
@@ -43,6 +46,7 @@ const fetchWorksiteDetails = (dispatch) => {
   return async (worksiteId) => {
     try {
       const token = await AsyncStorage.getItem('token');
+      
 
       if (token) {
         const response = await rakval.get(`/worksites/${worksiteId}`, {
@@ -79,7 +83,7 @@ const fetchWorksites = (dispatch) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log("FETCHWORKSITES ", response.data);
       dispatch({ type: "fetch_worksites", payload: response.data });
 
     } catch (error) {
