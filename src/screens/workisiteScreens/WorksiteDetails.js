@@ -9,10 +9,12 @@ const WorksiteDetails = ({route}) => {
     
     const [isLoading, setIsLoading] = useState(false);
     const {worksiteId} = route.params;
-    const { state, fetchWorksiteDetails, resetCurrentWorksite } = useContext(WorksiteContext);
+    const { state, fetchWorksiteDetails,fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
+
+    
 
     useEffect(() => {
-
+      
       async function loadDetails () {
         try {
           setIsLoading(true);

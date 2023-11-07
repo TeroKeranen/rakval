@@ -16,9 +16,11 @@ const worksiteReducer = (state, action) => {
       case "set_error":
         return { ...state, errorMessage: action.payload };
       case "clear_worksites":
+        console.log("suoritetaan clear_worksites");
         return { ...state, worksites: [] };
       case 'reset_current_worksite':
-        return {...state, currentWorksite:null}
+        console.log("suoritetaan reset_current_worksite")
+        return {...state, currentWorksite:[]}
       default:
         return state;
     }
@@ -83,18 +85,34 @@ const fetchWorksites = (dispatch) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("FETCHWORKSITES ", response.data);
+      
       dispatch({ type: "fetch_worksites", payload: response.data });
 
     } catch (error) {
 
-      if (error.response && error.response.status === 400 && error.response.data.error === "Käyttäjällä ei ole yritystä2") {
-        console.log("Käyttäjällä ei ole yritystä, ei haeta työmaita.");
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            // Käyttäjällä ei ole yritystä, ei tarvitse asettaa virheviestiä, voitaisiin ohjata luomaan yritys tai liittymään yritykseen
+            console.log("Käyttäjällä ei ole yritystä, ei haeta työmaita.");
+            break;
+          // Lisää muita koodin käsittelyjä tarvittaessa
+          default:
+            dispatch({ type: "set_error", payload: "jotain meni vikaan (työmaitten hauan kanssa)" });
+        }
       } else {
-
-        dispatch({type: 'set_error', payload: "jotain meni vikaan (työmaitten hauan kanssa)"})
+        // Jos virhe ei ole HTTP-virhe, käsittele se yleisenä virheenä
+        dispatch({ type: "set_error", payload: "Yleinen virhe työmaita haettaessa" });
       }
       console.log(error);
+
+      // if (error.response && error.response.status === 400 && error.response.data.error === "Käyttäjällä ei ole yritystä2") {
+      //   console.log("Käyttäjällä ei ole yritystä, ei haeta työmaita.");
+      // } else {
+
+      //   dispatch({type: 'set_error', payload: "jotain meni vikaan (työmaitten hauan kanssa)"})
+      // }
+      // console.log(error);
     }
   };
 };

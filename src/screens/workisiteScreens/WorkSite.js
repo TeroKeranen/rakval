@@ -7,34 +7,32 @@ import DownloadScreen from "../../components/DownloadScreen";
 import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity } from "react-native";
 
 const WorkSite = ({navigation}) => {
-
   const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
-  const { state, fetchWorksites } = useContext(WorksiteContext);
+  const { state, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
 
-  // // Käytetään päivittämään työmaalista nappia käyttämällä
+  // // Käytetään päivittämään työmaalista nappia käyttämällä ota käyttöön jos tulee jotain tarvetta
   // const handler = () => {
   //   fetchWorksites();
   // };
-
 
   // Käytetään navigation focusta joka hakee työmaat uudestaan kun palataan tälle sivulle. // Kommentoin päivitys napin tätä varten jos tulevaisuudessa tulee ongelmia sekä handler function
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchWorksites();
-      
-      
+
+      console.log("worksite.js", state);
     });
 
     return unsubscribe;
-  }, [navigation]);
-
+  }, [navigation]); // ehkä ,state,fetchWorksites
 
   useEffect(() => {
     const loadWorksites = async () => {
       setIsLoading(true);
       await fetchWorksites();
       setIsLoading(false);
-    }
+      
+    };
     loadWorksites();
   }, []);
 
@@ -45,9 +43,7 @@ const WorkSite = ({navigation}) => {
 
   // Jos
   if (isLoading) {
-    return (
-      <DownloadScreen message="Haetaan työmaita"/>
-    )
+    return <DownloadScreen message="Haetaan työmaita" />;
   }
 
   return (

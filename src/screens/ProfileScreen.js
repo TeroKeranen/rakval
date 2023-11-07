@@ -16,13 +16,13 @@ const ProfileScreen = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
   const { state, fetchUser, signout, joinCompany, clearErrorMessage } = useContext(AuthContext);
   const { clearCompany } = useContext(CompanyContext);
-  const { clearWorksites, fetchWorksites } = useContext(WorksiteContext);
+  const { clearWorksites, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
   const [companyCode, setCompanyCode] = useState("");
 
   // päivitetään tällä fechUser tiedot aina kun menemme sivulle
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      // fetchUser(); // Otettu pois mutta jos tulee ongelmia käyttäjätietojen kanssa
+      fetchUser(); // Otettu pois mutta jos tulee ongelmia käyttäjätietojen kanssa
       clearErrorMessage();
       
     });
@@ -42,7 +42,7 @@ const ProfileScreen = ({navigation}) => {
      // Onnistunut liittyminen
       clearErrorMessage();
       fetchUser(); // jos tulee ongelmia niin laitettaan takaisin
-      // fetchWorksites(); // Jos tulee ongelmia niin laitetaan takaisin
+      fetchWorksites(); // Jos tulee ongelmia niin laitetaan takaisin
      
     } else {
      // Näytä virheilmoitus käyttäjälle
@@ -53,8 +53,9 @@ const ProfileScreen = ({navigation}) => {
 
   // käytetään tätä uloskirjautumiseen
   const handleSignout = async () => {
-    await clearWorksites(); // pyyhitään työmaatiedot statesta
-    await clearCompany(); // pyyhitään company tiedot statesta
+    clearWorksites(); // pyyhitään työmaatiedot statesta
+    clearCompany(); // pyyhitään company tiedot statesta
+    resetCurrentWorksite();
     signout(); // Kutsutaan signout functio
   };
 

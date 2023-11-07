@@ -158,7 +158,7 @@ const fetchUser = (dispatch) => async () => {
       const response = await rakval.get('/profile', {
         headers: {Authorization: `Bearer ${token}`}
       })
-      console.log("FETCHUSER ", response.data);
+      
       dispatch({type: 'fetch_user', payload: response.data})
     }
     
