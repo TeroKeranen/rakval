@@ -41,5 +41,9 @@
   "worksitedetail-downloadscreen-msg": "Loading construction site information",
   "workistedetail-address": "Address",
   "worksitedetail-city": "City",
-  "worksite-no-worksites": "No construction sites"
+  "worksite-no-worksites": "No construction sites",
+  "worksitedetail-deleteBtn": "Delete construction site",
+  "worksitedetail-confirmdelete": "Are you sure you want to delete this worksite?",
+  "worksitedetail-confirmDelete-cancelButton": "Cancel",
+  "worksitedetail-confirmDelete-deleteButton": "Delete"
 }
