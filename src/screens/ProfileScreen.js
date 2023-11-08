@@ -5,6 +5,7 @@ import { Context as AuthContext } from "../context/AuthContext";
 import {Context as WorksiteContext} from '../context/WorksiteContext'
 import {Context as CompanyContext} from '../context/CompanyContext'
 import DownloadScreen from "../components/DownloadScreen";
+import ChangeLanguage from "../components/ChangeLanguage";
 
 
 //TO6b2PchlA
@@ -92,6 +93,7 @@ const ProfileScreen = ({navigation}) => {
       )}
 
       <Button title="Sign out" onPress={handleSignout} />
+      <ChangeLanguage />
     </View>
   );
 }
