@@ -14,13 +14,14 @@ import Etusivu from "./src/screens/Etusivu";
 import AddNewWorksite from './src/screens/workisiteScreens/AddNewWorksite';
 import SigninScreen from "./src/screens/SigninScreen";
 import SignupScreen from "./src/screens/SignupScreen";
-import AdminScreen from "./src/screens/adminScreens/AdminScreen";
+import AdminScreen from "./src/screens/adminScreens/CompanyScreen";
 import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
 import { Provider as AuthProvider} from './src/context/AuthContext'
 import {Provider as WorksiteProvider} from './src/context/WorksiteContext'
 import {Provider as CompanyProvider} from './src/context/CompanyContext'
 import {Ionicons} from '@expo/vector-icons'
 import {Context as CompanyContext} from './src/context/CompanyContext'
+import { useTranslation } from "react-i18next";
 
 
 
@@ -37,6 +38,7 @@ const Tab = createBottomTabNavigator();
 
 // Tämä näytetään etusivulla
 function HomeTabs() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -49,9 +51,9 @@ function HomeTabs() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "Profile") {
+          if (route.name === "Profile" || route.name === "Profiili") {
             iconName = focused ? "person" : "person-outline";
-          } else if (route.name === "AloitusSivu") {
+          } else if (route.name === "Main page" || route.name === "Etusivu") {
             iconName = focused ? "home" : "home-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -61,13 +63,14 @@ function HomeTabs() {
         // inactiveTintColor: "white",
       })}
     >
-      <Tab.Screen name="AloitusSivu" component={Etusivu} options={{ headerShown: false }} />
-      <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <Tab.Screen name={t("main-page")} component={Etusivu} options={{ headerShown: false }} />
+      <Tab.Screen name={t('profile')} component={ProfileScreen} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 }
 
 function AdminWorksiteTabNoCompany() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -100,7 +103,7 @@ function AdminWorksiteTabNoCompany() {
 
 // adminin workistetab if admin have a company
 function AdminWorksiteTabs() {
-  
+  const {t} = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -113,9 +116,9 @@ function AdminWorksiteTabs() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "add new") {
+          if (route.name === "Add new" || route.name === "Lisää uusi") {
             iconName = focused ? "add-circle" : "add-circle-outline";
-          } else if (route.name === "Työmaat") {
+          } else if (route.name === "Työmaat" || route.name === "Construction sites") {
             iconName = focused ? "list" : "list-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -125,14 +128,15 @@ function AdminWorksiteTabs() {
         // inactiveTintColor: "white",
       })}
     >
-      <Tab.Screen name="Työmaat" component={WorkSite} options={{ headerShown: false }} />
-      <Tab.Screen name="add new" component={AddNewWorksite} options={{ headerShown: false }} />
+      <Tab.Screen name={t("construction-site")} component={WorkSite} options={{ headerShown: false }} />
+      <Tab.Screen name={t("add-new-construction")} component={AddNewWorksite} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 }
 
 //userin worksitetab
 function UserWorksiteTabs() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -147,7 +151,7 @@ function UserWorksiteTabs() {
 
           if (route.name === "add new") {
             iconName = focused ? "add-circle" : "add-circle-outline";
-          } else if (route.name === "Työmaat") {
+          } else if (route.name === "Työmaat" || route.name === "Construction sites") {
             iconName = focused ? "list" : "list-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -157,25 +161,28 @@ function UserWorksiteTabs() {
         // inactiveTintColor: "white",
       })}
     >
-      <Tab.Screen name="Työmaat" component={WorkSite} options={{ headerShown: false }} />
+      <Tab.Screen name={t("construction-site")} component={WorkSite} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 }
 
 // Adminille näkyvät alatabit
 function AdminTabs() {
+  const { t } = useTranslation();
   return (
-    <Tab.Navigator screenOptions={{
-      headerShown: false,
-    }}>
-      <Tab.Screen name="admin" component={AdminScreen} />
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Tab.Screen name={t("tabScreen-company")} component={AdminScreen} />
     </Tab.Navigator>
-  )
+  );
 }
 
 //mUUTOS 3.11
 function MainDrawer () {
-
+  const { t } = useTranslation();
   const { state} = useContext(AuthContext);
    
   useEffect(() => {
@@ -184,33 +191,32 @@ function MainDrawer () {
    const isAdmin = state.user && state.user.role === 'admin';
    const hasCompany = state.user && state.user.company;
    return (
-    <Drawer.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: "#351301" }, // Headerin väri
-        headerTintColor: "white", // Headerin title ja burderin väri
-        sceneContainerStyle: { backgroundColor: "#3f2f25" }, // mikä tämä on ??
-        drawerContentStyle: { backgroundColor: "#351301" }, // sivulta tulevan listan background color
-        drawerInactiveTintColor: "white", // sivulla olevien linkkien väri
-        drawerActiveTintColor: "#351401", // sivulla olevan linkin väri kun aktiicinen
-        drawerActiveBackgroundColor: "#e4baa1", // sivulla olevan linkin laatikon väri kun aktiivinen
-      }}
-    >
-      {isAdmin ? (
-        <>
-          <Drawer.Screen name="etusivu" component={HomeTabs} />
-          <Drawer.Screen name="työmaat" component={hasCompany ? AdminWorksiteTabs : AdminWorksiteTabNoCompany} />
-          {/* <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} /> */}
-          <Drawer.Screen name="Oikeudet" component={AdminTabs} />
-          
-        </>
-      ) : (
-        <>
-          <Drawer.Screen name="etusivu" component={HomeTabs} />
-          <Drawer.Screen name="työmaat" component={UserWorksiteTabs} />
-        </>
-      )}
-    </Drawer.Navigator>
-   )
+     <Drawer.Navigator
+       screenOptions={{
+         headerStyle: { backgroundColor: "#351301" }, // Headerin väri
+         headerTintColor: "white", // Headerin title ja burderin väri
+         sceneContainerStyle: { backgroundColor: "#3f2f25" }, // mikä tämä on ??
+         drawerContentStyle: { backgroundColor: "#351301" }, // sivulta tulevan listan background color
+         drawerInactiveTintColor: "white", // sivulla olevien linkkien väri
+         drawerActiveTintColor: "#351401", // sivulla olevan linkin väri kun aktiicinen
+         drawerActiveBackgroundColor: "#e4baa1", // sivulla olevan linkin laatikon väri kun aktiivinen
+       }}
+     >
+       {isAdmin ? (
+         <>
+           <Drawer.Screen name={t("drawerScreen-front-page")} component={HomeTabs} />
+           <Drawer.Screen name={t("drawerScreen-worksite")} component={hasCompany ? AdminWorksiteTabs : AdminWorksiteTabNoCompany} />
+           {/* <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} /> */}
+           <Drawer.Screen name={t("drawerScreen-company")} component={AdminTabs} />
+         </>
+       ) : (
+         <>
+           <Drawer.Screen name={t("drawerScreen-front-page")} component={HomeTabs} />
+           <Drawer.Screen name={t("drawerScreen-worksite")} component={UserWorksiteTabs} />
+         </>
+       )}
+     </Drawer.Navigator>
+   );
   
 }
 //MUUTOS 3.11
@@ -218,13 +224,13 @@ function MainDrawer () {
 
 // Päänäkymä joosa katsotaan onko käyttäjä admin vai normi user
 function MainStack() {
- 
+  const { t } = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        headerStyle: { backgroundColor: "#351301",  },
-        headerTintColor: 'white',
+        headerStyle: { backgroundColor: "#351301" },
+        headerTintColor: "white",
       }}
     >
       <Stack.Screen name="MainDrawer" component={MainDrawer} />
@@ -233,7 +239,7 @@ function MainStack() {
         component={WorksiteDetails}
         options={{
           headerShown: true,
-          headerTitle: "Työmaan tiedot",
+          headerTitle: t("woksite-detail-header"),
         }}
       />
     </Stack.Navigator>

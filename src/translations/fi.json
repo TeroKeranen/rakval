@@ -8,5 +8,21 @@
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
 
-  "front-page": "Etusivu"
+  "drawerScreen-front-page": "etusivu",
+  "main-page": "Etusivu",
+  "profile": "Profiili",
+  "construction-site": "Työmaat",
+  "drawerScreen-worksite": "työmaat",
+  "drawerScreen-company": "yritys",
+  "tabScreen-company": "Sinun yritys",
+  "add-new-construction": "Lisää uusi",
+  "woksite-detail-header": "Työmaan tiedot",
+
+  "companyScreen-downloadScreen-message": "Haetaan yrityksen tietoja",
+  "companyScreen-companyInfo": "Yrityksen tiedot",
+  "companyScreen-companyInfo-name": "Nimi",
+  "companyScreen-companyInfo-address": "Osoite",
+  "companyScreen-companyInfo-city": "Kaupunki",
+  "companyScreen-companyInfo-code": "Yrityskoodi",
+  "companyScreen-create": "Luo yritys"
 }

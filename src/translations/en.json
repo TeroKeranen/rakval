@@ -8,5 +8,21 @@
   "sign-upHeader": "Sign Up",
   "signup-navlink-text": "Already have an account? Sign in instead",
 
-  "front-page": "frontpage"
+  "drawerScreen-front-page": "front page",
+  "main-page": "Main page",
+  "profile": "Profile",
+  "construction-site": "Construction sites",
+  "drawerScreen-worksite": "construction sites",
+  "drawerScreen-company": "company",
+  "tabScreen-company": "Your company",
+  "add-new-construction": "Add new",
+  "woksite-detail-header": "construction site details",
+
+  "companyScreen-downloadScreen-message": "Retrieving company details",
+  "companyScreen-companyInfo": "Company Details",
+  "companyScreen-companyInfo-name": "Name",
+  "companyScreen-companyInfo-address": "Address",
+  "companyScreen-companyInfo-city": "City",
+  "companyScreen-companyInfo-code": "Company code",
+  "companyScreen-create": "Create a Company"
 }

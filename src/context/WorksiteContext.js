@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import createDataContext from "./createDataContext";
 import rakval from "../api/rakval";
 import { navigate, resetAndNavigate } from "../navigationRef";
+import { useTranslation } from "react-i18next";
 
 
 const worksiteReducer = (state, action) => {
@@ -119,6 +120,7 @@ const fetchWorksites = (dispatch) => {
 
 // lähetetään uusityömaa tietokantaan
 const newWorksite = (dispatch) => {
+    const { t } = useTranslation();
     return async ({address, city, navigation }) => {
         try {
             const token = await AsyncStorage.getItem('token')
@@ -130,7 +132,7 @@ const newWorksite = (dispatch) => {
             
             
             dispatch({type: 'add_worksite', payload:response.data})
-            navigation.navigate("Työmaat");
+            navigation.navigate(t("construction-site"));
             
             
         } catch (error) {
