@@ -169,11 +169,28 @@ function UserWorksiteTabs() {
 // Adminille näkyvät alatabit
 function AdminTabs() {
   const { t } = useTranslation();
+
   return (
     <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: "#f48b28",
+        tabBarInactiveTintColor: "#a3845c",
+        tabBarStyle: {
+          backgroundColor: "#351301",
+        },
+
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "Your company" || route.name === "Sinun yritys") {
+            iconName = focused ? "ios-key" : "ios-key";
+          } 
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+
+        // activeTintColor: "tomato", // väri kun välilehti on aktiivinen
+        // inactiveTintColor: "white",
+      })}
     >
       <Tab.Screen name={t("tabScreen-company")} component={AdminScreen} />
     </Tab.Navigator>

@@ -5,8 +5,9 @@ import { useContext, useState } from "react";
 import WorksiteForm from "../../components/WorksiteForm";
 
 
-const AddNewWorksite = ({navigation}) => {
 
+const AddNewWorksite = ({navigation}) => {
+  
   const {state, newWorksite} = useContext(WorksiteContext);
   
   return (

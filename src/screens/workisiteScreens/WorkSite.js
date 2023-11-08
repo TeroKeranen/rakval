@@ -3,10 +3,12 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Context as WorksiteContext } from "../../context/WorksiteContext";
 import {Context as AuthContext} from '../../context/AuthContext'
 import DownloadScreen from "../../components/DownloadScreen";
+import { useTranslation } from "react-i18next";
 
 import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity } from "react-native";
 
 const WorkSite = ({navigation}) => {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
   const { state, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
 
@@ -55,8 +57,12 @@ const WorkSite = ({navigation}) => {
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handlePressWorksite(item._id)}>
               <View style={styles.worksiteContainer}>
-                <Text style={styles.worksiteText}>Osoite: {item.address}</Text>
-                <Text style={styles.worksiteText}>Kaupunki: {item.city}</Text>
+                <Text style={styles.worksiteText}>
+                  {t("workistedetail-address")}: {item.address}
+                </Text>
+                <Text style={styles.worksiteText}>
+                  {t("worksitedetail-city")}: {item.city}
+                </Text>
                 {/* Voit lisätä muita tietoja täällä */}
               </View>
             </TouchableOpacity>
@@ -64,7 +70,7 @@ const WorkSite = ({navigation}) => {
           keyExtractor={(worksite) => worksite._id}
         />
       ) : (
-        <Text style={styles.noWorksiteText}>Ei työmaita</Text>
+        <Text style={styles.noWorksiteText}>{t("worksite-no-worksites")}</Text>
       )}
       {/* <Button title="päivitä" onPress={handler} /> */}
     </View>

@@ -3,10 +3,11 @@ import {View, Text, StyleSheet, ActivityIndicator} from 'react-native'
 import {Context as WorksiteContext} from '../../context/WorksiteContext'
 import { useContext, useEffect, useState } from 'react';
 import DownloadScreen from '../../components/DownloadScreen';
+import { useTranslation } from "react-i18next";
 
 
 const WorksiteDetails = ({route}) => {
-    
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const {worksiteId} = route.params;
     const { state, fetchWorksiteDetails,fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
@@ -36,7 +37,7 @@ const WorksiteDetails = ({route}) => {
     if (isLoading) {
       return (
 
-        <DownloadScreen message="Ladataan työmaan tietoja" />
+        <DownloadScreen message={t('worksitedetail-downloadscreen-msg')} />
       )
            
     }
@@ -44,9 +45,11 @@ const WorksiteDetails = ({route}) => {
 
     return (
       <View>
-        <Text>Osoite:{state.currentWorksite.address} </Text>
+        <Text>
+          {t("workistedetail-address")}:{state.currentWorksite.address}{" "}
+        </Text>
         {/* <Text>Kaupunki: {state.currentWorksite.city} </Text> */}
-        <Text>Kaypunki</Text>
+        <Text>{t("worksitedetail-city")}</Text>
         {/* Lisää muita yksityiskohtia tähän */}
       </View>
     );

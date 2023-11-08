@@ -4,6 +4,7 @@
   "change-language": "Change language",
   "email": "Email",
   "password": "Password",
+  "role": "Role",
 
   "sign-upHeader": "Sign Up",
   "signup-navlink-text": "Already have an account? Sign in instead",
@@ -24,5 +25,21 @@
   "companyScreen-companyInfo-address": "Address",
   "companyScreen-companyInfo-city": "City",
   "companyScreen-companyInfo-code": "Company code",
-  "companyScreen-create": "Create a Company"
+  "companyScreen-create": "Create a Company",
+
+  "profileScreen-role": "You are an admin user",
+  "prifileScreen-company": "You have joined the company called",
+  "profileScreen-placeholder": "Enter company code",
+  "profileScreen-joincompany": "Add company",
+  "profileScreen-signout": "Sign Out",
+
+  "worksiteform-title": "Add new construction site",
+  "worksiteform-button": "Add construction site",
+  "worksiteform-address": "Address",
+  "worksiteform-city": "City",
+
+  "worksitedetail-downloadscreen-msg": "Loading construction site information",
+  "workistedetail-address": "Address",
+  "worksitedetail-city": "City",
+  "worksite-no-worksites": "No construction sites"
 }

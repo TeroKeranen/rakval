@@ -4,6 +4,7 @@
   "change-language": "Vaihda kieltä",
   "email": "Sähköpostiosoite",
   "password": "Salasana",
+  "role": "Rooli",
 
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
@@ -24,5 +25,21 @@
   "companyScreen-companyInfo-address": "Osoite",
   "companyScreen-companyInfo-city": "Kaupunki",
   "companyScreen-companyInfo-code": "Yrityskoodi",
-  "companyScreen-create": "Luo yritys"
+  "companyScreen-create": "Luo yritys",
+
+  "profileScreen-role": "Olet admin käyttäjä",
+  "profileScreen-company": "Olet liittynyt yritykseen",
+  "profileScreen-placeholder": "Lisää yrityskoodi",
+  "profileScreen-joincompany": "Lisää yritys",
+  "profileScreen-signout": "Kirjaudu ulos",
+
+  "worksiteform-title": "Lisää uusi työmaa",
+  "worksiteform-button": "Lisää työmaa",
+  "worksiteform-address": "Osoite",
+  "worksiteform-city": "Kaupunki",
+
+  "worksitedetail-downloadscreen-msg": "Ladataan työmaan tietoja",
+  "workistedetail-address": "Osoite",
+  "worksitedetail-city": "Kaupunki",
+  "worksite-no-worksites": "Ei työmaita"
 }
