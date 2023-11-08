@@ -1,0 +1,12 @@
+{
+  "signinHeader": "Sign In",
+  "signin-navlink-text": "Don't have an account? Create a new one for yourself",
+  "change-language": "Change language",
+  "email": "Email",
+  "password": "Password",
+
+  "sign-upHeader": "Sign Up",
+  "signup-navlink-text": "Already have an account? Sign in instead",
+
+  "front-page": "frontpage"
+}

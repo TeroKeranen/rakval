@@ -1,0 +1,12 @@
+{
+  "signinHeader": "Kirjaudu sisään",
+  "signin-navlink-text": "Sinulla ei ole tunnusta? Luo itsellesi uusi tunnus",
+  "change-language": "Vaihda kieltä",
+  "email": "Sähköpostiosoite",
+  "password": "Salasana",
+
+  "sign-upHeader": "Luo tunnus",
+  "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
+
+  "front-page": "Etusivu"
+}

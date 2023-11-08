@@ -1,12 +1,16 @@
 import { Text, View, StyleSheet } from "react-native";
+import i18next from '../../services/i18n'
+import { useTranslation } from "react-i18next";
 
 import AuthForm from "../components/AuthForm";
 import NavLink from "../components/NavLink";
 import { useContext, useEffect } from "react";
 import { Context as AuthContext } from "../context/AuthContext";
+import ChangeLanguage from "../components/ChangeLanguage";
 
 const SigninScreen = ({navigation}) => {
 
+  const {t} = useTranslation();
   const { state, signin, clearErrorMessage } = useContext(AuthContext);
   
   
@@ -26,8 +30,9 @@ const SigninScreen = ({navigation}) => {
     <>
       <View style={styles.container}>
         {/* signin */}
-        <AuthForm headerText="Sign in" errorMessage={state.errorMessage} submitButtonText="Sign In" onSubmit={signin} />
-        <NavLink text="Sinulla ei ole tunnusta? Luo itsellesi uusi tunnus" routeName="signup" />
+        <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t("signinHeader")} onSubmit={signin} />
+        <NavLink text={t("signin-navlink-text")} routeName="signup" />
+        <ChangeLanguage />
       </View>
     </>
   );

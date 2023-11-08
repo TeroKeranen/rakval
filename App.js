@@ -1,4 +1,5 @@
 
+import './services/i18n'
 import "react-native-gesture-handler";
 import { useContext, useState, useEffect } from "react";
 import { Context as AuthContext } from "./src/context/AuthContext";
