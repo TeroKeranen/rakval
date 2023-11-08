@@ -1,12 +1,14 @@
 import { useContext, useEffect } from "react";
 
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-
+import { useTranslation } from "react-i18next";
 import {Context as AuthContext} from '../context/AuthContext'
 import AuthForm from "../components/AuthForm";
 import NavLink from "../components/NavLink";
 
 const SignupScreen = ({navigation}) => {
+
+  const { t } = useTranslation();
   const { state, signup, clearErrorMessage, tryLocalSignin } = useContext(AuthContext);
   
   // useEffect(() => {
@@ -29,8 +31,8 @@ const SignupScreen = ({navigation}) => {
     <>
       <View style={styles.container}>
         {/* signup */}
-        <AuthForm headerText="Sign Up" errorMessage={state.errorMessage} submitButtonText="Sign Up" onSubmit={signup} />
-        <NavLink text="Sinulla on jo luotu tili? Kirjaudu sisään sittenkin" routeName="signin" />
+        <AuthForm headerText={t("sign-upHeader")} errorMessage={state.errorMessage} submitButtonText={t("sign-upHeader")} onSubmit={signup} />
+        <NavLink text={t("signup-navlink-text")} routeName="signin" />
       </View>
     </>
   );

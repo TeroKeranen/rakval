@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native'
 import {Text, Button, Input} from 'react-native-elements'
+import { useTranslation } from "react-i18next";
 
 
 const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
+
+    const { t } = useTranslation();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -12,7 +15,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
         <>
         <Text h3 style={styles.text}>{headerText}</Text>
            <Input 
-            label="Email" 
+            label={t('email')} 
             value={email} 
             onChangeText={setEmail}
             autoCapitalize="none"
@@ -20,7 +23,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
             />
            <Input 
             secureTextEntry
-            label="Password" 
+            label={t('password')}
             value={password} 
             onChangeText={setPassword}
             autoCapitalize="none"

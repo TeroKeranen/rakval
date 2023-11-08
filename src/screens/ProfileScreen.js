@@ -5,6 +5,8 @@ import { Context as AuthContext } from "../context/AuthContext";
 import {Context as WorksiteContext} from '../context/WorksiteContext'
 import {Context as CompanyContext} from '../context/CompanyContext'
 import DownloadScreen from "../components/DownloadScreen";
+import ChangeLanguage from "../components/ChangeLanguage";
+import { useTranslation } from "react-i18next";
 
 
 //TO6b2PchlA
@@ -12,7 +14,7 @@ import DownloadScreen from "../components/DownloadScreen";
 // admi2 JH6xHY2UEK
 
 const ProfileScreen = ({navigation}) => {
-
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
   const { state, fetchUser, signout, joinCompany, clearErrorMessage } = useContext(AuthContext);
   const { clearCompany } = useContext(CompanyContext);
@@ -68,30 +70,31 @@ const ProfileScreen = ({navigation}) => {
   return (
     <View>
       <View style={styles.userInfo}>
-        <Text style={styles.text}>Sähköposti: {state.user.email}</Text>
-        <Text style={styles.text}>Rooli : {state.user.role}</Text>
+        <Text style={styles.text}>{t('email')}: {state.user.email}</Text>
+        <Text style={styles.text}>{t('role')} : {state.user.role}</Text>
       </View>
 
       {/* admin käyttäjä */}
       {state.user.role === "admin" ? (
-        <Text>Olet admin käyttäjä</Text>
+        <Text>{t('profileScreen-role')}</Text>
       ) : (
         // normi käyttäjä
         <>
           {state.user.company ? (
-            <Text>Olet liittynyt yritykseen {state.user.company.name}</Text>
+            <Text>{t('profileScreen-company')} {state.user.company.name}</Text>
           ) : (
             // jos käyttäjä ei ole liittynyt yritykseen
             <>
               {state.errorMessage != "" ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
-              <TextInput placeholder="Enter company code" value={companyCode} onChangeText={setCompanyCode} style={styles.input} />
-              <Button title="Lisää yritys" onPress={handleJoinCompany} />
+              <TextInput placeholder={t('profileScreen-placeholder')} value={companyCode} onChangeText={setCompanyCode} style={styles.input} />
+              <Button title={t('profileScreen-joincompany')} onPress={handleJoinCompany} />
             </>
           )}
         </>
       )}
 
-      <Button title="Sign out" onPress={handleSignout} />
+      <Button title={t('profileScreen-signout')} onPress={handleSignout} />
+      <ChangeLanguage />
     </View>
   );
 }

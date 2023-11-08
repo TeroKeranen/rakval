@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { StyleSheet, View, Button } from "react-native";
 import { Text,  Input } from "react-native-elements";
+import { useTranslation } from "react-i18next";
 
 
 
 const WorksiteForm = ({onSubmit, errorMessage}) => {
-
+    const { t } = useTranslation();
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
 
@@ -22,15 +23,15 @@ const WorksiteForm = ({onSubmit, errorMessage}) => {
 
     return (
       <>
-        <Text style={styles.text}>add new work site</Text>
+        <Text style={styles.text}>{t('worksiteform-title')}</Text>
 
-        <Input style={styles.input} placeholder="address" value={address} onChangeText={setAddress} />
+        <Input style={styles.input} placeholder={t('worksiteform-address')} value={address} onChangeText={setAddress} />
 
-        <Input style={styles.input} placeholder="city" value={city} onChangeText={setCity} />
+        <Input style={styles.input} placeholder={t('worksiteform-city')} value={city} onChangeText={setCity} />
 
         {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
 
-        <Button  title="add worksite" onPress={handleSubmit} />
+        <Button  title={t('worksiteform-button')} onPress={handleSubmit} />
       </>
     );
 
