@@ -22,6 +22,8 @@ const worksiteReducer = (state, action) => {
       case 'reset_current_worksite':
         console.log("suoritetaan reset_current_worksite")
         return {...state, currentWorksite:[]}
+      case 'delete_worksite':
+        return {...state, worksites: state.worksites.filter(worksite => worksite._id !== action.payload)}
       default:
         return state;
     }
@@ -43,7 +45,27 @@ const resetCurrentWorksite = (dispatch) => {
   }
 }
 
+const deleteWorksite = (dispatch) => {
+  return async (worksiteId, callback) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      await rakval.delete(`/worksites/${worksiteId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      if (callback) {
+        callback();
+      }
 
+      dispatch({type:"delete_worksite", payload: worksiteId})
+    } catch (error) {
+      console.log(error)
+      dispatch({type:'set_error', payload: 'työmaan poisto epäonnistui'})
+      
+    }
+  }
+}
 // Kun työmaalistasta painetaan työmaata niin tällä saadaan avattua tietyn työmaan
 const fetchWorksiteDetails = (dispatch) => {
   return async (worksiteId) => {
@@ -144,4 +166,4 @@ const newWorksite = (dispatch) => {
 }
 
 
-export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite }, { worksites: [], errorMessage: "", currentWorksite: [] });
+export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite, deleteWorksite }, { worksites: [], errorMessage: "", currentWorksite: [] });
