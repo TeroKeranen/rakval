@@ -3,6 +3,8 @@ import './services/i18n'
 import "react-native-gesture-handler";
 import { useContext, useState, useEffect } from "react";
 import { Context as AuthContext } from "./src/context/AuthContext";
+import {Context as CompanyContext} from './src/context/CompanyContext'
+import { Context as WorksiteContext } from './src/context/WorksiteContext'
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import {NavigationContainer} from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -20,12 +22,14 @@ import { Provider as AuthProvider} from './src/context/AuthContext'
 import {Provider as WorksiteProvider} from './src/context/WorksiteContext'
 import {Provider as CompanyProvider} from './src/context/CompanyContext'
 import {Ionicons} from '@expo/vector-icons'
-import {Context as CompanyContext} from './src/context/CompanyContext'
 import { useTranslation } from "react-i18next";
+import MoreTabButton from './src/components/MoreTabButton';
+import MoreTabModal from './src/components/MoreTabModal';
 
 
 
 import { navigationRef } from "./src/navigationRef";
+import { TouchableOpacity, View } from 'react-native';
 
 
 
@@ -38,36 +42,62 @@ const Tab = createBottomTabNavigator();
 
 // Tämä näytetään etusivulla
 function HomeTabs() {
+  const { clearCompany } = useContext(CompanyContext);
+  const { signout } = useContext(AuthContext);
+  const { clearWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
   const { t } = useTranslation();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  // käytetään tätä uloskirjautumiseen
+  const handleSignout = async () => {
+    clearWorksites(); // pyyhitään työmaatiedot statesta
+    clearCompany(); // pyyhitään company tiedot statesta
+    resetCurrentWorksite();
+    signout(); // Kutsutaan signout functio
+  };
+
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarActiveTintColor: "#f48b28",
-        tabBarInactiveTintColor: "#a3845c",
-        tabBarStyle: {
-          backgroundColor: "#351301",
-        },
+    <>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarActiveTintColor: "#f48b28",
+          tabBarInactiveTintColor: "#a3845c",
+          tabBarStyle: {
+            backgroundColor: "#351301",
+          },
 
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-          if (route.name === "Profile" || route.name === "Profiili") {
-            iconName = focused ? "person" : "person-outline";
-          } else if (route.name === "Main page" || route.name === "Etusivu") {
-            iconName = focused ? "home" : "home-outline";
-          }
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
+            if (route.name === "Profile" || route.name === "Profiili") {
+              iconName = focused ? "person" : "person-outline";
+            } else if (route.name === "Main page" || route.name === "Etusivu") {
+              iconName = focused ? "home" : "home-outline";
+            }
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
 
-        // activeTintColor: "tomato", // väri kun välilehti on aktiivinen
-        // inactiveTintColor: "white",
-      })}
-    >
-      <Tab.Screen name={t("main-page")} component={Etusivu} options={{ headerShown: false }} />
-      <Tab.Screen name={t('profile')} component={ProfileScreen} options={{ headerShown: false }} />
-    </Tab.Navigator>
+          // activeTintColor: "tomato", // väri kun välilehti on aktiivinen
+          // inactiveTintColor: "white",
+        })}
+      >
+        <Tab.Screen name={t("main-page")} component={Etusivu} options={{ headerShown: false }} />
+        <Tab.Screen name={t("profile")} component={ProfileScreen} options={{ headerShown: false }} />
+        <Tab.Screen
+          name="More"
+          component={DummyComponent} // Dummy-komponentti, koska tämä tabi avaa vain modalin
+          options={{
+            tabBarButton: () => <MoreTabButton onPress={() => setModalVisible(true)} />,
+          }}
+        />
+      </Tab.Navigator>
+
+      <MoreTabModal isVisible={modalVisible} onClose={() => setModalVisible(false)} onLogout={handleSignout} />
+    </>
   );
 }
+
+const DummyComponent = () => <View />;
 
 function AdminWorksiteTabNoCompany() {
   const { t } = useTranslation();

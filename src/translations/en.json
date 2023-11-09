@@ -28,7 +28,7 @@
   "companyScreen-create": "Create a Company",
 
   "profileScreen-role": "You are an admin user",
-  "prifileScreen-company": "You have joined the company called",
+  "profileScreen-company": "You have joined the company called",
   "profileScreen-placeholder": "Enter company code",
   "profileScreen-joincompany": "Add company",
   "profileScreen-signout": "Sign Out",
