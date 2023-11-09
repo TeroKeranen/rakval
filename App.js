@@ -222,7 +222,7 @@ function AdminTabs() {
         // inactiveTintColor: "white",
       })}
     >
-      <Tab.Screen name={t("tabScreen-company")} component={AdminScreen} />
+      <Tab.Screen name={t("tabScreen-company")} component={AdminScreen} options={{headerShown: false}} />
     </Tab.Navigator>
   );
 }

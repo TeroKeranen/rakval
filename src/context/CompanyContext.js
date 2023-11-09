@@ -7,18 +7,17 @@ import { navigate, resetAndNavigate } from "../navigationRef";
 
 
 const CompanyReducer = (state, action) => {
-    switch (action.type){
-        case 'add_company':
-            return {...state, company: action.payload}
-        case 'fetch_company':
-            return {...state, company: action.payload}
-        case 'set_error':
-            return {...state, errorMessage: action.payload}
-        case 'clear_company':
-            return { ...state, company: null };
-        
-        default:
-            return state;
+    switch (action.type) {
+      case "add_company":
+        return { ...state, company: action.payload };
+      case "fetch_company":
+        return { ...state, company: action.payload };
+      case "set_error":
+        return { ...state, errorMessage: action.payload };
+      case "clear_company":
+        return { ...state, company: null };
+      default:
+        return state;
     }
 }
 
@@ -37,7 +36,7 @@ const fetchCompany = (dispatch) => {
               Authorization: `Bearer ${token}`,
             },
           });
-        console.log("fetchCompanyData ", response.data);
+        
           dispatch({ type: "fetch_company", payload: response.data });
         } catch (error) {
           console.log("ei ole fetchcompany dataa", error);

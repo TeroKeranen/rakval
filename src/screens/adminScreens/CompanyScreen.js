@@ -15,7 +15,7 @@ const CompanyScreen = ({ navigation }) => {
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
   const { state, createCompany, fetchCompany } = useContext(CompanyContext);
-  const { fetchUser } = useContext(AuthContext);
+  const {state:authState, fetchUser } = useContext(AuthContext);
 
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -25,9 +25,11 @@ const CompanyScreen = ({ navigation }) => {
     const loadCompany = async () => {
       setIsLoading(true);
       await fetchCompany();
+      
       setIsLoading(false);
     };
     loadCompany();
+    
   }, []);
 
   const handleCreateCompany = async () => {
@@ -45,15 +47,17 @@ const CompanyScreen = ({ navigation }) => {
       <View>
         <Text style={styles.text}>{t("companyScreen-companyInfo")}:</Text>
         <Text>
-          {t('companyScreen-companyInfo-name')}: {state.company.name}
+          {t("companyScreen-companyInfo-name")}: {authState.user.company.name}
         </Text>
         <Text>
-          {t('companyScreen-companyInfo-address')}: {state.company.address}
+          {t("companyScreen-companyInfo-address")}: {authState.user.company.address}
         </Text>
         <Text>
-          {t('companyScreen-companyInfo-city')}: {state.company.city}
+          {t("companyScreen-companyInfo-city")}: {authState.user.company.city}
         </Text>
-        <Text>{t('companyScreen-companyInfo-code')}: {state.company.code}</Text>
+        <Text>
+          {t("companyScreen-companyInfo-code")}: {authState.user.company.code}
+        </Text>
       </View>
     );
   };
@@ -74,7 +78,7 @@ const CompanyScreen = ({ navigation }) => {
     );
   };
 
-  return <View>{state.company ? renderCompanyInfo() : renderCreateForm()}</View>;
+  return <View>{authState.user.company ? renderCompanyInfo() : renderCreateForm()}</View>;
 };
 
 const styles = StyleSheet.create({

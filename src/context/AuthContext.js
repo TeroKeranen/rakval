@@ -131,7 +131,7 @@ const joinCompany = (dispatch) => async (companyCode) => {
     // Tarkista, että palvelimen vastauksessa on data-kenttä
     if (response.data) {
       const updatedUser = response.data; // Tämä on oletettu päivitetty käyttäjä
-      console.log("AUTHCONTEXT", updatedUser);
+      
       await AsyncStorage.setItem("user", JSON.stringify(updatedUser));
       dispatch({ type: "join_company", payload: updatedUser });
       return { success: true }; // Palauta onnistumisen merkki
