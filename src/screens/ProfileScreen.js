@@ -27,6 +27,7 @@ const ProfileScreen = ({navigation}) => {
       fetchUser(); // Otettu pois mutta jos tulee ongelmia käyttäjätietojen kanssa
       clearErrorMessage();
       
+      
     });
 
     return unsubscribe;
@@ -52,14 +53,15 @@ const ProfileScreen = ({navigation}) => {
     }
   };
 
+  
 
   // käytetään tätä uloskirjautumiseen
-  const handleSignout = async () => {
-    clearWorksites(); // pyyhitään työmaatiedot statesta
-    clearCompany(); // pyyhitään company tiedot statesta
-    resetCurrentWorksite();
-    signout(); // Kutsutaan signout functio
-  };
+  // const handleSignout = async () => {
+  //   clearWorksites(); // pyyhitään työmaatiedot statesta
+  //   clearCompany(); // pyyhitään company tiedot statesta
+  //   resetCurrentWorksite();
+  //   signout(); // Kutsutaan signout functio
+  // };
 
 
   // Latauskuvake jos etsii tietoja
@@ -72,29 +74,18 @@ const ProfileScreen = ({navigation}) => {
       <View style={styles.userInfo}>
         <Text style={styles.text}>{t('email')}: {state.user.email}</Text>
         <Text style={styles.text}>{t('role')} : {state.user.role}</Text>
+        {state.user.company ? <Text>{t('profileScreen-company')}: {state.user.company.name}</Text> : null}
+        
       </View>
-
-      {/* admin käyttäjä */}
-      {state.user.role === "admin" ? (
-        <Text>{t('profileScreen-role')}</Text>
-      ) : (
-        // normi käyttäjä
-        <>
-          {state.user.company ? (
-            <Text>{t('profileScreen-company')} {state.user.company.name}</Text>
-          ) : (
-            // jos käyttäjä ei ole liittynyt yritykseen
-            <>
+      <View>
+        {!state.user.company ?  
+          <>
               {state.errorMessage != "" ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
               <TextInput placeholder={t('profileScreen-placeholder')} value={companyCode} onChangeText={setCompanyCode} style={styles.input} />
               <Button title={t('profileScreen-joincompany')} onPress={handleJoinCompany} />
-            </>
-          )}
-        </>
-      )}
+          </> : null}
+      </View>
 
-      <Button title={t('profileScreen-signout')} onPress={handleSignout} />
-      <ChangeLanguage />
     </View>
   );
 }
