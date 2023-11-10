@@ -30,6 +30,7 @@ const WorksiteDetails = ({route, navigation}) => {
           setIsLoading(false);
         }   
       }
+      
       loadDetails();          
     },[worksiteId])
 

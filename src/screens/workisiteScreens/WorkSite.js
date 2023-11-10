@@ -22,7 +22,7 @@ const WorkSite = ({navigation}) => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchWorksites();
 
-      console.log("worksite.js", state);
+      
     });
 
     return unsubscribe;
@@ -49,15 +49,16 @@ const WorkSite = ({navigation}) => {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.headerText}>WorkSites</Text>
 
       {state.worksites.length > 0 ? (
         <FlatList
           data={state.worksites}
           renderItem={({ item }) => (
-            <Pressable onPress={() => handlePressWorksite(item._id)} style={({pressed}) => pressed && styles.pressed} >
-              <View style={styles.container}>
+            
+            <Pressable onPress={() => handlePressWorksite(item._id)} style={({pressed}) => pressed && styles.pressed}>
+              <View style={styles.worksiteItem}>
                 <View style={styles.worksiteContainer}>
                   <Text style={styles.worksiteText}>
                     {t("workistedetail-address")}: {item.address}
@@ -69,6 +70,7 @@ const WorkSite = ({navigation}) => {
                 </View>
               </View>
             </Pressable>
+            
           )}
           keyExtractor={(worksite) => worksite._id}
         />
@@ -82,14 +84,20 @@ const WorkSite = ({navigation}) => {
 
 const styles = StyleSheet.create({
   pressed: {
-    opacity: 0.8
+    opacity: 0.75,
   },
-  container: {
+  container : {
+    
+    marginBottom: 60,
+    
+    
+  },
+  worksiteItem: {
     flex: 1,
+    justifyContent: 'center',
     alignItems:'center',
-    marginBottom: 40,
   },
- 
+
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
@@ -97,18 +105,16 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   worksiteContainer: {
-    backgroundColor: "#e8e8f0",
+    padding: 12,
+    marginVertical: 8,
+    backgroundColor: "#dad0d0",
+    borderRadius: 6,
+    elevation: 3,
+    shadowColor: "black",
+    shadowRadius: 4,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.4,
     width: "90%",
-    padding: 40,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   worksiteText: {
     fontSize: 18,

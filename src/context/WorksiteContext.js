@@ -12,7 +12,7 @@ const worksiteReducer = (state, action) => {
       case "fetch_worksites":
         return { ...state, worksites: action.payload };
       case 'set_current_worksite': 
-      console.log("Asetetaan currentWorksite:", action.payload);
+      
         return {...state, currentWorksite: action.payload} 
       case "set_error":
         return { ...state, errorMessage: action.payload };

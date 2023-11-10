@@ -20,6 +20,8 @@ import { useTranslation } from "react-i18next";
 // Navigations
 import SignedOutNavigator from './src/navigation/SignedOutNavigator'
 import MainDrawerNavigator from './src/navigation/MainDrawerNavigator';
+import WorksiteDetailsTabsNavigator from './src/navigation/WorksiteDetailTabsNavigator';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -39,7 +41,7 @@ function MainStack() {
       <Stack.Screen name="MainDrawer" component={MainDrawerNavigator} />
       <Stack.Screen
         name="WorksiteDetails"
-        component={WorksiteDetails}
+        component={WorksiteDetailsTabsNavigator}
         options={{
           headerShown: true,
           headerTitle: t("woksite-detail-header"),

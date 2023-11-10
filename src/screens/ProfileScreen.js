@@ -53,16 +53,6 @@ const ProfileScreen = ({navigation}) => {
     }
   };
 
-  
-
-  // käytetään tätä uloskirjautumiseen
-  // const handleSignout = async () => {
-  //   clearWorksites(); // pyyhitään työmaatiedot statesta
-  //   clearCompany(); // pyyhitään company tiedot statesta
-  //   resetCurrentWorksite();
-  //   signout(); // Kutsutaan signout functio
-  // };
-
 
   // Latauskuvake jos etsii tietoja
   if (isLoading) {
