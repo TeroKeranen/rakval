@@ -20,9 +20,9 @@ const AddNewWorksite = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 100,
-    borderWidth: 1,
-    borderColor: 'red',
+    
+    
+    
   },
   
   

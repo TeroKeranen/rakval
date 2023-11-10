@@ -23,15 +23,19 @@ const WorksiteForm = ({onSubmit, errorMessage}) => {
 
     return (
       <>
-        <Text style={styles.text}>{t('worksiteform-title')}</Text>
+        <View style={styles.companyInfo}>
+            <Text style={styles.text}>{t("worksiteform-title")}</Text>
+          <View style={styles.infoCard}>
 
-        <Input style={styles.input} placeholder={t('worksiteform-address')} value={address} onChangeText={setAddress} />
+            <Input style={styles.input} placeholder={t("worksiteform-address")} value={address} onChangeText={setAddress} />
 
-        <Input style={styles.input} placeholder={t('worksiteform-city')} value={city} onChangeText={setCity} />
+            <Input style={styles.input} placeholder={t("worksiteform-city")} value={city} onChangeText={setCity} />
 
-        {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
+            {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
 
-        <Button  title={t('worksiteform-button')} onPress={handleSubmit} />
+            <Button title={t("worksiteform-button")} onPress={handleSubmit} />
+          </View>
+        </View>
       </>
     );
 
@@ -39,18 +43,39 @@ const WorksiteForm = ({onSubmit, errorMessage}) => {
 };
 
 const styles = StyleSheet.create({
-    errorMessage: {
-        fontSize: 16,
-        color: 'red',
+  errorMessage: {
+    fontSize: 16,
+    color: "red",
+  },
+  infoCard: {
+    backgroundColor: "#e8e8f0",
+    width: "90%",
+    padding: 40,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    text: {
-        alignSelf: 'center',
-        marginBottom: 50,
-        fontSize: 20,
-    },
-    button: {
-        width: '50%'
-    }
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  companyInfo: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginTop: 30,
+    alignItems: "center",
+  },
+  text: {
+    alignSelf: "center",
+    marginBottom: 50,
+    fontSize: 20,
+  },
+  button: {
+    width: "50%",
+  },
 });
 
 export default WorksiteForm;

@@ -5,7 +5,7 @@ import {Context as AuthContext} from '../../context/AuthContext'
 import DownloadScreen from "../../components/DownloadScreen";
 import { useTranslation } from "react-i18next";
 
-import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity, Pressable } from "react-native";
 
 const WorkSite = ({navigation}) => {
   const { t } = useTranslation();
@@ -51,21 +51,24 @@ const WorkSite = ({navigation}) => {
   return (
     <View>
       <Text style={styles.headerText}>WorkSites</Text>
+
       {state.worksites.length > 0 ? (
         <FlatList
           data={state.worksites}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handlePressWorksite(item._id)}>
-              <View style={styles.worksiteContainer}>
-                <Text style={styles.worksiteText}>
-                  {t("workistedetail-address")}: {item.address}
-                </Text>
-                <Text style={styles.worksiteText}>
-                  {t("worksitedetail-city")}: {item.city}
-                </Text>
-                {/* Voit lisätä muita tietoja täällä */}
+            <Pressable onPress={() => handlePressWorksite(item._id)} style={({pressed}) => pressed && styles.pressed} >
+              <View style={styles.container}>
+                <View style={styles.worksiteContainer}>
+                  <Text style={styles.worksiteText}>
+                    {t("workistedetail-address")}: {item.address}
+                  </Text>
+                  <Text style={styles.worksiteText}>
+                    {t("worksitedetail-city")}: {item.city}
+                  </Text>
+                  {/* Voit lisätä muita tietoja täällä */}
+                </View>
               </View>
-            </TouchableOpacity>
+            </Pressable>
           )}
           keyExtractor={(worksite) => worksite._id}
         />
@@ -78,6 +81,15 @@ const WorkSite = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.8
+  },
+  container: {
+    flex: 1,
+    alignItems:'center',
+    marginBottom: 40,
+  },
+ 
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
@@ -85,16 +97,22 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   worksiteContainer: {
-    padding: 10,
-    margin: 3,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    backgroundColor: '#3232eb',
-    
+    backgroundColor: "#e8e8f0",
+    width: "90%",
+    padding: 40,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   worksiteText: {
     fontSize: 18,
-    color:'white',
+    color: "#000000",
   },
   noWorksiteText: {
     fontSize: 18,

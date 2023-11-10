@@ -44,20 +44,23 @@ const CompanyScreen = ({ navigation }) => {
   }
   const renderCompanyInfo = () => {
     return (
-      <View>
-        <Text style={styles.text}>{t("companyScreen-companyInfo")}:</Text>
-        <Text>
-          {t("companyScreen-companyInfo-name")}: {authState.user.company.name}
-        </Text>
-        <Text>
-          {t("companyScreen-companyInfo-address")}: {authState.user.company.address}
-        </Text>
-        <Text>
-          {t("companyScreen-companyInfo-city")}: {authState.user.company.city}
-        </Text>
-        <Text>
-          {t("companyScreen-companyInfo-code")}: {authState.user.company.code}
-        </Text>
+      <View style={styles.companyInfo}>
+          <Text style={styles.title}>{t("companyScreen-companyInfo")}</Text>
+        <View style={styles.infoCard}>
+
+          <Text style={styles.text}>
+            {t("companyScreen-companyInfo-name")}: {authState.user.company.name}
+          </Text>
+          <Text style={styles.text}>
+            {t("companyScreen-companyInfo-address")}: {authState.user.company.address}
+          </Text>
+          <Text style={styles.text}>
+            {t("companyScreen-companyInfo-city")}: {authState.user.company.city}
+          </Text>
+          <Text style={styles.text}>
+            {t("companyScreen-companyInfo-code")}: {authState.user.company.code}
+          </Text>
+        </View>
       </View>
     );
   };
@@ -65,25 +68,60 @@ const CompanyScreen = ({ navigation }) => {
   // Funktio lomakkeen renderöintiin
   const renderCreateForm = () => {
     return (
-      <View>
-        <Text style={styles.text}>{t("companyScreen-create")}</Text>
-        <Input placeholder={t("companyScreen-companyInfo-name")} value={name} onChangeText={setName} />
-        <Input placeholder={t("companyScreen-companyInfo-address")} value={address} onChangeText={setAddress} />
-        <Input placeholder={t("companyScreen-companyInfo-city")} value={city} onChangeText={setCity} />
-        {state.errorMessage ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
-        {/* <Button title="Luo yritys" onPress={() => createCompany({ name, address, city })} /> */}
-        {/* <Button title="Luo yritys" onPress={handleCreateCompany} /> */}
-        <Button title={t("companyScreen-create")} onPress={handleCreateCompany} />
+      <View style={styles.companyInfo}>
+          <Text style={styles.title}>{t("companyScreen-create")}</Text>
+        <View style={styles.infoCard}>
+          <Input placeholder={t("companyScreen-companyInfo-name")} value={name} onChangeText={setName} />
+          <Input placeholder={t("companyScreen-companyInfo-address")} value={address} onChangeText={setAddress} />
+          <Input placeholder={t("companyScreen-companyInfo-city")} value={city} onChangeText={setCity} />
+          {state.errorMessage ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
+          {/* <Button title="Luo yritys" onPress={() => createCompany({ name, address, city })} /> */}
+          {/* <Button title="Luo yritys" onPress={handleCreateCompany} /> */}
+          <Button title={t("companyScreen-create")} onPress={handleCreateCompany} />
+        </View>
       </View>
     );
   };
 
-  return <View>{authState.user.company ? renderCompanyInfo() : renderCreateForm()}</View>;
+  return <View style={styles.container}>{authState.user.company ? renderCompanyInfo() : renderCreateForm()}</View>;
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderWidth: 1,
+    
+  },
+  infoCard: {
+    backgroundColor: "#e8e8f0",
+    width: "90%",
+    padding: 40,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  companyInfo: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginTop: 30,
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 30,
+    marginBottom: 30,
+  },
   text: {
     color: "black",
+    fontSize: 15,
+    padding: 6,
+    margin: 4,
   },
 });
 
