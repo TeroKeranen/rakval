@@ -7,10 +7,11 @@ import { useTranslation } from "react-i18next";
 
 import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity, Pressable } from "react-native";
 
-const WorkSite = ({navigation}) => {
+const WorkSite = ({navigation, route}) => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
-  const { state, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
+  const { state, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext); 
+  const {state: authState, fetchUser} = useContext(AuthContext);
 
   // // Käytetään päivittämään työmaalista nappia käyttämällä ota käyttöön jos tulee jotain tarvetta
   // const handler = () => {
@@ -21,7 +22,6 @@ const WorkSite = ({navigation}) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchWorksites();
-
       
     });
 
@@ -48,14 +48,29 @@ const WorkSite = ({navigation}) => {
     return <DownloadScreen message="Haetaan työmaita" />;
   }
 
+  // Käytetään tätä FlatListissä, renderöimaan työmaat joita käyttäjällä on valtuudet nähä
+  const visibleWorksitesHandler = () => {
+    // Suodatetaan työmaat, joissa käyttäjä on työntekijöiden listalla
+    const visibleWorksites = state.worksites.filter((worksite) => worksite.workers.includes(authState.user._id));
+    if (authState.user.role === "admin") { // Jos käyttäjällä on admin rooli niin palautetaan kaikki työmaat
+      
+      return state.worksites;
+
+    } else {
+      return visibleWorksites;
+    }
+  }
+  
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>WorkSites</Text>
 
       {state.worksites.length > 0 ? (
         <FlatList
-          data={state.worksites}
+          data={visibleWorksitesHandler()}
           renderItem={({ item }) => (
+
+            
             
             <Pressable onPress={() => handlePressWorksite(item._id)} style={({pressed}) => pressed && styles.pressed}>
               <View style={styles.worksiteItem}>

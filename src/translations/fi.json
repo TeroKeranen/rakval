@@ -5,6 +5,8 @@
   "email": "Sähköpostiosoite",
   "password": "Salasana",
   "role": "Rooli",
+  "worksiteDetail": "Työmaa",
+  "workers": "Työntekijät",
 
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
@@ -45,5 +47,9 @@
   "worksitedetail-deleteBtn": "Poista työmaa",
   "worksitedetail-confirmdelete": "Haluatko varmasti poistaa tämän työmaan",
   "worksitedetail-confirmDelete-cancelButton": "Peruuta",
-  "worksitedetail-confirmDelete-deleteButton": "Poista"
+  "worksitedetail-confirmDelete-deleteButton": "Poista",
+
+  "worksiteWorker-select-worker": "Valitse työntekijä",
+  "worksiteWorker-add-button" : "Lisää työntekijä",
+  "worksiteWorker-workers": "Työntekijät tässä työmaassa"
 }

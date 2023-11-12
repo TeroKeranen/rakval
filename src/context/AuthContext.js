@@ -23,6 +23,8 @@ const authReducer = (state, action) => {
       return {...state, errorMessage: ''}
     case "fetch_user":
       return {...state, user: action.payload}
+    case 'fetch_user_id':
+      return {...state, worksiteUser: [action.payload]}
     case 'join_company':
       return {...state, user: action.payload}
     case "signout":
@@ -169,6 +171,25 @@ const fetchUser = (dispatch) => async () => {
   }
 }
 
+// haetaan käyttäjän tiedot id perusteella. Tätä käytetään worksiteWorkers.js tiedostossa kun näytämme listan jotka on lisätty työmaahan
+const fetchUserWithId = (dispatch) => {
+  return async (userId) => {
+    try {
+      const token = await AsyncStorage.getItem('token')
+      const response = await rakval.get(`/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      
+      return response.data;
+      
+    } catch (error) {
+      
+    }
+  }
+}
+
 const signout = (dispatch) => {
   return async () => {
     await AsyncStorage.removeItem('token');
@@ -182,4 +203,4 @@ const signout = (dispatch) => {
   };
 };
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany }, { token: null, errorMessage: "", user: null,company: null });
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId }, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
