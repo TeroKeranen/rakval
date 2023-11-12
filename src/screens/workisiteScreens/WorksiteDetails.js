@@ -57,22 +57,49 @@ const WorksiteDetails = ({route, navigation}) => {
     
 
     return (
-      <View>
-        {isAdmin && <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} />}
-        {/* <Button title="Poista työmaa" onPress={handleDelete}/> */}
-        <Text>
-          {t("workistedetail-address")}:{state.currentWorksite.address}{" "}
-        </Text>
-        {/* <Text>Kaupunki: {state.currentWorksite.city} </Text> */}
-        <Text>{t("worksitedetail-city")}</Text>
-        {/* Lisää muita yksityiskohtia tähän */}
+      <View style={styles.container}>
+        
+        <View style={styles.textContainer}>
+          <Text>
+            {t("workistedetail-address")}:{state.currentWorksite.address}
+          </Text>
+          <Text>{t("worksitedetail-city")}</Text>
+        </View>
+
+        <View style={styles.buttonContainer}>{isAdmin && 
+          <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} />}   
+        </View>
+
       </View>
     );
 }
 
 
 const styles = StyleSheet.create({
-  
+  container: {
+    flex: 1,
+    alignItems:'center',
+    marginVertical: 20,
+  },
+  textContainer: {
+    flex: 1,
+    backgroundColor: "#e8e8f0",
+    width: "90%",
+    padding: 40,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  buttonContainer: {
+    borderWidth: 1,
+    marginTop: 20,
+  },
 });
 
 export default WorksiteDetails;

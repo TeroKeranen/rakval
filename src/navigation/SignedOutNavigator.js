@@ -6,7 +6,9 @@ const Stack = createNativeStackNavigator();
 
 const SignedOutNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerShown: false
+    }}>
       <Stack.Screen name="signin" component={SigninScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />
       {/* muut ruudut, jos niitä on */}

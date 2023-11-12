@@ -12,10 +12,12 @@ const CompanyReducer = (state, action) => {
         return { ...state, company: action.payload };
       case "fetch_company":
         return { ...state, company: action.payload };
+      case 'set_workers':
+        return {...state, workers:action.payload}
       case "set_error":
         return { ...state, errorMessage: action.payload };
       case "clear_company":
-        return { ...state, company: null };
+        return { ...state, company: null, workers:[] };
       default:
         return state;
     }
@@ -36,12 +38,30 @@ const fetchCompany = (dispatch) => {
               Authorization: `Bearer ${token}`,
             },
           });
-        
+          
           dispatch({ type: "fetch_company", payload: response.data });
         } catch (error) {
           console.log("ei ole fetchcompany dataa", error);
         }
     }
+}
+
+// Haetaan yrityksen työntekijät
+const fetchWorkers = (dispatch) => {
+  return async (companyId) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await rakval.get(`/company/${companyId}/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      
+      dispatch({type: 'set_workers', payload: response.data})
+    } catch (error) {
+      
+    }
+  }
 }
 
 // Luodaan uusi yritys
@@ -73,4 +93,4 @@ const createCompany = (dispatch) => {
     }
 }
 
-export const {Provider, Context } = createDataContext(CompanyReducer, {createCompany, fetchCompany, clearCompany}, {company: null, errorMessage:''})
+export const {Provider, Context } = createDataContext(CompanyReducer, {createCompany, fetchCompany, clearCompany,fetchWorkers}, {workers:[],company: null, errorMessage:''})

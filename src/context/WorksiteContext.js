@@ -11,19 +11,29 @@ const worksiteReducer = (state, action) => {
         return { ...state, worksites: [...state.worksites, action.payload] };
       case "fetch_worksites":
         return { ...state, worksites: action.payload };
-      case 'set_current_worksite': 
-      
-        return {...state, currentWorksite: action.payload} 
+      case "set_current_worksite":
+        return { ...state, currentWorksite: action.payload };
       case "set_error":
         return { ...state, errorMessage: action.payload };
       case "clear_worksites":
         console.log("suoritetaan clear_worksites");
         return { ...state, worksites: [] };
-      case 'reset_current_worksite':
-        console.log("suoritetaan reset_current_worksite")
-        return {...state, currentWorksite:[]}
-      case 'delete_worksite':
-        return {...state, worksites: state.worksites.filter(worksite => worksite._id !== action.payload)}
+      case "reset_current_worksite":
+        console.log("suoritetaan reset_current_worksite");
+        return { ...state, currentWorksite: [] };
+      case "delete_worksite":
+        return { ...state, worksites: state.worksites.filter((worksite) => worksite._id !== action.payload) };
+      case "delete_worker_from_worksite":
+        return {
+          ...state,
+          currentWorksite: {
+            ...state.currentWorksite,
+            workers: state.currentWorksite.workers.filter((id) => id !== action.payload.workerId),
+          },
+        };
+      case "update_worksite":
+        const updatedWorksites = state.worksites.map((worksite) => (worksite._id === action.payload._id ? action.payload : worksite));
+        return { ...state, worksites: updatedWorksites, currentWorksite: action.payload };
       default:
         return state;
     }
@@ -140,6 +150,36 @@ const fetchWorksites = (dispatch) => {
   };
 };
 
+const addWorkerToWorksite = (dispatch) => {
+  return async (worksiteId, workerId) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await rakval.post(`/worksites/${worksiteId}/add-worker`, {workerId}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      dispatch({type: 'update_worksite', payload:response.data})
+    } catch (error) {
+      
+    }
+  }
+}
+
+const deleteWorkerFromWorksite = (dispatch) => {
+  return async (worksiteId, workerId) => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      await rakval.delete(`/worksites/${worksiteId}/workers/${workerId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      // Päivitä worksiteState sen jälkeen kun työntekijä on poistettu
+      dispatch({ type: "delete_worker_from_worksite", payload: { worksiteId, workerId } });
+    } catch (error) {
+      // Käsittely virheille
+    }
+  };
+};
 // lähetetään uusityömaa tietokantaan
 const newWorksite = (dispatch) => {
     const { t } = useTranslation();
@@ -166,4 +206,4 @@ const newWorksite = (dispatch) => {
 }
 
 
-export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite, deleteWorksite }, { worksites: [], errorMessage: "", currentWorksite: [] });
+export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite, deleteWorksite, addWorkerToWorksite, deleteWorkerFromWorksite }, { worksites: [], errorMessage: "", currentWorksite: [] });

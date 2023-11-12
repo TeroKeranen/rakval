@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet,FlatList, ScrollView } from "react-native";
 import i18next from '../../services/i18n'
 import { useTranslation } from "react-i18next";
 
@@ -28,12 +28,15 @@ const SigninScreen = ({navigation}) => {
   
   return (
     <>
+    <ScrollView>
+
       <View style={styles.container}>
         {/* signin */}
         <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t("signinHeader")} onSubmit={signin} />
         <NavLink text={t("signin-navlink-text")} routeName="signup" />
         <ChangeLanguage />
       </View>
+    </ScrollView>
     </>
   );
 };

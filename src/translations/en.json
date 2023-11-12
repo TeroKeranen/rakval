@@ -5,6 +5,8 @@
   "email": "Email",
   "password": "Password",
   "role": "Role",
+  "worksiteDetail": "Construction site",
+  "workers": "Workers",
 
   "sign-upHeader": "Sign Up",
   "signup-navlink-text": "Already have an account? Sign in instead",
@@ -45,5 +47,9 @@
   "worksitedetail-deleteBtn": "Delete construction site",
   "worksitedetail-confirmdelete": "Are you sure you want to delete this worksite?",
   "worksitedetail-confirmDelete-cancelButton": "Cancel",
-  "worksitedetail-confirmDelete-deleteButton": "Delete"
+  "worksitedetail-confirmDelete-deleteButton": "Delete",
+
+  "worksiteWorker-select-worker": "Select a worker",
+  "worksiteWorker-add-button" : "Add worker",
+  "worksiteWorker-workers": "Workers at this construction site"
 }
