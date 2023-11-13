@@ -1,0 +1,44 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-rakval-dev-172236-authRole",
+      "UnauthRoleArn": "arn:aws:iam::829115295147:role/amplify-rakval-dev-172236-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::829115295147:role/amplify-rakval-dev-172236-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-rakval-dev-172236-deployment",
+      "UnauthRoleName": "amplify-rakval-dev-172236-unauthRole",
+      "StackName": "amplify-rakval-dev-172236",
+      "StackId": "arn:aws:cloudformation:eu-west-1:829115295147:stack/amplify-rakval-dev-172236/50acf810-816f-11ee-8668-024ebdfd6523",
+      "AmplifyAppId": "dgn1zhf9v7p90"
+    },
+    "categories": {
+      "auth": {
+        "rakvale49a7a9a": {}
+      },
+      "storage": {
+        "s3fe5f3cae": {}
+      }
+    }
+  },
+  "rakval": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-rakval-rakval-94331-authRole",
+      "UnauthRoleArn": "arn:aws:iam::829115295147:role/amplify-rakval-rakval-94331-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::829115295147:role/amplify-rakval-rakval-94331-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-rakval-rakval-94331-deployment",
+      "UnauthRoleName": "amplify-rakval-rakval-94331-unauthRole",
+      "StackName": "amplify-rakval-rakval-94331",
+      "StackId": "arn:aws:cloudformation:eu-west-1:829115295147:stack/amplify-rakval-rakval-94331/596a5f40-81f8-11ee-949d-02d44a83fddd",
+      "AmplifyAppId": "dgn1zhf9v7p90"
+    },
+    "categories": {
+      "auth": {
+        "rakvale49a7a9a": {}
+      },
+      "storage": {
+        "s3fe5f3cae": {}
+      }
+    }
+  }
+}
