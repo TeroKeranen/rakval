@@ -90,6 +90,7 @@ const fetchWorksiteDetails = (dispatch) => {
           }
         })
         
+        
         dispatch({type: 'set_current_worksite', payload: response.data})
       }
       
@@ -183,10 +184,10 @@ const deleteWorkerFromWorksite = (dispatch) => {
 // lähetetään uusityömaa tietokantaan
 const newWorksite = (dispatch) => {
     const { t } = useTranslation();
-    return async ({address, city, navigation }) => {
+    return async ({address, city, floorplanKey, navigation }) => {
         try {
             const token = await AsyncStorage.getItem('token')
-            const response = await rakval.post('/worksites', {address, city}, {
+            const response = await rakval.post('/worksites', {address, city, floorplanKey}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

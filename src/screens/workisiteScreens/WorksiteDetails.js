@@ -1,10 +1,11 @@
 
-import {View, Text, StyleSheet, ActivityIndicator, Alert, Button} from 'react-native'
+import {View, Text, StyleSheet, ActivityIndicator, Alert, Button, Image} from 'react-native'
 import {Context as WorksiteContext} from '../../context/WorksiteContext'
 import {Context as AuthContext} from '../../context/AuthContext'
 import { useContext, useEffect, useState } from 'react';
 import DownloadScreen from '../../components/DownloadScreen';
 import { useTranslation } from "react-i18next";
+import {FLOORPLAN_PHOTO_URL} from '@env'
 
 
 const WorksiteDetails = ({route, navigation}) => {
@@ -55,21 +56,19 @@ const WorksiteDetails = ({route, navigation}) => {
            
     }
     
-
+    const floorplanKey = state.currentWorksite.floorplanKey;
     return (
       <View style={styles.container}>
-        
         <View style={styles.textContainer}>
           <Text>
             {t("workistedetail-address")}:{state.currentWorksite.address}
           </Text>
+          <Text>{floorplanKey}</Text>
           <Text>{t("worksitedetail-city")}</Text>
+          <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} style={styles.image} />
         </View>
 
-        <View style={styles.buttonContainer}>{isAdmin && 
-          <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} />}   
-        </View>
-
+        <View style={styles.buttonContainer}>{isAdmin && <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} />}</View>
       </View>
     );
 }
@@ -78,7 +77,7 @@ const WorksiteDetails = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems:'center',
+    alignItems: "center",
     marginVertical: 20,
   },
   textContainer: {
@@ -99,6 +98,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     borderWidth: 1,
     marginTop: 20,
+  },
+  image: {
+    
+    width: 200,
+    height: 200,
+    // Muut kuvan tyylit
   },
 });
 

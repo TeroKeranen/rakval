@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, Button, Image } from "react-native";
 import { Text,  Input } from "react-native-elements";
 import { useTranslation } from "react-i18next";
+import * as ImagePicker from "expo-image-picker";
+import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
+
+
+
 
 
 
@@ -9,27 +14,54 @@ const WorksiteForm = ({onSubmit, errorMessage}) => {
     const { t } = useTranslation();
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
+    const [imageUri, setImageUri] = useState(null);
 
     const handleSubmit = async () => {
         try {
-            await onSubmit({address, city})
-            // nollataan input kentät onnistunee lisäyksen jälkeen
-            setAddress(''),
-            setCity('');
+          if (imageUri) {
+            const imageKey = await uploadImageToS3(imageUri);
+            await onSubmit({ address, city, floorplanKey:imageKey });
+          } else {
+            await onSubmit({ address, city });
+          }
+          // nollataan input kentät onnistunee lisäyksen jälkeen
+          setAddress("");
+          setCity("");
+          setImageUri(null);
         } catch (error) {
             console.log(error);
         }
     }
 
+
+    const handleSelectImage = async () => {
+      const permissionGranted = await requestMediaLibraryPermissions();
+      if (!permissionGranted) return;
+
+      const uri = await pickImage();
+      if (uri) {
+        setImageUri(uri);
+      }
+    };
+
+
+
     return (
       <>
         <View style={styles.companyInfo}>
-            <Text style={styles.text}>{t("worksiteform-title")}</Text>
+          <Text style={styles.text}>{t("worksiteform-title")}</Text>
           <View style={styles.infoCard}>
-
             <Input style={styles.input} placeholder={t("worksiteform-address")} value={address} onChangeText={setAddress} />
 
             <Input style={styles.input} placeholder={t("worksiteform-city")} value={city} onChangeText={setCity} />
+
+            <Button title="valitse kuva" onPress={handleSelectImage} />
+            {imageUri && (
+              <View>
+                <Image source={{ uri: imageUri }} style={{ width: 100, height: 100 }} />
+                {/* <Button title="Lataa kuva" onPress={() => uploadImageToS3(imageUri)} /> */}
+              </View>
+            )}
 
             {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
 

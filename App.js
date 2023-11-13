@@ -22,6 +22,11 @@ import SignedOutNavigator from './src/navigation/SignedOutNavigator'
 import MainDrawerNavigator from './src/navigation/MainDrawerNavigator';
 import WorksiteDetailsTabsNavigator from './src/navigation/WorksiteDetailTabsNavigator';
 
+//AWS
+import { Amplify } from "aws-amplify";
+import awsExports from "./src/aws-exports";
+Amplify.configure(awsExports);
+
 
 
 const Stack = createNativeStackNavigator();
