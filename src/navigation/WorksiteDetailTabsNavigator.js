@@ -8,6 +8,8 @@ import { Context as AuthContext } from "../context/AuthContext";
 import WorksiteDetails from "../screens/workisiteScreens/WorksiteDetails";
 import WorksiteWorkers from "../screens/workisiteScreens/WorksiteWorkers";
 import { useContext, useEffect } from "react";
+import FloorplanScreen from "../screens/workisiteScreens/FloorplanScreen";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +29,8 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
             headerShown: false,
         }}>
             <Tab.Screen name ={t('worksiteDetail')} component={WorksiteDetails} initialParams={{worksiteId: route.params.worksiteId}}/>
+            <Tab.Screen name="floorplan" component={FloorplanScreen} options={{headerShown:false}} />
+            
             {isAdmin ? <Tab.Screen name={t('workers')} component={WorksiteWorkers} /> : null}
             
         </Tab.Navigator>
