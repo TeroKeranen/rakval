@@ -4,6 +4,7 @@ import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue }
 
 import { FLOORPLAN_PHOTO_URL } from "@env";
 import {Context as WorksiteContext} from '../../context/WorksiteContext'
+import {Context as AuthContext} from '../../context/AuthContext'
 
 import ImageZoom from 'react-native-image-pan-zoom';
 import { TouchableOpacity } from "react-native";
@@ -12,6 +13,7 @@ import { TouchableOpacity } from "react-native";
 
 const FloorplanScreen = ({route}) => {
   const { state, saveMarkerToDatabase, fetchWorksiteDetails } = useContext(WorksiteContext);
+  const {state: authState } = useContext(AuthContext)
   const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKey);
   
   
@@ -25,25 +27,32 @@ const FloorplanScreen = ({route}) => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
-  // TÄSSÄ ONGELMAAA PERKRKERKKR
+  const [moveInfo, setMoveInfo] = useState(false);
+
   useEffect(() => {
-    if (state.currentWorksite && state.currentWorksite._id) {
-      fetchWorksiteDetails(state.currentWorksite._id)
-    }
     
-  },[putMarker])
-  
+    
+  },[state.currentWorksite])
+ 
   const addMarker = () => {
     setPutMarker(true);
     setMarkerInfo(""); // Tyhjennä aikaisemmat lisätiedot
   };
 
+  const moveInfobox = () => {
+
+    setMoveInfo(prevMoveInfo => !prevMoveInfo);
+
+  }
+
   const handleSaveMarker = () => {
-    if (tempMarkerPosition && markerInfo) {
+    const user = authState.user.email;
+    if (tempMarkerPosition && markerInfo && user) {
       const markerData = {
         x: tempMarkerPosition.x,
         y: tempMarkerPosition.y,
-        info: markerInfo
+        info: markerInfo,
+        creator: user
       };
       
       
@@ -53,16 +62,19 @@ const FloorplanScreen = ({route}) => {
     setPutMarker(false);
     setShowMarker(false);
     setTempMarkerPosition(null);
+    fetchWorksiteDetails(state.currentWorksite._id);
+     
 
   }
-  
+
 
   const handleMarkerPress = (index) => {
     // Tee jotain, kun markeria painetaan
     const pressedMarker = state.currentWorksite.markers[index];
+    console.log(pressedMarker);
     setSelectedMarker(pressedMarker);
     setModalVisible(true);
-    console.log(pressedMarker.info);
+    
   };
 
   const handlePress = (e) => {
@@ -88,7 +100,29 @@ const FloorplanScreen = ({route}) => {
 
   const closeMarker = () => {
     setPutMarker(false)
+    setShowMarker(false);
+    setTempMarkerPosition(null);
+    setMarkerInfo('');
+    
+    
+    
+    
+    
   }
+
+  const addMarkerContainerStyle = {
+    
+      position: "absolute",
+      bottom: moveInfo ? null : 20,
+      top: moveInfo ? 0 : null,
+      left: 0,
+      right: 0,
+      padding: 10,
+      backgroundColor: "#f7f8f7",
+      justifyContent: "center",
+      alignItems: "center",
+    
+  };
 
   return (
     <View style={styles.container}>
@@ -122,6 +156,8 @@ const FloorplanScreen = ({route}) => {
         <View style={styles.modalView}>
           <Text>Markerin tiedot:</Text>
           <Text>{selectedMarker ? selectedMarker.info : ""}</Text>
+          <Text>Luonut: {selectedMarker ? selectedMarker.creator : ""}</Text>
+
           <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
             <Text>Sulje</Text>
           </TouchableOpacity>
@@ -129,7 +165,17 @@ const FloorplanScreen = ({route}) => {
       </Modal>
 
       {putMarker ? (
-        <View style={styles.addMarkerContainer}>
+        <View style={addMarkerContainerStyle}>
+          {moveInfo ? (
+            <TouchableOpacity onPress={moveInfobox}>
+              <Text>Siirrä palkki alas</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={moveInfobox}>
+              <Text>Siirrä palkki ylös</Text>
+            </TouchableOpacity>
+          )}
+
           <TextInput style={styles.textInputStyle} onChangeText={setMarkerInfo} value={markerInfo} placeholder="Syötä markerin lisätiedot" />
           <TouchableOpacity onPress={handleSaveMarker} style={styles.addMarkerButton}>
             <Text style={styles.addMarkerButtonText}>Tallenna merkki</Text>
@@ -190,16 +236,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
-  addMarkerContainer: {
-    position: "absolute",
-    bottom: 20,
-    left: 0,
-    right: 0,
-    padding: 10,
-    backgroundColor: "#f7f8f7",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  
   addMarkerButton: {
     width: "50%",
     backgroundColor: "#812424",
@@ -219,7 +256,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: "80%", // Voit säätää leveyttä tarpeen mukaan
   },
+  
   modalView: {
+    
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
@@ -234,6 +273,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  
   modalButton: {
     backgroundColor: "#DDDDDD",
     padding: 10,

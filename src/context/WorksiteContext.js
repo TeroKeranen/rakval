@@ -86,28 +86,48 @@ const deleteWorksite = (dispatch) => {
   }
 }
 // Kun työmaalistasta painetaan työmaata niin tällä saadaan avattua tietyn työmaan
-const fetchWorksiteDetails = (dispatch) => {
-  return async (worksiteId) => {
-    try {
-      const token = await AsyncStorage.getItem('token');
+// const fetchWorksiteDetails = (dispatch) => {
+//   return async (worksiteId) => {
+//     try {
+//       const token = await AsyncStorage.getItem('token');
       
       
-      if (token) {
-        const response = await rakval.get(`/worksites/${worksiteId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
+//       if (token) {
+//         const response = await rakval.get(`/worksites/${worksiteId}`, {
+//           headers: {
+//             Authorization: `Bearer ${token}`
+//           }
+//         })
         
         
-        dispatch({type: 'set_current_worksite', payload: response.data})
-      }
+//         dispatch({type: 'set_current_worksite', payload: response.data})
+//       }
       
-    } catch (error) {
-      dispatch({type: 'set_error', payload: 'työmään tietojen haku epäonnistui'})
-      console.log(error);
+//     } catch (error) {
+//       dispatch({type: 'set_error', payload: 'työmään tietojen haku epäonnistui'})
+//       console.log(error);
       
+//     }
+//   }
+// }
+
+const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
+  try {
+    const token = await AsyncStorage.getItem("token");
+
+    if (token) {
+      const response = await rakval.get(`/worksites/${worksiteId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
+      dispatch({ type: "set_current_worksite", payload: response.data });
     }
+    
+  } catch (error) {
+    dispatch({ type: "set_error", payload: "työmään tietojen haku epäonnistui" });
+    console.log(error);
   }
 }
 
@@ -289,7 +309,12 @@ const newWorksite = (dispatch) => {
 const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
   
   try {
+    
     const token = await AsyncStorage.getItem("token");
+    // const requestBody = {
+    //   ...markerData,
+    //   creator: creator
+    // }
           const response = await rakval.post(`/worksites/${worksiteId}/add-marker`, markerData, {
             headers: {
               Authorization: `Bearer ${token}`
