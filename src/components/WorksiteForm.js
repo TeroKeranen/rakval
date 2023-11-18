@@ -55,7 +55,7 @@ const WorksiteForm = ({onSubmit, errorMessage}) => {
 
             <Input style={styles.input} placeholder={t("worksiteform-city")} value={city} onChangeText={setCity} />
 
-            <Button title="valitse kuva" onPress={handleSelectImage} />
+            <Button title={t("worksiteform-add-photo")} onPress={handleSelectImage} />
             {imageUri && (
               <View>
                 <Image source={{ uri: imageUri }} style={{ width: 100, height: 100 }} />

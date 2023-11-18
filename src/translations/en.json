@@ -7,6 +7,7 @@
   "role": "Role",
   "worksiteDetail": "Construction site",
   "workers": "Workers",
+  "floorplan": "Floor plan",
 
   "sign-upHeader": "Sign Up",
   "signup-navlink-text": "Already have an account? Sign in instead",
@@ -39,6 +40,7 @@
   "worksiteform-button": "Add construction site",
   "worksiteform-address": "Address",
   "worksiteform-city": "City",
+  "worksiteform-add-photo": "Add floor plan",
 
   "worksitedetail-downloadscreen-msg": "Loading construction site information",
   "workistedetail-address": "Address",
@@ -50,6 +52,15 @@
   "worksitedetail-confirmDelete-deleteButton": "Delete",
 
   "worksiteWorker-select-worker": "Select a worker",
-  "worksiteWorker-add-button" : "Add worker",
-  "worksiteWorker-workers": "Workers at this construction site"
+  "worksiteWorker-add-button": "Add worker",
+  "worksiteWorker-workers": "Workers at this construction site",
+
+  "floorplanscreen-add-marker": "Add marker",
+  "floorplanscreen-save-marker": "Save marker",
+  "floorplanscreen-close-marker": "Close",
+  "floorplanscreen-move-up": "Move the bar up",
+  "floorplanscreen-move-down": "Move the bar down",
+  "floorplanscreen-marker-textinput": "Enter the details",
+  "floorplanscreen-markerModal-info": "Marker's Details",
+  "floorplanscreen-markerModal-creator": "Creator"
 }

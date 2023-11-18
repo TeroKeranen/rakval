@@ -8,10 +8,12 @@ import {Context as AuthContext} from '../../context/AuthContext'
 
 import ImageZoom from 'react-native-image-pan-zoom';
 import { TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
 
 
 
 const FloorplanScreen = ({route}) => {
+  const { t } = useTranslation();
   const { state, saveMarkerToDatabase, fetchWorksiteDetails } = useContext(WorksiteContext);
   const {state: authState } = useContext(AuthContext)
   const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKey);
@@ -154,12 +156,14 @@ const FloorplanScreen = ({route}) => {
         }}
       >
         <View style={styles.modalView}>
-          <Text>Markerin tiedot:</Text>
+          <Text>{t("floorplanscreen-markerModal-info")}</Text>
           <Text>{selectedMarker ? selectedMarker.info : ""}</Text>
-          <Text>Luonut: {selectedMarker ? selectedMarker.creator : ""}</Text>
+          <Text>
+            {t("floorplanscreen-markerModal-creator")}: {selectedMarker ? selectedMarker.creator : ""}
+          </Text>
 
           <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
-            <Text>Sulje</Text>
+            <Text>{t("floorplanscreen-close-marker")}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -168,26 +172,26 @@ const FloorplanScreen = ({route}) => {
         <View style={addMarkerContainerStyle}>
           {moveInfo ? (
             <TouchableOpacity onPress={moveInfobox}>
-              <Text>Siirrä palkki alas</Text>
+              <Text>{t("floorplanscreen-move-down")}</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity onPress={moveInfobox}>
-              <Text>Siirrä palkki ylös</Text>
+              <Text>{t("floorplanscreen-move-up")}</Text>
             </TouchableOpacity>
           )}
 
-          <TextInput style={styles.textInputStyle} onChangeText={setMarkerInfo} value={markerInfo} placeholder="Syötä markerin lisätiedot" />
+          <TextInput style={styles.textInputStyle} onChangeText={setMarkerInfo} value={markerInfo} placeholder={t("floorplanscreen-marker-textinput")} />
           <TouchableOpacity onPress={handleSaveMarker} style={styles.addMarkerButton}>
-            <Text style={styles.addMarkerButtonText}>Tallenna merkki</Text>
+            <Text style={styles.addMarkerButtonText}>{t("floorplanscreen-save-marker")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={closeMarker} style={styles.addMarkerButton}>
-            <Text style={styles.addMarkerButtonText}>sulje</Text>
+            <Text style={styles.addMarkerButtonText}>{t("floorplanscreen-close-marker")}</Text>
           </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={addMarker} style={styles.button}>
-            <Text>Lisää merkki</Text>
+            <Text>{t("floorplanscreen-add-marker")}</Text>
           </TouchableOpacity>
         </View>
       )}

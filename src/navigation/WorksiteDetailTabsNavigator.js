@@ -29,7 +29,7 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
             headerShown: false,
         }}>
             <Tab.Screen name ={t('worksiteDetail')} component={WorksiteDetails} initialParams={{worksiteId: route.params.worksiteId}}/>
-            <Tab.Screen name="floorplan" component={FloorplanScreen} options={{headerShown:false}} />
+            <Tab.Screen name={t('floorplan')} component={FloorplanScreen} options={{headerShown:false}} />
             
             {isAdmin ? <Tab.Screen name={t('workers')} component={WorksiteWorkers} /> : null}
             
