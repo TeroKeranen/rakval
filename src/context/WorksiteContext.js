@@ -31,16 +31,19 @@ const worksiteReducer = (state, action) => {
             workers: state.currentWorksite.workers.filter((id) => id !== action.payload.workerId),
           },
         };
-      case "update_worksite":
-        const updatedWorksites = state.worksites.map((worksite) => (worksite._id === action.payload._id ? action.payload : worksite));
-        return { ...state, worksites: updatedWorksites, currentWorksite: action.payload };
-      case 'update_markers':
+        case "update_worksite":
+          const updatedWorksites = state.worksites.map((worksite) => (worksite._id === action.payload._id ? action.payload : worksite));
+          return { ...state, worksites: updatedWorksites, currentWorksite: action.payload };
+        case 'add_markers':
+        
         return {
           ...state,
           currentWorksite: {
             ...state.currentWorksite,
             markers: [...state.currentWorksite.markers, ...action.payload.markers] // Oletetaan että action.payload sisältää uudet markerit
         }}
+      case 'delete_marker':
+        return { ...state, currentWorksite: { ...state.currentWorksite, markers: state.currentWorksite.markers.filter((marker) => marker._id !== action.payload.markerId) } };
         
       default:
         return state;
@@ -48,7 +51,7 @@ const worksiteReducer = (state, action) => {
 }
 
 const clearWorksites = (dispatch) => {
-  console.log("joko");
+  
   return () => {
 
     dispatch({type:'clear_worksites'})
@@ -233,7 +236,7 @@ const deleteWorkerFromWorksite = (dispatch) => {
 };
 // lähetetään uusityömaa tietokantaan
 const newWorksite = (dispatch) => {
-    console.log("viddu");
+    
     const { t } = useTranslation();
     return async ({address, city, floorplanKey, navigation }) => {
         try {
@@ -321,12 +324,26 @@ const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
             }
           })
           console.log("done")
-          dispatch({ type: "update_markers", payload: response.data });
+          dispatch({ type: "add_markers", payload: response.data });
   } catch (error) {
-    console.log(error);
+    console.log("SavemarkerTodatabaseERROR",error);
     
   }
 }
 
+const deleteMarker = (dispatch) => async (worksiteId, markerId) => {
+  console.log("ksksksksk")
+  try {
+    const token = await AsyncStorage.getItem('token');
+    await rakval.delete(`/worksites/${worksiteId}/remove-marker/${markerId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    dispatch({type: "delete_marker", payload: {markerId}})
+  } catch (error) {
+    console.log("deletemarkerERROR",error);
+  }
+}
 
-export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite, deleteWorksite, addWorkerToWorksite, deleteWorkerFromWorksite, saveMarkerToDatabase }, { worksites: [], errorMessage: "", currentWorksite: [] });
+export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite, deleteWorksite, addWorkerToWorksite, deleteWorkerFromWorksite, saveMarkerToDatabase, deleteMarker }, { worksites: [], errorMessage: "", currentWorksite: [] });

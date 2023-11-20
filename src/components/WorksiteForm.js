@@ -39,6 +39,7 @@ const WorksiteForm = ({onSubmit, errorMessage}) => {
       if (!permissionGranted) return;
 
       const uri = await pickImage();
+      console.log("jurii",uri);
       if (uri) {
         setImageUri(uri);
       }

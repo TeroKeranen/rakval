@@ -54,6 +54,8 @@
   "worksiteWorker-select-worker": "Select a worker",
   "worksiteWorker-add-button": "Add worker",
   "worksiteWorker-workers": "Workers at this construction site",
+  "worksiteWorker-markerModal-deletemarker-title": "Delete worker",
+  "worksiteWorker-markerModal-deletemarker-confirmtext": "Are you sure you want to delete this worker?",
 
   "floorplanscreen-add-marker": "Add marker",
   "floorplanscreen-save-marker": "Save marker",
@@ -62,5 +64,9 @@
   "floorplanscreen-move-down": "Move the bar down",
   "floorplanscreen-marker-textinput": "Enter the details",
   "floorplanscreen-markerModal-info": "Marker's Details",
-  "floorplanscreen-markerModal-creator": "Creator"
+  "floorplanscreen-markerModal-creator": "Creator",
+  "floorplanscreen-markerModal-deletemarker-title": "Delete note",
+  "floorplanscreen-markerModal-deletemarker-confirmtext": "Are you sure you want to delete this marker?",
+  "floorplanscreen-markerModal-deletemarker-cancel": "Cancel",
+  "floorplanscreen-markerModal-deletemarker-yes": "Yes"
 }
