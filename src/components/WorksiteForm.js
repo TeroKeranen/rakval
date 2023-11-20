@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { StyleSheet, View, Button, Image } from "react-native";
+import { StyleSheet, View, Button, Image, TouchableOpacity } from "react-native";
 import { Text,  Input } from "react-native-elements";
 import { useTranslation } from "react-i18next";
 import * as ImagePicker from "expo-image-picker";
 import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
+import { Ionicons } from "@expo/vector-icons";
 
 
 
@@ -15,6 +16,7 @@ const WorksiteForm = ({onSubmit, errorMessage}) => {
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [imageUri, setImageUri] = useState(null);
+    const [isImage, setIsImage] = useState(true); // Käytetään avuksi poistamaan "Lisää kuva" nappi
 
     const handleSubmit = async () => {
         try {
@@ -45,6 +47,10 @@ const WorksiteForm = ({onSubmit, errorMessage}) => {
       }
     };
 
+    const delImage = () => {
+      setImageUri(null);
+    }
+
 
 
     return (
@@ -56,17 +62,39 @@ const WorksiteForm = ({onSubmit, errorMessage}) => {
 
             <Input style={styles.input} placeholder={t("worksiteform-city")} value={city} onChangeText={setCity} />
 
-            <Button title={t("worksiteform-add-photo")} onPress={handleSelectImage} />
+            {!imageUri ? 
+            
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={handleSelectImage} style={styles.button}>
+                <Text style={{ color: "white" }}>{t("worksiteform-add-photo")}</Text>
+              </TouchableOpacity>
+
+              {/* <Button title={t("worksiteform-button")} onPress={handleSubmit} /> */}
+            </View>
+            : null
+          }
+
+            {/* <Button title={t("worksiteform-add-photo")} onPress={handleSelectImage} /> */}
             {imageUri && (
-              <View>
-                <Image source={{ uri: imageUri }} style={{ width: 100, height: 100 }} />
+              <View style={styles.imagPreviewContainer}>
+
+              <View style={styles.imageContainer}>
+                <Image source={{ uri: imageUri }} style={{ width: 150, height: 150 }} />
                 {/* <Button title="Lataa kuva" onPress={() => uploadImageToS3(imageUri)} /> */}
+              </View>
+              <TouchableOpacity onPress={delImage}>
+                <Ionicons name="trash" size={20} />
+              </TouchableOpacity>
               </View>
             )}
 
             {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
+          </View>
+          <View style={styles.addWorksiteButtonContainer}>
 
-            <Button title={t("worksiteform-button")} onPress={handleSubmit} />
+          <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+            <Text style={{ color: "white" }}>{t("worksiteform-button")}</Text>
+          </TouchableOpacity>
           </View>
         </View>
       </>
@@ -106,9 +134,35 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     fontSize: 20,
   },
-  button: {
-    width: "50%",
+  buttonContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
+  imagPreviewContainer: {
+    justifyContent:'center',
+    alignItems: 'center',
+    padding: 10,
+    
+  },
+  imageContainer: {
+    marginBottom: 20,
+    
+    
+  },
+  button: {
+    width: "60%",
+    backgroundColor: "#812424",
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  addWorksiteButtonContainer: {
+    marginVertical: 20,
+  }
 });
 
 export default WorksiteForm;
