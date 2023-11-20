@@ -23,6 +23,7 @@ const WorkSite = ({navigation, route}) => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchWorksites();
       
+      
     });
 
     return unsubscribe;

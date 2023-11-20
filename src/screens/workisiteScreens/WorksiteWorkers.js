@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Text, View, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, FlatList, TouchableOpacity, StyleSheet,Alert } from "react-native";
 import {Context as WorksiteContext} from '../../context/WorksiteContext';
 import {Context as CompanyContext} from '../../context/CompanyContext'
 import {Context as AuthContext} from '../../context/AuthContext'
@@ -7,6 +7,7 @@ import RNPickerSelect from 'react-native-picker-select'
 import { Button } from "react-native-elements";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
+import ImagePicker from "../../components/ImagePicker";
 
 
 const WorksiteWorkers = () => {
@@ -76,8 +77,26 @@ const WorksiteWorkers = () => {
     }, [worksiteState.currentWorksite]);
 
     const handleRemoveWorker = (workerId) => {
-      const worksiteId = worksiteState.currentWorksite._id;
-      deleteWorkerFromWorksite(worksiteId, workerId);
+      Alert.alert(
+        t("worksiteWorker-markerModal-deletemarker-title"),
+        t("worksiteWorker-markerModal-deletemarker-confirmtext"),
+        [
+          {
+            text: t("floorplanscreen-markerModal-deletemarker-cancel"),
+            onPress: () => console.log("Peruutettu"),
+            style: "cancel",
+          },
+          {
+            text: t("floorplanscreen-markerModal-deletemarker-yes"),
+            onPress: () => {
+              const worksiteId = worksiteState.currentWorksite._id;
+              deleteWorkerFromWorksite(worksiteId, workerId);
+            },
+          },
+        ],
+        { cancelable: true }
+      );
+      
       // Tässä kohtaa voit myös päivittää näkymän poistamalla työntekijän näytöltä
     };
 
@@ -117,6 +136,7 @@ const WorksiteWorkers = () => {
                 renderItem={renderItem} 
                 keyExtractor={(item, index) => `worker-${index}`} />
             </View>
+            
           </View>
         </View>
       </View>
