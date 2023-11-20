@@ -7,6 +7,7 @@
   "role": "Rooli",
   "worksiteDetail": "Työmaa",
   "workers": "Työntekijät",
+  "floorplan": "Pohjakuva",
 
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
@@ -39,6 +40,7 @@
   "worksiteform-button": "Lisää työmaa",
   "worksiteform-address": "Osoite",
   "worksiteform-city": "Kaupunki",
+  "worksiteform-add-photo": "Lisää pohjakuva",
 
   "worksitedetail-downloadscreen-msg": "Ladataan työmaan tietoja",
   "workistedetail-address": "Osoite",
@@ -50,6 +52,21 @@
   "worksitedetail-confirmDelete-deleteButton": "Poista",
 
   "worksiteWorker-select-worker": "Valitse työntekijä",
-  "worksiteWorker-add-button" : "Lisää työntekijä",
-  "worksiteWorker-workers": "Työntekijät tässä työmaassa"
+  "worksiteWorker-add-button": "Lisää työntekijä",
+  "worksiteWorker-workers": "Työntekijät tässä työmaassa",
+  "worksiteWorker-markerModal-deletemarker-title": "Poista työntekijä",
+  "worksiteWorker-markerModal-deletemarker-confirmtext": "Oletko varma, että haluat poistaa tämän työntekijän?",
+
+  "floorplanscreen-add-marker": "Lisää merkintä",
+  "floorplanscreen-save-marker": "Tallenna merkki",
+  "floorplanscreen-close-marker": "Sulje",
+  "floorplanscreen-move-up": "Move the bar up",
+  "floorplanscreen-move-down": "Move the bar down",
+  "floorplanscreen-marker-textinput": "Syötä lisätiedot",
+  "floorplanscreen-markerModal-info": "Merkinnän tiedot",
+  "floorplanscreen-markerModal-creator": "Luonut",
+  "floorplanscreen-markerModal-deletemarker-title": "Poista merkintä",
+  "floorplanscreen-markerModal-deletemarker-confirmtext": "Oletko varma, että haluat poistaa tämän merkinnän?",
+  "floorplanscreen-markerModal-deletemarker-cancel": "Peruuta",
+  "floorplanscreen-markerModal-deletemarker-yes": "Kyllä"
 }

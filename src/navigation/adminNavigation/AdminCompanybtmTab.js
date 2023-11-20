@@ -38,6 +38,7 @@ const AdminCompanybtmTab = () => {
       >
         <Tab.Screen name={t("construction-site")} component={WorkSite} options={{ headerShown: false }} />
         <Tab.Screen name={t("add-new-construction")} component={AddNewWorksite} options={{ headerShown: false }} />
+        
       </Tab.Navigator>
     );
 };

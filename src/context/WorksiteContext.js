@@ -31,15 +31,27 @@ const worksiteReducer = (state, action) => {
             workers: state.currentWorksite.workers.filter((id) => id !== action.payload.workerId),
           },
         };
-      case "update_worksite":
-        const updatedWorksites = state.worksites.map((worksite) => (worksite._id === action.payload._id ? action.payload : worksite));
-        return { ...state, worksites: updatedWorksites, currentWorksite: action.payload };
+        case "update_worksite":
+          const updatedWorksites = state.worksites.map((worksite) => (worksite._id === action.payload._id ? action.payload : worksite));
+          return { ...state, worksites: updatedWorksites, currentWorksite: action.payload };
+        case 'add_markers':
+        
+        return {
+          ...state,
+          currentWorksite: {
+            ...state.currentWorksite,
+            markers: [...state.currentWorksite.markers, ...action.payload.markers] // Oletetaan että action.payload sisältää uudet markerit
+        }}
+      case 'delete_marker':
+        return { ...state, currentWorksite: { ...state.currentWorksite, markers: state.currentWorksite.markers.filter((marker) => marker._id !== action.payload.markerId) } };
+        
       default:
         return state;
     }
 }
 
 const clearWorksites = (dispatch) => {
+  
   return () => {
 
     dispatch({type:'clear_worksites'})
@@ -51,7 +63,7 @@ const resetCurrentWorksite = (dispatch) => {
   return () => {
     console.log("resecurrentworksite");
     dispatch({ type: "reset_current_worksite" });
-
+    
   }
 }
 
@@ -67,7 +79,7 @@ const deleteWorksite = (dispatch) => {
       if (callback) {
         callback();
       }
-
+      
       dispatch({type:"delete_worksite", payload: worksiteId})
     } catch (error) {
       console.log(error)
@@ -77,28 +89,48 @@ const deleteWorksite = (dispatch) => {
   }
 }
 // Kun työmaalistasta painetaan työmaata niin tällä saadaan avattua tietyn työmaan
-const fetchWorksiteDetails = (dispatch) => {
-  return async (worksiteId) => {
-    try {
-      const token = await AsyncStorage.getItem('token');
+// const fetchWorksiteDetails = (dispatch) => {
+//   return async (worksiteId) => {
+//     try {
+//       const token = await AsyncStorage.getItem('token');
       
+      
+//       if (token) {
+//         const response = await rakval.get(`/worksites/${worksiteId}`, {
+//           headers: {
+//             Authorization: `Bearer ${token}`
+//           }
+//         })
+        
+        
+//         dispatch({type: 'set_current_worksite', payload: response.data})
+//       }
+      
+//     } catch (error) {
+//       dispatch({type: 'set_error', payload: 'työmään tietojen haku epäonnistui'})
+//       console.log(error);
+      
+//     }
+//   }
+// }
 
-      if (token) {
-        const response = await rakval.get(`/worksites/${worksiteId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        
-        
-        dispatch({type: 'set_current_worksite', payload: response.data})
-      }
+const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
+  try {
+    const token = await AsyncStorage.getItem("token");
+
+    if (token) {
+      const response = await rakval.get(`/worksites/${worksiteId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       
-    } catch (error) {
-      dispatch({type: 'set_error', payload: 'työmään tietojen haku epäonnistui'})
-      console.log(error);
-      
+      dispatch({ type: "set_current_worksite", payload: response.data });
     }
+    
+  } catch (error) {
+    dispatch({ type: "set_error", payload: "työmään tietojen haku epäonnistui" });
+    console.log(error);
   }
 }
 
@@ -112,7 +144,7 @@ const fetchWorksites = (dispatch) => {
       
       const user = JSON.parse(userJson);
       
-
+      
       
       const response = await rakval.get("/worksites", {
         headers: {
@@ -121,17 +153,17 @@ const fetchWorksites = (dispatch) => {
       });
       
       dispatch({ type: "fetch_worksites", payload: response.data });
-
+      
     } catch (error) {
-
+      
       if (error.response) {
         switch (error.response.status) {
           case 400:
             // Käyttäjällä ei ole yritystä, ei tarvitse asettaa virheviestiä, voitaisiin ohjata luomaan yritys tai liittymään yritykseen
             console.log("Käyttäjällä ei ole yritystä, ei haeta työmaita.");
             break;
-          // Lisää muita koodin käsittelyjä tarvittaessa
-          default:
+            // Lisää muita koodin käsittelyjä tarvittaessa
+            default:
             dispatch({ type: "set_error", payload: "jotain meni vikaan (työmaitten hauan kanssa)" });
         }
       } else {
@@ -139,31 +171,52 @@ const fetchWorksites = (dispatch) => {
         dispatch({ type: "set_error", payload: "Yleinen virhe työmaita haettaessa" });
       }
       console.log(error);
-
+      
       // if (error.response && error.response.status === 400 && error.response.data.error === "Käyttäjällä ei ole yritystä2") {
-      //   console.log("Käyttäjällä ei ole yritystä, ei haeta työmaita.");
-      // } else {
-
-      //   dispatch({type: 'set_error', payload: "jotain meni vikaan (työmaitten hauan kanssa)"})
-      // }
-      // console.log(error);
-    }
-  };
+        //   console.log("Käyttäjällä ei ole yritystä, ei haeta työmaita.");
+        // } else {
+          
+          //   dispatch({type: 'set_error', payload: "jotain meni vikaan (työmaitten hauan kanssa)"})
+          // }
+          // console.log(error);
+        }
+      };
 };
 
-const addWorkerToWorksite = (dispatch) => {
-  return async (worksiteId, workerId) => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      const response = await rakval.post(`/worksites/${worksiteId}/add-worker`, {workerId}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      dispatch({type: 'update_worksite', payload:response.data})
-    } catch (error) {
-      
-    }
+// const addWorkerToWorksite = (dispatch) => {
+  
+  //   return async (worksiteId, workerId) => {
+    //     try {
+      //       const token = await AsyncStorage.getItem('token');
+      //       const response = await rakval.post(`/worksites/${worksiteId}/add-worker`, {workerId}, {
+        //         headers: {
+          //           Authorization: `Bearer ${token}`
+          //         }
+          //       })
+          //       dispatch({type: 'update_worksite', payload:response.data})
+          //     } catch (error) {
+            
+            //     }
+            //   }
+            // }
+            
+            const addWorkerToWorksite = (dispatch) => async (worksiteId,workerId) => {
+              try {
+                const token = await AsyncStorage.getItem("token");
+                const response = await rakval.post(
+                  
+                  `/worksites/${worksiteId}/add-worker`,
+                  { workerId },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                  );
+                  dispatch({ type: "update_worksite", payload: response.data });
+                  
+  } catch (error) {
+    
   }
 }
 
@@ -183,6 +236,7 @@ const deleteWorkerFromWorksite = (dispatch) => {
 };
 // lähetetään uusityömaa tietokantaan
 const newWorksite = (dispatch) => {
+    
     const { t } = useTranslation();
     return async ({address, city, floorplanKey, navigation }) => {
         try {
@@ -206,5 +260,90 @@ const newWorksite = (dispatch) => {
     }
 }
 
+// lähetetään uusityömaa tietokantaan
+// const newWorksite = (dispatch) => async ({address,city,floorplanKey, navigation}) => {
+  
+//   try {
+//     const { t } = useTranslation();
+//     const token = await AsyncStorage.getItem("token");
+//     const response = await rakval.post('/worksites', {address, city, floorplanKey}, {
 
-export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite, deleteWorksite, addWorkerToWorksite, deleteWorkerFromWorksite }, { worksites: [], errorMessage: "", currentWorksite: [] });
+//         headers: {
+
+//           Authorization: `Bearer ${token}`
+//         }
+//         })
+            
+            
+//             dispatch({type: 'add_worksite', payload:response.data})
+//             navigation.navigate(t("construction-site"));
+
+//   } catch (error) {
+//     dispatch({ type: "set_error", payload: "jotai meni vikaan" });
+//     console.log(error);
+    
+//   }
+// }
+
+// lähetetään merkkit tietokantaan
+// const saveMarkerToDatabase = (dispatch) => {
+//       console.log("jsjsj");
+
+//   return async (worksiteId, markerData) => {
+      
+    
+//     try {
+//       const token = await AsyncStorage.getItem('token');
+      
+      
+//       const response = await rakval.post(`/worksites/${worksiteId}/add-marker`, markerData, {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//       })
+      
+      
+//       dispatch({type: "update_markers", payload: response.data})
+//     } catch (error) {
+//       console.log(error); 
+//     }
+//   }
+// }
+const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
+  
+  try {
+    
+    const token = await AsyncStorage.getItem("token");
+    // const requestBody = {
+    //   ...markerData,
+    //   creator: creator
+    // }
+          const response = await rakval.post(`/worksites/${worksiteId}/add-marker`, markerData, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          console.log("done")
+          dispatch({ type: "add_markers", payload: response.data });
+  } catch (error) {
+    console.log("SavemarkerTodatabaseERROR",error);
+    
+  }
+}
+
+const deleteMarker = (dispatch) => async (worksiteId, markerId) => {
+  console.log("ksksksksk")
+  try {
+    const token = await AsyncStorage.getItem('token');
+    await rakval.delete(`/worksites/${worksiteId}/remove-marker/${markerId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    dispatch({type: "delete_marker", payload: {markerId}})
+  } catch (error) {
+    console.log("deletemarkerERROR",error);
+  }
+}
+
+export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite, deleteWorksite, addWorkerToWorksite, deleteWorkerFromWorksite, saveMarkerToDatabase, deleteMarker }, { worksites: [], errorMessage: "", currentWorksite: [] });
