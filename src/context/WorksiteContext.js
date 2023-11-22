@@ -35,13 +35,20 @@ const worksiteReducer = (state, action) => {
           const updatedWorksites = state.worksites.map((worksite) => (worksite._id === action.payload._id ? action.payload : worksite));
           return { ...state, worksites: updatedWorksites, currentWorksite: action.payload };
         case 'add_markers':
-        
-        return {
-          ...state,
-          currentWorksite: {
-            ...state.currentWorksite,
-            markers: [...state.currentWorksite.markers, ...action.payload.markers] // Oletetaan että action.payload sisältää uudet markerit
+          return {
+            ...state,
+            currentWorksite: {
+              ...state.currentWorksite,
+              markers: [...state.currentWorksite.markers, ...action.payload.markers] // Oletetaan että action.payload sisältää uudet markerit
         }}
+        case 'update_marker':
+          const updatedCurrentWorksite = {
+            ...state.currentWorksite,
+            markers: state.currentWorksite.markers.map(marker => 
+              marker._id === action.payload.markerId ? action.payload.updateMarker : marker
+              )
+          }
+          return {...state, currentWorksite: updatedCurrentWorksite}
       case 'delete_marker':
         return { ...state, currentWorksite: { ...state.currentWorksite, markers: state.currentWorksite.markers.filter((marker) => marker._id !== action.payload.markerId) } };
         
@@ -88,31 +95,6 @@ const deleteWorksite = (dispatch) => {
     }
   }
 }
-// Kun työmaalistasta painetaan työmaata niin tällä saadaan avattua tietyn työmaan
-// const fetchWorksiteDetails = (dispatch) => {
-//   return async (worksiteId) => {
-//     try {
-//       const token = await AsyncStorage.getItem('token');
-      
-      
-//       if (token) {
-//         const response = await rakval.get(`/worksites/${worksiteId}`, {
-//           headers: {
-//             Authorization: `Bearer ${token}`
-//           }
-//         })
-        
-        
-//         dispatch({type: 'set_current_worksite', payload: response.data})
-//       }
-      
-//     } catch (error) {
-//       dispatch({type: 'set_error', payload: 'työmään tietojen haku epäonnistui'})
-//       console.log(error);
-      
-//     }
-//   }
-// }
 
 const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
   try {
@@ -183,22 +165,7 @@ const fetchWorksites = (dispatch) => {
       };
 };
 
-// const addWorkerToWorksite = (dispatch) => {
-  
-  //   return async (worksiteId, workerId) => {
-    //     try {
-      //       const token = await AsyncStorage.getItem('token');
-      //       const response = await rakval.post(`/worksites/${worksiteId}/add-worker`, {workerId}, {
-        //         headers: {
-          //           Authorization: `Bearer ${token}`
-          //         }
-          //       })
-          //       dispatch({type: 'update_worksite', payload:response.data})
-          //     } catch (error) {
-            
-            //     }
-            //   }
-            // }
+
             
             const addWorkerToWorksite = (dispatch) => async (worksiteId,workerId) => {
               try {
@@ -260,55 +227,7 @@ const newWorksite = (dispatch) => {
     }
 }
 
-// lähetetään uusityömaa tietokantaan
-// const newWorksite = (dispatch) => async ({address,city,floorplanKey, navigation}) => {
-  
-//   try {
-//     const { t } = useTranslation();
-//     const token = await AsyncStorage.getItem("token");
-//     const response = await rakval.post('/worksites', {address, city, floorplanKey}, {
 
-//         headers: {
-
-//           Authorization: `Bearer ${token}`
-//         }
-//         })
-            
-            
-//             dispatch({type: 'add_worksite', payload:response.data})
-//             navigation.navigate(t("construction-site"));
-
-//   } catch (error) {
-//     dispatch({ type: "set_error", payload: "jotai meni vikaan" });
-//     console.log(error);
-    
-//   }
-// }
-
-// lähetetään merkkit tietokantaan
-// const saveMarkerToDatabase = (dispatch) => {
-//       console.log("jsjsj");
-
-//   return async (worksiteId, markerData) => {
-      
-    
-//     try {
-//       const token = await AsyncStorage.getItem('token');
-      
-      
-//       const response = await rakval.post(`/worksites/${worksiteId}/add-marker`, markerData, {
-//         headers: {
-//           Authorization: `Bearer ${token}`
-//         }
-//       })
-      
-      
-//       dispatch({type: "update_markers", payload: response.data})
-//     } catch (error) {
-//       console.log(error); 
-//     }
-//   }
-// }
 const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
   
   try {
@@ -331,6 +250,20 @@ const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
   }
 }
 
+
+// markerin muokkaus
+const updateMarker = (dispatch) => async (worksiteId, markerId, updatedMarkerData) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await rakval.put(`/worksites/${worksiteId}/markers/${markerId}`, updatedMarkerData, {
+      headers: {Authorization: `Bearer ${token}`}
+    })
+    dispatch({type: 'update_marker', payload: {markerId, updateMarker: response.data}})
+  } catch (error) {
+    
+  }
+}
+
 const deleteMarker = (dispatch) => async (worksiteId, markerId) => {
   console.log("ksksksksk")
   try {
@@ -346,4 +279,4 @@ const deleteMarker = (dispatch) => async (worksiteId, markerId) => {
   }
 }
 
-export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite, deleteWorksite, addWorkerToWorksite, deleteWorkerFromWorksite, saveMarkerToDatabase, deleteMarker }, { worksites: [], errorMessage: "", currentWorksite: [] });
+export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite, deleteWorksite, addWorkerToWorksite, deleteWorkerFromWorksite, saveMarkerToDatabase, deleteMarker, updateMarker }, { worksites: [], errorMessage: "", currentWorksite: [] });

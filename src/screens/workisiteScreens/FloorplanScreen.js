@@ -14,19 +14,21 @@ import { useTranslation } from "react-i18next";
 import ImagePicker from "../../components/ImagePicker";
 import { uploadImageToS3 } from "../../../services/ImageService";
 import DownloadScreen from "../../components/DownloadScreen";
+import MarkerinfoModal from "../../components/MarkerinfoModal";
+import MarkerUpdateModal from "../../components/MarkerUpdateModal";
 
 
 
 
 const FloorplanScreen = ({route, navigation}) => {
   const { t } = useTranslation();
-  const { state, saveMarkerToDatabase, fetchWorksiteDetails, deleteMarker } = useContext(WorksiteContext);
+  const { state, saveMarkerToDatabase, fetchWorksiteDetails, deleteMarker, updateMarker } = useContext(WorksiteContext);
   const {state: authState } = useContext(AuthContext)
   const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKey); // asetetaan kuvan uri tietokannasta tänne.
   
   
   const [showMarker, setShowMarker] = useState(false); // Käytetään apuna tätä kun painetaan markeri kuvaan
-  const [putMarker, setPutMarker] = useState(false);
+  const [putMarker, setPutMarker] = useState(false); // Asetataan trueksi kun painetaan "add marker" nappia, tällä asetetaan eri näkymiä näkyville
 
   const [allMarkers, setAllMarkers] = useState([]); // Uusi tilamuuttuja kaikkia markereita varten
   const [tempMarkerPosition, setTempMarkerPosition] = useState(null); // Asetetaan väliaikaisesti markerin tiedot tänne jotta markeri näkyy näytöllä sitä luodessa
@@ -40,7 +42,15 @@ const FloorplanScreen = ({route, navigation}) => {
   const [modalMarkerImage, setModalMarkerImage] = useState(null); // Tallenntaan markerin imageurl tänne. Käytetään tätä näyttämään oikea kuva modalissa
   const [isLoading, SetIsLoading] = useState(false);
 
- 
+  //Markerin muokkaus
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editableMarkerInfo, setEditableMarkerInfo] = useState('');
+
+  useEffect(() => {
+    console.log("uuuse");
+    setAllMarkers(state.currentWorksite.markers);
+  }, [state.currentWorksite.markers]);
+
   const addMarker = () => {
     setPutMarker(true);
     setMarkerInfo(""); // Tyhjennä aikaisemmat lisätiedot
@@ -80,7 +90,7 @@ const handleSaveMarker = async () => {
       
     }
     SetIsLoading(false); // Otetaan downloadScreen pois käytöstä
-
+    setPickedImageUri(null)
     setPutMarker(false);
     setShowMarker(false);
     setTempMarkerPosition(null);
@@ -131,20 +141,19 @@ useEffect(() => {
     }
   };
 
+
+  // Käytetään kun suljetaan markerin modali
   const closeMarker = () => {
     setPutMarker(false)
     setShowMarker(false);
     setTempMarkerPosition(null);
-    setMarkerInfo('');
-    
-    
-    
-    
-    
+    setPickedImageUri(null)
+    setMarkerInfo('');  
   }
 
-  const deleteMarkerHandler = (markerId) => {
 
+  // Käytetään kun poistetaan marker
+  const deleteMarkerHandler = (markerId) => {
     Alert.alert(
       t("floorplanscreen-markerModal-deletemarker-title"),
       t("floorplanscreen-markerModal-deletemarker-confirmtext"),
@@ -167,14 +176,41 @@ useEffect(() => {
       ],
       { cancelable: true }
     );
-    
-    
-
     setModalVisible(false);
   }
 
-  const addMarkerContainerStyle = {
+  // Markerin muokkaus
+  const handleEditMarker = () => {
+    setEditableMarkerInfo(selectedMarker.info);
+    setEditModalVisible(true);
+  }
+
+  const handleUpdateMarker = async () => {
+    // Kutsu backendin päivitysfunktiota ja lähetä muokatut tiedot
+    // ...
+    try {
+      console.log(modalMarkerImage);
+      // console.log(modalMarkerImage);
+      const updatedMarkerData = {
+        ...selectedMarker,
+        info: editableMarkerInfo,
+        imageUri: modalMarkerImage
+        
+        
+        
+      }
+      await updateMarker(state.currentWorksite._id, selectedMarker._id, updatedMarkerData)
+      setSelectedMarker(updatedMarkerData)
+      setEditModalVisible(false);
+      fetchWorksiteDetails(state.currentWorksite._id)
+    } catch (error) {
+      console.error("Error updating marker:", error);
+    }
     
+  };
+
+   // Käytetään tätä marker formissa jotta voimme liikuttaa sitä ylös tai alas
+  const addMarkerContainerStyle = {
       position: "absolute",
       bottom: moveInfo ? null : 20,
       top: moveInfo ? 0 : null,
@@ -194,10 +230,11 @@ useEffect(() => {
   }
   return (
     <View style={styles.container}>
+
       <ImageZoom cropWidth={Dimensions.get("window").width} cropHeight={Dimensions.get("window").height} imageWidth={200} imageHeight={200}>
-        {/* <TouchableOpacity > */}
-        {/* <Image style={{ width: 200, height: 200 }} source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} />
-         */}
+       
+         {/* Jos putMarker on true niin näytetään pohjakuvaa johon voi painaa markereita*/}
+
         {!putMarker ? (
           <Image style={{ width: 200, height: 200 }} source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} />
         ) : (
@@ -206,14 +243,41 @@ useEffect(() => {
             <Image style={{ width: 200, height: 200 }} source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} />
           </TouchableOpacity>
         )}
+
+        {/* Kun markeri on painettu pohjakuvaan niin showMarker asetetaan true arvoon ja silloin näytetään markerin pohjakuvassa  */}
         {showMarker && <View style={[styles.markerStyle, { position: "absolute", left: tempMarkerPosition.x, top: tempMarkerPosition.y }]} />}
+        {/* Käydään läpi kaikki markerit ja näytetään ne pohjakuvassa */}
         {state.currentWorksite.markers.map((pos, index) => (
           <TouchableOpacity key={index} onPress={() => handleMarkerPress(index)} style={[styles.markerStyle, { position: "absolute", left: pos.x, top: pos.y }]} />
         ))}
       </ImageZoom>
 
       {/* Modal markerin tiedoille */}
-      <Modal
+      <MarkerinfoModal 
+        isVisible={modalVisible} 
+        onClose={() => {
+          setModalVisible(false)
+          setModalMarkerImage(null);
+        }} 
+        marker={selectedMarker} 
+        onEdit={handleEditMarker} 
+        onDelete={() => deleteMarkerHandler(selectedMarker._id)}
+        isModalMarkerImage={modalMarkerImage}
+      />
+
+      {/* Merkinnän update modal */}
+        <MarkerUpdateModal 
+          isVisible={editModalVisible}
+          markerInfo={editableMarkerInfo}
+          editTableMarkerInfo={setEditableMarkerInfo}
+          onClose={() => setEditModalVisible(false)}
+          updateMarker={handleUpdateMarker}
+          isModalMarkerImage={modalMarkerImage}
+          deleteModalImage={setModalMarkerImage}
+          
+          
+        />
+        {/* <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -234,35 +298,66 @@ useEffect(() => {
           </View>
 
           <View style={styles.modalInfo}>
+            <TouchableOpacity style={styles.modalButton} onPress={handleEditMarker}>
+              <Text>Muokkaa</Text>
+            </TouchableOpacity>
+
             <Text style={{ fontWeight: "bold", fontSize: 20, marginBottom: 10 }}>{t("floorplanscreen-markerModal-info")}</Text>
             <Text style={{ fontSize: 16 }}>{selectedMarker ? selectedMarker.info : ""}</Text>
-            
+
             <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${modalMarkerImage}` }} style={styles.image} />
           </View>
+
           <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
             <Text>{t("floorplanscreen-close-marker")}</Text>
           </TouchableOpacity>
         </View>
-      </Modal>
+      </Modal> 
+      <Modal visible={editModalVisible}>
+        <View style={styles.editModalView}>
+          <View style={styles.editModalTitleContainer}>
+            <Text style={styles.editModalTitle}>Muokkaa tietoja</Text>
+          </View>
+          <View style={styles.editModalTextinput}>
+            <TextInput style={styles.textInputStyle} value={editableMarkerInfo} onChangeText={setEditableMarkerInfo} />
+          </View>
 
+          <View style={styles.editModalButtons}>
+            <TouchableOpacity style={styles.editModalButton} onPress={() => setEditModalVisible(false)}>
+              <Text>Poistu</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.editModalButton} onPress={handleUpdateMarker}>
+              <Text>Tallenna muutokset</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal> */}
+
+      
+      {/* Jos put marker on true arvossa niin näkyy markerin lisäys formi. false arvossa näkyy vain painike jossa lukee add marker */}
       {putMarker ? (
         <View style={addMarkerContainerStyle}>
+          {/* jos moveInfo === true, niin markerin lisäys formi on ylhäällä */}
           {moveInfo ? (
             <TouchableOpacity onPress={moveInfobox}>
               <Text>{t("floorplanscreen-move-down")}</Text>
             </TouchableOpacity>
           ) : (
+            // Jos moveInfo === false, niin markerin lisäys formi on alhaalla
             <TouchableOpacity onPress={moveInfobox}>
               <Text>{t("floorplanscreen-move-up")}</Text>
             </TouchableOpacity>
           )}
 
           <TextInput style={styles.textInputStyle} onChangeText={setMarkerInfo} value={markerInfo} placeholder={t("floorplanscreen-marker-textinput")} />
+          
+          {/*  Kun showMarker === true, niin lisätään imagePicker näkyviin. showMarker vaihtuu true arvoon silloin kun painamme markerin kuvaan  */}
           {showMarker ? (
             <View style={styles.imagePreview}>
               <ImagePicker onImagePicked={setPickedImageUri} />
             </View>
           ) : null}
+
           <View style={styles.modalButtonContainer}>
             <TouchableOpacity onPress={handleSaveMarker} style={styles.addMarkerButton}>
               <Text style={styles.addMarkerButtonText}>{t("floorplanscreen-save-marker")}</Text>
@@ -273,6 +368,7 @@ useEffect(() => {
           </View>
         </View>
       ) : (
+        // Kun putMarker asetetaan arvoon false, niin näkyy vain add marker nappi
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={addMarker} style={styles.button}>
             <Text>{t("floorplanscreen-add-marker")}</Text>
@@ -324,7 +420,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
-  
+
   addMarkerButton: {
     width: "40%",
     backgroundColor: "#812424",
@@ -344,67 +440,76 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: "80%", // Voit säätää leveyttä tarpeen mukaan
   },
-  
-  modalView: {
-    flex:1,
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    // padding: 20,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalInfo: {
-    flex: 4,
-    width: '100%',
-    padding: 20,
-    justifyContent:'center',
-    alignItems:'center'
-
-  },
-  delBtnContainer: {
-    width: '100%',
-    backgroundColor: '#e6e0e0',
-    padding: 20,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    flexDirection: 'row',
-    justifyContent:'space-between',
-    
-    
-    
-  },
-  
-  modalButton: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    borderRadius: 5,
-    marginVertical: 10,
-    width: '30%',
-    alignItems: 'center'
-  },
   imagePreview: {
-    width: '100%'
+    width: "100%",
   },
   modalButtonContainer: {
-    
-    width: '100%',
-    justifyContent:'center',
-    flexDirection: 'row'
+    width: "100%",
+    justifyContent: "center",
+    flexDirection: "row",
   },
   image: {
-    height: '80%',
-    width: '90%',
+    height: "80%",
+    width: "90%",
     marginTop: 20,
     borderRadius: 10,
-  }
+  },
 });
 
 export default FloorplanScreen;
+
+     {/* <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+          setModalMarkerImage(null);
+        }}
+      >
+        <View style={styles.modalView}>
+          <View style={styles.delBtnContainer}>
+            <Text style={{ fontSize: 16 }}>{selectedMarker ? selectedMarker.created : ""}</Text>
+            <Text style={{ fontSize: 16 }}>
+              {t("floorplanscreen-markerModal-creator")}: {selectedMarker ? selectedMarker.creator : ""}
+            </Text>
+            <TouchableOpacity onPress={() => deleteMarkerHandler(selectedMarker._id)}>
+              <Ionicons name="trash" size={20} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.modalInfo}>
+            <TouchableOpacity style={styles.modalButton} onPress={handleEditMarker}>
+              <Text>Muokkaa</Text>
+            </TouchableOpacity>
+
+            <Text style={{ fontWeight: "bold", fontSize: 20, marginBottom: 10 }}>{t("floorplanscreen-markerModal-info")}</Text>
+            <Text style={{ fontSize: 16 }}>{selectedMarker ? selectedMarker.info : ""}</Text>
+
+            <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${modalMarkerImage}` }} style={styles.image} />
+          </View>
+
+          <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+            <Text>{t("floorplanscreen-close-marker")}</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal> */}
+      {/* <Modal visible={editModalVisible}>
+        <View style={styles.editModalView}>
+          <View style={styles.editModalTitleContainer}>
+            <Text style={styles.editModalTitle}>Muokkaa tietoja</Text>
+          </View>
+          <View style={styles.editModalTextinput}>
+            <TextInput style={styles.textInputStyle} value={editableMarkerInfo} onChangeText={setEditableMarkerInfo} />
+          </View>
+
+          <View style={styles.editModalButtons}>
+            <TouchableOpacity style={styles.editModalButton} onPress={() => setEditModalVisible(false)}>
+              <Text>Poistu</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.editModalButton} onPress={handleUpdateMarker}>
+              <Text>Tallenna muutokset</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal> */}

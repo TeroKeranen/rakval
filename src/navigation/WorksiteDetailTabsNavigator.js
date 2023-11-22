@@ -25,10 +25,31 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
     
     
     return (
-        <Tab.Navigator screenOptions={{
-            headerShown: false,
-        }}>
-            <Tab.Screen name ={t('worksiteDetail')} component={WorksiteDetails} initialParams={{worksiteId: route.params.worksiteId}}/>
+        <Tab.Navigator screenOptions={({ route }) => ({
+            tabBarActiveTintColor: "#f48b28",
+            tabBarInactiveTintColor: "#a3845c",
+            tabBarStyle: {
+              backgroundColor: "#351301",
+            },
+  
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+  
+              if (route.name === "Construction site" || route.name === "Työmaa") {
+                iconName = focused ? "business" : "business-outline";
+              } else if (route.name === "Floor plan" || route.name === "Pohjakuva") {
+                iconName = focused ? "map" : "map-outline";
+              } else if (route.name === "Workers" || route.name === "Työntekijät") {
+                iconName = focused ? 'people' : 'people-outline';
+              }
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+  
+            // activeTintColor: "tomato", // väri kun välilehti on aktiivinen
+            // inactiveTintColor: "white",
+          })}
+        >
+            <Tab.Screen name ={t('worksiteDetail')} component={WorksiteDetails} options={{headerShown:false}} initialParams={{worksiteId: route.params.worksiteId}} />
             <Tab.Screen name={t('floorplan')} component={FloorplanScreen} options={{headerShown:false}} />
             
             {isAdmin ? <Tab.Screen name={t('workers')} component={WorksiteWorkers} /> : null}

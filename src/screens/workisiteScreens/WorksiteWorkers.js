@@ -8,6 +8,7 @@ import { Button } from "react-native-elements";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import ImagePicker from "../../components/ImagePicker";
+import DownloadScreen from "../../components/DownloadScreen";
 
 
 const WorksiteWorkers = () => {
@@ -19,7 +20,7 @@ const WorksiteWorkers = () => {
     const [selectedWorker, setSelecterWorker] = useState(null); // Käytetään tätä tallentamaan valittu työntekijä
 
     const [worksiteWorkers, setWorksiteWorkers] = useState([]) // Tallennetaan työntekijät jotka ovat lisätty työmaahan
-
+    const [isLoading, setIsLoading] = useState(false);
     const isAdmin = authState.user.role;
     
 
@@ -59,12 +60,14 @@ const WorksiteWorkers = () => {
     // kerätään työntekijöiden tiedot ja tallennetaan ne worksiteworkers useStateen
     const fetchAllWorkersInfo = async () => {
       try {
+        setIsLoading(true)
         const workersData = await Promise.all(
           worksiteState.currentWorksite.workers.map(async (workerId) => 
             await fetchUserWithId(workerId)
             )
           );
         setWorksiteWorkers(workersData);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -111,7 +114,9 @@ const WorksiteWorkers = () => {
 
         </View>
     );
-    
+    if (isLoading) {
+      return <DownloadScreen message="Ladataan" />
+    }
     return (
       <View style={styles.container}>
         <View style={styles.textContainer}>

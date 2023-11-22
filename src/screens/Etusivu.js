@@ -13,7 +13,7 @@ const Etusivu = () => {
     fetchUser();
     // console.log("etusivu state", state)
     
-
+    
   },[])
 
   

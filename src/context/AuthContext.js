@@ -64,10 +64,10 @@ const signup = (dispatch) => {
       dispatch({ type: "signup", payload: { token: response.data.token, user: response.data.user } });
       // resetAndNavigate('testi');
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data.error);
       dispatch({
         type: "add_error",
-        payload: "Something went wrong with sign up",
+        payload: err.response.data.error,
       });
     }
   };
@@ -77,44 +77,22 @@ const signin = (dispatch) => {
   return async ({ email, password }) => {
     try {
       const response = await rakval.post("/signin", { email, password });
-      
+      console.log("logging in",response.data);
       await AsyncStorage.setItem("token", response.data.token); // tallennetaan token
       await AsyncStorage.setItem('user', JSON.stringify(response.data.user)) // tallennetaan rooli
 
       dispatch({ type: "signin", payload: {token: response.data.token, user: response.data.user} });
       navigate('main');
-    } catch (error) {
+    } catch (err) {
       dispatch({
         type: "add_error",
-        payload: "Something wen wrong with sign in",
+        payload: err.response.data.error,
       });
     }
   };
 };
 
-// const joinCompany = (dispatch) => async (companyCode) => {
-//   try {
-      
-//       const token = await AsyncStorage.getItem('token');
-//       const userJson = await AsyncStorage.getItem('user')
-//       const user = JSON.parse(userJson)
-      
-     
-//       const response = await rakval.post('/join-company', {userId: user._id, companyCode}, {
-//         headers: {
-//           Authorization: `Bearer ${token}`
-//         }
-//       })
-      
-//       await AsyncStorage.setItem('user', JSON.stringify(response.data))
-//       dispatch({type: 'join_company', payload: updatedUser})
-//   } catch (error) {
-//       dispatch({
-//         type: 'add_error',
-//         payload: "Tarkista yrityskoodi"
-//       })
-//   }
-// }
+
 const joinCompany = (dispatch) => async (companyCode) => {
   try {
     // ... tokenin ja käyttäjän haun koodi ...
@@ -162,9 +140,9 @@ const fetchUser = (dispatch) => async () => {
         headers: {Authorization: `Bearer ${token}`}
       })
       
+      
       dispatch({type: 'fetch_user', payload: response.data})
     }
-    
   } catch (error) {
     console.log("something goes wrong")
     

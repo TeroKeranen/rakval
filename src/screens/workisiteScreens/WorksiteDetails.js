@@ -60,15 +60,17 @@ const WorksiteDetails = ({route, navigation}) => {
     return (
       <View style={styles.container}>
         <View style={styles.textContainer}>
-          <Text>
+          <Text style={styles.text}>
             {t("workistedetail-address")}:{state.currentWorksite.address}
           </Text>
-          <Text>{floorplanKey}</Text>
-          <Text>{t("worksitedetail-city")}</Text>
-          <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} style={styles.image} />
+          
+          <Text style={styles.text}>{t("worksitedetail-city")}: {state.currentWorksite.city}</Text>
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} style={styles.image} />
+          </View>
         </View>
 
-        <View style={styles.buttonContainer}>{isAdmin && <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} />}</View>
+        <View style={styles.buttonContainer}>{isAdmin && <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} /> }</View>
       </View>
     );
 }
@@ -95,9 +97,17 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  text: {
+    fontSize: 16,
+
+  },
+  imageContainer: {
+    marginTop: 30,
+    justifyContent:'center',
+    alignItems: 'center'
+  },
   buttonContainer: {
-    borderWidth: 1,
-    marginTop: 20,
+    
   },
   image: {
     

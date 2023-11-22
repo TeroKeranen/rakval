@@ -14,8 +14,11 @@ function ImagePicker ({onImagePicked}) {
             aspect: [16,9],
             quality: 0.5,
         });
-        setPickedImage(image.assets[0].uri);
-        onImagePicked(image.assets[0].uri)
+        if (!image.canceled) {
+          setPickedImage(image.assets[0].uri);
+          onImagePicked(image.assets[0].uri)
+
+        }
         
       }
       
