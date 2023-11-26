@@ -9,70 +9,123 @@ import {FLOORPLAN_PHOTO_URL} from '@env'
 
 
 const WorksiteDetails = ({route, navigation}) => {
-    const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const {worksiteId} = route.params;
-    const { state, fetchWorksiteDetails,fetchWorksites, resetCurrentWorksite,deleteWorksite } = useContext(WorksiteContext);
-    const { state:authState} = useContext(AuthContext); // Etsitään käyttäjän tiedot
-    const isAdmin = authState.user && authState.user.role ==='admin'; // jos on käyttäjä ja rooli on admin === true
+  const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
+  const { worksiteId } = route.params;
+  const { state, fetchWorksiteDetails, fetchWorksites, resetCurrentWorksite, deleteWorksite, startWorkDay, endWorkDay } = useContext(WorksiteContext);
+  const { state: authState } = useContext(AuthContext); // Etsitään käyttäjän tiedot
+  const isAdmin = authState.user && authState.user.role === "admin"; // jos on käyttäjä ja rooli on admin === true
 
-    
-    //Q999nNAyCg
-    useEffect(() => {
-      
-      async function loadDetails () {
-        try {
-          setIsLoading(true);
-          await fetchWorksiteDetails(worksiteId);
-          
-        } catch (error) {
-          console.log(error);     
-        } finally {
-          setIsLoading(false);
-        }   
+  const [dayIsOn, setDayIsOn] = useState(false);
+
+  useEffect(() => {
+    async function loadDetails() {
+      try {
+        setIsLoading(true);
+        await fetchWorksiteDetails(worksiteId);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
       }
-      
-      loadDetails();          
-    },[worksiteId])
-
-    const confirmDelete = (worksiteId) => {
-      Alert.alert(t("worksitedetail-deleteBtn"), t("worksitedetail-confirmdelete"), [
-        { text: t("worksitedetail-confirmDelete-cancelButton"), style: "cancel" },
-        {
-          text: t("worksitedetail-confirmDelete-deleteButton"),
-          onPress: () =>
-            deleteWorksite(worksiteId, () => {
-              navigation.goBack();
-            }),
-        },
-      ]);
     }
-  
-    if (isLoading) {
-      return (
 
-        <DownloadScreen message={t('worksitedetail-downloadscreen-msg')} />
-      )
-           
+    loadDetails();
+  }, [worksiteId]);
+
+  useEffect(() => {
+    const checkOngoingWorkDay = async () => {
+      // Varmista, että workDays on olemassa ja se on taulukko
+      if (state.currentWorksite && Array.isArray(state.currentWorksite.workDays)) {
+        // Tee pyyntö backendiin tarkistaaksesi, onko käyttäjällä käynnissä olevaa työpäivää
+        const userId = authState.user._id;
+        const ongoingWorkDay = state.currentWorksite.workDays.find((workDay) => workDay.workerId === userId && workDay.running === true);
+
+        if (ongoingWorkDay) {
+          setDayIsOn(true);
+        }
+      }
+    };
+
+    checkOngoingWorkDay();
+  }, [state.currentWorksite, authState.user._id]); // Riippuvuudet päivitetty
+
+  const confirmDelete = (worksiteId) => {
+    Alert.alert(t("worksitedetail-deleteBtn"), t("worksitedetail-confirmdelete"), [
+      { text: t("worksitedetail-confirmDelete-cancelButton"), style: "cancel" },
+      {
+        text: t("worksitedetail-confirmDelete-deleteButton"),
+        onPress: () =>
+          deleteWorksite(worksiteId, () => {
+            navigation.goBack();
+          }),
+      },
+    ]);
+  };
+
+  const handleStartDay = () => {
+    // console.log(state.currentWorksite.workDays);
+    // Haetaan käyttäjän id
+    const userId = authState.user._id;
+
+    // Etsi onko käyttäjällä jo käynnissä oleva työpäivä
+    const ongoingWorkDay = state.currentWorksite.workDays.find((workDay) => workDay.workerId === userId && workDay.running === true);
+
+    if (ongoingWorkDay) {
+      console.log("työpäivä kännissä");
+      return;
     }
-    
-    const floorplanKey = state.currentWorksite.floorplanKey;
-    return (
-      <View style={styles.container}>
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>
-            {t("workistedetail-address")}:{state.currentWorksite.address}
-          </Text>
-          
-          <Text style={styles.text}>{t("worksitedetail-city")}: {state.currentWorksite.city}</Text>
-          <View style={styles.imageContainer}>
-            <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} style={styles.image} />
-          </View>
+
+    startWorkDay(state.currentWorksite._id, authState.user._id);
+    setDayIsOn(true);
+  };
+
+  const handleEndDay = () => {
+    // endWorkDay(state.currentWorksite._id, state.currentWorksite.workDays[0]._id)
+    // console.log(state.currentWorksite.workDays[0]._id);
+    // Hae käyttäjän id
+    const userId = authState.user._id;
+
+    const ongoingWorkDay = state.currentWorksite.workDays.find((workDay) => workDay.workerId === userId && workDay.running === true);
+
+    if (ongoingWorkDay) {
+      endWorkDay(state.currentWorksite._id, ongoingWorkDay._id);
+      setDayIsOn(false);
+    } else {
+      console.log("Ei käynnissä olevaa työpäivää löydetty");
+    }
+  };
+
+  if (isLoading) {
+    return <DownloadScreen message={t("worksitedetail-downloadscreen-msg")} />;
+  }
+
+  const floorplanKey = state.currentWorksite.floorplanKey;
+  return (
+    <View style={styles.container}>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>
+          {t("workistedetail-address")}:{state.currentWorksite.address}
+        </Text>
+
+        <Text style={styles.text}>
+          {t("worksitedetail-city")}: {state.currentWorksite.city}
+        </Text>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} style={styles.image} />
         </View>
-
-        <View style={styles.buttonContainer}>{isAdmin && <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} /> }</View>
       </View>
-    );
+
+      <View style={styles.buttonContainer}>{isAdmin && <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} />}</View>
+      <View style={styles.buttonContainer}>
+        {dayIsOn ? <Button title="lopeta työpäivän" onPress={handleEndDay} /> : <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} />}
+        {/* <Button title="lopeta työpäivän" onPress={handleEndDay} />
+          <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} /> */}
+        {/* <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} />
+          <Button title="Loipeta" onPress={handleEndDay} /> */}
+      </View>
+    </View>
+  );
 }
 
 

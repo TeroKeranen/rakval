@@ -51,7 +51,16 @@ const worksiteReducer = (state, action) => {
           return {...state, currentWorksite: updatedCurrentWorksite}
       case 'delete_marker':
         return { ...state, currentWorksite: { ...state.currentWorksite, markers: state.currentWorksite.markers.filter((marker) => marker._id !== action.payload.markerId) } };
-        
+      case 'start_work_day': 
+          return {...state, currentWorksite: {...state.currentWorksite, workDays: [...state.currentWorksite.workDays, action.payload]}}
+
+      case 'end_work_day':
+        const updateWorkDays = state.currentWorksite.workDays.map(day => 
+            day._id === action.payload._id ? action.payload: day
+          )
+          return {
+            ...state, currentWorksite: {...state.currentWorksite, workDays: updateWorkDays}
+          }
       default:
         return state;
     }
@@ -97,6 +106,7 @@ const deleteWorksite = (dispatch) => {
 }
 
 const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
+  console.log("fetchworksitedetails");
   try {
     const token = await AsyncStorage.getItem("token");
 
@@ -118,6 +128,7 @@ const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
 
 // Käytetään tätä hakemaan työmaat Worksite.js sivustolle
 const fetchWorksites = (dispatch) => {
+  console.log("fecksworkdsites");
   return async () => {
     try {
       
@@ -167,20 +178,18 @@ const fetchWorksites = (dispatch) => {
 
 
             
-            const addWorkerToWorksite = (dispatch) => async (worksiteId,workerId) => {
-              try {
-                const token = await AsyncStorage.getItem("token");
-                const response = await rakval.post(
-                  
-                  `/worksites/${worksiteId}/add-worker`,
-                  { workerId },
-                  {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  }
-                  );
-                  dispatch({ type: "update_worksite", payload: response.data });
+  const addWorkerToWorksite = (dispatch) => async (worksiteId,workerId) => {
+    console.log("POOOST");
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await rakval.post(`/worksites/${worksiteId}/add-worker`,{ workerId },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                  },
+            }
+        );
+      dispatch({ type: "update_worksite", payload: response.data });
                   
   } catch (error) {
     
@@ -203,6 +212,7 @@ const deleteWorkerFromWorksite = (dispatch) => {
 };
 // lähetetään uusityömaa tietokantaan
 const newWorksite = (dispatch) => {
+  console.log("pooost");
     
     const { t } = useTranslation();
     return async ({address, city, floorplanKey, navigation }) => {
@@ -216,6 +226,7 @@ const newWorksite = (dispatch) => {
             
             
             dispatch({type: 'add_worksite', payload:response.data})
+
             navigation.navigate(t("construction-site"));
             
             
@@ -229,7 +240,7 @@ const newWorksite = (dispatch) => {
 
 
 const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
-  
+  console.log("pooost");
   try {
     
     const token = await AsyncStorage.getItem("token");
@@ -265,7 +276,7 @@ const updateMarker = (dispatch) => async (worksiteId, markerId, updatedMarkerDat
 }
 
 const deleteMarker = (dispatch) => async (worksiteId, markerId) => {
-  console.log("ksksksksk")
+  console.log("deletemarker")
   try {
     const token = await AsyncStorage.getItem('token');
     await rakval.delete(`/worksites/${worksiteId}/remove-marker/${markerId}`, {
@@ -279,4 +290,51 @@ const deleteMarker = (dispatch) => async (worksiteId, markerId) => {
   }
 }
 
-export const { Provider, Context } = createDataContext(worksiteReducer, { newWorksite, fetchWorksites, clearWorksites, fetchWorksiteDetails, resetCurrentWorksite, deleteWorksite, addWorkerToWorksite, deleteWorkerFromWorksite, saveMarkerToDatabase, deleteMarker, updateMarker }, { worksites: [], errorMessage: "", currentWorksite: [] });
+const startWorkDay = (dispatch) => async (worksiteId,userId) => {
+  console.log("startworkday")
+  try {
+    const token = await AsyncStorage.getItem('token');
+    
+    const response = await rakval.post(`/worksites/${worksiteId}/startday`,{userId}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    console.log(response.data);
+    dispatch({ type: 'start_work_day', payload: response.data });
+  } catch (error) {
+    console.log(error);
+  }
+}
+const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await rakval.post(`/worksites/${worksiteId}/endday`, { workDayId }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    dispatch({ type: 'end_work_day', payload: response.data });
+  } catch (error) {
+    console.log(error);
+    // Virheenkäsittely
+  }
+};
+
+
+
+export const { Provider, Context } = createDataContext(worksiteReducer, {
+   newWorksite,
+    fetchWorksites,
+     clearWorksites,
+      fetchWorksiteDetails,
+       resetCurrentWorksite,
+        deleteWorksite,
+         addWorkerToWorksite,
+          deleteWorkerFromWorksite,
+           saveMarkerToDatabase,
+            deleteMarker,
+             updateMarker,
+             startWorkDay,
+             endWorkDay
+             },
+              { worksites: [], errorMessage: "", currentWorksite: [] });
