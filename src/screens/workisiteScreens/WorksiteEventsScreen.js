@@ -4,6 +4,7 @@ import {Context as AuthContext} from '../../context/AuthContext'
 import { useContext, useEffect, useState } from 'react';
 import DownloadScreen from '../../components/DownloadScreen';
 import { useTranslation } from "react-i18next";
+import { calculateWorkHours } from "../../utils/workingHours";
 
 
 const WorksiteEventsScreen = () => {
@@ -14,9 +15,9 @@ const WorksiteEventsScreen = () => {
     const {state, fetchWorksiteDetails} = useContext(WorksiteContext);
 
 
-    const fetchWorksiteEventsWithUserDetails = async () => {
+    const fetchWorksiteEventsWithUserDetails = async (workDays) => {
         const workdaysWithUserDetails = await Promise.all(
-            state.currentWorksite.workDays.map(async (workDay) => {
+            workDays.map(async (workDay) => {
                 // console.log(workDay);
                 const userData = await fetchUserWithId(workDay.workerId);
                 return {
@@ -28,29 +29,38 @@ const WorksiteEventsScreen = () => {
         )
         setWorksiteEvents(workdaysWithUserDetails);
     }
-
+    
     useEffect(() => {
-        console.log(worksiteEvents);
-        setIsLoading(true);
-        fetchWorksiteDetails();
-        fetchWorksiteEventsWithUserDetails().then(() => setIsLoading(false));
-    }, [state.currentWorksite]);
+        const fetchEvents = async () => {
+            setIsLoading(true);
+            // await fetchWorksiteDetails(state.currentWorksite._id);
 
-    // useEffect(() => {
-    //     const loadEvents = async () => {
-    //         setIsLoading(true);
-    //         await fetchWorksiteDetails();
-    //         setIsLoading(false);
-    //     }
+            let workDays;
+            if (authState.user.role === 'admin') {
+                workDays = state.currentWorksite.workDays;
+                console.log("minä olen admin")
+            } else {
+                const userId = authState.user._id;
+                console.log("minä olen user")
+                workDays = state.currentWorksite.workDays.filter(workDay => workDay.workerId === userId);
+            }
 
-    //     loadEvents();
-    // }, [])
+            await fetchWorksiteEventsWithUserDetails(workDays);
+            setIsLoading(false);
+        };
+
+        fetchEvents();
+    }, [state.currentWorksite, authState.user]);
+  
 
 
     if (isLoading) {
         return <DownloadScreen message="ladataan" />
     }
 
+
+    const isAdmin = authState.user.role === 'admin';
+    
     return (
         <View style={styles.container}>
             <View style={styles.title}>
@@ -64,12 +74,14 @@ const WorksiteEventsScreen = () => {
 
                         {item.running ? 
                             <View style={styles.workRunning}>
-                                <Text>{item.userName} - {item.date}</Text>
-                                <Text>Työ aloitettu: {item.date} klo {item.startTime}</Text>
+                                <Text>{item.userName} - {item.startDate} (työ Käynnissä)</Text>
+                                <Text>Työ aloitettu: {item.startDate} klo {item.startTime}</Text>
                             </View> :
                             <View style={styles.workDone}>
-                                <Text>{item.userName} - {item.date}</Text>
-                                <Text>Tehty työ: {item.startTime} - {item.endTime}</Text>
+                                <Text>{item.userName} - {item.startDate}</Text>
+                                <Text>Tehty työ: </Text>
+                                <Text>{item.startDate} - {item.startTime} --- {item.endDate}-{item.endTime}</Text>
+                                <Text>työhön menny aika : {calculateWorkHours(item.startDate, item.startTime, item.endDate, item.endTime)}</Text>
                             </View>
                         
                         }
@@ -101,13 +113,13 @@ const styles = StyleSheet.create({
         
     },
     workRunning: {
-        backgroundColor: 'green',
+        backgroundColor: 'red',
         padding: 10,
         borderRadius: 10,
         margin:5,
     },
     workDone: {
-        backgroundColor: '#797439',
+        backgroundColor: 'green',
         padding: 10,
         borderRadius: 10,
         margin: 5,

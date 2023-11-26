@@ -82,10 +82,6 @@ const WorksiteDetails = ({route, navigation}) => {
     setDayIsOn(true);
   };
 
-  const testiWorkday = () => {
-    console.log(state.currentWorksite);
-  }
-
   const handleEndDay = async () => {
     
     // Hae käyttäjän id
@@ -127,11 +123,7 @@ const WorksiteDetails = ({route, navigation}) => {
       <View style={styles.buttonContainer}>{isAdmin && <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} />}</View>
       <View style={styles.buttonContainer}>
         {dayIsOn ? <Button title="lopeta työpäivän" onPress={handleEndDay} /> : <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} />}
-        <Button title="testi" onPress={testiWorkday} />
-        {/* <Button title="lopeta työpäivän" onPress={handleEndDay} />
-          <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} /> */}
-        {/* <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} />
-          <Button title="Loipeta" onPress={handleEndDay} /> */}
+        
       </View>
     </View>
   );
