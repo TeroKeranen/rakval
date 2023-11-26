@@ -52,7 +52,16 @@ const worksiteReducer = (state, action) => {
       case 'delete_marker':
         return { ...state, currentWorksite: { ...state.currentWorksite, markers: state.currentWorksite.markers.filter((marker) => marker._id !== action.payload.markerId) } };
       case 'start_work_day': 
-          return {...state, currentWorksite: {...state.currentWorksite, workDays: [...state.currentWorksite.workDays, action.payload]}}
+          // return {...state, currentWorksite: {...state.currentWorksite, workDays: [...state.currentWorksite.workDays, action.payload]}}
+          const newWorkDay = action.payload;
+          return {
+            ...state,
+            currentWorksite: {
+              ...state.currentWorksite,
+              workDays: [...state.currentWorksite.workDays, newWorkDay]
+            }
+          }
+          
 
       case 'end_work_day':
         const updateWorkDays = state.currentWorksite.workDays.map(day => 
@@ -300,7 +309,7 @@ const startWorkDay = (dispatch) => async (worksiteId,userId) => {
         Authorization: `Bearer ${token}`
       }
     })
-    console.log(response.data);
+    
     dispatch({ type: 'start_work_day', payload: response.data });
   } catch (error) {
     console.log(error);

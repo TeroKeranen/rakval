@@ -26,6 +26,7 @@ const WorksiteDetails = ({route, navigation}) => {
       } catch (error) {
         console.log(error);
       } finally {
+        // console.log("current",state.currentWorksite.workDays.workDays)
         setIsLoading(false);
       }
     }
@@ -34,7 +35,7 @@ const WorksiteDetails = ({route, navigation}) => {
   }, [worksiteId]);
 
   useEffect(() => {
-    const checkOngoingWorkDay = async () => {
+    const checkOngoingWorkDay = () => {
       // Varmista, että workDays on olemassa ja se on taulukko
       if (state.currentWorksite && Array.isArray(state.currentWorksite.workDays)) {
         // Tee pyyntö backendiin tarkistaaksesi, onko käyttäjällä käynnissä olevaa työpäivää
@@ -63,8 +64,8 @@ const WorksiteDetails = ({route, navigation}) => {
     ]);
   };
 
-  const handleStartDay = () => {
-    // console.log(state.currentWorksite.workDays);
+  const handleStartDay = async () => {
+    
     // Haetaan käyttäjän id
     const userId = authState.user._id;
 
@@ -76,20 +77,27 @@ const WorksiteDetails = ({route, navigation}) => {
       return;
     }
 
-    startWorkDay(state.currentWorksite._id, authState.user._id);
+    await startWorkDay(state.currentWorksite._id, authState.user._id);
+    await fetchWorksiteDetails(state.currentWorksite._id);
     setDayIsOn(true);
   };
 
-  const handleEndDay = () => {
-    // endWorkDay(state.currentWorksite._id, state.currentWorksite.workDays[0]._id)
-    // console.log(state.currentWorksite.workDays[0]._id);
+  const testiWorkday = () => {
+    console.log(state.currentWorksite);
+  }
+
+  const handleEndDay = async () => {
+    
     // Hae käyttäjän id
     const userId = authState.user._id;
 
+    // console.log("workdays", state.currentWorksite.workDays)
     const ongoingWorkDay = state.currentWorksite.workDays.find((workDay) => workDay.workerId === userId && workDay.running === true);
-
+    
+    
     if (ongoingWorkDay) {
-      endWorkDay(state.currentWorksite._id, ongoingWorkDay._id);
+      await endWorkDay(state.currentWorksite._id, ongoingWorkDay._id);
+      await fetchWorksiteDetails(state.currentWorksite._id);
       setDayIsOn(false);
     } else {
       console.log("Ei käynnissä olevaa työpäivää löydetty");
@@ -119,6 +127,7 @@ const WorksiteDetails = ({route, navigation}) => {
       <View style={styles.buttonContainer}>{isAdmin && <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} />}</View>
       <View style={styles.buttonContainer}>
         {dayIsOn ? <Button title="lopeta työpäivän" onPress={handleEndDay} /> : <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} />}
+        <Button title="testi" onPress={testiWorkday} />
         {/* <Button title="lopeta työpäivän" onPress={handleEndDay} />
           <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} /> */}
         {/* <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} />
