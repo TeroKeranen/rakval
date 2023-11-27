@@ -118,13 +118,17 @@ const WorksiteDetails = ({route, navigation}) => {
         <View style={styles.imageContainer}>
           <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} style={styles.image} />
         </View>
+
+        <View style={styles.buttonContainer}>
+          {dayIsOn ? <Button title="lopeta työpäivän" onPress={handleEndDay} /> : <Button title="aloita päivä" onPress={handleStartDay} />}  
+        </View>
       </View>
 
       <View style={styles.buttonContainer}>{isAdmin && <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} />}</View>
-      <View style={styles.buttonContainer}>
+      {/* <View style={styles.buttonContainer}>
         {dayIsOn ? <Button title="lopeta työpäivän" onPress={handleEndDay} /> : <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} />}
         
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -156,12 +160,13 @@ const styles = StyleSheet.create({
 
   },
   imageContainer: {
+    flex: 1,
     marginTop: 30,
     justifyContent:'center',
     alignItems: 'center'
   },
   buttonContainer: {
-    
+    marginTop: 20,
   },
   image: {
     

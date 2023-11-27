@@ -74,14 +74,20 @@ const WorksiteEventsScreen = () => {
 
                         {item.running ? 
                             <View style={styles.workRunning}>
-                                <Text>{item.userName} - {item.startDate} (työ Käynnissä)</Text>
-                                <Text>Työ aloitettu: {item.startDate} klo {item.startTime}</Text>
+                                <Text style={styles.text}>{item.userName} - {item.startDate} (työ Käynnissä)</Text>
+                                <Text style={styles.text}>Työ aloitettu: {item.startDate} klo {item.startTime}</Text>
                             </View> :
                             <View style={styles.workDone}>
-                                <Text>{item.userName} - {item.startDate}</Text>
-                                <Text>Tehty työ: </Text>
-                                <Text>{item.startDate} - {item.startTime} --- {item.endDate}-{item.endTime}</Text>
-                                <Text>työhön menny aika : {calculateWorkHours(item.startDate, item.startTime, item.endDate, item.endTime)}</Text>
+                                <Text style={styles.text}>{item.userName} - {item.startDate}</Text>
+                                <Text style={styles.text}>Työt aloitettu: {item.startDate} kello {item.startTime}</Text>
+                                <Text style={styles.text}>Työt lopetettu: {item.endDate} kello {item.endTime}</Text>
+                                
+                                <Text style={styles.text}>työhön menny aika :
+                                    {item.endDate && item.endTime
+                                        ? calculateWorkHours(item.startDate, item.startTime, item.endDate, item.endTime)
+                                        : "Ei saataville"}
+                                </Text>
+                                 
                             </View>
                         
                         }
@@ -99,12 +105,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         // alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'red',
+       
     },
     title: {
         alignItems: 'center',
         marginVertical: 10,
+    },
+    text: {
+        fontSize: 16,
+        fontWeight :'600'
     },
     listContainer: {
         width: '100%',
@@ -119,7 +128,7 @@ const styles = StyleSheet.create({
         margin:5,
     },
     workDone: {
-        backgroundColor: 'green',
+        backgroundColor: '#007400',
         padding: 10,
         borderRadius: 10,
         margin: 5,

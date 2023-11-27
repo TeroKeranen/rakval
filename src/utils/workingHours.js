@@ -1,10 +1,11 @@
 
 export const calculateWorkHours = (startDateString, startTimeString, endDateString, endTimeString) => {
 
-     // Muodosta Date-objektit aloitus- ja lopetusajoista
+    const [startDay, startMonth, startYear] = startDateString.split('.').map(Number);
+    const [endDay, endMonth, endYear] = endDateString.split('.').map(Number);
 
-    const startDateTime = new Date(`${startDateString}T${startTimeString}`);
-    const endDateTime = new Date(`${endDateString}T${endTimeString}`);
+    const startDateTime = new Date(startYear, startMonth - 1, startDay, ...startTimeString.split(':').map(Number));
+    const endDateTime = new Date(endYear, endMonth - 1, endDay, ...endTimeString.split(':').map(Number));
 
     // Laske aikaero millisekunteina
     const timeDiffInSeconds = (endDateTime - startDateTime) / 1000; // Aikaero sekunteina
