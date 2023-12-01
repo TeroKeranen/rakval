@@ -14,6 +14,7 @@ import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
 import { Provider as AuthProvider} from './src/context/AuthContext'
 import {Provider as WorksiteProvider} from './src/context/WorksiteContext'
 import {Provider as CompanyProvider} from './src/context/CompanyContext'
+import {Provider as EventsProvider} from './src/context/EventsContext'
 import {Ionicons} from '@expo/vector-icons'
 import { useTranslation } from "react-i18next";
 
@@ -39,7 +40,7 @@ function MainStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        headerStyle: { backgroundColor: "#351301" },
+        headerStyle: { backgroundColor: "#4f1c01" },
         headerTintColor: "white",
       }}
     >
@@ -99,7 +100,9 @@ export default () => {
     <AuthProvider>
       <WorksiteProvider>
         <CompanyProvider>
-          <App />
+          <EventsProvider>
+            <App />
+          </EventsProvider>
         </CompanyProvider>
       </WorksiteProvider>
     </AuthProvider>

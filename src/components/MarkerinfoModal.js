@@ -33,9 +33,10 @@ const MarkerinfoModal = ({isVisible, onClose, marker, onEdit, onDelete, isModalM
           
           <ScrollView contentContainerStyle={styles.scrollViewStyle}>
             {/* <View style={styles.modalInfo}> */}
-              <TouchableOpacity style={styles.modalButton} onPress={onEdit}>
-                <Text>Muokkaa</Text>
-              </TouchableOpacity>
+              
+              <TouchableOpacity onPress={onEdit} style={styles.modalButton}>
+                <Text style={{color:'white'}}>{t('edit')}</Text>
+               </TouchableOpacity>
               
 
 
@@ -51,7 +52,7 @@ const MarkerinfoModal = ({isVisible, onClose, marker, onEdit, onDelete, isModalM
             {/* </View> */}
 
           <TouchableOpacity style={styles.modalButton} onPress={onClose}>
-            <Text>{t("floorplanscreen-close-marker")}</Text>
+            <Text style={{color:'white'}}>{t("floorplanscreen-close-marker")}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -99,13 +100,21 @@ const styles = StyleSheet.create({
         alignItems: "center",
       },
       modalButton: {
-        backgroundColor: "#dddddd",
+        backgroundColor: "#507ab8",
         padding: 10,
         borderRadius: 5,
         marginVertical: 10,
-        width: "30%",
+        // width: "50%",
         alignItems: "center",
-        alignSelf:'center'
+        alignSelf:'center',
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
       },
       image: {
         flex: 1,

@@ -47,7 +47,6 @@ const FloorplanScreen = ({route, navigation}) => {
   const [editableMarkerInfo, setEditableMarkerInfo] = useState('');
 
   useEffect(() => {
-    console.log("testi1");
     console.log(state.currentWorksite.markers.length);
     setAllMarkers(state.currentWorksite.markers);
   }, [state.currentWorksite.markers]);
@@ -163,7 +162,7 @@ useEffect(() => {
   // Käytetään kun poistetaan marker
   const deleteMarkerHandler = (markerId) => {
     const markerNumber = selectedMarker ? selectedMarker.markerNumber : null;
-    
+    console.log("testiii",markerNumber)
     Alert.alert(
       t("floorplanscreen-markerModal-deletemarker-title"),
       t("floorplanscreen-markerModal-deletemarker-confirmtext"),
@@ -199,7 +198,6 @@ useEffect(() => {
   const handleUpdateMarker = async () => {
     // Kutsu backendin päivitysfunktiota ja lähetä muokatut tiedot
     // ...
-    
     try {
       console.log(modalMarkerImage);
       // console.log(modalMarkerImage);
@@ -211,11 +209,6 @@ useEffect(() => {
         
         
       }
-      if (!updatedMarkerData.info) {
-        Alert.alert(t('Error'), t('worksiteUpdateError'));
-        return; // Lopeta funktio, jos ehto ei täyty
-      }
-      
       await updateMarker(state.currentWorksite._id, selectedMarker._id, updatedMarkerData)
       setSelectedMarker(updatedMarkerData)
       setEditModalVisible(false);
@@ -239,7 +232,7 @@ useEffect(() => {
       alignItems: "center",
     
   };
-  const imageUri = state.currentWorksite.markers.imageUri;
+  // const imageUri = state.currentWorksite.markers.imageUri;
   if (isLoading) {
     return (
       <DownloadScreen message="ladataan"/>

@@ -8,6 +8,9 @@
   "worksiteDetail": "Construction site",
   "workers": "Workers",
   "floorplan": "Floor plan",
+  "error": "Error",
+  "edit": "Edit",
+  "loading": "Loading",
 
   "sign-upHeader": "Sign Up",
   "signup-navlink-text": "Already have an account? Sign in instead",
@@ -68,5 +71,30 @@
   "floorplanscreen-markerModal-deletemarker-title": "Delete note",
   "floorplanscreen-markerModal-deletemarker-confirmtext": "Are you sure you want to delete this marker?",
   "floorplanscreen-markerModal-deletemarker-cancel": "Cancel",
-  "floorplanscreen-markerModal-deletemarker-yes": "Yes"
+  "floorplanscreen-markerModal-deletemarker-yes": "Yes",
+
+  "worksiteDeleteError": "Worksite deletion failed",
+  "worksiteFetchByIdError": "Fetching worksite information by ID failed",
+  "worksiteFetchError" : "General error in data retrieva",
+  "worksiteError": "Something went wrong",
+  "worksiteDeleteWorkerError": "Worker removal failed",
+  "worksiteAddMarkerError": "Adding marker failed",
+
+  "worksiteUpdateError": "You cannot save an empty text field",
+
+  "markerUpdatemodalTitle": "Edit information",
+  "markerUpdatemodalExitBtn": "Exit",
+  "markerUpdatemodalSaveBtn": "Save",
+  "markerUpdatemodalImgBtn": "Take a picture",
+  "markerUpdatemodaDelImageBtn": "Delete the picture",
+
+  "worksiteEventScreenTitle": "Logs",
+  "worksiteEventScreenRunning": "work in progress",
+  "worksiteEventScreenStartedAt": "Work started",
+  "worksiteEventScreenCompletedAt": "Work completed",
+  "worksiteEventScreenSpentTime": "Time spent on work",
+
+  "workingHour" : "hours",
+  "workingMinutes" : "minutes",
+  "workingSeconds" : "seconds"
 }

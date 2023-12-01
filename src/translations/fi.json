@@ -8,6 +8,9 @@
   "worksiteDetail": "Työmaa",
   "workers": "Työntekijät",
   "floorplan": "Pohjakuva",
+  "error": "Virhe",
+  "edit": "Muokkaa",
+  "loading": "Ladataan",
 
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
@@ -68,5 +71,31 @@
   "floorplanscreen-markerModal-deletemarker-title": "Poista merkintä",
   "floorplanscreen-markerModal-deletemarker-confirmtext": "Oletko varma, että haluat poistaa tämän merkinnän?",
   "floorplanscreen-markerModal-deletemarker-cancel": "Peruuta",
-  "floorplanscreen-markerModal-deletemarker-yes": "Kyllä"
+  "floorplanscreen-markerModal-deletemarker-yes": "Kyllä",
+
+  "worksiteDeleteError": "Työmaan poisto epäonnistui",
+  "worksiteFetchByIdError": "Työmaan tietojen haku epäonnistui",
+  "worksiteFetchError" : "Yleinen virhe datan haussa",
+  "worksiteError": "Jotain meni vikaan",
+  "worksiteDeleteWorkerError": "Työntekijän poistaminen epäonnistui",
+  "worksiteAddMarkerError": "Markerin lisäys epäonnistui",
+
+  "worksiteUpdateError": "Et voi tallentaa tyhjää tekstikenttää",
+
+  "markerUpdatemodalTitle": "Muokkaa tietoja",
+  "markerUpdatemodalExitBtn": "Poistu",
+  "markerUpdatemodalSaveBtn": "Tallenna",
+  "markerUpdatemodalImgBtn": "Ota kuva",
+  "markerUpdatemodaDelImageBtn": "Poista kuva",
+
+  "worksiteEventScreenTitle": "Työkirjaukset",
+  "worksiteEventScreenRunning": "Työ käynnissä",
+  "worksiteEventScreenStartedAt": "Työ aloitettu",
+  "worksiteEventScreenCompletedAt": "Työ lopetettu",
+  "worksiteEventScreenSpentTime": "Työhön mennyt aika",
+
+  "workingHour" : "tuntia",
+  "workingMinutes" : "minuuttia",
+  "workingSeconds" : "sekuntia"
+
 }

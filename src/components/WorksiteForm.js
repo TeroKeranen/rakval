@@ -1,22 +1,30 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { StyleSheet, View, Button, Image, TouchableOpacity } from "react-native";
 import { Text,  Input } from "react-native-elements";
 import { useTranslation } from "react-i18next";
 import * as ImagePicker from "expo-image-picker";
 import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
 import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 
 
 
 
-const WorksiteForm = ({onSubmit, errorMessage}) => {
+const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const { t } = useTranslation();
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [imageUri, setImageUri] = useState(null);
     const [isImage, setIsImage] = useState(true); // Käytetään avuksi poistamaan "Lisää kuva" nappi
+
+    // useFocusEffect(
+    //   useCallback(() => {
+    //     clearError();
+        
+    //   }, [])
+    // )
 
     const handleSubmit = async () => {
         try {
