@@ -19,7 +19,7 @@ const WorksiteDetails = ({route, navigation}) => {
   const [dayIsOn, setDayIsOn] = useState(false);
 
   useEffect(() => {
-    console.log("stateee",state);
+    
     async function loadDetails() {
       try {
         setIsLoading(true);
@@ -36,6 +36,7 @@ const WorksiteDetails = ({route, navigation}) => {
   }, [worksiteId]);
 
   useEffect(() => {
+    
     const checkOngoingWorkDay = () => {
       // Varmista, että workDays on olemassa ja se on taulukko
       if (state.currentWorksite && Array.isArray(state.currentWorksite.workDays)) {
@@ -43,9 +44,9 @@ const WorksiteDetails = ({route, navigation}) => {
         const userId = authState.user._id;
         const ongoingWorkDay = state.currentWorksite.workDays.find((workDay) => workDay.workerId === userId && workDay.running === true);
 
-        if (ongoingWorkDay) {
-          setDayIsOn(true);
-        }
+        
+        setDayIsOn(!!ongoingWorkDay);
+        
       }
     };
 
@@ -69,12 +70,27 @@ const WorksiteDetails = ({route, navigation}) => {
     
     // Haetaan käyttäjän id
     const userId = authState.user._id;
+    console.log("stkksks", state.worksites);
+    
 
-    // Etsi onko käyttäjällä jo käynnissä oleva työpäivä
+    // Etsitään onko käyttäjällä missään työmaalla työpäivä käynnissä
+    const ongoingWorkDayAnyWorksite = state.worksites.some(worksite => 
+        worksite.workDays.find(workDay => workDay.workerId === userId && workDay.running === true)
+      )
+    if (ongoingWorkDayAnyWorksite) {
+      
+      Alert.alert(
+        "työpäivä jo käynnissä",
+        "Sinulla on jo käynnissä oleva työpäivä toisella työmaalla. Lopeta se ensin, ennen kuin aloitat uuden",
+        [{text: "OK"}]
+      )
+      return;
+    }
+    // Etsi onko käyttäjällä jo käynnissä oleva työpäivä kyseisellä työmaalla
     const ongoingWorkDay = state.currentWorksite.workDays.find((workDay) => workDay.workerId === userId && workDay.running === true);
 
     if (ongoingWorkDay) {
-      console.log("työpäivä kännissä");
+      
       return;
     }
 
@@ -121,14 +137,14 @@ const WorksiteDetails = ({route, navigation}) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          {/* {dayIsOn ? 
+          {dayIsOn ? 
             <TouchableOpacity style={styles.workDaybutton} onPress={handleEndDay}>
               <Text style={{color: 'white'}}>Lopeta työpäivä</Text>
             </TouchableOpacity> : 
             <TouchableOpacity style={styles.workDaybutton} onPress={handleStartDay}>
               <Text style={{color: 'white'}}>Aloita työpäivä</Text>
             </TouchableOpacity>
-            }   */}
+            }  
         </View>
       </View>
 

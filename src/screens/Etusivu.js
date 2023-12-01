@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList } from "react-native";
+import { Text, View, StyleSheet, FlatList, TextInput } from "react-native";
 import {useContext, useEffect, useState} from 'react';
 import { Context as Autcontext} from '../context/AuthContext'
 import {Context as EventContext} from '../context/EventsContext'
@@ -6,6 +6,7 @@ import {Button} from 'react-native-elements'
 import { useTranslation } from "react-i18next";
 import DownloadScreen from "../components/DownloadScreen";
 import { timeStampChanger } from "../utils/timestampChanger";
+import { Ionicons } from "@expo/vector-icons";
 
 const Etusivu = ({navigation}) => {
   const { t } = useTranslation();
@@ -13,6 +14,7 @@ const Etusivu = ({navigation}) => {
   const {state: eventState,fetchEvents } = useContext(EventContext)
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   
   // Haetaan AuthCOntect.js avulla tiedot käyttäjästä.
@@ -43,18 +45,57 @@ const Etusivu = ({navigation}) => {
 
   useEffect(() => {
     if (eventState.events) {
-      setEvents(eventState.events);
+      // Käännetään lista siten että ekana näkyy uusimmat 
+      const reservedEvents = [...eventState.events].reverse();
+      setEvents(reservedEvents);
     }
   }, [eventState.events])
+
+  const translateEventType = (type) => {
+    switch (type) {
+      case 'work-start':
+        return 'työ aloitettu';
+      case 'work-end':
+        return 'työ lopetettu';
+      case 'added-marker':
+        return 'lisätty merkki';
+      // Lisää muita tapauksia tarvittaessa
+      default:
+        return type;
+    }
+  };
+
+  const displayEvents = searchTerm.length === 0 
+    ? events
+    : events.filter(event => {
+      const translatedType = translateEventType(event.type).toLowerCase();
+      return (
+        event.user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.worksite.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        translatedType.includes(searchTerm.toLocaleLowerCase()) ||
+        timeStampChanger(event.timestamp).includes(searchTerm)
+        
+        // Lisää muita suodatusehtoja tarpeen mukaan
+      );
+    })
 
   if (isLoading) {
     return <DownloadScreen message="ladataan" />
   }
   
   return (
-    <View>
+    <View style={styles.mainContainer}>
+      <View style={styles.textinputContainer}>
+        <Ionicons name="ios-options" size={25} />
+        <TextInput 
+          placeholder="hae..."
+          style={styles.textinput}
+          value={searchTerm}
+          onChangeText={text => setSearchTerm(text)}
+          />
+      </View>
       <FlatList 
-        data={events}
+        data={displayEvents}
         keyExtractor={(item) => item._id}
         renderItem={({item}) => {
           let displayText;
@@ -83,6 +124,7 @@ const Etusivu = ({navigation}) => {
           return (
             
             <View style={styles.eventContainer}>
+              
               <View>
                 <View style={styles.type}>
                   {item.markerNumber ? 
@@ -112,6 +154,9 @@ const Etusivu = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    marginBottom: 70,
+  },
   text: {
     color: "black",
     fontSize: 16,
@@ -145,6 +190,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'grey',
   },
+  textinputContainer: {
+    marginVertical: 10,
+    padding: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: 'grey',
+    borderRadius: 5,
+    width: '90%',
+    alignSelf: 'center'
+  },
+  textinput: {
+    padding: 3,
+    
+    width: '100%'
+  }
 });
 
 export default Etusivu;

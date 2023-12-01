@@ -27,7 +27,8 @@ const WorksiteEventsScreen = () => {
                 }
             })
         )
-        setWorksiteEvents(workdaysWithUserDetails);
+        const reservedEvents = [...workdaysWithUserDetails].reverse();
+        setWorksiteEvents(reservedEvents);
     }
     
     useEffect(() => {
