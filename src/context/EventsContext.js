@@ -7,10 +7,21 @@ const eventsReducer = (state, action) => {
     switch (action.type) {
         case 'fetch_events':
             return {...state, events: action.payload}
+        case 'clear_events':
+            return {...state, events:[]}
         default:
             return state;
     }
 }
+
+
+const clearEvents = (dispatch) => {
+  
+    return () => {
+  
+      dispatch({type:'clear_events'})
+    }
+  }
 
 
 const fetchEvents = (dispatch) => async () => {
@@ -21,7 +32,7 @@ const fetchEvents = (dispatch) => async () => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log("fetchevents", response.data);
+        
         dispatch({type: "fetch_events", payload: response.data})
 
     } catch (error) {
@@ -31,4 +42,4 @@ const fetchEvents = (dispatch) => async () => {
 
 
 
-export const {Provider, Context} = createDataContext(eventsReducer, {fetchEvents}, {events: []})
+export const {Provider, Context} = createDataContext(eventsReducer, {fetchEvents,clearEvents}, {events: []})

@@ -18,7 +18,7 @@ const AdminCompanybtmTab = () => {
           tabBarActiveTintColor: "#f48b28",
           tabBarInactiveTintColor: "#a3845c",
           tabBarStyle: {
-            backgroundColor: "#351301",
+            backgroundColor: "#4f1c01",
           },
 
           tabBarIcon: ({ focused, color, size }) => {

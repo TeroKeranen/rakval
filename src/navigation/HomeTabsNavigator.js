@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Context as CompanyContext } from "../context/CompanyContext"
 import { Context as AuthContext } from "../context/AuthContext";
 import { Context as WorksiteContext } from "../context/WorksiteContext";
+import { Context as EventContext} from '../context/EventsContext';
 
 // Screens
 import Etusivu from "../screens/Etusivu";
@@ -21,6 +22,7 @@ import MoreTabModal from "../components/MoreTabModal";
 const Tab = createBottomTabNavigator();
 
 const HomeTabsNavigator = () => {
+  const { clearEvents } = useContext(EventContext);
   const { clearCompany } = useContext(CompanyContext);
   const { signout } = useContext(AuthContext);
   const { clearWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
@@ -29,6 +31,7 @@ const HomeTabsNavigator = () => {
 
   // käytetään tätä uloskirjautumiseen
   const handleSignout = async () => {
+    clearEvents(); // pyyhitään tapahtumat etusivulta
     clearWorksites(); // pyyhitään työmaatiedot statesta
     clearCompany(); // pyyhitään company tiedot statesta
     resetCurrentWorksite();
@@ -42,7 +45,7 @@ const HomeTabsNavigator = () => {
           tabBarActiveTintColor: "#f48b28",
           tabBarInactiveTintColor: "#a3845c",
           tabBarStyle: {
-            backgroundColor: "#351301",
+            backgroundColor: "#4f1c01",
           },
 
           tabBarIcon: ({ focused, color, size }) => {

@@ -1,5 +1,5 @@
 
-import {View, Text, StyleSheet, ActivityIndicator, Alert, Button, Image} from 'react-native'
+import {View, Text, StyleSheet, ActivityIndicator, Alert, Button, Image, TouchableOpacity} from 'react-native'
 import {Context as WorksiteContext} from '../../context/WorksiteContext'
 import {Context as AuthContext} from '../../context/AuthContext'
 import { useContext, useEffect, useState } from 'react';
@@ -19,6 +19,7 @@ const WorksiteDetails = ({route, navigation}) => {
   const [dayIsOn, setDayIsOn] = useState(false);
 
   useEffect(() => {
+    console.log("stateee",state);
     async function loadDetails() {
       try {
         setIsLoading(true);
@@ -120,11 +121,26 @@ const WorksiteDetails = ({route, navigation}) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          {dayIsOn ? <Button title="lopeta työpäivän" onPress={handleEndDay} /> : <Button title="aloita päivä" onPress={handleStartDay} />}  
+          {/* {dayIsOn ? 
+            <TouchableOpacity style={styles.workDaybutton} onPress={handleEndDay}>
+              <Text style={{color: 'white'}}>Lopeta työpäivä</Text>
+            </TouchableOpacity> : 
+            <TouchableOpacity style={styles.workDaybutton} onPress={handleStartDay}>
+              <Text style={{color: 'white'}}>Aloita työpäivä</Text>
+            </TouchableOpacity>
+            }   */}
         </View>
       </View>
 
-      <View style={styles.buttonContainer}>{isAdmin && <Button title={t("worksitedetail-deleteBtn")} onPress={() => confirmDelete(worksiteId)} />}</View>
+     
+      
+      <View style={styles.buttonContainer}>
+        {isAdmin && 
+          <TouchableOpacity onPress={() => confirmDelete(worksiteId)} style={styles.button}>
+            <Text style={{color: 'white'}}>{t("worksitedetail-deleteBtn")}</Text>
+          </TouchableOpacity>
+        }
+      </View>
       {/* <View style={styles.buttonContainer}>
         {dayIsOn ? <Button title="lopeta työpäivän" onPress={handleEndDay} /> : <Button title={t("worksiteDetail-startDay")} onPress={handleStartDay} />}
         
@@ -174,6 +190,40 @@ const styles = StyleSheet.create({
     height: 200,
     // Muut kuvan tyylit
   },
+  button: {
+    backgroundColor: "#b85050",
+        padding: 10,
+        borderRadius: 5,
+        marginVertical: 10,
+        // width: "50%",
+        alignItems: "center",
+        alignSelf:'center',
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+  },
+  workDaybutton: {
+    backgroundColor: "#507ab8",
+        padding: 10,
+        borderRadius: 5,
+        marginVertical: 10,
+        // width: "50%",
+        alignItems: "center",
+        alignSelf:'center',
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+  }
 });
 
 export default WorksiteDetails;

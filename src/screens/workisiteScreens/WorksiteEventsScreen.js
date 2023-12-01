@@ -38,10 +38,10 @@ const WorksiteEventsScreen = () => {
             let workDays;
             if (authState.user.role === 'admin') {
                 workDays = state.currentWorksite.workDays;
-                console.log("minä olen admin")
+                
             } else {
                 const userId = authState.user._id;
-                console.log("minä olen user")
+                
                 workDays = state.currentWorksite.workDays.filter(workDay => workDay.workerId === userId);
             }
 
@@ -55,7 +55,7 @@ const WorksiteEventsScreen = () => {
 
 
     if (isLoading) {
-        return <DownloadScreen message="ladataan" />
+        return <DownloadScreen message={t('loading')} />
     }
 
 
@@ -64,7 +64,7 @@ const WorksiteEventsScreen = () => {
     return (
         <View style={styles.container}>
             <View style={styles.title}>
-                <Text>EVENTS</Text>
+                <Text>{t('worksiteEventScreenTitle')}</Text>
             </View>
             <FlatList 
                 data={worksiteEvents}
@@ -74,17 +74,17 @@ const WorksiteEventsScreen = () => {
 
                         {item.running ? 
                             <View style={styles.workRunning}>
-                                <Text style={styles.text}>{item.userName} - {item.startDate} (työ Käynnissä)</Text>
-                                <Text style={styles.text}>Työ aloitettu: {item.startDate} klo {item.startTime}</Text>
+                                <Text style={styles.text}>{item.userName} - {item.startDate} ({t('worksiteEventScreenRunning')})</Text>
+                                <Text style={styles.text}>Työ aloitettu: {item.startDate} -- {item.startTime}</Text>
                             </View> :
                             <View style={styles.workDone}>
                                 <Text style={styles.text}>{item.userName} - {item.startDate}</Text>
-                                <Text style={styles.text}>Työt aloitettu: {item.startDate} kello {item.startTime}</Text>
-                                <Text style={styles.text}>Työt lopetettu: {item.endDate} kello {item.endTime}</Text>
+                                <Text style={styles.text}>{t('worksiteEventScreenStartedAt')}: {item.startDate} kello {item.startTime}</Text>
+                                <Text style={styles.text}>{t('worksiteEventScreenCompletedAt')}: {item.endDate} kello {item.endTime}</Text>
                                 
-                                <Text style={styles.text}>työhön menny aika :
+                                <Text style={styles.text}>{t('worksiteEventScreenSpentTime')} : 
                                     {item.endDate && item.endTime
-                                        ? calculateWorkHours(item.startDate, item.startTime, item.endDate, item.endTime)
+                                        ? calculateWorkHours(item.startDate, item.startTime, item.endDate, item.endTime, t)
                                         : "Ei saataville"}
                                 </Text>
                                  
@@ -113,7 +113,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        fontWeight :'600'
+        fontWeight :'600',
+        color: 'white',
     },
     listContainer: {
         width: '100%',

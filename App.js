@@ -40,7 +40,7 @@ function MainStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        headerStyle: { backgroundColor: "#351301" },
+        headerStyle: { backgroundColor: "#4f1c01" },
         headerTintColor: "white",
       }}
     >

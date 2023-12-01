@@ -35,10 +35,10 @@ const MainDrawerNavigator = () => {
     return (
       <Drawer.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: "#351301" }, // Headerin väri
+          headerStyle: { backgroundColor: "#4f1c01" }, // Headerin väri
           headerTintColor: "white", // Headerin title ja burderin väri
           sceneContainerStyle: { backgroundColor: "#3f2f25" }, // mikä tämä on ??
-          drawerContentStyle: { backgroundColor: "#351301" }, // sivulta tulevan listan background color
+          drawerContentStyle: { backgroundColor: "#4f1c01" }, // sivulta tulevan listan background color
           drawerInactiveTintColor: "white", // sivulla olevien linkkien väri
           drawerActiveTintColor: "#351401", // sivulla olevan linkin väri kun aktiicinen
           drawerActiveBackgroundColor: "#e4baa1", // sivulla olevan linkin laatikon väri kun aktiivinen

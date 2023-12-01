@@ -43,8 +43,8 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
            
             
             {isLoading ? (
-              <DownloadScreen message="ladataa" />
-            ) : (
+              <DownloadScreen message="ladataan" />
+            ) : 
 
             <View style={styles.modalView}>
 
@@ -62,15 +62,16 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
             </View>
 
               <View style={styles.imageContainer}>
-                {isModalMarkerImage ? (
+                {isModalMarkerImage ? 
                   <View>
 
-                  <TouchableOpacity onPress={handleRemoveImage}>
-                    <Text>Poista kuva</Text>
+                  
+                  <TouchableOpacity onPress={handleRemoveImage} style={styles.delButton}>
+                    <Text style={{color: 'white'}}>{t('markerUpdatemodaDelImageBtn')}</Text>
                   </TouchableOpacity>
-                  <Image resizeMode={'stretch'} width={200} height={200} source={{ uri: `${FLOORPLAN_PHOTO_URL}${isModalMarkerImage}` }} style={styles.image} />
+                  <Image resizeMode={'stretch'} width={100} height={100} source={{ uri: `${FLOORPLAN_PHOTO_URL}${isModalMarkerImage}` }} style={styles.image} />
                   </View>
-                  ): (
+                  : (
                     <ImagePicker onImagePicked={handleImagePicked} />
                   )}
                 {/* </ScrollView> */}
@@ -78,14 +79,14 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
               {/* </View> */}
               <View style={styles.editModalButtons}>
               <TouchableOpacity style={styles.editModalButton} onPress={onClose}>
-                <Text>Poistu</Text>
+                <Text style={{color:'white'}}>{t('markerUpdatemodalExitBtn')}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.editModalButton} onPress={updateMarker}>
-                <Text>Tallenna muutokset</Text>
+                <Text style={{color:'white'}}>{t('markerUpdatemodalSaveBtn')}</Text>
               </TouchableOpacity>
             </View>
           </View>
-          )}
+          }
         
             
        
@@ -134,8 +135,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     fontSize: 20,
   },
-      editModalTitle: {
-        fontSize: 20,
+  editModalTitle: {
+    fontSize: 20,
     fontWeight:'bold',
   },
   editModalTextinput: {
@@ -164,15 +165,42 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   editModalButton: {
-    
-    backgroundColor: "#c4c6ca",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
     height: 40,
     width: 100,
     margin: 10,
+    backgroundColor: "#507ab8",
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+    // width: "50%",
+    alignItems: "center",
+    alignSelf:'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
+  delButton: {
+    backgroundColor: "#b85050",
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+    // width: "50%",
+    alignItems: "center",
+    alignSelf:'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  }
   
   
 })

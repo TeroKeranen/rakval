@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 const MoreTabButton = ({ onPress }) => {
   return (
     <TouchableOpacity style={{ padding: 10 }} onPress={onPress}>
-      <Ionicons name="ellipsis-horizontal" size={24} color="white" />
+      <Ionicons name="build" size={24} color="white" />
     </TouchableOpacity>
   );
 };

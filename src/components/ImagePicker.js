@@ -2,7 +2,7 @@
 import { launchCameraAsync } from 'expo-image-picker'
 import { useState } from 'react';
 import { Image, StyleSheet } from 'react-native';
-import { View, Button, Text } from "react-native";
+import { View, Button, Text, TouchableOpacity } from "react-native";
 
 function ImagePicker ({onImagePicked}) {
 
@@ -40,9 +40,20 @@ function ImagePicker ({onImagePicked}) {
     return (
       <View>
         <View style={imagePreview}>{imagePrevies}</View>
-        {pickedImage ? <Button title="ota uusi kuva" onPress={takeImageHandler} /> : <Button title="take image" onPress={takeImageHandler} />}
+        {pickedImage ? 
+          <TouchableOpacity style={styles.button} onPress={takeImageHandler}>
+            <Text style={{color:'white'}}>Ota uusi kuva</Text>
+          </TouchableOpacity> : 
+          <TouchableOpacity style={styles.button} onPress={takeImageHandler}>
+            <Text style={{color:'white'}}>Take image</Text>
+          </TouchableOpacity>
+          }
       </View>
     );
+
+    <TouchableOpacity style={styles.modalButton} onPress={takeImageHandler}>
+      <Text style={{color:'white'}}>Ota uusi kuva</Text>
+    </TouchableOpacity>
 
 }
 const styles = StyleSheet.create({
@@ -59,6 +70,23 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  button: {
+    backgroundColor: "#507ab8",
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+    // width: "50%",
+    alignItems: "center",
+    alignSelf:'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  }
 });
 
 export default ImagePicker;

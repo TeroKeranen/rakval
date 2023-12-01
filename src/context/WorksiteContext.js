@@ -7,6 +7,9 @@ import { useTranslation } from "react-i18next";
 
 const worksiteReducer = (state, action) => {
     switch (action.type) {
+      case 'clear_error_message':
+        return {...state, errorMessage: ''};
+
       case "add_worksite":
         return { ...state, worksites: [...state.worksites, action.payload] };
       case "fetch_worksites":
@@ -74,6 +77,10 @@ const worksiteReducer = (state, action) => {
         return state;
     }
 }
+// Käytetään puhdistamaan error message
+const clearErrorMessage = dispatch => () => {
+  dispatch({type: 'clear_error_message'})
+}
 
 const clearWorksites = (dispatch) => {
   
@@ -92,8 +99,9 @@ const resetCurrentWorksite = (dispatch) => {
   }
 }
 
+// työmään poistaminen
 const deleteWorksite = (dispatch) => {
-  return async (worksiteId, callback) => {
+    return async (worksiteId, callback) => {
     try {
       const token = await AsyncStorage.getItem('token');
       await rakval.delete(`/worksites/${worksiteId}`, {
@@ -114,6 +122,7 @@ const deleteWorksite = (dispatch) => {
   }
 }
 
+// etsitään työmaan tiedot id perusteella
 const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
   console.log("fetchworksitedetails");
   try {
@@ -132,13 +141,13 @@ const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
   } catch (error) {
     dispatch({ type: "set_error", payload: "työmään tietojen haku epäonnistui" });
     console.log(error);
-  }
+      }
 }
 
 // Käytetään tätä hakemaan työmaat Worksite.js sivustolle
 const fetchWorksites = (dispatch) => {
   console.log("fecksworkdsites");
-  return async () => {
+    return async () => {
     try {
       
       const token = await AsyncStorage.getItem("token");
@@ -176,7 +185,7 @@ const fetchWorksites = (dispatch) => {
       
       // if (error.response && error.response.status === 400 && error.response.data.error === "Käyttäjällä ei ole yritystä2") {
         //   console.log("Käyttäjällä ei ole yritystä, ei haeta työmaita.");
-        // } else {
+// } else {
           
           //   dispatch({type: 'set_error', payload: "jotain meni vikaan (työmaitten hauan kanssa)"})
           // }
@@ -186,9 +195,9 @@ const fetchWorksites = (dispatch) => {
 };
 
 
-            
+  // Lisätään työntekijä työmaalle
   const addWorkerToWorksite = (dispatch) => async (worksiteId,workerId) => {
-    console.log("POOOST");
+        console.log("POOOST");
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await rakval.post(`/worksites/${worksiteId}/add-worker`,{ workerId },
@@ -205,8 +214,9 @@ const fetchWorksites = (dispatch) => {
   }
 }
 
+// Poistetaan työntekijä työmaasta
 const deleteWorkerFromWorksite = (dispatch) => {
-  return async (worksiteId, workerId) => {
+    return async (worksiteId, workerId) => {
     try {
       const token = await AsyncStorage.getItem("token");
       await rakval.delete(`/worksites/${worksiteId}/workers/${workerId}`, {
@@ -242,7 +252,7 @@ const newWorksite = (dispatch) => {
         } catch (error) {
             dispatch({type: 'set_error', payload: 'jotai meni vikaan'})
             console.log(error)
-            
+                        
         }
     }
 }
@@ -250,7 +260,7 @@ const newWorksite = (dispatch) => {
 
 const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
   console.log("pooost");
-  try {
+    try {
     
     const token = await AsyncStorage.getItem("token");
     // const requestBody = {
@@ -272,23 +282,26 @@ const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
 
 
 // markerin muokkaus
-const updateMarker = (dispatch) => async (worksiteId, markerId, updatedMarkerData) => {
-  try {
+const updateMarker = (dispatch) => async (worksiteId, markerId, updatedMarkerData, t) => {
+    
+    try {
     const token = await AsyncStorage.getItem('token');
     const response = await rakval.put(`/worksites/${worksiteId}/markers/${markerId}`, updatedMarkerData, {
       headers: {Authorization: `Bearer ${token}`}
     })
     dispatch({type: 'update_marker', payload: {markerId, updateMarker: response.data}})
   } catch (error) {
-    
+    dispatch({type: 'set_error', payload: 'jotai meni vikaan'})
+    console.log(error)
   }
 }
 
-const deleteMarker = (dispatch) => async (worksiteId, markerId) => {
+const deleteMarker = (dispatch) => async (worksiteId, markerId,markerNumber) => {
   console.log("deletemarker")
   try {
     const token = await AsyncStorage.getItem('token');
-    await rakval.delete(`/worksites/${worksiteId}/remove-marker/${markerId}`, {
+    const queryString = `markerNumber=${markerNumber}`;
+    await rakval.delete(`/worksites/${worksiteId}/remove-marker/${markerId}?${queryString}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -300,7 +313,7 @@ const deleteMarker = (dispatch) => async (worksiteId, markerId) => {
 }
 
 const startWorkDay = (dispatch) => async (worksiteId,userId) => {
-  console.log("startworkday")
+    console.log("startworkday")
   try {
     const token = await AsyncStorage.getItem('token');
     
@@ -316,7 +329,7 @@ const startWorkDay = (dispatch) => async (worksiteId,userId) => {
   }
 }
 const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
-  try {
+    try {
     const token = await AsyncStorage.getItem('token');
     const response = await rakval.post(`/worksites/${worksiteId}/endday`, { workDayId }, {
       headers: { Authorization: `Bearer ${token}` }

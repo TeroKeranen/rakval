@@ -1,5 +1,7 @@
+import { useTranslation } from "react-i18next";
 
-export const calculateWorkHours = (startDateString, startTimeString, endDateString, endTimeString) => {
+export const calculateWorkHours = (startDateString, startTimeString, endDateString, endTimeString,t) => {
+    
 
     const [startDay, startMonth, startYear] = startDateString.split('.').map(Number);
     const [endDay, endMonth, endYear] = endDateString.split('.').map(Number);
@@ -14,6 +16,6 @@ export const calculateWorkHours = (startDateString, startTimeString, endDateStri
     const minutes = Math.floor((timeDiffInSeconds % 3600) / 60); // Muunna jäljellä olevat sekunnit minuuteiksi
     const seconds = timeDiffInSeconds % 60; // Jäljellä olevat sekunnit
 
-    return `${hours} tuntia, ${minutes} minuuttia ja ${Math.round(seconds)} sekuntia`;
+    return ` ${hours} ${t('workingHour')}, ${minutes} ${t('workingMinutes')}, ${Math.round(seconds)} ${t('workingSeconds')}`;
 
 }
