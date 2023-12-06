@@ -64,10 +64,21 @@ const styles = StyleSheet.create({
     color: "#333333", // Tekstin väri
   },
   button: {
-    width: "50%",
-    backgroundColor: "blue",
+    backgroundColor: "#507ab8",
     padding: 10,
-    borderRadius: 4,
+    borderRadius: 5,
+    marginVertical: 10,
+    // width: "50%",
+    alignItems: "center",
+    alignSelf:'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   buttonText: {
     color: "white",

@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     paddingVertical: 35,
     paddingHorizontal: 55,
     width: "100%",
+    height: '100%',
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {

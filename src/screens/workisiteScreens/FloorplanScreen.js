@@ -48,7 +48,7 @@ const FloorplanScreen = ({route, navigation}) => {
 
   useEffect(() => {
     console.log("testi1");
-    console.log(state.currentWorksite.markers.length);
+    
     setAllMarkers(state.currentWorksite.markers);
   }, [state.currentWorksite.markers]);
 
@@ -111,13 +111,14 @@ const handleSaveMarker = async () => {
 };
 
 useEffect(() => {
-  console.log("uuuse");
+  
   setAllMarkers(state.currentWorksite.markers);
 },[state.currentWorksite.markers])
 
 // Käytetään tätä kun halutaan avata modali
-  const handleMarkerPress = (index) => {
+  const handleMarkerPress = (index, pos) => {
     // Tee jotain, kun markeria painetaan
+    console.log(pos);
     const pressedMarker = state.currentWorksite.markers[index];
 
     
@@ -265,8 +266,8 @@ useEffect(() => {
         {showMarker && <View style={[styles.markerStyle, { position: "absolute", left: tempMarkerPosition.x, top: tempMarkerPosition.y }]} />}
         {/* Käydään läpi kaikki markerit ja näytetään ne pohjakuvassa */}
         {state.currentWorksite.markers.map((pos, index) => (
-          <TouchableOpacity key={index} onPress={() => handleMarkerPress(index)} style={[styles.markerStyle, { position: "absolute", left: pos.x, top: pos.y }]} >
-            <Text style={styles.markerTextStyle}> {index + 1}</Text>
+          <TouchableOpacity key={index} onPress={() => handleMarkerPress(index,pos)} style={[styles.markerStyle, { position: "absolute", left: pos.x, top: pos.y }]} >
+            <Text style={styles.markerTextStyle}> {pos.markerNumber}</Text>
           </TouchableOpacity>
         ))}
       </ImageZoom>

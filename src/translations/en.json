@@ -96,5 +96,7 @@
 
   "workingHour" : "hours",
   "workingMinutes" : "minutes",
-  "workingSeconds" : "seconds"
+  "workingSeconds" : "seconds",
+
+  "profileScreenCompanycodeError": "Check the company code"
 }

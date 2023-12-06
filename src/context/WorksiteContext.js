@@ -38,12 +38,22 @@ const worksiteReducer = (state, action) => {
           const updatedWorksites = state.worksites.map((worksite) => (worksite._id === action.payload._id ? action.payload : worksite));
           return { ...state, worksites: updatedWorksites, currentWorksite: action.payload };
         case 'add_markers':
-          return {
-            ...state,
-            currentWorksite: {
-              ...state.currentWorksite,
-              markers: [...state.currentWorksite.markers, ...action.payload.markers] // Oletetaan että action.payload sisältää uudet markerit
-        }}
+          const existingMarkerIds = new Set(state.currentWorksite.markers.map(marker => marker._id));
+  const newMarkers = action.payload.markers.filter(marker => !existingMarkerIds.has(marker._id));
+
+  return {
+    ...state,
+    currentWorksite: {
+      ...state.currentWorksite,
+      markers: [...state.currentWorksite.markers, ...newMarkers]
+    }
+  };
+        //   return {
+        //     ...state,
+        //     currentWorksite: {
+        //       ...state.currentWorksite,
+        //       markers: [...state.currentWorksite.markers, ...action.payload.markers] // Oletetaan että action.payload sisältää uudet markerit
+        // }}
         case 'update_marker':
           const updatedCurrentWorksite = {
             ...state.currentWorksite,
@@ -197,7 +207,7 @@ const fetchWorksites = (dispatch) => {
 
   // Lisätään työntekijä työmaalle
   const addWorkerToWorksite = (dispatch) => async (worksiteId,workerId) => {
-        console.log("POOOST");
+        
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await rakval.post(`/worksites/${worksiteId}/add-worker`,{ workerId },
@@ -207,6 +217,7 @@ const fetchWorksites = (dispatch) => {
                   },
             }
         );
+        
       dispatch({ type: "update_worksite", payload: response.data });
                   
   } catch (error) {
@@ -231,7 +242,7 @@ const deleteWorkerFromWorksite = (dispatch) => {
 };
 // lähetetään uusityömaa tietokantaan
 const newWorksite = (dispatch) => {
-  console.log("pooost");
+  
     
     const { t } = useTranslation();
     return async ({address, city, floorplanKey, navigation }) => {
@@ -239,7 +250,9 @@ const newWorksite = (dispatch) => {
             const token = await AsyncStorage.getItem('token')
             const response = await rakval.post('/worksites', {address, city, floorplanKey}, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    
+                    
                 }
             })
             
@@ -259,20 +272,19 @@ const newWorksite = (dispatch) => {
 
 
 const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
-  console.log("pooost");
+  console.log("pooost markeri");
     try {
     
     const token = await AsyncStorage.getItem("token");
-    // const requestBody = {
-    //   ...markerData,
-    //   creator: creator
-    // }
-          const response = await rakval.post(`/worksites/${worksiteId}/add-marker`, markerData, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          console.log("done")
+    
+  
+    const response = await rakval.post(`/worksites/${worksiteId}/add-marker`, markerData, {
+      headers: {
+        
+        Authorization: `Bearer ${token}`
+          }
+        })
+          
           dispatch({ type: "add_markers", payload: response.data });
   } catch (error) {
     console.log("SavemarkerTodatabaseERROR",error);

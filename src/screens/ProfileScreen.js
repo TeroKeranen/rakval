@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, Alert, TextInput} from "react-native";
+import {Text, View, StyleSheet, Alert, TextInput,TouchableOpacity} from "react-native";
 import { Button } from "react-native-elements";
 import { useContext, useEffect, useState } from "react";
 import { Context as AuthContext } from "../context/AuthContext";
@@ -48,8 +48,12 @@ const ProfileScreen = ({navigation}) => {
       fetchWorksites(); // Jos tulee ongelmia niin laitetaan takaisin
      
     } else {
+      
+      Alert.alert(t('error'), t('profileScreenCompanycodeError'));
+        return; // Lopeta funktio, jos ehto ei täyty
+      
      // Näytä virheilmoitus käyttäjälle
-      console.log("Liittymisessä yritykseen tapahtui virhe:", result.error);
+      
     }
   };
 
@@ -70,9 +74,12 @@ const ProfileScreen = ({navigation}) => {
       <View>
         {!state.user.company ?  
           <>
-              {state.errorMessage != "" ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
+              {/* {state.errorMessage != "" ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null} */}
               <TextInput placeholder={t('profileScreen-placeholder')} value={companyCode} onChangeText={setCompanyCode} style={styles.input} />
-              <Button title={t('profileScreen-joincompany')} onPress={handleJoinCompany} />
+              {/* <Button title={t('profileScreen-joincompany')} onPress={handleJoinCompany} /> */}
+              <TouchableOpacity style={styles.workDaybutton} onPress={handleJoinCompany}>
+                <Text style={{color: 'white'}}>{t('profileScreen-joincompany')}</Text>
+              </TouchableOpacity>
           </> : null}
       </View>
 
@@ -94,6 +101,8 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     borderColor: "gray",
+    width: '60%',
+    alignSelf: 'center',
     borderWidth: 1,
     marginTop: 10,
     marginBottom: 10,
@@ -103,6 +112,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "red",
   },
+  workDaybutton: {
+    backgroundColor: "#507ab8",
+        padding: 10,
+        borderRadius: 5,
+        marginVertical: 10,
+        // width: "50%",
+        alignItems: "center",
+        alignSelf:'center',
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+  }
 });
 
 export default ProfileScreen;

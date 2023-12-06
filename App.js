@@ -3,6 +3,7 @@ import './services/i18n'
 import "react-native-gesture-handler";
 import { useContext, useState, useEffect } from "react";
 import { Context as AuthContext } from "./src/context/AuthContext";
+import { StatusBar } from 'expo-status-bar';
 
 
 import {NavigationContainer} from '@react-navigation/native'
@@ -31,6 +32,7 @@ Amplify.configure(awsExports);
 
 
 const Stack = createNativeStackNavigator();
+
 
 
 // päästack 
@@ -63,6 +65,7 @@ function SignedInNavigator() {
     <Stack.Navigator screenOptions={{
       headerShown: false,
     }}>
+      
       <Stack.Screen name="Main" component={MainStack} />
       {/* muut ruudut, jos niitä on */}
     </Stack.Navigator>
@@ -79,6 +82,7 @@ function App() {
     
     const checkAuthState = async () => {
       await tryLocalSignin();
+      await fetchUser();
       setLoading(false);
     };
     checkAuthState();

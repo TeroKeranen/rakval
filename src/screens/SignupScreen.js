@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { useTranslation } from "react-i18next";
 import {Context as AuthContext} from '../context/AuthContext'
 import AuthForm from "../components/AuthForm";
@@ -29,11 +29,14 @@ const SignupScreen = ({navigation}) => {
 
   return (
     <>
+    <ScrollView>
+
       <View style={styles.container}>
         {/* signup */}
         <AuthForm headerText={t("sign-upHeader")} errorMessage={state.errorMessage} submitButtonText={t("sign-upHeader")} onSubmit={signup} />
         <NavLink text={t("signup-navlink-text")} routeName="signin" />
       </View>
+    </ScrollView>
     </>
   );
 };

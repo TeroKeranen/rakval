@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList, TextInput } from "react-native";
+import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView } from "react-native";
 import {useContext, useEffect, useState} from 'react';
 import { Context as Autcontext} from '../context/AuthContext'
 import {Context as EventContext} from '../context/EventsContext'
@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import DownloadScreen from "../components/DownloadScreen";
 import { timeStampChanger } from "../utils/timestampChanger";
 import { Ionicons } from "@expo/vector-icons";
+
 
 const Etusivu = ({navigation}) => {
   const { t } = useTranslation();
@@ -17,39 +18,37 @@ const Etusivu = ({navigation}) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   
-  // Haetaan AuthCOntect.js avulla tiedot käyttäjästä.
-  // useEffect(() => {
 
-    
-  //   fetchUser();
-  //   fetchEvents();
-    
-    
-    
-    
-  // },[])
+
+
+  // Haetaan AuthCOntect.js avulla tiedot käyttäjästä.
+ 
 
   useEffect(() => {
     const fetchAndSetData = async () => {
       setIsLoading(true);
-      await fetchUser();
-      await fetchEvents();
+      // await fetchUser();
+      fetchEvents();
       setIsLoading(false)
     }
     const unsubscribe = navigation.addListener('focus', fetchAndSetData)
-    
-    
+
+
     return unsubscribe;
   })
 
 
+
   useEffect(() => {
     if (eventState.events) {
-      // Käännetään lista siten että ekana näkyy uusimmat 
+      // Käännetään lista siten että ekana näkyy uusimmat
       const reservedEvents = [...eventState.events].reverse();
       setEvents(reservedEvents);
     }
   }, [eventState.events])
+
+  
+
 
   const translateEventType = (type) => {
     switch (type) {
@@ -65,7 +64,7 @@ const Etusivu = ({navigation}) => {
     }
   };
 
-  const displayEvents = searchTerm.length === 0 
+  const displayEvents = searchTerm.length === 0
     ? events
     : events.filter(event => {
       const translatedType = translateEventType(event.type).toLowerCase();
@@ -74,7 +73,7 @@ const Etusivu = ({navigation}) => {
         event.worksite.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
         translatedType.includes(searchTerm.toLocaleLowerCase()) ||
         timeStampChanger(event.timestamp).includes(searchTerm)
-        
+
         // Lisää muita suodatusehtoja tarpeen mukaan
       );
     })
@@ -82,19 +81,21 @@ const Etusivu = ({navigation}) => {
   if (isLoading) {
     return <DownloadScreen message="ladataan" />
   }
-  
+
   return (
+
+
     <View style={styles.mainContainer}>
       <View style={styles.textinputContainer}>
         <Ionicons name="ios-options" size={25} />
-        <TextInput 
+        <TextInput
           placeholder="hae..."
           style={styles.textinput}
           value={searchTerm}
           onChangeText={text => setSearchTerm(text)}
           />
       </View>
-      <FlatList 
+      <FlatList
         data={displayEvents}
         keyExtractor={(item) => item._id}
         renderItem={({item}) => {
@@ -104,40 +105,40 @@ const Etusivu = ({navigation}) => {
             case 'added-marker':
               displayText ='Lisätty merkki';
               break;
-            case 'update-marker':
-              displayText ='Merkkiä muokattu';
-              break;
-            case 'work-start':
-              displayText = 'Työ aloitettu';
-              break;
-            case 'work-end':
-              displayText = 'Työ lopetettu';
-              break;
-            case 'remove-marker':
-              displayText = "Merkki poistettu";
-              break;
-            
-            default:
-              displayText = item.type;
-          }
-          
-          return (
-            
-            <View style={styles.eventContainer}>
-              
+              case 'update-marker':
+                displayText ='Merkkiä muokattu';
+                break;
+                case 'work-start':
+                  displayText = 'Työ aloitettu';
+                  break;
+                  case 'work-end':
+                    displayText = 'Työ lopetettu';
+                    break;
+                    case 'remove-marker':
+                      displayText = "Merkki poistettu";
+                      break;
+
+                      default:
+                        displayText = item.type;
+                      }
+
+                      return (
+
+                        <View style={styles.eventContainer}>
+
               <View>
                 <View style={styles.type}>
-                  {item.markerNumber ? 
-                    <Text style={styles.text}>{displayText} ({item.markerNumber})</Text> 
+                  {item.markerNumber ?
+                    <Text style={styles.text}>{displayText} ({item.markerNumber})</Text>
                     : <Text style={styles.text}>{displayText}</Text>
                   }
                   <Text style={styles.text}>{timeStampChanger(item.timestamp)}</Text>
                 </View>
-                
+
                 <Text style={styles.text}>Työmaalle: {item.worksite.address}</Text>
                 <Text style={styles.text}>Käyttäjä: {item.user.email}</Text>
               </View>
-              
+
           </View>
           )
         }}
@@ -146,12 +147,13 @@ const Etusivu = ({navigation}) => {
             <Text style={styles.emptyListText}>ei dataa</Text>
           </View>
         )}
-      />
-     
+        />
+
     </View>
   )
 
 };
+
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   eventContainer: {
-    alignSelf: 'center', 
+    alignSelf: 'center',
     backgroundColor: '#ddd4d4',
     width: '90%',
     marginVertical: 6,
@@ -173,13 +175,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.4,
-    
+
   },
   type: {
     flexDirection: 'row',
     justifyContent:'space-between',
     marginBottom: 10,
-    
+
   },
   emptyListContainer: {
     alignItems: 'center',
@@ -204,7 +206,7 @@ const styles = StyleSheet.create({
   },
   textinput: {
     padding: 3,
-    
+
     width: '100%'
   }
 });

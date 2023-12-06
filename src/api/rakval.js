@@ -1,6 +1,7 @@
 
 import axios from 'axios'
+import { BASE_URL } from "@env";
 
 export default axios.create({
-  baseURL: "https://2646-91-152-126-92.ngrok-free.app",
+  baseURL: BASE_URL,
 });

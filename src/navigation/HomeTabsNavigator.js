@@ -17,6 +17,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 // Components
 import MoreTabButton from "../components/MoreTabButton";
 import MoreTabModal from "../components/MoreTabModal";
+import { StatusBar } from "expo-status-bar";
 
 
 const Tab = createBottomTabNavigator();
@@ -40,6 +41,7 @@ const HomeTabsNavigator = () => {
 
   return (
     <>
+      <StatusBar style="light" />
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarActiveTintColor: "#f48b28",

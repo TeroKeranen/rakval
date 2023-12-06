@@ -24,7 +24,8 @@ const CompanyScreen = ({ navigation }) => {
   useEffect(() => {
     const loadCompany = async () => {
       setIsLoading(true);
-      await fetchCompany();
+      // await fetchCompany();
+      fetchCompany();
       
       setIsLoading(false);
     };

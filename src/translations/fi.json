@@ -96,6 +96,8 @@
 
   "workingHour" : "tuntia",
   "workingMinutes" : "minuuttia",
-  "workingSeconds" : "sekuntia"
+  "workingSeconds" : "sekuntia",
+
+  "profileScreenCompanycodeError": "Tarkista yrityskoodi"
 
 }

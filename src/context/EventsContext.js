@@ -26,6 +26,7 @@ const clearEvents = (dispatch) => {
 
 const fetchEvents = (dispatch) => async () => {
     try {
+        console.log("tererer")
         const token = await AsyncStorage.getItem('token');
         const response = await rakval.get('/events', {
             headers: {
