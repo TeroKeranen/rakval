@@ -3,7 +3,8 @@ import { Text, View, FlatList, TouchableOpacity, StyleSheet,Alert } from "react-
 import {Context as WorksiteContext} from '../../context/WorksiteContext';
 import {Context as CompanyContext} from '../../context/CompanyContext'
 import {Context as AuthContext} from '../../context/AuthContext'
-import RNPickerSelect from 'react-native-picker-select'
+import {Picker} from '@react-native-picker/picker';
+
 import { Button } from "react-native-elements";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,7 +14,7 @@ import DownloadScreen from "../../components/DownloadScreen";
 
 const WorksiteWorkers = () => {
     const { t } = useTranslation();
-    const { state: worksiteState, addWorkerToWorksite, fetchWorksiteDetails, fetchWorksites, resetCurrentWorksite, deleteWorksite, deleteWorkerFromWorksite } = useContext(WorksiteContext);
+    const { state: worksiteState, addWorkerToWorksite, deleteWorkerFromWorksite } = useContext(WorksiteContext);
     const {state: companyState, fetchCompany,fetchWorkers} = useContext(CompanyContext);
     const {state: authState, fetchUserWithId} = useContext(AuthContext) // TÄHÄN JÄÄTIIIN
 
@@ -26,8 +27,7 @@ const WorksiteWorkers = () => {
 
     useEffect(() => {
       fetchCompany();
-      
-     
+
       
     }, []);
     
@@ -35,7 +35,6 @@ const WorksiteWorkers = () => {
         if (companyState.company && companyState.company._id) {
             fetchWorkers(companyState.company._id)
         }
-        
         
         
     },[companyState.company, authState])
@@ -59,16 +58,21 @@ const WorksiteWorkers = () => {
 
     // kerätään työntekijöiden tiedot ja tallennetaan ne worksiteworkers useStateen
     const fetchAllWorkersInfo = async () => {
+      console.log("aloitetaan fetchallworkersinfo")
       try {
+        console.log("aloitetaan fetchallworkersinfo try 1")
         setIsLoading(true)
         const workersData = await Promise.all(
           worksiteState.currentWorksite.workers.map(async (workerId) => 
             await fetchUserWithId(workerId)
             )
           );
+          console.log("aloitetaan fetchallworkersinfo try 2")
         setWorksiteWorkers(workersData);
         setIsLoading(false);
+        console.log("aloitetaan fetchallworkersinfo try 3")
       } catch (error) {
+        console.log("aloitetaan fetchallworkersinfo try 4")
         console.error(error);
       }
     };
@@ -77,6 +81,7 @@ const WorksiteWorkers = () => {
       if (worksiteState.currentWorksite && worksiteState.currentWorksite.workers) {
         fetchAllWorkersInfo();
       }
+      console.log("userururururu 3")
     }, [worksiteState.currentWorksite]);
 
     const handleRemoveWorker = (workerId) => {
@@ -122,14 +127,18 @@ const WorksiteWorkers = () => {
         <View style={styles.textContainer}>
           <View style={styles.pickerContainer}>
             <Text style={styles.title}>{t("worksiteWorker-select-worker")}</Text>
-            <RNPickerSelect
-              onValueChange={handleSelectWorker}
-              items={companyState.workers.map((worker) => ({
-                label: worker.email, // Tässä voit näyttää haluamasi tiedot työntekijästä
-                value: worker._id,
-              }))}
-              value={selectedWorker}
-            />
+            
+            <Picker
+            style={{width: 100}}
+              selectedValue={selectedWorker}
+              onValueChange={(itemValue, itemIndex) => 
+              setSelecterWorker(itemValue)
+            }
+            >
+              {companyState.workers.map((worker) => (
+                <Picker.Item label={worker.email} value={worker._id} key={worker._id} />
+              ))}
+            </Picker>
 
             <Button title={t("worksiteWorker-add-button")} onPress={handleAddWorker} disabled={!selectedWorker} />
           </View>

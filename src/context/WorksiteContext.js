@@ -103,7 +103,7 @@ const clearWorksites = (dispatch) => {
 // Käytetään WorksiteDetails.js sivustolla tyhjentämään edellisen työmaantiedot näkyvistä
 const resetCurrentWorksite = (dispatch) => {
   return () => {
-    console.log("resecurrentworksite");
+    
     dispatch({ type: "reset_current_worksite" });
     
   }
@@ -134,7 +134,7 @@ const deleteWorksite = (dispatch) => {
 
 // etsitään työmaan tiedot id perusteella
 const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
-  console.log("fetchworksitedetails");
+  
   try {
     const token = await AsyncStorage.getItem("token");
 
@@ -156,7 +156,7 @@ const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
 
 // Käytetään tätä hakemaan työmaat Worksite.js sivustolle
 const fetchWorksites = (dispatch) => {
-  console.log("fecksworkdsites");
+  
     return async () => {
     try {
       
@@ -209,6 +209,7 @@ const fetchWorksites = (dispatch) => {
   const addWorkerToWorksite = (dispatch) => async (worksiteId,workerId) => {
         
     try {
+      
       const token = await AsyncStorage.getItem("token");
       const response = await rakval.post(`/worksites/${worksiteId}/add-worker`,{ workerId },
             {
@@ -240,6 +241,7 @@ const deleteWorkerFromWorksite = (dispatch) => {
     }
   };
 };
+
 // lähetetään uusityömaa tietokantaan
 const newWorksite = (dispatch) => {
   
@@ -272,7 +274,7 @@ const newWorksite = (dispatch) => {
 
 
 const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
-  console.log("pooost markeri");
+  
     try {
     
     const token = await AsyncStorage.getItem("token");
@@ -309,7 +311,7 @@ const updateMarker = (dispatch) => async (worksiteId, markerId, updatedMarkerDat
 }
 
 const deleteMarker = (dispatch) => async (worksiteId, markerId,markerNumber) => {
-  console.log("deletemarker")
+  
   try {
     const token = await AsyncStorage.getItem('token');
     const queryString = `markerNumber=${markerNumber}`;
@@ -325,7 +327,7 @@ const deleteMarker = (dispatch) => async (worksiteId, markerId,markerNumber) => 
 }
 
 const startWorkDay = (dispatch) => async (worksiteId,userId) => {
-    console.log("startworkday")
+   
   try {
     const token = await AsyncStorage.getItem('token');
     

@@ -27,7 +27,7 @@ const Etusivu = ({navigation}) => {
   useEffect(() => {
     const fetchAndSetData = async () => {
       setIsLoading(true);
-      // await fetchUser();
+      fetchUser();
       fetchEvents();
       setIsLoading(false)
     }

@@ -30,8 +30,9 @@ const clearCompany = (dispatch) => {
 };
 //Haetaan yrityksen tietota
 const fetchCompany = (dispatch) => {
-    return async () => {
-        try {
+  return async () => {
+    try {
+          
           const token = await AsyncStorage.getItem("token");
           const response = await rakval.get("/company", {
             headers: {
@@ -50,6 +51,7 @@ const fetchCompany = (dispatch) => {
 const fetchWorkers = (dispatch) => {
   return async (companyId) => {
     try {
+      
       const token = await AsyncStorage.getItem('token');
       const response = await rakval.get(`/company/${companyId}/users`, {
         headers: {

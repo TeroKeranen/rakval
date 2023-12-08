@@ -77,7 +77,7 @@ const signin = (dispatch) => {
   return async ({ email, password }) => {
     try {
       const response = await rakval.post("/signin", { email, password });
-      console.log("logging in",response.data);
+     
       await AsyncStorage.setItem("token", response.data.token); // tallennetaan token
       await AsyncStorage.setItem('user', JSON.stringify(response.data.user)) // tallennetaan rooli
 
@@ -153,6 +153,7 @@ const fetchUser = (dispatch) => async () => {
 const fetchUserWithId = (dispatch) => {
   return async (userId) => {
     try {
+      
       const token = await AsyncStorage.getItem('token')
       const response = await rakval.get(`/users/${userId}`, {
         headers: {

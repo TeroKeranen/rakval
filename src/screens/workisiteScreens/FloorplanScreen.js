@@ -80,7 +80,7 @@ const handleSaveMarker = async () => {
     if (pickedImageUri) {
       imageKey = await uploadImageToS3(pickedImageUri); // Ladataan kuva ja tallennetaan avain
     }
-    console.log(imageKey);
+    
     const user = authState.user.email;
     if (tempMarkerPosition && markerInfo && user) {
       const markerData = {
