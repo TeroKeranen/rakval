@@ -6,6 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -18,6 +19,7 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const [city, setCity] = useState("");
     const [imageUri, setImageUri] = useState(null);
     const [isImage, setIsImage] = useState(true); // Käytetään avuksi poistamaan "Lisää kuva" nappi
+    const navigation = useNavigation();
 
     // useFocusEffect(
     //   useCallback(() => {
@@ -41,6 +43,13 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const handeCancel = () => {
+      navigation.navigate(t("construction-site"))
+      setAddress('');
+      setCity('');
+      setImageUri(null);
     }
 
 
@@ -98,11 +107,14 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
 
             {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
           </View>
-          <View style={styles.addWorksiteButtonContainer}>
 
-          <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-            <Text style={{ color: "white" }}>{t("worksiteform-button")}</Text>
-          </TouchableOpacity>
+          <View style={styles.addWorksiteButtonContainer}>         
+            <TouchableOpacity onPress={handeCancel} style={styles.button}>
+              <Text style={{ color: "white" }}>{t("cancel")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+              <Text style={{ color: "white" }}>{t("worksiteform-button")}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </>
@@ -160,7 +172,8 @@ const styles = StyleSheet.create({
     
   },
   button: {
-    width: "60%",
+    // width: "60%",
+    // width: '30%',
     backgroundColor: "#812424",
     padding: 10,
     margin: 10,
@@ -169,6 +182,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   addWorksiteButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
     marginVertical: 20,
   }
 });
