@@ -64,14 +64,14 @@ const ProfileScreen = ({navigation}) => {
   }
 
   return (
-    <View>
+    <View style={styles.infoCard}>
       <View style={styles.userInfo}>
         <Text style={styles.text}>{t('email')}: {state.user.email}</Text>
         <Text style={styles.text}>{t('role')} : {state.user.role}</Text>
         {state.user.company ? <Text>{t('profileScreen-company')}: {state.user.company.name}</Text> : null}
         
       </View>
-      <View>
+      <View style={styles.textInputcontainer}>
         {!state.user.company ?  
           <>
               {/* {state.errorMessage != "" ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null} */}
@@ -92,16 +92,37 @@ const styles = StyleSheet.create({
     color: "black",
     margin: 4,
   },
+  infoCard: {
+    flex: 1,
+    
+    alignItems: 'center',
+    
+  },
   userInfo: {
-    margin: 10,
-    alignItems: "center",
-    backgroundColor: "#dad1d1",
-    borderRadius: 5,
+    flex: 1,
+    backgroundColor: "#e8e8f0",
+    width: '90%',
+    marginTop: 10,
+    padding: 40,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  textInputcontainer: {
+    
+    width: '100%',
   },
   input: {
     height: 40,
-    borderColor: "gray",
     width: '60%',
+    borderRadius: 5,
+    borderColor: "gray",
     alignSelf: 'center',
     borderWidth: 1,
     marginTop: 10,
