@@ -1,13 +1,17 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
-// Context
-import { Context as AuthContext } from "../context/AuthContext"
 
 // Screens
 
+
+// Context
+import { Context as CompanyContext } from "../context/CompanyContext"
+import { Context as AuthContext } from "../context/AuthContext";
+import { Context as WorksiteContext } from "../context/WorksiteContext";
+import { Context as EventContext} from '../context/EventsContext';
 
 // Navigator
 import HomeTabsNavigator from './HomeTabsNavigator'
@@ -15,6 +19,9 @@ import AdminCompanybtmTab from './adminNavigation/AdminCompanybtmTab'
 import AdminNoCompanybtmTab from './adminNavigation/AdminNoCompanybtmTab'
 import AdminTabs from './adminNavigation/AdminTabs'
 import UserWorksiteTabs from './UserWorksiteTabs'
+import { Text } from "react-native";
+import MoreTabButton from "../components/MoreTabButton";
+import MoreTabModal from "../components/MoreTabModal";
 
 const Drawer = createDrawerNavigator();
 
@@ -23,16 +30,37 @@ const Drawer = createDrawerNavigator();
 const MainDrawerNavigator = () => {
 
     const { t } = useTranslation();
-    const { state } = useContext(AuthContext);
+    
+    const { clearEvents } = useContext(EventContext);
+    const { clearCompany } = useContext(CompanyContext);
+    const {state, signout } = useContext(AuthContext);
+    const { clearWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
+    const [modalVisible, setModalVisible] = useState(false);
+
+     // käytetään tätä uloskirjautumiseen
+  const handleSignout = async () => {
+    clearEvents(); // pyyhitään tapahtumat etusivulta
+    clearWorksites(); // pyyhitään työmaatiedot statesta
+    clearCompany(); // pyyhitään company tiedot statesta
+    resetCurrentWorksite();
+    signout(); // Kutsutaan signout functio
+  };
 
     useEffect(() => {
       // console.log("app.js", state);
     }, [state]);
 
+
+    const toggleModal = () => {
+      setModalVisible(!modalVisible);
+    };
+
+
     const isAdmin = state.user && state.user.role === "admin";
     const hasCompany = state.user && state.user.company;
 
     return (
+      <>
       <Drawer.Navigator
         screenOptions={{
           headerStyle: { backgroundColor: "#4f1c01" }, // Headerin väri
@@ -43,21 +71,32 @@ const MainDrawerNavigator = () => {
           drawerActiveTintColor: "#351401", // sivulla olevan linkin väri kun aktiicinen
           drawerActiveBackgroundColor: "#e4baa1", // sivulla olevan linkin laatikon väri kun aktiivinen
         }}
-      >
+        >
         {isAdmin ? (
           <>
-            <Drawer.Screen name={t("drawerScreen-front-page")} component={HomeTabsNavigator} />
+            <Drawer.Screen name={t("drawerScreen-front-page")} component={HomeTabsNavigator} options={{
+              headerRight: () => {
+                return <MoreTabButton onPress={toggleModal}/>
+              }
+            }}/>
             <Drawer.Screen name={t("drawerScreen-worksite")} component={hasCompany ? AdminCompanybtmTab : AdminNoCompanybtmTab} />
             {/* <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} /> */}
             <Drawer.Screen name={t("drawerScreen-company")} component={AdminTabs} />
+            
           </>
         ) : (
           <>
-            <Drawer.Screen name={t("drawerScreen-front-page")} component={HomeTabsNavigator} />
+            <Drawer.Screen name={t("drawerScreen-front-page")} component={HomeTabsNavigator} options={{
+              headerRight: () => {
+                return <MoreTabButton onPress={toggleModal}/>
+              }
+            }}/>
             <Drawer.Screen name={t("drawerScreen-worksite")} component={UserWorksiteTabs} />
           </>
         )}
-      </Drawer.Navigator>
+        </Drawer.Navigator>
+        <MoreTabModal isVisible={modalVisible} onClose={() => setModalVisible(false)} onLogout={handleSignout}/>
+        </>
     );
 
 }

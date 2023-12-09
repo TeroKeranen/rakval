@@ -64,9 +64,7 @@ const WorksiteEventsScreen = () => {
     
     return (
         <View style={styles.container}>
-            <View style={styles.title}>
-                <Text>{t('worksiteEventScreenTitle')}</Text>
-            </View>
+            
             <FlatList 
                 data={worksiteEvents}
                 keyExtractor={(item) => item._id}
@@ -75,11 +73,14 @@ const WorksiteEventsScreen = () => {
 
                         {item.running ? 
                             <View style={styles.workRunning}>
+
                                 <Text style={styles.text}>{item.userName} - {item.startDate} ({t('worksiteEventScreenRunning')})</Text>
                                 <Text style={styles.text}>Työ aloitettu: {item.startDate} -- {item.startTime}</Text>
                             </View> :
                             <View style={styles.workDone}>
-                                <Text style={styles.text}>{item.userName} - {item.startDate}</Text>
+                                <View style={styles.header}>
+                                    <Text style={styles.text}>{item.userName} - {item.startDate}</Text>
+                                </View>
                                 <Text style={styles.text}>{t('worksiteEventScreenStartedAt')}: {item.startDate} kello {item.startTime}</Text>
                                 <Text style={styles.text}>{t('worksiteEventScreenCompletedAt')}: {item.endDate} kello {item.endTime}</Text>
                                 
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
        
     },
+    
     title: {
         alignItems: 'center',
         marginVertical: 10,
@@ -130,11 +132,20 @@ const styles = StyleSheet.create({
         margin:5,
     },
     workDone: {
-        backgroundColor: '#007400',
+        backgroundColor: '#369236',
         padding: 10,
         borderRadius: 10,
         margin: 5,
-    }
+    },
+    header: {
+        
+        alignItems: 'center',
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        backgroundColor: '#5aad57',
+        padding: 5,
+        marginBottom: 5,
+    },
 
 })
 

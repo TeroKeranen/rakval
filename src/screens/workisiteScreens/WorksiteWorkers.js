@@ -129,7 +129,7 @@ const WorksiteWorkers = () => {
             <Text style={styles.title}>{t("worksiteWorker-select-worker")}</Text>
             
             <Picker
-            style={{width: 100}}
+            style={styles.pickerstyle}
               selectedValue={selectedWorker}
               onValueChange={(itemValue, itemIndex) => 
               setSelecterWorker(itemValue)
@@ -194,6 +194,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  pickerstyle: {
+    width: '100%',
+    
   },
   workersContainer: {
     flex: 1,

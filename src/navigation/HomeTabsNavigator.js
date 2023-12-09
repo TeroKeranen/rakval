@@ -4,40 +4,22 @@ import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 
-// Context
-import { Context as CompanyContext } from "../context/CompanyContext"
-import { Context as AuthContext } from "../context/AuthContext";
-import { Context as WorksiteContext } from "../context/WorksiteContext";
-import { Context as EventContext} from '../context/EventsContext';
 
 // Screens
 import Etusivu from "../screens/Etusivu";
 import ProfileScreen from "../screens/ProfileScreen";
 
 // Components
-import MoreTabButton from "../components/MoreTabButton";
-import MoreTabModal from "../components/MoreTabModal";
+
 import { StatusBar } from "expo-status-bar";
 
 
 const Tab = createBottomTabNavigator();
 
 const HomeTabsNavigator = () => {
-  const { clearEvents } = useContext(EventContext);
-  const { clearCompany } = useContext(CompanyContext);
-  const { signout } = useContext(AuthContext);
-  const { clearWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
+  
   const { t } = useTranslation();
-  const [modalVisible, setModalVisible] = useState(false);
 
-  // käytetään tätä uloskirjautumiseen
-  const handleSignout = async () => {
-    clearEvents(); // pyyhitään tapahtumat etusivulta
-    clearWorksites(); // pyyhitään työmaatiedot statesta
-    clearCompany(); // pyyhitään company tiedot statesta
-    resetCurrentWorksite();
-    signout(); // Kutsutaan signout functio
-  };
 
   return (
     <>
@@ -57,6 +39,8 @@ const HomeTabsNavigator = () => {
               iconName = focused ? "person" : "person-outline";
             } else if (route.name === "Main page" || route.name === "Etusivu") {
               iconName = focused ? "home" : "home-outline";
+            } else if (route.name === "More") {
+              iconName =focused ? "build" : "build-outline";
             }
             return <Ionicons name={iconName} size={size} color={color} />;
           },
@@ -65,23 +49,19 @@ const HomeTabsNavigator = () => {
           // inactiveTintColor: "white",
         })}
       >
-        <Tab.Screen name={t("main-page")} component={Etusivu} options={{ headerShown: false }} />
+        <Tab.Screen name={t("main-page")} component={Etusivu} options={{ 
+          headerShown: false,
+          }} />
         <Tab.Screen name={t("profile")} component={ProfileScreen} options={{ headerShown: false }} />
-        <Tab.Screen
-          name="More"
-          component={DummyComponent} // Dummy-komponentti, koska tämä tabi avaa vain modalin
-          options={{
-            tabBarButton: () => <MoreTabButton onPress={() => setModalVisible(true)} />,
-          }}
-        />
+        
       </Tab.Navigator>
 
-      <MoreTabModal isVisible={modalVisible} onClose={() => setModalVisible(false)} onLogout={handleSignout} />
+      
     </>
   );
 }
 
-const DummyComponent = () => <View />;
+
 
 
 export default HomeTabsNavigator;
