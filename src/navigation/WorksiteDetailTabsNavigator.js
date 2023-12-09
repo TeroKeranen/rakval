@@ -42,7 +42,7 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
                 iconName = focused ? "map" : "map-outline";
               } else if (route.name === "Workers" || route.name === "Työntekijät") {
                 iconName = focused ? 'people' : 'people-outline';
-              } else if (route.name ==="tapahtumat" ) {
+              } else if (route.name ==="Work entries" || route.name == "Työkirjaukset" ) {
                 iconName = focused ? "list" : 'list-outline';
               }
               return <Ionicons name={iconName} size={size} color={color} />;
@@ -54,7 +54,7 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
         >
             <Tab.Screen name ={t('worksiteDetail')} component={WorksiteDetails} options={{headerShown:false}} initialParams={{worksiteId: route.params.worksiteId}} />
             <Tab.Screen name={t('floorplan')} component={FloorplanScreen} options={{headerShown:false}} />
-            <Tab.Screen name="tapahtumat" component={WorksiteEventsScreen} options={{headerShown: false}} />
+            <Tab.Screen name={t('workEntries')} component={WorksiteEventsScreen} options={{headerShown: false}} />
             
             {isAdmin ? <Tab.Screen name={t('workers')} component={WorksiteWorkers} /> : null}
             
