@@ -73,7 +73,7 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     return (
       <>
         <View style={styles.companyInfo}>
-          <Text style={styles.text}>{t("worksiteform-title")}</Text>
+          {/* <Text style={styles.text}>{t("worksiteform-title")}</Text> */}
           <View style={styles.infoCard}>
             <Input style={styles.input} placeholder={t("worksiteform-address")} value={address} onChangeText={setAddress} />
 
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     color: "red",
   },
   infoCard: {
+    flex: 1,
     backgroundColor: "#e8e8f0",
     width: "90%",
     padding: 40,
@@ -185,6 +186,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginVertical: 20,
+    
   }
 });
 
