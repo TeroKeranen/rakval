@@ -29,6 +29,8 @@ const authReducer = (state, action) => {
       return {...state, user: action.payload}
     case "signout":
       return {token: null,user: null,company: null, errorMessage: ''};
+    case 'leave_company':
+      return {...state, user:{...state.user, company: null}}
     default:
       return state;
   }
@@ -97,6 +99,7 @@ const joinCompany = (dispatch) => async (companyCode) => {
   try {
     // ... tokenin ja käyttäjän haun koodi ...
       const token = await AsyncStorage.getItem('token');
+      const authHeader = `${TOKEN_REPLACE} ${token}`;
       const userJson = await AsyncStorage.getItem('user')
       const user = JSON.parse(userJson)
 
@@ -104,7 +107,7 @@ const joinCompany = (dispatch) => async (companyCode) => {
       "/join-company",
       { userId: user._id, companyCode },
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: authHeader },
       }
     );
       
@@ -126,18 +129,42 @@ const joinCompany = (dispatch) => async (companyCode) => {
   }
 };
 
+const leaveCompany = (dispatch) => async (userId) => {
+
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await rakval.post('/leave-company', {userId},{
+      headers: {
+        Authorization: authHeader
+      }
+    })
+    if (response.data) {
+      dispatch({type: 'leave_company'})
+      return {success: true}
+
+    } else {
+      return {success:false}
+    }
+  } catch (error) {
+    console.log(error);
+    return { success: false, error };
+  }
+}
+
 // Haetaan käyttäjän tiedot 
 const fetchUser = (dispatch) => async () => {
   try {
 
     const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
     // const storedUser = await AsyncStorage.getItem('user');
     // const user = JSON.parse(storedUser)
     
 
     if (token) {
       const response = await rakval.get('/profile', {
-        headers: {Authorization: `Bearer ${token}`}
+        headers: {Authorization: authHeader}
       })
       
       
@@ -154,10 +181,11 @@ const fetchUserWithId = (dispatch) => {
   return async (userId) => {
     try {
       
-      const token = await AsyncStorage.getItem('token')
+      const token = await AsyncStorage.getItem('token');
+      const authHeader = `${TOKEN_REPLACE} ${token}`;
       const response = await rakval.get(`/users/${userId}`, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: authHeader
         }
       })
       
@@ -182,4 +210,4 @@ const signout = (dispatch) => {
   };
 };
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId }, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany }, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });

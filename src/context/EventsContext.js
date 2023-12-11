@@ -28,9 +28,10 @@ const fetchEvents = (dispatch) => async () => {
     try {
         
         const token = await AsyncStorage.getItem('token');
+        const authHeader = `${TOKEN_REPLACE} ${token}`;
         const response = await rakval.get('/events', {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: authHeader,
             },
         });
         

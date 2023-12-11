@@ -3,6 +3,9 @@ import createDataContext from "./createDataContext";
 import rakval from "../api/rakval";
 import { navigate, resetAndNavigate } from "../navigationRef";
 import { useTranslation } from "react-i18next";
+import {TOKEN_REPLACE} from '@env'
+
+
 
 
 const worksiteReducer = (state, action) => {
@@ -112,11 +115,14 @@ const resetCurrentWorksite = (dispatch) => {
 // työmään poistaminen
 const deleteWorksite = (dispatch) => {
     return async (worksiteId, callback) => {
+      
     try {
       const token = await AsyncStorage.getItem('token');
+      const authHeader = `${TOKEN_REPLACE} ${token}`;
+      
       await rakval.delete(`/worksites/${worksiteId}`, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: authHeader
         }
       })
       if (callback) {
@@ -137,11 +143,11 @@ const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
   
   try {
     const token = await AsyncStorage.getItem("token");
-
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
     if (token) {
       const response = await rakval.get(`/worksites/${worksiteId}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: authHeader,
         },
       });
       
@@ -161,6 +167,7 @@ const fetchWorksites = (dispatch) => {
     try {
       
       const token = await AsyncStorage.getItem("token");
+      const authHeader = `${TOKEN_REPLACE} ${token}`;
       const userJson = await AsyncStorage.getItem('user');
       
       const user = JSON.parse(userJson);
@@ -169,7 +176,7 @@ const fetchWorksites = (dispatch) => {
       
       const response = await rakval.get("/worksites", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: authHeader,
         },
       });
       
@@ -211,10 +218,11 @@ const fetchWorksites = (dispatch) => {
     try {
       
       const token = await AsyncStorage.getItem("token");
+      const authHeader = `${TOKEN_REPLACE} ${token}`;
       const response = await rakval.post(`/worksites/${worksiteId}/add-worker`,{ workerId },
             {
               headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: authHeader,
                   },
             }
         );
@@ -231,8 +239,9 @@ const deleteWorkerFromWorksite = (dispatch) => {
     return async (worksiteId, workerId) => {
     try {
       const token = await AsyncStorage.getItem("token");
+      const authHeader = `${TOKEN_REPLACE} ${token}`;
       await rakval.delete(`/worksites/${worksiteId}/workers/${workerId}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: authHeader },
       });
       // Päivitä worksiteState sen jälkeen kun työntekijä on poistettu
       dispatch({ type: "delete_worker_from_worksite", payload: { worksiteId, workerId } });
@@ -250,9 +259,10 @@ const newWorksite = (dispatch) => {
     return async ({address, city, floorplanKey, navigation }) => {
         try {
             const token = await AsyncStorage.getItem('token')
+            const authHeader = `${TOKEN_REPLACE} ${token}`;
             const response = await rakval.post('/worksites', {address, city, floorplanKey}, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: authHeader,
                     
                     
                 }
@@ -278,12 +288,12 @@ const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
     try {
     
     const token = await AsyncStorage.getItem("token");
-    
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
   
     const response = await rakval.post(`/worksites/${worksiteId}/add-marker`, markerData, {
       headers: {
         
-        Authorization: `Bearer ${token}`
+        Authorization: authHeader
           }
         })
           
@@ -300,8 +310,9 @@ const updateMarker = (dispatch) => async (worksiteId, markerId, updatedMarkerDat
     
     try {
     const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
     const response = await rakval.put(`/worksites/${worksiteId}/markers/${markerId}`, updatedMarkerData, {
-      headers: {Authorization: `Bearer ${token}`}
+      headers: {Authorization: authHeader}
     })
     dispatch({type: 'update_marker', payload: {markerId, updateMarker: response.data}})
   } catch (error) {
@@ -314,10 +325,11 @@ const deleteMarker = (dispatch) => async (worksiteId, markerId,markerNumber) => 
   
   try {
     const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
     const queryString = `markerNumber=${markerNumber}`;
     await rakval.delete(`/worksites/${worksiteId}/remove-marker/${markerId}?${queryString}`, {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: authHeader
       }
     })
     dispatch({type: "delete_marker", payload: {markerId}})
@@ -330,10 +342,10 @@ const startWorkDay = (dispatch) => async (worksiteId,userId) => {
    
   try {
     const token = await AsyncStorage.getItem('token');
-    
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
     const response = await rakval.post(`/worksites/${worksiteId}/startday`,{userId}, {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: authHeader
       }
     })
     
@@ -345,8 +357,9 @@ const startWorkDay = (dispatch) => async (worksiteId,userId) => {
 const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
     try {
     const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
     const response = await rakval.post(`/worksites/${worksiteId}/endday`, { workDayId }, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: authHeader }
     });
 
     dispatch({ type: 'end_work_day', payload: response.data });

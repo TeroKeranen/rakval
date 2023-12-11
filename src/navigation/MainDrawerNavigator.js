@@ -92,6 +92,7 @@ const MainDrawerNavigator = () => {
               }
             }}/>
             <Drawer.Screen name={t("drawerScreen-worksite")} component={UserWorksiteTabs} />
+            <Drawer.Screen name={t("drawerScreen-company")} component={AdminTabs} />
           </>
         )}
         </Drawer.Navigator>

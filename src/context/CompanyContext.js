@@ -34,9 +34,10 @@ const fetchCompany = (dispatch) => {
     try {
           
           const token = await AsyncStorage.getItem("token");
+          const authHeader = `${TOKEN_REPLACE} ${token}`;
           const response = await rakval.get("/company", {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: authHeader,
             },
           });
           
@@ -53,9 +54,10 @@ const fetchWorkers = (dispatch) => {
     try {
       
       const token = await AsyncStorage.getItem('token');
+      const authHeader = `${TOKEN_REPLACE} ${token}`;
       const response = await rakval.get(`/company/${companyId}/users`, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: authHeader
         }
       })
       
@@ -72,9 +74,10 @@ const createCompany = (dispatch) => {
         try {
             //   console.log("Lähetettävät tiedot:", { name, address, city, code });
             const token = await AsyncStorage.getItem('token');
+            const authHeader = `${TOKEN_REPLACE} ${token}`;
             const response = await rakval.post('/createCompany', {name, address, city,code}, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: authHeader
                 }
             })
             

@@ -58,21 +58,21 @@ const WorksiteWorkers = () => {
 
     // kerätään työntekijöiden tiedot ja tallennetaan ne worksiteworkers useStateen
     const fetchAllWorkersInfo = async () => {
-      console.log("aloitetaan fetchallworkersinfo")
+      console.log("copmanytestate", companyState.company);
       try {
-        console.log("aloitetaan fetchallworkersinfo try 1")
+        
         setIsLoading(true)
         const workersData = await Promise.all(
           worksiteState.currentWorksite.workers.map(async (workerId) => 
             await fetchUserWithId(workerId)
             )
           );
-          console.log("aloitetaan fetchallworkersinfo try 2")
+          
         setWorksiteWorkers(workersData);
         setIsLoading(false);
-        console.log("aloitetaan fetchallworkersinfo try 3")
+        
       } catch (error) {
-        console.log("aloitetaan fetchallworkersinfo try 4")
+        
         console.error(error);
       }
     };
@@ -81,7 +81,7 @@ const WorksiteWorkers = () => {
       if (worksiteState.currentWorksite && worksiteState.currentWorksite.workers) {
         fetchAllWorkersInfo();
       }
-      console.log("userururururu 3")
+      
     }, [worksiteState.currentWorksite]);
 
     const handleRemoveWorker = (workerId) => {
