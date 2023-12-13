@@ -100,5 +100,16 @@
   "workingMinutes" : "minutes",
   "workingSeconds" : "seconds",
 
-  "profileScreenCompanycodeError": "Check the company code"
+  "profileScreenCompanycodeError": "Check the company code",
+  "profileScreenChangePassword": "Change password",
+
+  "changePasswordScreenGoBack": "Go back",
+  "changePasswordScreenAlertWithPasswords": "passwords do not match",
+  "changePasswordScreenAlertSuccess": "You have changed your password to a new one",
+  "changePasswordScreenAlertSuccessTitle": "Succeeded",
+  "changePasswordScreenAlertFailed": "Something went wrong",
+  "changePasswordScreenPhCurrentPass": "Current password",
+  "changePasswordScreenPhNewPass": "New password",
+  "changePasswordScreenPhConfirmNewPass": "Confirm password"
+  
 }

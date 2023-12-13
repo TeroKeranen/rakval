@@ -27,6 +27,7 @@ import WorksiteDetailsTabsNavigator from './src/navigation/WorksiteDetailTabsNav
 //AWS
 import { Amplify } from "aws-amplify";
 import awsExports from "./src/aws-exports";
+import ChangepasswordScreen from './src/screens/ChangepasswordScreen';
 Amplify.configure(awsExports);
 
 
@@ -55,6 +56,7 @@ function MainStack() {
           headerTitle: t("woksite-detail-header"),
         }}
       />
+      
     </Stack.Navigator>
   );
 }
@@ -68,6 +70,7 @@ function SignedInNavigator() {
       
       <Stack.Screen name="Main" component={MainStack} />
       {/* muut ruudut, jos niitä on */}
+      
     </Stack.Navigator>
   );
 }
@@ -94,6 +97,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Screen name="resolveAuth" component={ResolveAuthScreen} />
+      
       {state.token == null ? <SignedOutNavigator /> : <SignedInNavigator />}
     </NavigationContainer>
   );

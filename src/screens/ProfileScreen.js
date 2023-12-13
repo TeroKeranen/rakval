@@ -58,21 +58,33 @@ const ProfileScreen = ({navigation}) => {
   };
 
 
+  const navigateToChangePassword = () => {
+    navigation.navigate('ChangepasswordScreen')
+  }
+
   // Latauskuvake jos etsii tietoja
   if (isLoading) {
     <DownloadScreen message="ladataan" />
   }
 
   return (
-    <View style={styles.infoCard}>
+    <View style={styles.container}>
       <View style={styles.userInfo}>
-        <Text style={styles.text}>{t('email')}: {state.user.email}</Text>
-        <Text style={styles.text}>{t('role')} : {state.user.role}</Text>
-        {state.user.company ? <Text>{t('profileScreen-company')}: {state.user.company.name}</Text> : null}
-        
-      </View>
+
+        <View >
+          <Text style={styles.text}>{t('email')}: {state.user.email}</Text>
+          <Text style={styles.text}>{t('role')} : {state.user.role}</Text>
+          {state.user.company ? <Text>{t('profileScreen-company')}: {state.user.company.name}</Text> : null}
+        </View>
+
+        <View>
+          <TouchableOpacity onPress={navigateToChangePassword} style={styles.button}>
+            <Text style={{color:'white'}}>{t('profileScreenChangePassword')}</Text>
+          </TouchableOpacity>
+        </View>
       
 
+      </View>
     </View>
   );
 }
@@ -82,7 +94,7 @@ const styles = StyleSheet.create({
     color: "black",
     margin: 4,
   },
-  infoCard: {
+  container: {
     flex: 1,
     alignItems: 'center',
     
@@ -102,11 +114,30 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 3.84,
     elevation: 5,
+    justifyContent: 'space-between'
   },
   errorMessage: {
     fontSize: 16,
     color: "red",
   },
+  button: {
+    backgroundColor: "#507ab8",
+        padding: 10,
+        borderRadius: 5,
+        marginVertical: 10,
+        // width: "50%",
+        alignItems: "center",
+        alignSelf:'center',
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        flexDirection:'row'
+  }
   
 });
 

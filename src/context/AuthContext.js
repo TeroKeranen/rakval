@@ -211,4 +211,27 @@ const signout = (dispatch) => {
   };
 };
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany }, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
+const changePassword = dispatch => async  ({oldPassword, newPassword}) => {
+
+  try {
+    const token = await AsyncStorage.getItem('token')
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await rakval.post('/change-password', {oldPassword, newPassword}, {
+      headers: {
+        Authorization: authHeader
+      }
+    })
+    
+    if (response.data) {
+      return {success: true}
+    } 
+  } catch (error) {
+
+    dispatch({type: "add_error", payload: "salasanana vaihto epäonnistui"})
+    return {success:false}
+    
+    
+  }
+}
+
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany,changePassword }, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });

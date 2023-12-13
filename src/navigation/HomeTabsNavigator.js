@@ -9,6 +9,9 @@ import { Ionicons } from "@expo/vector-icons";
 import Etusivu from "../screens/Etusivu";
 import ProfileScreen from "../screens/ProfileScreen";
 
+// stacknavigator
+import ProfileStackNavigator from "./ProfileStackNavigator";
+
 // Components
 
 import { StatusBar } from "expo-status-bar";
@@ -52,7 +55,7 @@ const HomeTabsNavigator = () => {
         <Tab.Screen name={t("main-page")} component={Etusivu} options={{ 
           headerShown: false,
           }} />
-        <Tab.Screen name={t("profile")} component={ProfileScreen} options={{ headerShown: false }} />
+        <Tab.Screen name={t("profile")} component={ProfileStackNavigator} options={{ headerShown: false }} />
         
       </Tab.Navigator>
 
