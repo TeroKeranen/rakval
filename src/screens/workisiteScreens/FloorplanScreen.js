@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { getCurrentDate } from "../../utils/currentDate";
+import { calculateNextMarkerNumber } from "../../utils/calculateNextMarkerNumber";
 
 import { FLOORPLAN_PHOTO_URL } from "@env";
 import {Context as WorksiteContext} from '../../context/WorksiteContext'
@@ -47,7 +48,7 @@ const FloorplanScreen = ({route, navigation}) => {
   const [editableMarkerInfo, setEditableMarkerInfo] = useState('');
 
   useEffect(() => {
-    console.log("testi1");
+    
     
     setAllMarkers(state.currentWorksite.markers);
   }, [state.currentWorksite.markers]);
@@ -81,6 +82,15 @@ const handleSaveMarker = async () => {
       imageKey = await uploadImageToS3(pickedImageUri); // Ladataan kuva ja tallennetaan avain
     }
     
+    // let maxMarkerNumber = 0;
+    // if (state.currentWorksite.markers && state.currentWorksite.markers.length > 0) {
+    //   maxMarkerNumber = Math.max(...state.currentWorksite.markers.map(marker => marker.markerNumber))
+    // }
+    // const newMarkerNumber = maxMarkerNumber + 1;
+    
+    // Käytetään apufunktiota (löytyy utils kansioista) laskemaan markerNumber markerillle
+    const newMarkerNumber = calculateNextMarkerNumber(state.currentWorksite.markers);
+
     const user = authState.user.email;
     if (tempMarkerPosition && markerInfo && user) {
       const markerData = {
@@ -90,7 +100,7 @@ const handleSaveMarker = async () => {
         creator: user,
         created: getCurrentDate(),
         imageUri: imageKey || "", // Käytetään ladatun kuvan avainta, jos saatavilla
-        markerNumber: state.currentWorksite.markers.length + 1
+        markerNumber: newMarkerNumber
 
       };
       
@@ -118,7 +128,7 @@ useEffect(() => {
 // Käytetään tätä kun halutaan avata modali
   const handleMarkerPress = (index, pos) => {
     // Tee jotain, kun markeria painetaan
-    console.log(pos);
+    
     const pressedMarker = state.currentWorksite.markers[index];
 
     

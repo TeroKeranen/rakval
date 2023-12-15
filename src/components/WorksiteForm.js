@@ -106,8 +106,6 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
             )}
 
             {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
-          </View>
-
           <View style={styles.addWorksiteButtonContainer}>         
             <TouchableOpacity onPress={handeCancel} style={styles.button}>
               <Text style={{ color: "white" }}>{t("cancel")}</Text>
@@ -116,6 +114,8 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
               <Text style={{ color: "white" }}>{t("worksiteform-button")}</Text>
             </TouchableOpacity>
           </View>
+          </View>
+
         </View>
       </>
     );
