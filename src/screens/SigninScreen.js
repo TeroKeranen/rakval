@@ -7,6 +7,7 @@ import NavLink from "../components/NavLink";
 import { useContext, useEffect } from "react";
 import { Context as AuthContext } from "../context/AuthContext";
 import ChangeLanguage from "../components/ChangeLanguage";
+import VerificationScreen from "./VerificationScreen";
 
 const SigninScreen = ({navigation}) => {
 
@@ -16,6 +17,7 @@ const SigninScreen = ({navigation}) => {
   
   // Käytetään tätä tyhjentämään errormessage jos tulee virhe ja vaihdetaan toiselle sivulle, Näin virhe ei seuraa mukana
   useEffect(() => {
+    
     const focus = navigation.addListener('focus', clearErrorMessage)
 
     const blur = navigation.addListener('blur', clearErrorMessage)
@@ -25,6 +27,8 @@ const SigninScreen = ({navigation}) => {
       blur();
     }
   }, [navigation])
+
+  
   
   return (
     <>

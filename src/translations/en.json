@@ -13,9 +13,13 @@
   "loading": "Loading",
   "workEntries": "Work entries",
   "cancel": "Cancel",
+  "goeswrong": "Something goes wrong",
+  "goBack": "Go back",
 
   "sign-upHeader": "Sign Up",
   "signup-navlink-text": "Already have an account? Sign in instead",
+  "signup-alert-vericode": "We sent a verification code to your email",
+  "signup-alert-vericode-attention": "Attention",
 
   "drawerScreen-front-page": "front page",
   "main-page": "Main page",
@@ -110,6 +114,11 @@
   "changePasswordScreenAlertFailed": "Something went wrong",
   "changePasswordScreenPhCurrentPass": "Current password",
   "changePasswordScreenPhNewPass": "New password",
-  "changePasswordScreenPhConfirmNewPass": "Confirm password"
+  "changePasswordScreenPhConfirmNewPass": "Confirm password",
+
+  "verificationSuccessTitle": "All good",
+  "verificationSuccessText": "You entered the correct code",
+  "verificationCode": "Verification code",
+  "verification": "Verify"
   
 }

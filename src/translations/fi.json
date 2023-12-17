@@ -13,9 +13,13 @@
   "loading": "Ladataan",
   "workEntries": "Työkirjaukset",
   "cancel": "Peruuta",
+  "goeswrong": "Jotain meni väärin",
+  "goBack": "Takaisin",
   
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
+  "signup-alert-vericode": "Lähetimme vahvistuskoodin sähköpostiisi",
+  "signup-alert-vericode-attention": "Huom",
 
   "drawerScreen-front-page": "etusivu",
   "main-page": "Etusivu",
@@ -110,6 +114,12 @@
   "changePasswordScreenAlertFailed": "Jotain meni vikaan",
   "changePasswordScreenPhCurrentPass": "Nykyinen salasana",
   "changePasswordScreenPhNewPass": "Uusi salasana",
-  "changePasswordScreenPhConfirmNewPass": "Vahvista salasana"
+  "changePasswordScreenPhConfirmNewPass": "Vahvista salasana",
+
+  "verificationSuccessTitle": "Onnistui",
+  "verificationSuccessText": "Syötit oikean koodin",
+  "verificationCode": "Vahvistuskoodi",
+  "verification": "Vahvista"
+
   
 }

@@ -28,6 +28,7 @@ import WorksiteDetailsTabsNavigator from './src/navigation/WorksiteDetailTabsNav
 import { Amplify } from "aws-amplify";
 import awsExports from "./src/aws-exports";
 import ChangepasswordScreen from './src/screens/ChangepasswordScreen';
+import VerificationScreen from './src/screens/VerificationScreen';
 Amplify.configure(awsExports);
 
 
@@ -38,7 +39,20 @@ const Stack = createNativeStackNavigator();
 
 // päästack 
 function MainStack() {
+
+  // const { state, tryLocalSignin, fetchUser } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
+ 
   const { t } = useTranslation();
+
+  // useEffect(() => {
+    
+  //   const checkAuthState = async () => {
+      
+  //     await fetchUser();
+      
+  //   };
+  //   checkAuthState();
+  // }, []);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -61,13 +75,15 @@ function MainStack() {
   );
 }
 
+
+
 // Tämä renderöidään appin sisällä jos käyttäjä löytyy
 function SignedInNavigator() {
   return (
     <Stack.Navigator screenOptions={{
       headerShown: false,
     }}>
-      
+      {/* <Stack.Screen name="veri" component={FeriviedUser} /> */}
       <Stack.Screen name="Main" component={MainStack} />
       {/* muut ruudut, jos niitä on */}
       
@@ -94,6 +110,7 @@ function App() {
   if (loading) {
     return <ResolveAuthScreen />
   }
+ 
   return (
     <NavigationContainer>
       <Stack.Screen name="resolveAuth" component={ResolveAuthScreen} />

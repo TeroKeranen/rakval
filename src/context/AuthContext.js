@@ -32,6 +32,10 @@ const authReducer = (state, action) => {
       return {token: null,user: null,company: null, errorMessage: ''};
     case 'leave_company':
       return {...state, user:{...state.user, company: null}}
+    case 'email_verified':
+      return {...state, user:{...state.user, isVerified: true}}
+    case "set_email":
+      return {...state, email: action.payload}
     default:
       return state;
   }
@@ -55,7 +59,7 @@ const clearErrorMessage = dispatch => () => {
 }
 
 const signup = (dispatch) => {
-  return async ({ email, password }) => {
+  return async ({ email, password,navigation }) => {
     try {
       
       const response = await rakval.post("/signup", { email, password });
@@ -65,16 +69,19 @@ const signup = (dispatch) => {
       
       
       dispatch({ type: "signup", payload: { token: response.data.token, user: response.data.user } });
-      // resetAndNavigate('testi');
+      
     } catch (err) {
       console.log(err.response.data.error);
       dispatch({
         type: "add_error",
         payload: err.response.data.error,
       });
+      throw new Error(err.response.data.error);
     }
   };
 };
+
+
 
 const signin = (dispatch) => {
   return async ({ email, password }) => {
@@ -94,6 +101,34 @@ const signin = (dispatch) => {
     }
   };
 };
+
+
+// Käytetään tätä kun käyttäjä syöttää verification koodin signupin yhteydessä
+const verifyEmail = (dispatch) => {
+  return async ({email, verificationCode}) => {
+    
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const authHeader = `${TOKEN_REPLACE} ${token}`;
+      
+      const response = await rakval.post('/verify', {email, verificationCode}
+      )
+      
+      dispatch({type: 'email_verified', payload: response.data.user})
+      return({success:true})
+    } catch (error) {
+      console.log("Error verifying email:", error.response?.data?.error || "Failed to verify email");
+      // Välitä tarkempi virheviesti dispatch-kutsussa
+      dispatch({ type: 'add_error', payload: error.response?.data?.error || "Failed to verify email" });
+      return({success: false})
+    }
+  }
+}
+
+// Kätetään kun käyttäjä ei heti syötä verification koodia, vaan menee myöhemmin signin kauttaa, ja hänellä ei ole koodia syötettynä.
+const setUserEmail = (dispatch) => (email) => {
+  dispatch({type:"set_email", payload: email})
+}
 
 
 const joinCompany = (dispatch) => async (companyCode) => {
@@ -155,6 +190,7 @@ const leaveCompany = (dispatch) => async (userId) => {
 
 // Haetaan käyttäjän tiedot 
 const fetchUser = (dispatch) => async () => {
+  console.log("fetchuserr")
   try {
 
     const token = await AsyncStorage.getItem('token');
@@ -234,4 +270,4 @@ const changePassword = dispatch => async  ({oldPassword, newPassword}) => {
   }
 }
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany,changePassword }, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany,changePassword,verifyEmail,setUserEmail }, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });

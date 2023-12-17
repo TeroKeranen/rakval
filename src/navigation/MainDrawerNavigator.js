@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 // Screens
 
@@ -19,11 +19,14 @@ import AdminCompanybtmTab from './adminNavigation/AdminCompanybtmTab'
 import AdminNoCompanybtmTab from './adminNavigation/AdminNoCompanybtmTab'
 import AdminTabs from './adminNavigation/AdminTabs'
 import UserWorksiteTabs from './UserWorksiteTabs'
-import { Text } from "react-native";
+
 import MoreTabButton from "../components/MoreTabButton";
 import MoreTabModal from "../components/MoreTabModal";
 
+import VerificationScreen from "../screens/VerificationScreen";
+
 const Drawer = createDrawerNavigator();
+
 
 
 // drawer eli sivuvalikko, tässä näytetään eri osia jos käyttäjällä on admin rooli
@@ -47,20 +50,39 @@ const MainDrawerNavigator = () => {
   };
 
     useEffect(() => {
-      // console.log("app.js", state);
+      
+      
     }, [state]);
 
-
+    
     const toggleModal = () => {
       setModalVisible(!modalVisible);
     };
 
 
     const isAdmin = state.user && state.user.role === "admin";
+    const isVerified = state.user.isVerified; 
     const hasCompany = state.user && state.user.company;
 
+    
+
+    // useEffect(() => {
+    //   if (!isVerified) {
+    //     console.log("vitutole verified")
+        
+    //   }
+    // }, [state.user.isVerified])
+
+    // Jos käyttäjä ei ole syöttänyt verification koodia niin näytetään VerificationScreen
+    if (!isVerified) {
+      return <VerificationScreen />
+    }
+
+    
     return (
+      
       <>
+      
       <Drawer.Navigator
         screenOptions={{
           headerStyle: { backgroundColor: "#4f1c01" }, // Headerin väri
@@ -72,6 +94,7 @@ const MainDrawerNavigator = () => {
           drawerActiveBackgroundColor: "#e4baa1", // sivulla olevan linkin laatikon väri kun aktiivinen
         }}
         >
+        
         {isAdmin ? (
           <>
             <Drawer.Screen name={t("drawerScreen-front-page")} component={HomeTabsNavigator} options={{
@@ -93,6 +116,7 @@ const MainDrawerNavigator = () => {
             }}/>
             <Drawer.Screen name={t("drawerScreen-worksite")} component={UserWorksiteTabs} />
             <Drawer.Screen name={t("drawerScreen-company")} component={AdminTabs} />
+            
           </>
         )}
         </Drawer.Navigator>
