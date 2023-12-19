@@ -119,6 +119,8 @@
   "verificationSuccessTitle": "All good",
   "verificationSuccessText": "You entered the correct code",
   "verificationCode": "Verification code",
-  "verification": "Verify"
+  "verification": "Verify",
+
+  "calenderScreenNavigator": "Calendar"
   
 }

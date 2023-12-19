@@ -119,7 +119,9 @@
   "verificationSuccessTitle": "Onnistui",
   "verificationSuccessText": "Syötit oikean koodin",
   "verificationCode": "Vahvistuskoodi",
-  "verification": "Vahvista"
+  "verification": "Vahvista",
+
+  "calenderScreenNavigator": "Kalenteri"
 
   
 }
