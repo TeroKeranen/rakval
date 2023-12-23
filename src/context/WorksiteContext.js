@@ -86,6 +86,22 @@ const worksiteReducer = (state, action) => {
           return {
             ...state, currentWorksite: {...state.currentWorksite, workDays: updateWorkDays}
           }
+      case 'add_calendar_entry':
+        return {...state, currentWorksite: {...state.currentWorksite, calendarEntries: [...state.currentWorksite.calendarEntries, action.payload]}}
+      case 'set_calendar_entries':
+        return {...state, currentWorksite: {...state.currentWorksite, calendarEntries: action.payload }}
+      case 'update_calendar_entry':
+
+        const updatedCalendarEntries = state.currentWorksite.calendarEntries.map(entry => 
+          entry._id === action.payload._id ? action.payload : entry
+        );
+        return {
+          ...state,
+          currentWorksite: {
+            ...state.currentWorksite,
+            calendarEntries: updatedCalendarEntries
+          }
+        };
       default:
         return state;
     }
@@ -369,6 +385,54 @@ const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
   }
 };
 
+const saveCalendarEntry = (dispatch) => async (worksiteId, date,title,text) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await rakval.post(`/worksites/${worksiteId}/calendar-entry`, {date, title, text}, {
+      headers: {
+        Authorization: authHeader
+      }
+    })
+    dispatch({type:'add_calendar_entry', payload: response.data})
+  } catch (error) {
+    
+  }
+}
+
+const fetchCalendarEntries = (dispatch) => async (worksiteId) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await rakval.get(`/worksites/${worksiteId}/calendar-entries`, {
+      headers: {
+        Authorization: authHeader
+      }
+    })
+    
+      dispatch({ type: 'set_calendar_entries', payload: response.data });
+    
+  } catch (error) {
+    console.log("Virher kalenterimerkintöjen haussa", error);
+  }
+}
+
+const updateCalendarEntry = (dispatch) => async (worksiteId, entryId, date,title,text) => {
+
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await rakval.put(`/worksites/${worksiteId}/calendar-entry/${entryId}`, {date, title, text},{
+      headers:{
+        Authorization: authHeader
+      }
+    })
+    dispatch({type: 'update_calendar_entry', payload: {_id: entryId, date, title, text}})
+  } catch (error) {
+    console.error("Virhe päivitettäessä kalenterimerkintää:", error);
+  }
+
+}
 
 
 export const { Provider, Context } = createDataContext(worksiteReducer, {
@@ -384,6 +448,9 @@ export const { Provider, Context } = createDataContext(worksiteReducer, {
             deleteMarker,
              updateMarker,
              startWorkDay,
-             endWorkDay
+             endWorkDay,
+             saveCalendarEntry,
+             fetchCalendarEntries,
+             updateCalendarEntry
              },
               { worksites: [], errorMessage: "", currentWorksite: [] });

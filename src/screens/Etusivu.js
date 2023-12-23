@@ -30,6 +30,7 @@ const Etusivu = ({navigation}) => {
       fetchUser();
       fetchEvents();
       setIsLoading(false)
+      console.log("eventstate", eventState);
     }
     const unsubscribe = navigation.addListener('focus', fetchAndSetData)
 
@@ -58,6 +59,8 @@ const Etusivu = ({navigation}) => {
         return 'työ lopetettu';
       case 'added-marker':
         return 'lisätty merkki';
+      case 'added-calendarmark':
+        return 'Lisätty kalenteri merkki';
       // Lisää muita tapauksia tarvittaessa
       default:
         return type;
@@ -105,26 +108,31 @@ const Etusivu = ({navigation}) => {
             case 'added-marker':
               displayText ='Lisätty merkki';
               break;
-              case 'update-marker':
-                displayText ='Merkkiä muokattu';
-                break;
-                case 'work-start':
-                  displayText = 'Työ aloitettu';
-                  break;
-                  case 'work-end':
-                    displayText = 'Työ lopetettu';
-                    break;
-                    case 'remove-marker':
-                      displayText = "Merkki poistettu";
-                      break;
+            case 'update-marker':
+              displayText ='Merkkiä muokattu';
+              break;
+            case 'work-start':
+              displayText = 'Työ aloitettu';
+              break;
+            case 'work-end':
+              displayText = 'Työ lopetettu';
+              break;
+            case 'remove-marker':
+              displayText = "Merkki poistettu";
+              break;
+            case 'added-calendarmark':
+              displayText = "Lisätty kalenteri merkki";
+              break;
+            case 'updated-calendarmark':
+              displayText = "Muokattu kalenteri merkki";
+              break;
+            default:
+              displayText = item.type;
+            }
 
-                      default:
-                        displayText = item.type;
-                      }
+            return (
 
-                      return (
-
-                        <View style={styles.eventContainer}>
+            <View style={styles.eventContainer}>
 
               <View>
                 <View style={styles.type}>
@@ -132,10 +140,14 @@ const Etusivu = ({navigation}) => {
                     <Text style={styles.text}>{displayText} ({item.markerNumber})</Text>
                     : <Text style={styles.text}>{displayText}</Text>
                   }
+                  
                   <Text style={styles.text}>{timeStampChanger(item.timestamp)}</Text>
                 </View>
 
                 <Text style={styles.text}>Työmaalle: {item.worksite.address}</Text>
+                {item.calendarDate && 
+                  <Text style={styles.text}>Päivämäärälle: {item.calendarDate}</Text>
+                }
                 <Text style={styles.text}>Käyttäjä: {item.user.email}</Text>
               </View>
 
