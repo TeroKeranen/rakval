@@ -39,6 +39,7 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends.",
           "cameraPermission": "The app need access to your camera in order to take photos"
         }
+       
       ]
     ],
     "extra": {

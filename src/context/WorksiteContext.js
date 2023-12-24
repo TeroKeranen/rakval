@@ -86,6 +86,33 @@ const worksiteReducer = (state, action) => {
           return {
             ...state, currentWorksite: {...state.currentWorksite, workDays: updateWorkDays}
           }
+      case 'add_calendar_entry':
+        return {...state, currentWorksite: {...state.currentWorksite, calendarEntries: [...state.currentWorksite.calendarEntries, action.payload]}}
+      case 'set_calendar_entries':
+        return {...state, currentWorksite: {...state.currentWorksite, calendarEntries: action.payload }}
+      case 'update_calendar_entry':
+
+        const updatedCalendarEntries = state.currentWorksite.calendarEntries.map(entry => 
+          entry._id === action.payload._id ? action.payload : entry
+        );
+        return {
+          ...state,
+          currentWorksite: {
+            ...state.currentWorksite,
+            calendarEntries: updatedCalendarEntries
+          }
+        };
+      case 'delete_calendar_entry':
+        const updatedCalendarEntriess = state.currentWorksite.calendarEntries.filter(
+          entry => entry._id !== action.payload.entryId
+        )
+        return {
+          ...state,
+          currentWorksite: {
+            ...state.currentWorksite,
+            calendarEntries:updatedCalendarEntriess
+          }
+        }
       default:
         return state;
     }
@@ -369,6 +396,72 @@ const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
   }
 };
 
+const saveCalendarEntry = (dispatch) => async (worksiteId, date,title,text) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await rakval.post(`/worksites/${worksiteId}/calendar-entry`, {date, title, text}, {
+      headers: {
+        Authorization: authHeader
+      }
+    })
+    dispatch({type:'add_calendar_entry', payload: response.data})
+  } catch (error) {
+    
+  }
+}
+
+const fetchCalendarEntries = (dispatch) => async (worksiteId) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await rakval.get(`/worksites/${worksiteId}/calendar-entries`, {
+      headers: {
+        Authorization: authHeader
+      }
+    })
+    
+      dispatch({ type: 'set_calendar_entries', payload: response.data });
+    
+  } catch (error) {
+    console.log("Virher kalenterimerkintöjen haussa", error);
+  }
+}
+
+const updateCalendarEntry = (dispatch) => async (worksiteId, entryId, date,title,text) => {
+
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await rakval.put(`/worksites/${worksiteId}/calendar-entry/${entryId}`, {date, title, text},{
+      headers:{
+        Authorization: authHeader
+      }
+    })
+    dispatch({type: 'update_calendar_entry', payload: {_id: entryId, date, title, text}})
+  } catch (error) {
+    console.error("Virhe päivitettäessä kalenterimerkintää:", error);
+  }
+
+}
+
+const deleteCalendarEntry = (dispatch) => async (worksiteId, entryId,date) => {
+  
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const url = `/worksites/${worksiteId}/calendar-entry/${entryId}?date=${encodeURIComponent(date)}`;
+    await rakval.delete(url, {
+      headers: {
+        Authorization: authHeader
+      }
+    })
+    dispatch({type: 'delete_calendar_entry', payload: {entryId}})
+  } catch (error) {
+    console.error("Virhe poistettaessa kalenterimerkintää:", error);
+  }
+
+}
 
 
 export const { Provider, Context } = createDataContext(worksiteReducer, {
@@ -384,6 +477,10 @@ export const { Provider, Context } = createDataContext(worksiteReducer, {
             deleteMarker,
              updateMarker,
              startWorkDay,
-             endWorkDay
+             endWorkDay,
+             saveCalendarEntry,
+             fetchCalendarEntries,
+             updateCalendarEntry,
+             deleteCalendarEntry
              },
               { worksites: [], errorMessage: "", currentWorksite: [] });
