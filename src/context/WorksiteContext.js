@@ -102,6 +102,17 @@ const worksiteReducer = (state, action) => {
             calendarEntries: updatedCalendarEntries
           }
         };
+      case 'delete_calendar_entry':
+        const updatedCalendarEntriess = state.currentWorksite.calendarEntries.filter(
+          entry => entry._id !== action.payload.entryId
+        )
+        return {
+          ...state,
+          currentWorksite: {
+            ...state.currentWorksite,
+            calendarEntries:updatedCalendarEntriess
+          }
+        }
       default:
         return state;
     }
@@ -434,6 +445,24 @@ const updateCalendarEntry = (dispatch) => async (worksiteId, entryId, date,title
 
 }
 
+const deleteCalendarEntry = (dispatch) => async (worksiteId, entryId,date) => {
+  
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const url = `/worksites/${worksiteId}/calendar-entry/${entryId}?date=${encodeURIComponent(date)}`;
+    await rakval.delete(url, {
+      headers: {
+        Authorization: authHeader
+      }
+    })
+    dispatch({type: 'delete_calendar_entry', payload: {entryId}})
+  } catch (error) {
+    console.error("Virhe poistettaessa kalenterimerkintää:", error);
+  }
+
+}
+
 
 export const { Provider, Context } = createDataContext(worksiteReducer, {
    newWorksite,
@@ -451,6 +480,7 @@ export const { Provider, Context } = createDataContext(worksiteReducer, {
              endWorkDay,
              saveCalendarEntry,
              fetchCalendarEntries,
-             updateCalendarEntry
+             updateCalendarEntry,
+             deleteCalendarEntry
              },
               { worksites: [], errorMessage: "", currentWorksite: [] });

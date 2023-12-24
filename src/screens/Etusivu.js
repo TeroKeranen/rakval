@@ -50,7 +50,7 @@ const Etusivu = ({navigation}) => {
 
   
 
-
+  // Käytetään tätä etusivun haku toiminnossa apuna
   const translateEventType = (type) => {
     switch (type) {
       case 'work-start':
@@ -61,6 +61,8 @@ const Etusivu = ({navigation}) => {
         return 'lisätty merkki';
       case 'added-calendarmark':
         return 'Lisätty kalenteri merkki';
+      case 'deleted-calendarmark':
+        return 'Poistettu kalenteri merkki'
       // Lisää muita tapauksia tarvittaessa
       default:
         return type;
@@ -126,6 +128,9 @@ const Etusivu = ({navigation}) => {
             case 'updated-calendarmark':
               displayText = "Muokattu kalenteri merkki";
               break;
+            case 'deleted-calendarmark':
+              displayText = "Poistettu kalenteri merkki"
+              break;
             default:
               displayText = item.type;
             }
@@ -146,7 +151,7 @@ const Etusivu = ({navigation}) => {
 
                 <Text style={styles.text}>Työmaalle: {item.worksite.address}</Text>
                 {item.calendarDate && 
-                  <Text style={styles.text}>Päivämäärälle: {item.calendarDate}</Text>
+                  <Text style={styles.text}>Kalenteri pvm: {item.calendarDate}</Text>
                 }
                 <Text style={styles.text}>Käyttäjä: {item.user.email}</Text>
               </View>

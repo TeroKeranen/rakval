@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 
 const CalendarModal = ({isVisible, onClose, onSave, title, date, setTitle, text, setText}) => {
 
-    const {state: worksiteState, saveCalendarEntry,fetchCalendarEntries,updateCalendarEntry} = useContext(WorksiteContext)
+    const {state: worksiteState, saveCalendarEntry,fetchCalendarEntries,updateCalendarEntry, deleteCalendarEntry} = useContext(WorksiteContext)
     const [isEditing, setIsEditing] = useState(false);
     const [existingEntry, setExistingEntry] = useState(null);
     // console.log("calendarModal", worksiteState);
@@ -51,10 +51,19 @@ const CalendarModal = ({isVisible, onClose, onSave, title, date, setTitle, text,
         onClose();
     };
 
+    const handleDelete = async () => {
+        const worksiteId = worksiteState.currentWorksite._id;
+        
+        await deleteCalendarEntry(worksiteId, existingEntry._id, date);
+        onClose();
+    }
+
     return (
         <Modal animationType="slide" transparent={true} visible={isVisible} onRequestClose={onClose}>
             <View style={styles.container}>
+                
                 <View style={styles.modalView}>
+                
                     {/* <TextInput style={styles.input} placeholder="Otsikko" value={title} onChangeText={setTitle}/> */}
                     <TextInput style={styles.input} placeholder="Otsikko" value={title} onChangeText={isEditing ? setTitle : undefined} editable={isEditing}/>
                     {/* <TextInput style={styles.input} placeholder="Teksti" value={text} onChangeText={setText}/> */}
@@ -63,7 +72,11 @@ const CalendarModal = ({isVisible, onClose, onSave, title, date, setTitle, text,
                     {isEditing ? (
                         <Button title="Tallenna" onPress={handleSave}/>
                     ) : (
-                        <Button title="Muokkaa" onPress={() => setIsEditing(true)}/>
+                        <View>
+
+                            <Button  title="Muokkaa" onPress={() => setIsEditing(true)}/>
+                            <Button title="Poista" onPress={handleDelete}/>
+                        </View>
                     )}
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                         <Ionicons name="close" size={24} color="#f5f5f5" />
