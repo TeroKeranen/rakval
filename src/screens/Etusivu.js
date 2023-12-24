@@ -30,7 +30,7 @@ const Etusivu = ({navigation}) => {
       fetchUser();
       fetchEvents();
       setIsLoading(false)
-      console.log("eventstate", eventState);
+      
     }
     const unsubscribe = navigation.addListener('focus', fetchAndSetData)
 
