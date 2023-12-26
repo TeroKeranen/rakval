@@ -15,6 +15,15 @@ const worksiteReducer = (state, action) => {
 
       case "add_worksite":
         return { ...state, worksites: [...state.worksites, action.payload] };
+      case 'add_worksite_floorplan':
+        return {
+          ...state,
+          worksites: state.worksites.map(worksite => 
+            worksite._id === action.payload.worksiteId 
+              ? { ...worksite, floorplanKey: action.payload.floorplanKey } 
+              : worksite
+          )
+        };
       case "fetch_worksites":
         return { ...state, worksites: action.payload };
       case "set_current_worksite":
@@ -309,6 +318,24 @@ const newWorksite = (dispatch) => {
     }
 }
 
+// käytetää kun lähetetään kuva databaseen
+const floorplankeySend = (dispatch) => async (worksiteId, floorplanKey) => {
+  try {
+    
+    const token = await AsyncStorage.getItem('token')
+    const authHeader = `${TOKEN_REPLACE} ${token}`;
+
+    const response = await rakval.post(`/worksites/${worksiteId}/floorplan`, { floorplanKey}, {
+      headers: {
+        Authorization: authHeader
+      }
+    })
+    dispatch({type: 'add_worksite_floorplan', payload:{worksiteId, floorplanKey: response.data.floorplanKey}})
+  } catch (error) {
+    
+  }
+}
+
 
 const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
   
@@ -481,6 +508,7 @@ export const { Provider, Context } = createDataContext(worksiteReducer, {
              saveCalendarEntry,
              fetchCalendarEntries,
              updateCalendarEntry,
-             deleteCalendarEntry
+             deleteCalendarEntry,
+             floorplankeySend
              },
               { worksites: [], errorMessage: "", currentWorksite: [] });

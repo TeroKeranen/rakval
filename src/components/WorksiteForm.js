@@ -7,6 +7,7 @@ import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../.
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
+import AddFloorplanImg from "./AddFloorplanImg";
 
 
 
@@ -18,7 +19,7 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [imageUri, setImageUri] = useState(null);
-    const [isImage, setIsImage] = useState(true); // Käytetään avuksi poistamaan "Lisää kuva" nappi
+    
     const navigation = useNavigation();
 
     // useFocusEffect(
@@ -49,24 +50,24 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
       navigation.navigate(t("construction-site"))
       setAddress('');
       setCity('');
-      setImageUri(null);
+      // setImageUri(null);
     }
 
+    //ALAPUOLELLA OLI KUN LISÄTTIIN KUVA
+    // const handleSelectImage = async () => {
+    //   const permissionGranted = await requestMediaLibraryPermissions();
+    //   if (!permissionGranted) return;
 
-    const handleSelectImage = async () => {
-      const permissionGranted = await requestMediaLibraryPermissions();
-      if (!permissionGranted) return;
+    //   const uri = await pickImage();
+    //   console.log("jurii",uri);
+    //   if (uri) {
+    //     setImageUri(uri);
+    //   }
+    // };
 
-      const uri = await pickImage();
-      console.log("jurii",uri);
-      if (uri) {
-        setImageUri(uri);
-      }
-    };
-
-    const delImage = () => {
-      setImageUri(null);
-    }
+    // const delImage = () => {
+    //   setImageUri(null);
+    // }
 
 
 
@@ -78,32 +79,6 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
             <Input style={styles.input} placeholder={t("worksiteform-address")} value={address} onChangeText={setAddress} />
 
             <Input style={styles.input} placeholder={t("worksiteform-city")} value={city} onChangeText={setCity} />
-
-            {!imageUri ? 
-            
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={handleSelectImage} style={styles.button}>
-                <Text style={{ color: "white" }}>{t("worksiteform-add-photo")}</Text>
-              </TouchableOpacity>
-
-              {/* <Button title={t("worksiteform-button")} onPress={handleSubmit} /> */}
-            </View>
-            : null
-          }
-
-            {/* <Button title={t("worksiteform-add-photo")} onPress={handleSelectImage} /> */}
-            {imageUri && (
-              <View style={styles.imagPreviewContainer}>
-
-              <View style={styles.imageContainer}>
-                <Image source={{ uri: imageUri }} style={{ width: 150, height: 150 }} />
-                {/* <Button title="Lataa kuva" onPress={() => uploadImageToS3(imageUri)} /> */}
-              </View>
-              <TouchableOpacity onPress={delImage}>
-                <Ionicons name="trash" size={20} />
-              </TouchableOpacity>
-              </View>
-            )}
 
             {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
           <View style={styles.addWorksiteButtonContainer}>         

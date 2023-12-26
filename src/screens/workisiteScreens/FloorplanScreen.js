@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image, Dimensions, ScrollView, Button, TextInput, Modal, Alert } from "react-native";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { StyleSheet, Text, View, Image, Dimensions, ScrollView, Button, TextInput, Modal, Alert, FlatList } from "react-native";
+import React, { useContext, useEffect, useRef, useState, useCallback } from "react";
 import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { getCurrentDate } from "../../utils/currentDate";
@@ -17,6 +17,8 @@ import { uploadImageToS3 } from "../../../services/ImageService";
 import DownloadScreen from "../../components/DownloadScreen";
 import MarkerinfoModal from "../../components/MarkerinfoModal";
 import MarkerUpdateModal from "../../components/MarkerUpdateModal";
+import AddFloorplanImg from "../../components/AddFloorplanImg";
+import AddMarkerForm from "../../components/FloorplanScreen/AddMarkerForm";
 
 
 
@@ -25,11 +27,12 @@ const FloorplanScreen = ({route, navigation}) => {
   const { t } = useTranslation();
   const { state, saveMarkerToDatabase, fetchWorksiteDetails, deleteMarker, updateMarker } = useContext(WorksiteContext);
   const {state: authState } = useContext(AuthContext)
-  const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKey); // asetetaan kuvan uri tietokannasta tänne.
+  // const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKey); // asetetaan kuvan uri tietokannasta tänne.
+  const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKeys); // asetetaan kuvan uri tietokannasta tänne.
   
   
   const [showMarker, setShowMarker] = useState(false); // Käytetään apuna tätä kun painetaan markeri kuvaan
-  const [putMarker, setPutMarker] = useState(false); // Asetataan trueksi kun painetaan "add marker" nappia, tällä asetetaan eri näkymiä näkyville
+  const [putMarker, setPutMarker] = useState(false); // Asetataan trueksi kun painetaan "add marker" nappia, kun tämä true, niin avaa add marker modalin
 
   const [allMarkers, setAllMarkers] = useState([]); // Uusi tilamuuttuja kaikkia markereita varten
   const [tempMarkerPosition, setTempMarkerPosition] = useState(null); // Asetetaan väliaikaisesti markerin tiedot tänne jotta markeri näkyy näytöllä sitä luodessa
@@ -38,7 +41,7 @@ const FloorplanScreen = ({route, navigation}) => {
   const [selectedMarker, setSelectedMarker] = useState(null); // Kun painetaan jotai tehtyä markeria, tallennetaan tänne markerin tiedot.
   const [modalVisible, setModalVisible] = useState(false); // Kun halutaan näyttää modali, asetetaan tämä true arvoon
 
-  const [moveInfo, setMoveInfo] = useState(false); // vaihdellaa tätä moveInfoBox function avulla.
+  
   const [pickedImageUri, setPickedImageUri] = useState(null); // Imagepickerista tuleva kuvan url, käytetään markereissa, tämän avulla tallennetaan kuvan uri databaseen
   const [modalMarkerImage, setModalMarkerImage] = useState(null); // Tallenntaan markerin imageurl tänne. Käytetään tätä näyttämään oikea kuva modalissa
   const [isLoading, SetIsLoading] = useState(false);
@@ -47,24 +50,31 @@ const FloorplanScreen = ({route, navigation}) => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editableMarkerInfo, setEditableMarkerInfo] = useState('');
 
+  const [imageUri, setImageUri] = useState(null);
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+
+  const [floorplanKeys, setFloorplanKeys] = useState(state.currentWorksite.floorplanKeys || []); // Asetetaan kuvien floorplanKey arvot tänne
+  const [selectedFloorplanIndex, setSelectedFloorplanIndex] = useState(0);
+  const [selectImageAddMarker, setSelectImageAddMarker] = useState(false); // Tämä kun on true niin aukeaa add marker nappi
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+
+
+ 
+  
+
   useEffect(() => {
     
     
     setAllMarkers(state.currentWorksite.markers);
-  }, [state.currentWorksite.markers]);
+  }, [state.currentWorksite.markers,state.currentWorksite.floorplanKeys]);
 
   const addMarker = () => {
-    setPutMarker(true);
+    setPutMarker(true); // avataan add marker modali
     setMarkerInfo(""); // Tyhjennä aikaisemmat lisätiedot
+    setSelectImageAddMarker(false);
     
   };
 
-  // kun lisätään markeri niin tällä voidaan liikuttaa tietojensyöttämis lomakkeen ylös tai alas
-  const moveInfobox = () => {
-
-    setMoveInfo(prevMoveInfo => !prevMoveInfo);
-
-  }
   
 // Tallennetaan uusi markeri tietokantaan
 const handleSaveMarker = async () => {
@@ -100,7 +110,8 @@ const handleSaveMarker = async () => {
         creator: user,
         created: getCurrentDate(),
         imageUri: imageKey || "", // Käytetään ladatun kuvan avainta, jos saatavilla
-        markerNumber: newMarkerNumber
+        markerNumber: newMarkerNumber,
+        floorplanIndex: tempMarkerPosition.floorplanIndex
 
       };
       
@@ -109,7 +120,7 @@ const handleSaveMarker = async () => {
     }
     SetIsLoading(false); // Otetaan downloadScreen pois käytöstä
     setPickedImageUri(null)
-    setPutMarker(false);
+    setPutMarker(false); // suljetaan add marker modali
     setShowMarker(false);
     setTempMarkerPosition(null);
     fetchWorksiteDetails(state.currentWorksite._id);
@@ -125,11 +136,13 @@ useEffect(() => {
   setAllMarkers(state.currentWorksite.markers);
 },[state.currentWorksite.markers])
 
-// Käytetään tätä kun halutaan avata modali
+// Käytetään tätä kun halutaan avata  modali
   const handleMarkerPress = (index, pos) => {
     // Tee jotain, kun markeria painetaan
-    
-    const pressedMarker = state.currentWorksite.markers[index];
+    const markersForThisImage = state.currentWorksite.markers.filter(marker => marker.floorplanIndex === selectedFloorplanIndex)
+
+    const pressedMarker = markersForThisImage[index];
+    // const pressedMarker = state.currentWorksite.markers[index];
 
     
     setModalMarkerImage(pressedMarker.imageUri);
@@ -140,10 +153,11 @@ useEffect(() => {
 
   // Käytetään tätä kun painetaan merkki kuvaan (silloin ku on luomassa merkkiä)
   const handlePress = (e) => {
+    
     const { locationX, locationY } = e.nativeEvent;
     
     if (putMarker) {
-      setTempMarkerPosition({ x: locationX, y: locationY });
+      setTempMarkerPosition({ x: locationX, y: locationY, floorplanIndex: selectedFloorplanIndex });
       setShowMarker(true);
     } else {
       // Tarkista, osuuko painallus mihinkään markeriin
@@ -163,7 +177,7 @@ useEffect(() => {
 
   // Käytetään kun suljetaan markerin modali
   const closeMarker = () => {
-    setPutMarker(false)
+    setPutMarker(false) // Sulkee add marker modalin
     setShowMarker(false);
     setTempMarkerPosition(null);
     setPickedImageUri(null)
@@ -207,12 +221,13 @@ useEffect(() => {
     setEditModalVisible(true);
   }
 
+  // MARKERIN UPDATE
   const handleUpdateMarker = async () => {
     // Kutsu backendin päivitysfunktiota ja lähetä muokatut tiedot
     // ...
     
     try {
-      console.log(modalMarkerImage);
+      
       // console.log(modalMarkerImage);
       const updatedMarkerData = {
         ...selectedMarker,
@@ -236,52 +251,110 @@ useEffect(() => {
     }
     
   };
-
-   // Käytetään tätä marker formissa jotta voimme liikuttaa sitä ylös tai alas
-  const addMarkerContainerStyle = {
-      position: "absolute",
-      bottom: moveInfo ? null : 20,
-      top: moveInfo ? 0 : null,
-      left: 0,
-      right: 0,
-      padding: 10,
-      backgroundColor: "#f7f8f7",
-      justifyContent: "center",
-      alignItems: "center",
+   // käytetään tätä kun painetaan kuvaa
+  const handleFloorplanSelect = (index) => {
     
+    setSelectedFloorplanIndex(index); // asetetaan kuvan indeksi
+    // setSelectImageAddMarker(true); // kun tämä on true niin näkyy "add marker" nappi
+    setSelectedImageIndex(index);
+    console.log(selectedImageIndex)
+    
+    
+    // Mahdolliset muut toiminnot markerin lisäämiseksi
   };
-  const imageUri = state.currentWorksite.markers.imageUri;
+
+  
+  
+  // Määritellään, milloin kuva katsotaan näkyväksi/ käytetään flatlist
+  const viewabilityConfig = {
+    itemVisiblePercentThreshold: 50 // Esimerkiksi, kun 50% kuvasta on näkyvissä
+  };
+
+  // Päivitetään valittu kuva, kun uusi kuva tulee näkyviin
+  const onViewableItemsChanged = useCallback(({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      const firstVisibleItemIndex = viewableItems[0].index; // otetaan ensimmäisen näkyvän kohteen indexin muutttujaan
+      setSelectedFloorplanIndex(firstVisibleItemIndex);
+      setSelectedImageIndex(firstVisibleItemIndex);
+      setSelectImageAddMarker(true); // Näytä "add marker" nappi
+    }
+  }, []);
+
+
+  // käytetään tätä päivittämään näkymä kun lisätää floorplanimage
+  const updateFloorplanKeys = (newKey) => {
+    setFloorplanKeys([...floorplanKeys, newKey]);
+    // Tarvittaessa kutsu fetchWorksiteDetails tai muita päivitysfunktioita
+  };
+
+
+
+  const renderFloorplanItem = ({ item,index }) => {
+    const isSelected = selectedFloorplanIndex === index; // käytetään tätä tuomaan border väri kuvaan
+    const markersForThisImage = state.currentWorksite.markers.filter(marker => marker.floorplanIndex === index && index === selectedImageIndex); // näytetään tämän avulla valitun kuvan markerit
+    
+    return (
+        
+        <ImageZoom 
+          cropWidth={Dimensions.get("window").width}
+          cropHeight={Dimensions.get("window").height} // Muokkaa korkeutta tarpeen mukaan
+          imageWidth={200} // Muokkaa leveyttä tarpeen mukaan
+          imageHeight={200}
+        >
+          {/* {!putMarker ? (
+
+            <TouchableOpacity onPress={() => handleFloorplanSelect(index)}>
+
+            <Image 
+              style={[{ width: 200, height: 200 }, isSelected ? styles.selectedImage : {}]}
+              source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }}
+              />
+            </TouchableOpacity>
+          ) : (
+            
+            <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
+              <Image style={{ width: 200, height: 200 }} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }} />
+            </TouchableOpacity>
+          )
+        } */}
+            <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
+              <Image style={[{ width: 200, height: 200 }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }} />
+            </TouchableOpacity>
+         {showMarker && <View style={[styles.markerStyle, { position: "absolute", left: tempMarkerPosition.x, top: tempMarkerPosition.y }]} />}
+         {markersForThisImage.map((pos, markerIndex) => (
+            <TouchableOpacity 
+              key={markerIndex}
+              onPress={() => handleMarkerPress(markerIndex, pos)}
+              style={[styles.markerStyle, { position: "absolute", left: pos.x, top: pos.y }]}
+            >
+              <Text style={styles.markerTextStyle}> {pos.markerNumber}</Text>
+            </TouchableOpacity>
+          ))}
+        </ImageZoom>
+        
+      
+    );
+  };
+  
+  // const imageUri = state.currentWorksite.markers.imageUri;
   if (isLoading) {
     return (
       <DownloadScreen message="ladataan"/>
     )
   }
+
   return (
     <View style={styles.container}>
-
-      <ImageZoom cropWidth={Dimensions.get("window").width} cropHeight={Dimensions.get("window").height} imageWidth={200} imageHeight={200}>
-       
-         {/* Jos putMarker on true niin näytetään pohjakuvaa johon voi painaa markereita*/}
-
-        {!putMarker ? (
-          <Image style={{ width: 200, height: 200 }} source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} />
-        ) : (
-          <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
-            {/* <TextInput style={styles.textInputStyle} onChangeText={setMarkerInfo} value={markerInfo} placeholder="Syötä markerin lisätiedot" /> */}
-            <Image style={{ width: 200, height: 200 }} source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} />
-          </TouchableOpacity>
-        )}
-
-        {/* Kun markeri on painettu pohjakuvaan niin showMarker asetetaan true arvoon ja silloin näytetään markerin pohjakuvassa  */}
-        {showMarker && <View style={[styles.markerStyle, { position: "absolute", left: tempMarkerPosition.x, top: tempMarkerPosition.y }]} />}
-        {/* Käydään läpi kaikki markerit ja näytetään ne pohjakuvassa */}
-        {state.currentWorksite.markers.map((pos, index) => (
-          <TouchableOpacity key={index} onPress={() => handleMarkerPress(index,pos)} style={[styles.markerStyle, { position: "absolute", left: pos.x, top: pos.y }]} >
-            <Text style={styles.markerTextStyle}> {pos.markerNumber}</Text>
-          </TouchableOpacity>
-        ))}
-      </ImageZoom>
-
+      
+      <FlatList
+        data={floorplanKeys}
+        renderItem={renderFloorplanItem}
+        keyExtractor={(item, index) => `floorplan-${index}`}
+        horizontal={false}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
+        />
+     
       {/* Modal markerin tiedoille */}
       <MarkerinfoModal 
         isVisible={modalVisible} 
@@ -310,44 +383,33 @@ useEffect(() => {
       
       
       {/* Jos put marker on true arvossa niin näkyy markerin lisäys formi. false arvossa näkyy vain painike jossa lukee add marker */}
-      {putMarker ? (
-        <View style={addMarkerContainerStyle}>
-          {/* jos moveInfo === true, niin markerin lisäys formi on ylhäällä */}
-          {moveInfo ? (
-            <TouchableOpacity onPress={moveInfobox}>
-              <Text>{t("floorplanscreen-move-down")}</Text>
-            </TouchableOpacity>
-          ) : (
-            // Jos moveInfo === false, niin markerin lisäys formi on alhaalla
-            <TouchableOpacity onPress={moveInfobox}>
-              <Text>{t("floorplanscreen-move-up")}</Text>
-            </TouchableOpacity>
-          )}
 
-          <TextInput style={styles.textInputStyle} onChangeText={setMarkerInfo} value={markerInfo} placeholder={t("floorplanscreen-marker-textinput")} />
-          
-          {/*  Kun showMarker === true, niin lisätään imagePicker näkyviin. showMarker vaihtuu true arvoon silloin kun painamme markerin kuvaan  */}
-          {showMarker ? (
-            <View style={styles.imagePreview}>
-              <ImagePicker onImagePicked={setPickedImageUri} />
-            </View>
-          ) : null}
+      {putMarker ? 
 
-          <View style={styles.modalButtonContainer}>
-            <TouchableOpacity onPress={handleSaveMarker} style={styles.addMarkerButton}>
-              <Text style={styles.addMarkerButtonText}>{t("floorplanscreen-save-marker")}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={closeMarker} style={styles.addMarkerButton}>
-              <Text style={styles.addMarkerButtonText}>{t("floorplanscreen-close-marker")}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ) : (
+        <AddMarkerForm 
+          handleSaveMarker={handleSaveMarker} 
+          closeMarker={closeMarker} 
+          showMarker={showMarker} 
+          setPickedImageUri={setPickedImageUri}
+          markerInfo={markerInfo}
+          setMarkerInfo={setMarkerInfo}
+          />
+
+       : (
         // Kun putMarker asetetaan arvoon false, niin näkyy vain add marker nappi
         <View style={styles.buttonContainer}>
+          <AddFloorplanImg imageUri={imageUri} setImageUri={setImageUri} onUpdate={updateFloorplanKeys}/>
+          {floorplanKeys.length > 0 && selectImageAddMarker && 
+          <>
           <TouchableOpacity onPress={addMarker} style={styles.button}>
             <Text style={{color:'white'}}>{t("floorplanscreen-add-marker")}</Text>
           </TouchableOpacity>
+
+          
+
+          </>
+          
+          }
         </View>
       )}
     </View>
@@ -418,39 +480,16 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
   },
-
-  addMarkerButton: {
-    width: "40%",
-    backgroundColor: "#812424",
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
-  addMarkerButtonText: {
-    color: "white",
-    alignSelf: "center",
-  },
-  textInputStyle: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    margin: 10,
-    paddingHorizontal: 10,
-    width: "80%", // Voit säätää leveyttä tarpeen mukaan
-  },
-  imagePreview: {
-    width: "100%",
-  },
-  modalButtonContainer: {
-    width: "100%",
-    justifyContent: "center",
-    flexDirection: "row",
-  },
+ 
   image: {
     height: "80%",
     width: "90%",
     marginTop: 20,
     borderRadius: 10,
+  },
+  selectedImage: {
+    borderWidth: 2,
+    borderColor: 'blue', // Vaihda haluamaksesi väriseksi
   },
 });
 
