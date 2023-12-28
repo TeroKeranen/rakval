@@ -28,7 +28,7 @@ const FloorplanScreen = ({route, navigation}) => {
   const { state, saveMarkerToDatabase, fetchWorksiteDetails, deleteMarker, updateMarker } = useContext(WorksiteContext);
   const {state: authState } = useContext(AuthContext)
   // const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKey); // asetetaan kuvan uri tietokannasta tänne.
-  const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKeys); // asetetaan kuvan uri tietokannasta tänne.
+  // const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKeys); // asetetaan kuvan uri tietokannasta tänne.
   
   
   const [showMarker, setShowMarker] = useState(false); // Käytetään apuna tätä kun painetaan markeri kuvaan
@@ -51,12 +51,14 @@ const FloorplanScreen = ({route, navigation}) => {
   const [editableMarkerInfo, setEditableMarkerInfo] = useState('');
 
   const [imageUri, setImageUri] = useState(null);
-  const [imageModalVisible, setImageModalVisible] = useState(false);
+  // const [imageModalVisible, setImageModalVisible] = useState(false);
 
   const [floorplanKeys, setFloorplanKeys] = useState(state.currentWorksite.floorplanKeys || []); // Asetetaan kuvien floorplanKey arvot tänne
   const [selectedFloorplanIndex, setSelectedFloorplanIndex] = useState(0);
   const [selectImageAddMarker, setSelectImageAddMarker] = useState(false); // Tämä kun on true niin aukeaa add marker nappi
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const [isZoomed, setIsZoomed] = useState(false); // käytetään handlemove funktiossa jolla katsotaan, zoomataanko kuvaa
+ 
 
 
  
@@ -71,7 +73,7 @@ const FloorplanScreen = ({route, navigation}) => {
   const addMarker = () => {
     setPutMarker(true); // avataan add marker modali
     setMarkerInfo(""); // Tyhjennä aikaisemmat lisätiedot
-    setSelectImageAddMarker(false);
+    // setSelectImageAddMarker(false);
     
   };
 
@@ -251,19 +253,8 @@ useEffect(() => {
     }
     
   };
-   // käytetään tätä kun painetaan kuvaa
-  const handleFloorplanSelect = (index) => {
-    
-    setSelectedFloorplanIndex(index); // asetetaan kuvan indeksi
-    // setSelectImageAddMarker(true); // kun tämä on true niin näkyy "add marker" nappi
-    setSelectedImageIndex(index);
-    console.log(selectedImageIndex)
-    
-    
-    // Mahdolliset muut toiminnot markerin lisäämiseksi
-  };
 
-  
+
   
   // Määritellään, milloin kuva katsotaan näkyväksi/ käytetään flatlist
   const viewabilityConfig = {
@@ -287,6 +278,29 @@ useEffect(() => {
     // Tarvittaessa kutsu fetchWorksiteDetails tai muita päivitysfunktioita
   };
 
+  const zoomTimeoutRef = useRef(null);
+
+  const handleMove = (position) => {
+    // Jos kuvaa liikutetaan tai zoomataan, aseta isZoomed true:ksi ja peruuta mahdollinen aikaisempi ajastin
+    if (position.scale > 1.2) { // tarkastetaan että zoomataanko kuvaa
+      console.log("zooo", zoomTimeoutRef);
+      if (zoomTimeoutRef.current) {
+        clearTimeout(zoomTimeoutRef.current);
+      }
+      setIsZoomed(true);
+      zoomTimeoutRef.current = setTimeout(() => setIsZoomed(false), 1000); // Asetetaan 3 sekunnin ajastin
+    }
+  }
+  
+  //  puhdistaa ajastimen, jos komponentti poistuu käytöstä
+  useEffect(() => {
+    return () => {
+      if (zoomTimeoutRef.current) {
+        clearTimeout(zoomTimeoutRef.current);
+      }
+    };
+  }, []);
+
 
 
   const renderFloorplanItem = ({ item,index }) => {
@@ -297,29 +311,32 @@ useEffect(() => {
         
         <ImageZoom 
           cropWidth={Dimensions.get("window").width}
-          cropHeight={Dimensions.get("window").height} // Muokkaa korkeutta tarpeen mukaan
-          imageWidth={200} // Muokkaa leveyttä tarpeen mukaan
-          imageHeight={200}
+          cropHeight={500} // Muokkaa korkeutta tarpeen mukaan
+          imageWidth={300} // Muokkaa leveyttä tarpeen mukaan
+          imageHeight={300}
+          panToMove={true}
+          pinchToZoom={true}
+          onMove={handleMove}
         >
-          {/* {!putMarker ? (
+          {isZoomed ? (
 
-            <TouchableOpacity onPress={() => handleFloorplanSelect(index)}>
-
-            <Image 
-              style={[{ width: 200, height: 200 }, isSelected ? styles.selectedImage : {}]}
-              source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }}
-              />
-            </TouchableOpacity>
-          ) : (
             
-            <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
-              <Image style={{ width: 200, height: 200 }} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }} />
-            </TouchableOpacity>
+            <Image 
+            style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]}
+            source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }}
+            />
+            
+            ) : (
+              
+              <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
+                <Image style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }} />
+              </TouchableOpacity>
           )
-        } */}
-            <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
-              <Image style={[{ width: 200, height: 200 }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }} />
-            </TouchableOpacity>
+        }
+          
+            {/* <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
+              <Image style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }} />
+            </TouchableOpacity> */}
          {showMarker && <View style={[styles.markerStyle, { position: "absolute", left: tempMarkerPosition.x, top: tempMarkerPosition.y }]} />}
          {markersForThisImage.map((pos, markerIndex) => (
             <TouchableOpacity 
@@ -400,14 +417,14 @@ useEffect(() => {
         <View style={styles.buttonContainer}>
           <AddFloorplanImg imageUri={imageUri} setImageUri={setImageUri} onUpdate={updateFloorplanKeys}/>
           {floorplanKeys.length > 0 && selectImageAddMarker && 
-          <>
+          
           <TouchableOpacity onPress={addMarker} style={styles.button}>
             <Text style={{color:'white'}}>{t("floorplanscreen-add-marker")}</Text>
           </TouchableOpacity>
 
           
 
-          </>
+          
           
           }
         </View>
@@ -489,7 +506,8 @@ const styles = StyleSheet.create({
   },
   selectedImage: {
     borderWidth: 2,
-    borderColor: 'blue', // Vaihda haluamaksesi väriseksi
+    borderColor: '#272761', // Vaihda haluamaksesi väriseksi
+    
   },
 });
 

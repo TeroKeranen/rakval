@@ -18,7 +18,7 @@ const AddFloorplanImg = ({ imageUri, setImageUri, isVisible, onClose, onUpdate }
     return (
         <View>
             <TouchableOpacity onPress={handleModal} style={styles.button}>
-                <Text style={{ color: "white" }}>avaa modal</Text>
+                <Text style={{ color: "white" }}>{t('floorplanscreen-add-image')}</Text>
               </TouchableOpacity>
 
               <AddFloorplanImgModal isVisible={imageModalVisible} onClose={() => setImageModalVisible(false)} onUpdate={onUpdate}  />

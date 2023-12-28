@@ -67,10 +67,11 @@
   "worksiteWorker-markerModal-deletemarker-confirmtext": "Oletko varma, että haluat poistaa tämän työntekijän?",
 
   "floorplanscreen-add-marker": "Lisää merkintä",
+  "floorplanscreen-add-image": "Lisää kuva",
   "floorplanscreen-save-marker": "Tallenna merkki",
   "floorplanscreen-close-marker": "Sulje",
-  "floorplanscreen-move-up": "Move the bar up",
-  "floorplanscreen-move-down": "Move the bar down",
+  "floorplanscreen-move-up": "Siirrä ylös",
+  "floorplanscreen-move-down": "Siirrä alas",
   "floorplanscreen-marker-textinput": "Syötä lisätiedot",
   "floorplanscreen-markerModal-info": "Merkinnän tiedot",
   "floorplanscreen-markerModal-creator": "Luonut",
