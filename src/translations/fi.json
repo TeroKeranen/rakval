@@ -50,6 +50,8 @@
   "worksiteform-address": "Osoite",
   "worksiteform-city": "Kaupunki",
   "worksiteform-add-photo": "Lisää pohjakuva",
+  "worksiteform-worktype-worksite": "Työmaa",
+  "worksiteform-worktype-privateClient": "Yksityisasiakas",
 
   "worksitedetail-downloadscreen-msg": "Ladataan työmaan tietoja",
   "workistedetail-address": "Osoite",

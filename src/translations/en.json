@@ -50,6 +50,8 @@
   "worksiteform-address": "Address",
   "worksiteform-city": "City",
   "worksiteform-add-photo": "Add floor plan",
+  "worksiteform-worktype-worksite": "Construction site",
+  "worksiteform-worktype-privateClient": "Private client",
 
   "worksitedetail-downloadscreen-msg": "Loading construction site information",
   "workistedetail-address": "Address",

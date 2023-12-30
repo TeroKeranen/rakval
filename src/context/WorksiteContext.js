@@ -292,11 +292,11 @@ const newWorksite = (dispatch) => {
   
     
     const { t } = useTranslation();
-    return async ({address, city, floorplanKey, navigation }) => {
+    return async ({address, city, floorplanKey,worktype, navigation }) => {
         try {
             const token = await AsyncStorage.getItem('token')
             const authHeader = `${TOKEN_REPLACE} ${token}`;
-            const response = await rakval.post('/worksites', {address, city, floorplanKey}, {
+            const response = await rakval.post('/worksites', {address, city, floorplanKey,worktype}, {
                 headers: {
                     Authorization: authHeader,
                     
