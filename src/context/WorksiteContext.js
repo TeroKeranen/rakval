@@ -319,13 +319,13 @@ const newWorksite = (dispatch) => {
 }
 
 // käytetää kun lähetetään kuva databaseen
-const floorplankeySend = (dispatch) => async (worksiteId, floorplanKey) => {
+const floorplankeySend = (dispatch) => async (worksiteId, floorplan) => {
   try {
     
     const token = await AsyncStorage.getItem('token')
     const authHeader = `${TOKEN_REPLACE} ${token}`;
 
-    const response = await rakval.post(`/worksites/${worksiteId}/floorplan`, { floorplanKey}, {
+    const response = await rakval.post(`/worksites/${worksiteId}/floorplan`, floorplan, {
       headers: {
         Authorization: authHeader
       }

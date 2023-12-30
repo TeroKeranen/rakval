@@ -55,6 +55,16 @@ const WorksiteEventsScreen = () => {
   
 
 
+    const renderEmptyComponent = () => {
+        return (
+            <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>Ei dataa</Text>
+            </View>
+        );
+        
+        
+    };
+
     if (isLoading) {
         return <DownloadScreen message={t('loading')} />
     }
@@ -70,7 +80,7 @@ const WorksiteEventsScreen = () => {
                 keyExtractor={(item) => item._id}
                 renderItem={({item}) => (
                     <View style={styles.listContainer}>
-
+                        
                         {item.running ? 
                             <View style={styles.workRunning}>
 
@@ -97,6 +107,7 @@ const WorksiteEventsScreen = () => {
                         
                     </View>
                 )}
+                ListEmptyComponent={renderEmptyComponent}
             />
         </View>
     )
@@ -146,6 +157,15 @@ const styles = StyleSheet.create({
         padding: 5,
         marginBottom: 5,
     },
+    emptyContainer: {
+        marginTop: 100,
+        alignItems: 'center',
+        justifyContent:'center',
+        
+    },
+    emptyText: {
+        fontSize: 20,
+    }
 
 })
 

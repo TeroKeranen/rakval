@@ -1,4 +1,4 @@
-import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,7 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
     const { t } = useTranslation();
     const [imageUri, setImageUri] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [imageTitle, setImageTitle] = useState("");
 
 
     const handleSelectImage = async () => {
@@ -34,11 +35,12 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
         try {
             setIsLoading(true)
             const currenWorksiteId = worksiteState.currentWorksite._id;
-            if (imageUri) {
+            if (imageUri && imageTitle) {
                 const imageKey = await uploadImageToS3(imageUri);
+                const floorplan = {key: imageKey, title: imageTitle};
                 
-                await floorplankeySend(worksiteState.currentWorksite._id, imageKey);
-                onUpdate && onUpdate(imageKey);
+                await floorplankeySend(worksiteState.currentWorksite._id, floorplan);
+                onUpdate && onUpdate(floorplan);
             }
             
             setIsLoading(false);
@@ -70,10 +72,15 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                         <Ionicons name="close" size={24} color="#f5f5f5" />
                     </TouchableOpacity>
-                    
+                    <TextInput 
+                        onChangeText={setImageTitle}
+                        value={imageTitle}
+                        placeholder="enter image title"
+                        style={styles.input}
+                        />
                     {imageUri ? 
                         <View style={styles.imagPreviewContainer}>
-
+                            
                             <View style={styles.imageContainer}>
                                 <Image source={{ uri: imageUri }} style={{ width: 150, height: 150 }} />
                                 {/* <Button title="Lataa kuva" onPress={() => uploadImageToS3(imageUri)} /> */}
@@ -115,6 +122,7 @@ const styles = StyleSheet.create({
         width: "90%",
         height: '70%',
         alignItems: "center",
+        justifyContent: 'center',
         shadowColor: "#000",
         shadowOffset: {
         width: 0,
@@ -137,7 +145,7 @@ const styles = StyleSheet.create({
         // width: '30%',
         backgroundColor: "#812424",
         padding: 10,
-        margin: 10,
+        marginVertical: 20,
         borderRadius: 5,
         justifyContent: "center",
         alignItems: "center",
@@ -147,6 +155,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 10,
         
+        
       },
+      input: {
+        
+        borderColor: "gray",
+        borderWidth: 1,
+        borderRadius: 5,
+        margin: 10,
+        paddingHorizontal: 5,
+        paddingVertical: 5,
+        width: 200, // Voit säätää leveyttä tarpeen mukaan
+        
+      }
 })
 export default AddFloorplanImgModal;

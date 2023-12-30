@@ -33,6 +33,7 @@ const WorksiteWorkers = () => {
     
     useEffect(() => {
         if (companyState.company && companyState.company._id) {
+            
             fetchWorkers(companyState.company._id)
         }
         
@@ -58,12 +59,14 @@ const WorksiteWorkers = () => {
 
     // kerätään työntekijöiden tiedot ja tallennetaan ne worksiteworkers useStateen
     const fetchAllWorkersInfo = async () => {
-      console.log("copmanytestate", companyState.company);
+      const currentUserId = authState.user._id;
+      
       try {
         
         setIsLoading(true)
         const workersData = await Promise.all(
           worksiteState.currentWorksite.workers.map(async (workerId) => 
+            
             await fetchUserWithId(workerId)
             )
           );
@@ -135,9 +138,16 @@ const WorksiteWorkers = () => {
               setSelecterWorker(itemValue)
             }
             >
-              {companyState.workers.map((worker) => (
-                <Picker.Item label={worker.email} value={worker._id} key={worker._id} />
-              ))}
+              {/* {companyState.workers.filter(worker => worker._id !== authState.user._id).map((worker) => (
+                 <Picker.Item label={worker.email} value={worker._id} key={worker._id} />
+              ))} */}
+                    <Picker.Item label="--" value="--" key="--"/>
+               {companyState.workers
+                    .filter(worker => worker._id !== authState.user._id) // Suodata pois nykyinen käyttäjä
+                    .map((worker) => (
+                        <Picker.Item label={worker.email} value={worker._id} key={worker._id} />
+                    ))
+                }
             </Picker>
 
             <Button title={t("worksiteWorker-add-button")} onPress={handleAddWorker} disabled={!selectedWorker} />

@@ -58,6 +58,7 @@ const FloorplanScreen = ({route, navigation}) => {
   const [selectImageAddMarker, setSelectImageAddMarker] = useState(false); // Tämä kun on true niin aukeaa add marker nappi
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [isZoomed, setIsZoomed] = useState(false); // käytetään handlemove funktiossa jolla katsotaan, zoomataanko kuvaa
+  
  
 
 
@@ -283,7 +284,7 @@ useEffect(() => {
   const handleMove = (position) => {
     // Jos kuvaa liikutetaan tai zoomataan, aseta isZoomed true:ksi ja peruuta mahdollinen aikaisempi ajastin
     if (position.scale > 1.2) { // tarkastetaan että zoomataanko kuvaa
-      console.log("zooo", zoomTimeoutRef);
+      
       if (zoomTimeoutRef.current) {
         clearTimeout(zoomTimeoutRef.current);
       }
@@ -304,50 +305,60 @@ useEffect(() => {
 
 
   const renderFloorplanItem = ({ item,index }) => {
+    
     const isSelected = selectedFloorplanIndex === index; // käytetään tätä tuomaan border väri kuvaan
     const markersForThisImage = state.currentWorksite.markers.filter(marker => marker.floorplanIndex === index && index === selectedImageIndex); // näytetään tämän avulla valitun kuvan markerit
     
     return (
-        
-        <ImageZoom 
-          cropWidth={Dimensions.get("window").width}
-          cropHeight={500} // Muokkaa korkeutta tarpeen mukaan
-          imageWidth={300} // Muokkaa leveyttä tarpeen mukaan
-          imageHeight={300}
-          panToMove={true}
-          pinchToZoom={true}
-          onMove={handleMove}
-        >
-          {isZoomed ? (
-
-            
-            <Image 
-            style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]}
-            source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }}
-            />
-            
-            ) : (
-              
-              <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
-                <Image style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }} />
-              </TouchableOpacity>
-          )
-        }
-          
-            {/* <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
-              <Image style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }} />
-            </TouchableOpacity> */}
-         {showMarker && <View style={[styles.markerStyle, { position: "absolute", left: tempMarkerPosition.x, top: tempMarkerPosition.y }]} />}
-         {markersForThisImage.map((pos, markerIndex) => (
-            <TouchableOpacity 
-              key={markerIndex}
-              onPress={() => handleMarkerPress(markerIndex, pos)}
-              style={[styles.markerStyle, { position: "absolute", left: pos.x, top: pos.y }]}
+      
+        <View style={styles.imageContainer}>
+          <View style={styles.imageTitleBox}>
+            <Text style={styles.imageTitleText}>{item.title}</Text>
+          </View>
+          <ImageZoom 
+            cropWidth={Dimensions.get("window").width}
+            cropHeight={500} // Muokkaa korkeutta tarpeen mukaan
+            imageWidth={300} // Muokkaa leveyttä tarpeen mukaan
+            imageHeight={300}
+            panToMove={true}
+            pinchToZoom={true}
+            onMove={handleMove}
             >
-              <Text style={styles.markerTextStyle}> {pos.markerNumber}</Text>
-            </TouchableOpacity>
-          ))}
-        </ImageZoom>
+            {isZoomed ? (
+              
+              
+              <Image 
+              style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]}
+              source={{ uri: `${FLOORPLAN_PHOTO_URL}${item.key}` }}
+              />
+              
+              ) : (
+                
+                <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
+                    
+                      <Image style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item.key}` }} />
+                      
+                    
+                  </TouchableOpacity>
+            )
+          }
+            
+              {/* <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
+                <Image style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item}` }} />
+              </TouchableOpacity> */}
+          {showMarker && <View style={[styles.markerStyle, { position: "absolute", left: tempMarkerPosition.x, top: tempMarkerPosition.y }]} />}
+          {markersForThisImage.map((pos, markerIndex) => (
+            <TouchableOpacity 
+            key={markerIndex}
+            onPress={() => handleMarkerPress(markerIndex, pos)}
+            style={[styles.markerStyle, { position: "absolute", left: pos.x, top: pos.y }]}
+            >
+                <Text style={styles.markerTextStyle}> {pos.markerNumber}</Text>
+              </TouchableOpacity>
+            ))}
+          </ImageZoom>
+          
+        </View>
         
       
     );
@@ -433,8 +444,9 @@ useEffect(() => {
   );
    
 }
-
+const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     justifyContent: "center",
@@ -504,11 +516,31 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 10,
   },
+  
   selectedImage: {
-    borderWidth: 2,
-    borderColor: '#272761', // Vaihda haluamaksesi väriseksi
+    borderWidth: 3,
+    
+    borderColor: '#0066c5', // Vaihda haluamaksesi väriseksi
     
   },
+  imageContainer: {
+    width: screenWidth - 5,
+    borderBottomWidth: 0.8,
+    borderColor: '#504f4f',
+    backgroundColor: '#f1f1f1',
+    
+    
+  },
+  imageTitleBox: {
+    alignItems: 'center',
+    marginTop: 50,
+    
+  },
+  imageTitleText: {
+    fontSize: 20,
+    letterSpacing: 6,
+    color: '#030303',
+  }
 });
 
 export default FloorplanScreen;
