@@ -56,7 +56,7 @@
   "worksitedetail-downloadscreen-msg": "Ladataan työmaan tietoja",
   "workistedetail-address": "Osoite",
   "worksitedetail-city": "Kaupunki",
-  "worksite-no-worksites": "Ei työmaita",
+  "worksite-no-worksites": "Ei dataa",
   "worksitedetail-deleteBtn": "Poista työmaa",
   "worksitedetail-confirmdelete": "Haluatko varmasti poistaa tämän työmaan",
   "worksitedetail-confirmDelete-cancelButton": "Peruuta",

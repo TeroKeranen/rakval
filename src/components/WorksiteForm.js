@@ -30,7 +30,7 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const handleSubmit = async () => {
         try {
           if (!address || !city || !workType) {
-            Alert.alert("Error", "jotain meni vikaan")
+            Alert.alert("Error", t('goeswrong'))
             return;
           }
           if (imageUri) {
@@ -42,7 +42,7 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
           // nollataan input kentät onnistunee lisäyksen jälkeen
           setAddress("");
           setCity("");
-          setWorkType('');
+          
           setImageUri(null);
         } catch (error) {
             console.log(error);
