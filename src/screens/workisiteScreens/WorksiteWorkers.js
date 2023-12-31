@@ -134,8 +134,7 @@ const WorksiteWorkers = () => {
             <Picker
             style={styles.pickerstyle}
               selectedValue={selectedWorker}
-              onValueChange={(itemValue, itemIndex) => 
-              setSelecterWorker(itemValue)
+              onValueChange={(itemValue, itemIndex) => setSelecterWorker(itemValue)
             }
             >
               {/* {companyState.workers.filter(worker => worker._id !== authState.user._id).map((worker) => (

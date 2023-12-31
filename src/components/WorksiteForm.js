@@ -1,13 +1,14 @@
-import { useCallback, useState } from "react";
-import { StyleSheet, View, Button, Image, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import { StyleSheet, View,TouchableOpacity, Alert } from "react-native";
 import { Text,  Input } from "react-native-elements";
 import { useTranslation } from "react-i18next";
-import * as ImagePicker from "expo-image-picker";
+
 import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
-import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
+
+
 import { useNavigation } from '@react-navigation/native';
-import AddFloorplanImg from "./AddFloorplanImg";
+
+import {Picker} from '@react-native-picker/picker';
 
 
 
@@ -16,30 +17,32 @@ import AddFloorplanImg from "./AddFloorplanImg";
 
 const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const { t } = useTranslation();
-    const [address, setAddress] = useState("");
+    const [address, setAddress] = useState(""); 
     const [city, setCity] = useState("");
+    const [workType, setWorkType] = useState(t('worksiteform-worktype-worksite')); // asetetaan default valueksi työmaa
     const [imageUri, setImageUri] = useState(null);
+    
     
     const navigation = useNavigation();
 
-    // useFocusEffect(
-    //   useCallback(() => {
-    //     clearError();
-        
-    //   }, [])
-    // )
-
+    
+    
     const handleSubmit = async () => {
         try {
+          if (!address || !city || !workType) {
+            Alert.alert("Error", t('goeswrong'))
+            return;
+          }
           if (imageUri) {
             const imageKey = await uploadImageToS3(imageUri);
-            await onSubmit({ address, city, floorplanKey:imageKey });
+            await onSubmit({ address, city, floorplanKey:imageKey, worktype: workType });
           } else {
-            await onSubmit({ address, city });
+            await onSubmit({ address, city, worktype: workType });
           }
           // nollataan input kentät onnistunee lisäyksen jälkeen
           setAddress("");
           setCity("");
+          
           setImageUri(null);
         } catch (error) {
             console.log(error);
@@ -50,24 +53,9 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
       navigation.navigate(t("construction-site"))
       setAddress('');
       setCity('');
-      // setImageUri(null);
+      
     }
 
-    //ALAPUOLELLA OLI KUN LISÄTTIIN KUVA
-    // const handleSelectImage = async () => {
-    //   const permissionGranted = await requestMediaLibraryPermissions();
-    //   if (!permissionGranted) return;
-
-    //   const uri = await pickImage();
-    //   console.log("jurii",uri);
-    //   if (uri) {
-    //     setImageUri(uri);
-    //   }
-    // };
-
-    // const delImage = () => {
-    //   setImageUri(null);
-    // }
 
 
 
@@ -80,7 +68,16 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
 
             <Input style={styles.input} placeholder={t("worksiteform-city")} value={city} onChangeText={setCity} />
 
-            {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
+            <Picker
+              selectedValue={workType}
+              onValueChange={(itemValue, itemIndex) => setWorkType(itemValue)}
+            >
+              
+              <Picker.Item label={t('worksiteform-worktype-worksite')} value={t('worksiteform-worktype-worksite')} />
+              <Picker.Item label={t('worksiteform-worktype-privateClient')} value={t('worksiteform-worktype-privateClient')} />
+            </Picker>
+
+            
           <View style={styles.addWorksiteButtonContainer}>         
             <TouchableOpacity onPress={handeCancel} style={styles.button}>
               <Text style={{ color: "white" }}>{t("cancel")}</Text>

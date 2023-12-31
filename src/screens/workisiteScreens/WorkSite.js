@@ -5,13 +5,17 @@ import {Context as AuthContext} from '../../context/AuthContext'
 import DownloadScreen from "../../components/DownloadScreen";
 import { useTranslation } from "react-i18next";
 
-import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity, Pressable } from "react-native";
+import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity, Pressable, Dimensions } from "react-native";
 
 const WorkSite = ({navigation, route}) => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
+  const [showWorksites, setShowWorksites] = useState(false);
+  const [showSmallGigs, setShowSmallGigs] = useState(false);
   const { state, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext); 
   const {state: authState, fetchUser} = useContext(AuthContext);
+  
+  
 
   // // Käytetään päivittämään työmaalista nappia käyttämällä ota käyttöön jos tulee jotain tarvetta
   // const handler = () => {
@@ -49,54 +53,105 @@ const WorkSite = ({navigation, route}) => {
     return <DownloadScreen message="Haetaan työmaita" />;
   }
 
-  // Käytetään tätä FlatListissä, renderöimaan työmaat joita käyttäjällä on valtuudet nähä
+  // Käytetään tätä kun painetaan työmaat nappia, tämä tuo työmaat esille
+  const handeleShowWorksites = () => {
+    if (showSmallGigs) {
+      setShowSmallGigs(false);
+    }
+    setShowWorksites(prevState => !prevState )
+  }
+
+  const handleShowSmallGigs = () => {
+    if (showWorksites) {
+      setShowWorksites(false);
+    }
+    setShowSmallGigs(prevState => !prevState);
+  }
+
+
+  // Käytetään tätä FlatListissä, renderöimaan työmaat joita käyttäjällä on valtuudet nähdä
   const visibleWorksitesHandler = () => {
     // Suodatetaan työmaat, joissa käyttäjä on työntekijöiden listalla
-    const visibleWorksites = state.worksites.filter((worksite) => worksite.workers.includes(authState.user._id));
-    if (authState.user.role === "admin") { // Jos käyttäjällä on admin rooli niin palautetaan kaikki työmaat
-      
-      return state.worksites;
+    const visibleWorksites = state.worksites.filter((worksite) => 
+      authState.user.role === "admin" || worksite.workers.includes(authState.user._id)
+    );
 
-    } else {
-      return visibleWorksites;
-    }
-  }
+    // Erota työmaat tyypin perusteella
+    const tyomaat = visibleWorksites.filter(worksite => worksite.worktype === "Construction site");
+    const pikkukeikat = visibleWorksites.filter(worksite => worksite.worktype === "Private client");
+
+    return { tyomaat, pikkukeikat };
+  };
+
+  const { tyomaat, pikkukeikat } = visibleWorksitesHandler();
+
+  const renderWorksite = ({ item }) => (
+    <Pressable onPress={() => handlePressWorksite(item._id)} style={({pressed}) => pressed && styles.pressed}>
+      <View style={styles.worksiteItem}>
+        <View style={styles.worksiteContainer}>
+          <Text style={styles.worksiteText}>
+            {t("workistedetail-address")}: {item.address}
+          </Text>
+          <Text style={styles.worksiteText}>
+            {t("worksitedetail-city")}: {item.city}
+          </Text>
+          <Text style={styles.worksiteText}>
+            tyyppi: {item.worktype}
+          </Text>
+          {/* Voit lisätä muita tietoja täällä */}
+        </View>
+      </View>
+    </Pressable>
+  );
   
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>WorkSites</Text>
+      
+      
+      <View style={styles.selectJobtype}>
+        <TouchableOpacity onPress={handeleShowWorksites} style={[styles.jobTypeButton, showWorksites ? styles.selectedJobType: null]}>
+          <Text style={[styles.jobTypeButtonText, showWorksites ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-worksite')}s</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleShowSmallGigs} style={[styles.jobTypeButton, showSmallGigs ? styles.selectedJobType: null]}>
+          <Text style={[styles.jobTypeButtonText, showSmallGigs ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-privateClient')}s</Text>
+        </TouchableOpacity>
+      </View>
 
-      {state.worksites.length > 0 ? (
+      {showWorksites && (
+
+      tyomaat.length > 0 ? (
         <FlatList
-          data={visibleWorksitesHandler()}
-          renderItem={({ item }) => (
-
-            
-            
-            <Pressable onPress={() => handlePressWorksite(item._id)} style={({pressed}) => pressed && styles.pressed}>
-              <View style={styles.worksiteItem}>
-                <View style={styles.worksiteContainer}>
-                  <Text style={styles.worksiteText}>
-                    {t("workistedetail-address")}: {item.address}
-                  </Text>
-                  <Text style={styles.worksiteText}>
-                    {t("worksitedetail-city")}: {item.city}
-                  </Text>
-                  {/* Voit lisätä muita tietoja täällä */}
-                </View>
-              </View>
-            </Pressable>
-            
-          )}
-          keyExtractor={(worksite) => worksite._id}
+          data={tyomaat}
+          renderItem={renderWorksite}
+          keyExtractor={(worksite) => `tyomaa-${worksite._id}`}
+          
         />
       ) : (
         <Text style={styles.noWorksiteText}>{t("worksite-no-worksites")}</Text>
+      )
       )}
-      {/* <Button title="päivitä" onPress={handler} /> */}
+
+      {showSmallGigs && (
+
+      pikkukeikat.length > 0 ? (
+        <FlatList
+          data={pikkukeikat}
+          renderItem={renderWorksite}
+          keyExtractor={(worksite) => `pikkukeikka-${worksite._id}`}
+          
+          
+        />
+      ) : (
+        <Text style={styles.noWorksiteText}>{t("worksite-no-worksites")}</Text>
+      )
+      )}
     </View>
+ 
   );
 };
+
+
+const phoneHeight = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   pressed: {
@@ -104,7 +159,7 @@ const styles = StyleSheet.create({
   },
   container : {
     
-    marginBottom: 60,
+    height: phoneHeight,
     
     
   },
@@ -142,6 +197,37 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "gray",
   },
+  selectJobtype: {
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
+  jobTypeButton: {
+    backgroundColor: "#74777c",
+        padding: 10,
+        borderRadius: 5,
+        marginVertical: 10,
+        // width: "50%",
+        alignItems: "center",
+        alignSelf:'center',
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        flexDirection:'row'
+  },
+  selectedJobType: {
+    backgroundColor: "#507ab8",
+  },
+  jobTypeButtonText: {
+    color: 'white',
+  },
+  selectedJobTypeButtonText: {
+    color: '#ffffff'
+  }
 });
 
 export default WorkSite;
