@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import DownloadScreen from "./DownloadScreen";
 
 
-const CalendarModal = ({isVisible, onClose, onSave, title, date,setSelectedDate, setTitle, text,entries, setText, isEditing}) => {
+const CalendarModal = ({isVisible, onClose, onSave, title, date,setSelectedDate, setTitle, text,entries, setText, isEditing,isAdmin}) => {
 
     const { t } = useTranslation();
     const {state: worksiteState, saveCalendarEntry,fetchCalendarEntries,updateCalendarEntry, deleteCalendarEntry} = useContext(WorksiteContext)
@@ -127,9 +127,10 @@ const CalendarModal = ({isVisible, onClose, onSave, title, date,setSelectedDate,
                                             <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
                                                 <Text style={styles.markTitle}>{entry.title}</Text>
                                                 {/* <Button title="Poista" onPress={handleDelete(entry._id)}/> */}
-                                                <TouchableOpacity onPress={handleDelete(entry._id)}>
+                                                {isAdmin && <TouchableOpacity onPress={handleDelete(entry._id)}>
                                                     <Ionicons name="trash" size={20} />
-                                                </TouchableOpacity>
+                                                </TouchableOpacity>}
+                                                
                                             </View>
                                             <View>
                                                 <Text style={styles.markText}>{entry.text}</Text>

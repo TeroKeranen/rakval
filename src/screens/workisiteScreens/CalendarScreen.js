@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, Platform, TouchableOpacity } from "reac
 import { Calendar } from "react-native-calendars";
 import CalendarModal from "../../components/CalendarModal";
 import { Context as WorksiteContext } from "../../context/WorksiteContext"
+import { Context as AuthContext } from "../../context/AuthContext"
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -21,6 +22,9 @@ const CalendarScreen = () => {
     const [selectedEntries, setSelectedEntries] = useState([]); // Uusi tila valituille merkinnöille
 
     const {state: worksiteState, fetchCalendarEntries} = useContext(WorksiteContext);
+    const {state: authState} = useContext(AuthContext)
+    const isAdmin = authState.user.role === 'admin';
+    
     
 
     useEffect(() => {
@@ -168,6 +172,7 @@ const CalendarScreen = () => {
                 setText={setText}
                 isEditing={isEditing}
                 entries={selectedEntries}
+                isAdmin={isAdmin}
             />
             
         </View>
