@@ -61,7 +61,7 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
             <Tab.Screen name={t('calenderScreenNavigator')} component={CalendarScreen} options={{headerShown: false}} />
             
             
-            {isAdmin ? <Tab.Screen name={t('workers')} component={WorksiteWorkers} /> : null}
+            {isAdmin ? <Tab.Screen name={t('workers')} component={WorksiteWorkers} options={{headerShown: false}} /> : null}
             
         </Tab.Navigator>
     )
