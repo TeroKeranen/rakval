@@ -21,10 +21,13 @@ const MarkerinfoModal = ({isVisible, onClose, marker, onEdit, onDelete, isModalM
       >
         <View style={styles.modalView}>
           <View style={styles.delBtnContainer}>
-            <Text style={{ fontSize: 16 }}>{marker ? marker.created : ""}</Text>
-            <Text style={{ fontSize: 16 }}>
-              {t("floorplanscreen-markerModal-creator")}: {marker ? marker.creator : ""}
-            </Text>
+            <View>
+
+              <Text style={{ fontSize: 16 }}>{marker ? marker.created : ""}</Text>
+              <Text style={{ fontSize: 16 }}>
+                {t("floorplanscreen-markerModal-creator")}: {marker ? marker.creator : ""}
+              </Text>
+            </View>
             <TouchableOpacity onPress={onDelete}>
               <Ionicons name="trash" size={20} />
             </TouchableOpacity>

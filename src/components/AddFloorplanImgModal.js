@@ -45,6 +45,7 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
             
             setIsLoading(false);
             setImageUri(null);
+            setImageTitle('');
             onClose();
             
         } catch (error) {
@@ -75,7 +76,7 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
                     <TextInput 
                         onChangeText={setImageTitle}
                         value={imageTitle}
-                        placeholder="enter image title"
+                        placeholder={t('addFloorplanImgModalPlaceholder')}
                         style={styles.input}
                         />
                     {imageUri ? 
@@ -87,7 +88,7 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
                             </View>
 
                             <TouchableOpacity onPress={handelSaveImage} style={styles.button}>
-                            <Text style={{ color: "white" }}>tallenna kuva</Text>
+                            <Text style={{ color: "white" }}>{t('addFloorplanImgModalSave')}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={delImage}>

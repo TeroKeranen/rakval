@@ -50,7 +50,7 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
 
 
             <View style={styles.editModalTitleContainer}>
-              <Text style={styles.editModalTitle}>Muokkaa tietoja</Text>
+              <Text style={styles.editModalTitle}>{t('markerUpdatemodalTitle')}</Text>
             </View>
 
             

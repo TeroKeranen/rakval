@@ -129,6 +129,9 @@
 
   "calenderScreenNavigator": "Calendar",
   "calenderScreenAddNewMark": "Add entry",
-  "calenderScreenOpenEntries": "Open day's entries"
+  "calenderScreenOpenEntries": "Open day's entries",
+
+  "addFloorplanImgModalSave": "save",
+  "addFloorplanImgModalPlaceholder": "Enter title"
   
 }

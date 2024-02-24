@@ -129,7 +129,10 @@
 
   "calenderScreenNavigator": "Kalenteri",
   "calenderScreenAddNewMark": "lisää merkintä",
-  "calenderScreenOpenEntries": "Avaa päivän merkinnät"
+  "calenderScreenOpenEntries": "Avaa päivän merkinnät",
+
+  "addFloorplanImgModalSave": "Tallenna",
+  "addFloorplanImgModalPlaceholder": "Syötä otsikko"
   
 
   
