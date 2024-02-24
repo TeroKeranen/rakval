@@ -84,7 +84,7 @@ const Etusivu = ({navigation}) => {
     })
 
   if (isLoading) {
-    return <DownloadScreen message="ladataan" />
+    return <DownloadScreen message={t('loading')} />
   }
 
   return (

@@ -120,12 +120,15 @@ const WorkSite = ({navigation, route}) => {
       {showWorksites && (
 
       tyomaat.length > 0 ? (
-        <FlatList
-          data={tyomaat}
-          renderItem={renderWorksite}
-          keyExtractor={(worksite) => `tyomaa-${worksite._id}`}
-          
-        />
+        <View style={styles.woksiteContainer}>
+
+          <FlatList
+            data={tyomaat}
+            renderItem={renderWorksite}
+            keyExtractor={(worksite) => `tyomaa-${worksite._id}`}
+            
+            />
+        </View>
       ) : (
         <Text style={styles.noWorksiteText}>{t("worksite-no-worksites")}</Text>
       )
@@ -134,13 +137,16 @@ const WorkSite = ({navigation, route}) => {
       {showSmallGigs && (
 
       pikkukeikat.length > 0 ? (
-        <FlatList
-          data={pikkukeikat}
-          renderItem={renderWorksite}
-          keyExtractor={(worksite) => `pikkukeikka-${worksite._id}`}
-          
-          
-        />
+        <View style={styles.woksiteContainer}>
+
+          <FlatList
+            data={pikkukeikat}
+            renderItem={renderWorksite}
+            keyExtractor={(worksite) => `pikkukeikka-${worksite._id}`}
+            
+            
+            />
+        </View>
       ) : (
         <Text style={styles.noWorksiteText}>{t("worksite-no-worksites")}</Text>
       )
@@ -158,9 +164,14 @@ const styles = StyleSheet.create({
     opacity: 0.75,
   },
   container : {
-    
+    flex: 1,
     height: phoneHeight,
     
+    
+    
+  },
+  woksiteContainer: {
+    flex: 2,
     
   },
   worksiteItem: {

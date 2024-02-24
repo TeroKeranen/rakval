@@ -26,7 +26,7 @@ const CompanyScreen = ({ navigation }) => {
   const [city, setCity] = useState("");
 
   useEffect(() => {
-    console.log(authState.user.role);
+    
     const loadCompany = async () => {
       setIsLoading(true);
       // await fetchCompany();

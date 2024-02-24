@@ -302,6 +302,31 @@ useEffect(() => {
     };
   }, []);
 
+  const [imageSize, setImageSize] = useState({ width: 200, height: 400 }); // Alkuarvot
+
+  const handleImageLoad = (event) => {
+    const { width, height } = event.nativeEvent.source;
+
+    // Säädä kuvan kokoa säilyttäen kuvasuhde
+    const maxWidth = 300 // tai jokin muu maksimileveys
+    const maxHeight = 300; // tai jokin muu maksimikorkeus
+    let newWidth, newHeight;
+
+    if (width > maxWidth) {
+      newWidth = maxWidth;
+      newHeight = (height / width) * maxWidth;
+    } else if (height > maxHeight) {
+      newHeight = maxHeight;
+      newWidth = (width / height) * maxHeight;
+    } else {
+      newWidth = width;
+      newHeight = height;
+    }
+
+    setImageSize({ width: newWidth, height: newHeight });
+  };
+
+
 
 
   const renderFloorplanItem = ({ item,index }) => {
@@ -317,9 +342,9 @@ useEffect(() => {
           </View>
           <ImageZoom 
             cropWidth={Dimensions.get("window").width}
-            cropHeight={500} // Muokkaa korkeutta tarpeen mukaan
-            imageWidth={300} // Muokkaa leveyttä tarpeen mukaan
-            imageHeight={300}
+            cropHeight={700} // Muokkaa korkeutta tarpeen mukaan
+            imageWidth={imageSize.width}
+            imageHeight={imageSize.height}
             panToMove={true}
             pinchToZoom={true}
             onMove={handleMove}
@@ -328,15 +353,16 @@ useEffect(() => {
               
               
               <Image 
-              style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]}
+              style={[{ width: '100%', height: '100%', resizeMode: 'cover' }, isSelected ? styles.selectedImage : {}]}
               source={{ uri: `${FLOORPLAN_PHOTO_URL}${item.key}` }}
+              onLoad={handleImageLoad}
               />
               
               ) : (
                 
                 <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
                     
-                      <Image style={[{ width: 300, height: 300 }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item.key}` }} />
+                      <Image style={[{ width: '100%', height: '100%', resizeMode: 'cover' }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item.key}` }} onLoad={handleImageLoad} />
                       
                     
                   </TouchableOpacity>
@@ -367,7 +393,7 @@ useEffect(() => {
   // const imageUri = state.currentWorksite.markers.imageUri;
   if (isLoading) {
     return (
-      <DownloadScreen message="ladataan"/>
+      <DownloadScreen message={t('loading')}/>
     )
   }
 

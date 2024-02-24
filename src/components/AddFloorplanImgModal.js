@@ -58,7 +58,7 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
 
       if (isLoading) {
         return (
-            <DownloadScreen message="ladataan" />
+            <DownloadScreen message={t('loading')} />
         )
       }
 

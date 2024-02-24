@@ -43,7 +43,7 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
            
             
             {isLoading ? (
-              <DownloadScreen message="ladataan" />
+              <DownloadScreen message={t('loading')} />
             ) : 
 
             <View style={styles.modalView}>

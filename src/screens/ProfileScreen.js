@@ -64,7 +64,7 @@ const ProfileScreen = ({navigation}) => {
 
   // Latauskuvake jos etsii tietoja
   if (isLoading) {
-    <DownloadScreen message="ladataan" />
+    <DownloadScreen message={t('loading')} />
   }
 
   return (

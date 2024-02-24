@@ -123,7 +123,7 @@ const WorksiteWorkers = () => {
         </View>
     );
     if (isLoading) {
-      return <DownloadScreen message="Ladataan" />
+      return <DownloadScreen message={t('loading')} />
     }
     return (
       <View style={styles.container}>

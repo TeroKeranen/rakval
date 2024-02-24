@@ -15,6 +15,9 @@
   "cancel": "Peruuta",
   "goeswrong": "Jotain meni väärin",
   "goBack": "Takaisin",
+  "title": "Otsikko",
+  "text": "Teksti",
+  "save": "Tallenna",
   
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
@@ -124,7 +127,10 @@
   "verificationCode": "Vahvistuskoodi",
   "verification": "Vahvista",
 
-  "calenderScreenNavigator": "Kalenteri"
+  "calenderScreenNavigator": "Kalenteri",
+  "calenderScreenAddNewMark": "lisää merkintä",
+  "calenderScreenOpenEntries": "Avaa päivän merkinnät"
+  
 
   
 }
