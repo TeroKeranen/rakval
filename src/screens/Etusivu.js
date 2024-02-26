@@ -74,7 +74,7 @@ const Etusivu = ({navigation}) => {
     : events.filter(event => {
       const translatedType = translateEventType(event.type).toLowerCase();
       return (
-        event.user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.user?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.worksite.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
         translatedType.includes(searchTerm.toLocaleLowerCase()) ||
         timeStampChanger(event.timestamp).includes(searchTerm)
@@ -153,7 +153,7 @@ const Etusivu = ({navigation}) => {
                 {item.calendarDate && 
                   <Text style={styles.text}>Kalenteri pvm: {item.calendarDate}</Text>
                 }
-                <Text style={styles.text}>Käyttäjä: {item.user.email}</Text>
+                <Text style={styles.text}>Käyttäjä: {item.user?.email}</Text>
               </View>
 
           </View>

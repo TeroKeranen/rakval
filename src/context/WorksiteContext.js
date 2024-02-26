@@ -34,7 +34,7 @@ const worksiteReducer = (state, action) => {
         return { ...state, errorMessage: action.payload };
       case "clear_worksites":
         console.log("suoritetaan clear_worksites");
-        return { ...state, worksites: [] };
+        return { ...state, worksites: [], errorMessage: "" };
       case "reset_current_worksite":
         console.log("suoritetaan reset_current_worksite");
         return { ...state, currentWorksite: [] };
@@ -218,41 +218,23 @@ const fetchWorksites = (dispatch) => {
       
       const response = await makeApiRequest('worksites', 'get', null, dispatch)
       
-      // const response = await rakval.get("/worksites", {
-      //   headers: {
-      //     Authorization: authHeader,
-      //   },
-      // });
+      if (response && response.data) {
+
+        dispatch({ type: "fetch_worksites", payload: response.data });
+      } else {
+        
+        dispatch({type:'set_error', payload: "No data"})
+      }
       
-      dispatch({ type: "fetch_worksites", payload: response.data });
       
     } catch (error) {
       
-      if (error.response) {
-        switch (error.response.status) {
-          case 400:
-            // Käyttäjällä ei ole yritystä, ei tarvitse asettaa virheviestiä, voitaisiin ohjata luomaan yritys tai liittymään yritykseen
-            console.log("Käyttäjällä ei ole yritystä, ei haeta työmaita.");
-            break;
-            // Lisää muita koodin käsittelyjä tarvittaessa
-            default:
-            dispatch({ type: "set_error", payload: "jotain meni vikaan (työmaitten hauan kanssa)" });
-        }
-      } else {
-        // Jos virhe ei ole HTTP-virhe, käsittele se yleisenä virheenä
-        dispatch({ type: "set_error", payload: "Yleinen virhe työmaita haettaessa" });
-      }
-      console.log(error);
+      console.log("fetchworksitesError", error);
       
-      // if (error.response && error.response.status === 400 && error.response.data.error === "Käyttäjällä ei ole yritystä2") {
-        //   console.log("Käyttäjällä ei ole yritystä, ei haeta työmaita.");
-// } else {
-          
-          //   dispatch({type: 'set_error', payload: "jotain meni vikaan (työmaitten hauan kanssa)"})
-          // }
-          // console.log(error);
-        }
-      };
+      
+    
+      }
+    };
 };
 
 

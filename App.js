@@ -40,19 +40,19 @@ const Stack = createNativeStackNavigator();
 // päästack 
 function MainStack() {
 
-  // const { state, tryLocalSignin, fetchUser } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
+  const { state, tryLocalSignin, fetchUser } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
  
   const { t } = useTranslation();
 
-  // useEffect(() => {
+  useEffect(() => {
     
-  //   const checkAuthState = async () => {
+    const checkAuthState = async () => {
       
-  //     await fetchUser();
+      await fetchUser();
       
-  //   };
-  //   checkAuthState();
-  // }, []);
+    };
+    checkAuthState();
+  }, []);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -79,6 +79,12 @@ function MainStack() {
 
 // Tämä renderöidään appin sisällä jos käyttäjä löytyy
 function SignedInNavigator() {
+  const { state, tryLocalSignin, fetchUser } = useContext(AuthContext);
+  const isVerified = state?.user?.isVerified;
+  
+  
+  
+
   return (
     <Stack.Navigator screenOptions={{
       headerShown: false,
@@ -96,11 +102,9 @@ function App() {
   
   const { state, tryLocalSignin, fetchUser } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
   const [loading, setLoading] = useState(true); // asetetaan loading
-  // const {migrateToken} = useContext(AuthContext)
-
-  // useEffect(() => {
-  //   migrateToken()
-  // },[])
+  
+  const isVerified = state?.user?.isVerified;
+  
 
   useEffect(() => {
     
@@ -115,10 +119,13 @@ function App() {
   if (loading) {
     return <ResolveAuthScreen />
   }
+  
  
   return (
     <NavigationContainer>
       <Stack.Screen name="resolveAuth" component={ResolveAuthScreen} />
+      
+      
       
       {state.token == null ? <SignedOutNavigator /> : <SignedInNavigator />}
     </NavigationContainer>

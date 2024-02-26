@@ -27,7 +27,7 @@ export const makeApiRequest = async (endpoint, method, data, dispatch) => {
         } else if (error.response && error.response.status === 422) {
           return {success:false, message: error.response.data.error || "tapahtui virhe"}
         } else {
-          throw error;
+          return {success:false, message: error.response.data.error || "tapahtui virhe"}
         }
       }
     } catch (error) {

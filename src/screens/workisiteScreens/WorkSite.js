@@ -14,6 +14,11 @@ const WorkSite = ({navigation, route}) => {
   const [showSmallGigs, setShowSmallGigs] = useState(false);
   const { state, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext); 
   const {state: authState, fetchUser} = useContext(AuthContext);
+
+  const errorMessage = state.errorMessage;
+
+  console.log("ERRORMESSAGE", errorMessage)
+  
   
   
 
@@ -50,7 +55,10 @@ const WorkSite = ({navigation, route}) => {
 
   // Jos
   if (isLoading) {
-    return <DownloadScreen message="Haetaan työmaita" />;
+    return <DownloadScreen message={t('loading')} />;
+  }
+  if (errorMessage) {
+    return <DownloadScreen message={t('loading')} />;
   }
 
   // Käytetään tätä kun painetaan työmaat nappia, tämä tuo työmaat esille
@@ -116,6 +124,8 @@ const WorkSite = ({navigation, route}) => {
           <Text style={[styles.jobTypeButtonText, showSmallGigs ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-privateClient')}</Text>
         </TouchableOpacity>
       </View>
+
+      {/* {errorMessage && <DownloadScreen message={t('loading')}/>} */}
 
       {showWorksites && (
 
