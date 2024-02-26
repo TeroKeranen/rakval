@@ -17,6 +17,7 @@ const SignedOutNavigator = () => {
       
       
       
+      
       {/* muut ruudut, jos niitä on */}
     </Stack.Navigator>
   );

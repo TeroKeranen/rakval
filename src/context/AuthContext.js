@@ -15,7 +15,7 @@ const authReducer = (state, action) => {
     case "add_error":
       return { ...state, errorMessage: action.payload };
     case "signup":
-      return { errorMessage: "", token: action.payload.accessToken, user: action.payload.user };
+      return { ...state,errorMessage: "", token: action.payload.token, user: action.payload.user };
     // case "signin":
     //   return {errorMessage: "", token: action.payload.token, user:action.payload.user};
     case "signin": 
@@ -72,8 +72,9 @@ const signup = (dispatch) => {
       
       const response = await rakval.post("/signup", { email, password });
       const {accessToken, refreshToken} = response.data
-      await SecureStore.setItemAsync("token", response.data.accessToken);
-      await SecureStore.setItemAsync("refreshToken", response.data.refreshToken)
+
+      await SecureStore.setItemAsync('token', accessToken);
+      await SecureStore.setItemAsync("refreshToken", refreshToken)
       // await AsyncStorage.setItem("token", response.data.token);
       await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
       

@@ -59,13 +59,10 @@ const MainDrawerNavigator = () => {
       setModalVisible(!modalVisible);
     };
 
-    console.log("Tehty tunnus ja mennään mainDrawerNavigatoriin")
-    console.log("isverified", isVerified)
-
 
     const isAdmin = state.user && state.user.role === "admin";
     const isVerified = state.user?.isVerified; 
-    const isUser = state.user;
+    
     const hasCompany = state.user && state.user.company;
 
    

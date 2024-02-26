@@ -18,6 +18,8 @@ const VerificationScreen = ({navigation}) => {
         
     },[authState.user, authState.email])
 
+
+   
     
 
     const verifycode = async () => {
@@ -41,8 +43,7 @@ const VerificationScreen = ({navigation}) => {
 
     }
 
-    
-
+  
 
     return (
         <View style={styles.container}>
@@ -50,6 +51,7 @@ const VerificationScreen = ({navigation}) => {
 
                 <View style={styles.goback}>
                     <TouchableOpacity style={styles.button} onPress={() => signout()}>
+                    {/* <TouchableOpacity style={styles.button} onPress={handleSignout}> */}
                         <Ionicons name="arrow-back-outline" size={20} color={'white'} />
                         <Text style={{color: 'white'}}>{t('goBack')}</Text>
                     </TouchableOpacity>

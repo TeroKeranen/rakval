@@ -37,6 +37,7 @@ const SignupScreen = ({navigation}) => {
       
       
       Alert.alert(t('signup-alert-vericode-attention'), t('signup-alert-vericode'));
+      // navigation.navigate('verification');
       
     } catch (error) {
       console.log("handleSingup",error)
