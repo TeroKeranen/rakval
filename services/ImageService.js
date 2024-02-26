@@ -39,12 +39,12 @@ const uploadImageToS3 = async (imageUri) => {
       .then((result) => {
         
         let awsImageUrl = result.substring(0, result.indexOf('?'))
-        console.log("result after removed ", awsImageUrl)
+        
       })
     })
     ;
 
-    console.log("Image uploaded:", key);
+    
     return key; // Palauta avain (key), jotta voit viitata kuvaan myöhemmin
   } catch (error) {
     console.error("Image upload error:", error);

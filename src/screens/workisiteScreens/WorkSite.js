@@ -110,10 +110,10 @@ const WorkSite = ({navigation, route}) => {
       
       <View style={styles.selectJobtype}>
         <TouchableOpacity onPress={handeleShowWorksites} style={[styles.jobTypeButton, showWorksites ? styles.selectedJobType: null]}>
-          <Text style={[styles.jobTypeButtonText, showWorksites ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-worksite')}s</Text>
+          <Text style={[styles.jobTypeButtonText, showWorksites ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-worksite')}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleShowSmallGigs} style={[styles.jobTypeButton, showSmallGigs ? styles.selectedJobType: null]}>
-          <Text style={[styles.jobTypeButtonText, showSmallGigs ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-privateClient')}s</Text>
+          <Text style={[styles.jobTypeButtonText, showSmallGigs ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-privateClient')}</Text>
         </TouchableOpacity>
       </View>
 

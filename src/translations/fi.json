@@ -132,7 +132,8 @@
   "calenderScreenOpenEntries": "Avaa päivän merkinnät",
 
   "addFloorplanImgModalSave": "Tallenna",
-  "addFloorplanImgModalPlaceholder": "Syötä otsikko"
+  "addFloorplanImgModalPlaceholder": "Syötä otsikko",
+  "addFloorplanImgModalTitleError": "Syötä otsikko"
   
 
   

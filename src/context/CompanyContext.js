@@ -3,6 +3,8 @@ import createDataContext from "./createDataContext";
 import rakval from "../api/rakval";
 import { navigate, resetAndNavigate } from "../navigationRef";
 import {TOKEN_REPLACE} from '@env'
+import * as SecureStore from 'expo-secure-store';
+import { makeApiRequest, refreshAccessToken } from "../api/refreshToken";
 
 
 
@@ -34,13 +36,15 @@ const fetchCompany = (dispatch) => {
   return async () => {
     try {
           
-          const token = await AsyncStorage.getItem("token");
-          const authHeader = `${TOKEN_REPLACE} ${token}`;
-          const response = await rakval.get("/company", {
-            headers: {
-              Authorization: authHeader,
-            },
-          });
+          // const token = await AsyncStorage.getItem("token");
+          // const token = await SecureStore.getItemAsync('token');
+          // const authHeader = `${TOKEN_REPLACE} ${token}`;
+          const response = await makeApiRequest('/company', 'get', null, dispatch);
+          // const response = await rakval.get("/company", {
+          //   headers: {
+          //     Authorization: authHeader,
+          //   },
+          // });
           
           dispatch({ type: "fetch_company", payload: response.data });
         } catch (error) {
@@ -54,13 +58,15 @@ const fetchWorkers = (dispatch) => {
   return async (companyId) => {
     try {
       
-      const token = await AsyncStorage.getItem('token');
-      const authHeader = `${TOKEN_REPLACE} ${token}`;
-      const response = await rakval.get(`/company/${companyId}/users`, {
-        headers: {
-          Authorization: authHeader
-        }
-      })
+      // const token = await AsyncStorage.getItem('token');
+      // const token = await SecureStore.getItemAsync('token');
+      // const authHeader = `${TOKEN_REPLACE} ${token}`;
+      const response = await makeApiRequest(`/company/${companyId}/users`, 'get', null, dispatch)
+      // const response = await rakval.get(`/company/${companyId}/users`, {
+      //   headers: {
+      //     Authorization: authHeader
+      //   }
+      // })
       
       dispatch({type: 'set_workers', payload: response.data})
     } catch (error) {
@@ -73,21 +79,15 @@ const fetchWorkers = (dispatch) => {
 const createCompany = (dispatch) => {
     return async ({name, address, city, code}) => {
         try {
-            //   console.log("Lähetettävät tiedot:", { name, address, city, code });
-            const token = await AsyncStorage.getItem('token');
-            const authHeader = `${TOKEN_REPLACE} ${token}`;
-            const response = await rakval.post('/createCompany', {name, address, city,code}, {
-                headers: {
-                    Authorization: authHeader
-                }
-            })
             
+            const response = await makeApiRequest('/createCompany', 'post', {name,address,city,code}, dispatch)
             
-            // const updatedUser = response.data.user;
-            // console.log("testiuser", updatedUser)
-            // await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
-            
-            dispatch({type: 'add_company', payload: response.data})
+            if (response.success) {
+              
+              dispatch({type: 'add_company', payload: response.data})
+            } else {
+              dispatch({type:'set_error', payload: response.message})
+            }
 
             
             

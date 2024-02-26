@@ -24,6 +24,8 @@ const CalendarScreen = () => {
     const {state: worksiteState, fetchCalendarEntries} = useContext(WorksiteContext);
     const {state: authState} = useContext(AuthContext)
     const isAdmin = authState.user.role === 'admin';
+    const token = authState;
+    
     
     
 

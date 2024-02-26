@@ -132,6 +132,7 @@
   "calenderScreenOpenEntries": "Open day's entries",
 
   "addFloorplanImgModalSave": "save",
-  "addFloorplanImgModalPlaceholder": "Enter title"
+  "addFloorplanImgModalPlaceholder": "Enter a title",
+  "addFloorplanImgModalTitleError": "Enter a title"
   
 }

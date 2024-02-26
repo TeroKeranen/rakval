@@ -70,7 +70,7 @@ const WorksiteDetails = ({route, navigation}) => {
     
     // Haetaan käyttäjän id
     const userId = authState.user._id;
-    console.log("stkksks", state.worksites);
+    
     
 
     // Etsitään onko käyttäjällä missään työmaalla työpäivä käynnissä

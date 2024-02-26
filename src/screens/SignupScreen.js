@@ -33,7 +33,7 @@ const SignupScreen = ({navigation}) => {
 
     try {
       const response = await signup({email, password});
-      console.log("handleSignUp", response)
+      
       Alert.alert(t('signup-alert-vericode-attention'), t('signup-alert-vericode'));
       
     } catch (error) {

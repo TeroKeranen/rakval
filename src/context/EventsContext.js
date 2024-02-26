@@ -2,6 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import createDataContext from "./createDataContext";
 import rakval from "../api/rakval";
 import {TOKEN_REPLACE} from '@env'
+import * as SecureStore from 'expo-secure-store';
+import { makeApiRequest, refreshAccessToken } from "../api/refreshToken";
 
 
 const eventsReducer = (state, action) => {
@@ -28,13 +30,15 @@ const clearEvents = (dispatch) => {
 const fetchEvents = (dispatch) => async () => {
     try {
         
-        const token = await AsyncStorage.getItem('token');
-        const authHeader = `${TOKEN_REPLACE} ${token}`;
-        const response = await rakval.get('/events', {
-            headers: {
-                Authorization: authHeader,
-            },
-        });
+        // const token = await AsyncStorage.getItem('token');
+        // const token = await SecureStore.getItemAsync('token');
+        // const authHeader = `${TOKEN_REPLACE} ${token}`;
+        const response = await makeApiRequest('/events', 'get', null, dispatch)
+        // const response = await rakval.get('/events', {
+        //     headers: {
+        //         Authorization: authHeader,
+        //     },
+        // });
         
         dispatch({type: "fetch_events", payload: response.data})
 

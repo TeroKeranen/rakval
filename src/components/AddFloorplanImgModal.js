@@ -1,4 +1,4 @@
-import { Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
 import { useTranslation } from "react-i18next";
@@ -41,6 +41,9 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
                 
                 await floorplankeySend(worksiteState.currentWorksite._id, floorplan);
                 onUpdate && onUpdate(floorplan);
+            }
+            if (!imageTitle) {
+                Alert.alert("Error", t('addFloorplanImgModalTitleError'))
             }
             
             setIsLoading(false);

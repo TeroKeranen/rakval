@@ -96,12 +96,17 @@ function App() {
   
   const { state, tryLocalSignin, fetchUser } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
   const [loading, setLoading] = useState(true); // asetetaan loading
+  // const {migrateToken} = useContext(AuthContext)
+
+  // useEffect(() => {
+  //   migrateToken()
+  // },[])
 
   useEffect(() => {
     
     const checkAuthState = async () => {
       await tryLocalSignin();
-      await fetchUser();
+      // await fetchUser();
       setLoading(false);
     };
     checkAuthState();

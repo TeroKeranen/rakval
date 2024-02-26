@@ -4,6 +4,8 @@ import rakval from "../api/rakval";
 import { navigate, resetAndNavigate } from "../navigationRef";
 import { useTranslation } from "react-i18next";
 import {TOKEN_REPLACE} from '@env'
+import * as SecureStore from 'expo-secure-store';
+import { makeApiRequest, refreshAccessToken } from "../api/refreshToken";
 
 
 
@@ -153,14 +155,18 @@ const deleteWorksite = (dispatch) => {
     return async (worksiteId, callback) => {
       
     try {
-      const token = await AsyncStorage.getItem('token');
-      const authHeader = `${TOKEN_REPLACE} ${token}`;
+      // const token = await AsyncStorage.getItem('token');
+      // const token = await SecureStore.getItemAsync('token');
       
-      await rakval.delete(`/worksites/${worksiteId}`, {
-        headers: {
-          Authorization: authHeader
-        }
-      })
+      // const authHeader = `${TOKEN_REPLACE} ${token}`;
+
+      await makeApiRequest(`/worksites/${worksiteId}`, "delete", null, dispatch);
+      
+      // await rakval.delete(`/worksites/${worksiteId}`, {
+      //   headers: {
+      //     Authorization: authHeader
+      //   }
+      // })
       if (callback) {
         callback();
       }
@@ -178,17 +184,18 @@ const deleteWorksite = (dispatch) => {
 const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
   
   try {
-    const token = await AsyncStorage.getItem("token");
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
-    if (token) {
-      const response = await rakval.get(`/worksites/${worksiteId}`, {
-        headers: {
-          Authorization: authHeader,
-        },
-      });
+    // const token = await AsyncStorage.getItem("token");
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+      const response = await makeApiRequest(`/worksites/${worksiteId}`, 'get', null, dispatch);
+      // const response = await rakval.get(`/worksites/${worksiteId}`, {
+      //   headers: {
+      //     Authorization: authHeader,
+      //   },
+      // });
       
       dispatch({ type: "set_current_worksite", payload: response.data });
-    }
+    
     
   } catch (error) {
     dispatch({ type: "set_error", payload: "työmään tietojen haku epäonnistui" });
@@ -202,19 +209,20 @@ const fetchWorksites = (dispatch) => {
     return async () => {
     try {
       
-      const token = await AsyncStorage.getItem("token");
-      const authHeader = `${TOKEN_REPLACE} ${token}`;
+      // const token = await AsyncStorage.getItem("token");
+      // const token = await SecureStore.getItemAsync('token');
+      // const authHeader = `${TOKEN_REPLACE} ${token}`;
       const userJson = await AsyncStorage.getItem('user');
       
       const user = JSON.parse(userJson);
       
+      const response = await makeApiRequest('worksites', 'get', null, dispatch)
       
-      
-      const response = await rakval.get("/worksites", {
-        headers: {
-          Authorization: authHeader,
-        },
-      });
+      // const response = await rakval.get("/worksites", {
+      //   headers: {
+      //     Authorization: authHeader,
+      //   },
+      // });
       
       dispatch({ type: "fetch_worksites", payload: response.data });
       
@@ -253,15 +261,17 @@ const fetchWorksites = (dispatch) => {
         
     try {
       
-      const token = await AsyncStorage.getItem("token");
-      const authHeader = `${TOKEN_REPLACE} ${token}`;
-      const response = await rakval.post(`/worksites/${worksiteId}/add-worker`,{ workerId },
-            {
-              headers: {
-                Authorization: authHeader,
-                  },
-            }
-        );
+      // const token = await AsyncStorage.getItem("token");
+      // const token = await SecureStore.getItemAsync('token');
+      // const authHeader = `${TOKEN_REPLACE} ${token}`;
+      const response = await makeApiRequest(`/worksites/${worksiteId}/add-worker`, 'post', {workerId}, dispatch);
+      // const response = await rakval.post(`/worksites/${worksiteId}/add-worker`,{ workerId },
+      //       {
+      //         headers: {
+      //           Authorization: authHeader,
+      //             },
+      //       }
+      //   );
         
       dispatch({ type: "update_worksite", payload: response.data });
                   
@@ -274,11 +284,13 @@ const fetchWorksites = (dispatch) => {
 const deleteWorkerFromWorksite = (dispatch) => {
     return async (worksiteId, workerId) => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      const authHeader = `${TOKEN_REPLACE} ${token}`;
-      await rakval.delete(`/worksites/${worksiteId}/workers/${workerId}`, {
-        headers: { Authorization: authHeader },
-      });
+      // const token = await AsyncStorage.getItem("token");
+      // const token = await SecureStore.getItemAsync('token');
+      // const authHeader = `${TOKEN_REPLACE} ${token}`;
+      await makeApiRequest(`/worksites/${worksiteId}/workers/${workerId}`, 'delete', null, dispatch)
+      // await rakval.delete(`/worksites/${worksiteId}/workers/${workerId}`, {
+      //   headers: { Authorization: authHeader },
+      // });
       // Päivitä worksiteState sen jälkeen kun työntekijä on poistettu
       dispatch({ type: "delete_worker_from_worksite", payload: { worksiteId, workerId } });
     } catch (error) {
@@ -294,15 +306,19 @@ const newWorksite = (dispatch) => {
     const { t } = useTranslation();
     return async ({address, city, floorplanKey,worktype, navigation }) => {
         try {
-            const token = await AsyncStorage.getItem('token')
-            const authHeader = `${TOKEN_REPLACE} ${token}`;
-            const response = await rakval.post('/worksites', {address, city, floorplanKey,worktype}, {
-                headers: {
-                    Authorization: authHeader,
+            // const token = await AsyncStorage.getItem('token')
+            // const token = await SecureStore.getItemAsync('token');
+            // const authHeader = `${TOKEN_REPLACE} ${token}`;
+
+            const response = await makeApiRequest('/worksites', 'post', {address,city,floorplanKey, worktype}, dispatch)
+
+            // const response = await rakval.post('/worksites', {address, city, floorplanKey,worktype}, {
+            //     headers: {
+            //         Authorization: authHeader,
                     
                     
-                }
-            })
+            //     }
+            // })
             
             
             dispatch({type: 'add_worksite', payload:response.data})
@@ -322,14 +338,16 @@ const newWorksite = (dispatch) => {
 const floorplankeySend = (dispatch) => async (worksiteId, floorplan) => {
   try {
     
-    const token = await AsyncStorage.getItem('token')
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
-
-    const response = await rakval.post(`/worksites/${worksiteId}/floorplan`, floorplan, {
-      headers: {
-        Authorization: authHeader
-      }
-    })
+    // const token = await AsyncStorage.getItem('token')
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+    
+    const response = await makeApiRequest(`worksites/${worksiteId}/floorplan`, 'post', floorplan, dispatch)
+    // const response = await rakval.post(`/worksites/${worksiteId}/floorplan`, floorplan, {
+    //   headers: {
+    //     Authorization: authHeader
+    //   }
+    // })
     dispatch({type: 'add_worksite_floorplan', payload:{worksiteId, floorplanKey: response.data.floorplanKey}})
   } catch (error) {
     
@@ -341,15 +359,16 @@ const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
   
     try {
     
-    const token = await AsyncStorage.getItem("token");
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
-  
-    const response = await rakval.post(`/worksites/${worksiteId}/add-marker`, markerData, {
-      headers: {
+    // const token = await AsyncStorage.getItem("token");
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await makeApiRequest(`/worksites/${worksiteId}/add-marker`, 'post', markerData, dispatch);
+    // const response = await rakval.post(`/worksites/${worksiteId}/add-marker`, markerData, {
+    //   headers: {
         
-        Authorization: authHeader
-          }
-        })
+    //     Authorization: authHeader
+    //       }
+    //     })
           
           dispatch({ type: "add_markers", payload: response.data });
   } catch (error) {
@@ -363,11 +382,13 @@ const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
 const updateMarker = (dispatch) => async (worksiteId, markerId, updatedMarkerData, t) => {
     
     try {
-    const token = await AsyncStorage.getItem('token');
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
-    const response = await rakval.put(`/worksites/${worksiteId}/markers/${markerId}`, updatedMarkerData, {
-      headers: {Authorization: authHeader}
-    })
+    // const token = await AsyncStorage.getItem('token');
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await makeApiRequest(`/worksites/${worksiteId}/markers/${markerId}`, 'put', updatedMarkerData, dispatch)
+    // const response = await rakval.put(`/worksites/${worksiteId}/markers/${markerId}`, updatedMarkerData, {
+    //   headers: {Authorization: authHeader}
+    // })
     dispatch({type: 'update_marker', payload: {markerId, updateMarker: response.data}})
   } catch (error) {
     dispatch({type: 'set_error', payload: 'jotai meni vikaan'})
@@ -378,14 +399,17 @@ const updateMarker = (dispatch) => async (worksiteId, markerId, updatedMarkerDat
 const deleteMarker = (dispatch) => async (worksiteId, markerId,markerNumber) => {
   
   try {
-    const token = await AsyncStorage.getItem('token');
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    // const token = await AsyncStorage.getItem('token');
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+
     const queryString = `markerNumber=${markerNumber}`;
-    await rakval.delete(`/worksites/${worksiteId}/remove-marker/${markerId}?${queryString}`, {
-      headers: {
-        Authorization: authHeader
-      }
-    })
+    await makeApiRequest(`/worksites/${worksiteId}/remove-marker/${markerId}?${queryString}`, 'delete', null, dispatch);
+    // await rakval.delete(`/worksites/${worksiteId}/remove-marker/${markerId}?${queryString}`, {
+    //   headers: {
+    //     Authorization: authHeader
+    //   }
+    // })
     dispatch({type: "delete_marker", payload: {markerId}})
   } catch (error) {
     console.log("deletemarkerERROR",error);
@@ -395,13 +419,15 @@ const deleteMarker = (dispatch) => async (worksiteId, markerId,markerNumber) => 
 const startWorkDay = (dispatch) => async (worksiteId,userId) => {
    
   try {
-    const token = await AsyncStorage.getItem('token');
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
-    const response = await rakval.post(`/worksites/${worksiteId}/startday`,{userId}, {
-      headers: {
-        Authorization: authHeader
-      }
-    })
+    // const token = await AsyncStorage.getItem('token');
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await makeApiRequest(`/worksites/${worksiteId}/startday`, 'post', {userId}, dispatch)
+    // const response = await rakval.post(`/worksites/${worksiteId}/startday`,{userId}, {
+    //   headers: {
+    //     Authorization: authHeader
+    //   }
+    // })
     
     dispatch({ type: 'start_work_day', payload: response.data });
   } catch (error) {
@@ -410,11 +436,13 @@ const startWorkDay = (dispatch) => async (worksiteId,userId) => {
 }
 const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
     try {
-    const token = await AsyncStorage.getItem('token');
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
-    const response = await rakval.post(`/worksites/${worksiteId}/endday`, { workDayId }, {
-      headers: { Authorization: authHeader }
-    });
+    // const token = await AsyncStorage.getItem('token');
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await makeApiRequest(`/worksites/${worksiteId}/endday`, 'post', {workDayId}, dispatch)
+    // const response = await rakval.post(`/worksites/${worksiteId}/endday`, { workDayId }, {
+    //   headers: { Authorization: authHeader }
+    // });
 
     dispatch({ type: 'end_work_day', payload: response.data });
   } catch (error) {
@@ -425,13 +453,15 @@ const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
 
 const saveCalendarEntry = (dispatch) => async (worksiteId, date,title,text) => {
   try {
-    const token = await AsyncStorage.getItem('token');
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
-    const response = await rakval.post(`/worksites/${worksiteId}/calendar-entry`, {date, title, text}, {
-      headers: {
-        Authorization: authHeader
-      }
-    })
+    // const token = await AsyncStorage.getItem('token');
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await makeApiRequest(`/worksites/${worksiteId}/calendar-entry`, 'post', {date,title,text}, dispatch)
+    // const response = await rakval.post(`/worksites/${worksiteId}/calendar-entry`, {date, title, text}, {
+    //   headers: {
+    //     Authorization: authHeader
+    //   }
+    // })
     dispatch({type:'add_calendar_entry', payload: response.data})
   } catch (error) {
     
@@ -440,13 +470,15 @@ const saveCalendarEntry = (dispatch) => async (worksiteId, date,title,text) => {
 
 const fetchCalendarEntries = (dispatch) => async (worksiteId) => {
   try {
-    const token = await AsyncStorage.getItem('token');
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
-    const response = await rakval.get(`/worksites/${worksiteId}/calendar-entries`, {
-      headers: {
-        Authorization: authHeader
-      }
-    })
+    // const token = await AsyncStorage.getItem('token');
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await makeApiRequest(`/worksites/${worksiteId}/calendar-entries`, 'get', null, dispatch);
+    // const response = await rakval.get(`/worksites/${worksiteId}/calendar-entries`, {
+    //   headers: {
+    //     Authorization: authHeader
+    //   }
+    // })
     
       dispatch({ type: 'set_calendar_entries', payload: response.data });
     
@@ -458,13 +490,15 @@ const fetchCalendarEntries = (dispatch) => async (worksiteId) => {
 const updateCalendarEntry = (dispatch) => async (worksiteId, entryId, date,title,text) => {
 
   try {
-    const token = await AsyncStorage.getItem('token');
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
-    const response = await rakval.put(`/worksites/${worksiteId}/calendar-entry/${entryId}`, {date, title, text},{
-      headers:{
-        Authorization: authHeader
-      }
-    })
+    // const token = await AsyncStorage.getItem('token');
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+    const response = await makeApiRequest(`/worksites/${worksiteId}/calendar-entry/${entryId}`, 'put', {date,title,text}, dispatch);
+    // const response = await rakval.put(`/worksites/${worksiteId}/calendar-entry/${entryId}`, {date, title, text},{
+    //   headers:{
+    //     Authorization: authHeader
+    //   }
+    // })
     dispatch({type: 'update_calendar_entry', payload: {_id: entryId, date, title, text}})
   } catch (error) {
     console.error("Virhe päivitettäessä kalenterimerkintää:", error);
@@ -475,14 +509,16 @@ const updateCalendarEntry = (dispatch) => async (worksiteId, entryId, date,title
 const deleteCalendarEntry = (dispatch) => async (worksiteId, entryId,date) => {
   
   try {
-    const token = await AsyncStorage.getItem('token');
-    const authHeader = `${TOKEN_REPLACE} ${token}`;
+    // const token = await AsyncStorage.getItem('token');
+    // const token = await SecureStore.getItemAsync('token');
+    // const authHeader = `${TOKEN_REPLACE} ${token}`;
     const url = `/worksites/${worksiteId}/calendar-entry/${entryId}?date=${encodeURIComponent(date)}`;
-    await rakval.delete(url, {
-      headers: {
-        Authorization: authHeader
-      }
-    })
+    await makeApiRequest(url, 'delete', null,dispatch);
+    // await rakval.delete(url, {
+    //   headers: {
+    //     Authorization: authHeader
+    //   }
+    // })
     dispatch({type: 'delete_calendar_entry', payload: {entryId}})
   } catch (error) {
     console.error("Virhe poistettaessa kalenterimerkintää:", error);
