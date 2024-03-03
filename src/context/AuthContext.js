@@ -67,6 +67,7 @@ const clearErrorMessage = dispatch => () => {
 }
 
 const signup = (dispatch) => {
+  console.log("testssi");
   return async ({ email, password,navigation }) => {
     try {
       

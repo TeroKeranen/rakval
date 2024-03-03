@@ -24,7 +24,7 @@ const AdminTabs = () => {
           let iconName;
 
           if (route.name === "Your company" || route.name === "Sinun yritys") {
-            iconName = focused ? "ios-key" : "ios-key";
+            iconName = focused ? "key" : "key";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },

@@ -12,10 +12,11 @@ const WorksiteDetails = ({route, navigation}) => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const { worksiteId } = route.params;
-  const { state, fetchWorksiteDetails, fetchWorksites, resetCurrentWorksite, deleteWorksite, startWorkDay, endWorkDay } = useContext(WorksiteContext);
+  const { state, fetchWorksiteDetails, fetchWorksites, resetCurrentWorksite, deleteWorksite, startWorkDay, endWorkDay,worksiteReady } = useContext(WorksiteContext);
   const { state: authState } = useContext(AuthContext); // Etsitään käyttäjän tiedot
   const isAdmin = authState.user && authState.user.role === "admin"; // jos on käyttäjä ja rooli on admin === true
-
+  const worksiteIsReady = state.currentWorksite?.isReady; // katsotaan onko työmaa valmis vai ei
+  
   const [dayIsOn, setDayIsOn] = useState(false);
 
   useEffect(() => {
@@ -117,6 +118,29 @@ const WorksiteDetails = ({route, navigation}) => {
     }
   };
 
+  // käytetään tätä kun halutaan merkitä työmaa valmiiksi
+  const handleWorksiteReady = async () => {
+    Alert.alert(
+      "Vahvista toiminto",
+      "Oletko varma, että haluat merkitä työmaan valmiiksi?",
+      [
+        {
+          text:"Peruuta",
+          onPress: () => console.log("peruutettu"),
+          style:"cancel"
+        },
+        {text: "OK", onPress: async () => {
+          try {
+            await worksiteReady(worksiteId)
+          } catch (err) {
+            console.log(err);
+          }
+        }}
+      ],
+      { cancelable: false }
+    )
+  }
+
   if (isLoading) {
     return <DownloadScreen message={t("worksitedetail-downloadscreen-msg")} />;
   }
@@ -137,14 +161,22 @@ const WorksiteDetails = ({route, navigation}) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          {dayIsOn ? 
+          
+          {!worksiteIsReady && (dayIsOn ? 
             <TouchableOpacity style={styles.workDaybutton} onPress={handleEndDay}>
-              <Text style={{color: 'white'}}>Lopeta työpäivä</Text>
+              <Text style={{color: 'white'}}>{t('worksitedetail-endWorkDay')}</Text>
             </TouchableOpacity> : 
             <TouchableOpacity style={styles.workDaybutton} onPress={handleStartDay}>
-              <Text style={{color: 'white'}}>Aloita työpäivä</Text>
+              <Text style={{color: 'white'}}>{t('worksitedetail-startWorkDay')}</Text>
             </TouchableOpacity>
-            }  
+            )} 
+            {!worksiteIsReady ? 
+            
+            <TouchableOpacity style={styles.workDaybutton} onPress={handleWorksiteReady}>
+              <Text style={{color: 'white'}}>Merkitse työmaa valmiiksi</Text>
+            </TouchableOpacity>
+            : null
+          } 
         </View>
       </View>
 

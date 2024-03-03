@@ -89,7 +89,7 @@ const worksiteReducer = (state, action) => {
             }
           }
           
-
+      
       case 'end_work_day':
         const updateWorkDays = state.currentWorksite.workDays.map(day => 
             day._id === action.payload._id ? action.payload: day
@@ -398,6 +398,22 @@ const deleteMarker = (dispatch) => async (worksiteId, markerId,markerNumber) => 
   }
 }
 
+const worksiteReady = (dispatch) => async (worksiteId) => {
+  try {
+    const response = await makeApiRequest(`/worksites/${worksiteId}/worksiteready`, "post", null, dispatch)
+    
+    if (response && response.status === 200) {
+      dispatch({type:"update_worksite", payload:response.data})
+    } else {
+      console.log("virhe päivittäessä työmaan tilaa.1")
+    }
+  } catch (error) {
+    console.log('Virhe worksiteReady-funktiossa:', error);
+    dispatch({type: 'set_error', payload: 'Virhe päivittäessä työmaan valmiustilaa'});
+  }
+  
+}
+
 const startWorkDay = (dispatch) => async (worksiteId,userId) => {
    
   try {
@@ -527,6 +543,7 @@ export const { Provider, Context } = createDataContext(worksiteReducer, {
              fetchCalendarEntries,
              updateCalendarEntry,
              deleteCalendarEntry,
-             floorplankeySend
+             floorplankeySend,
+             worksiteReady
              },
               { worksites: [], errorMessage: "", currentWorksite: [] });

@@ -64,6 +64,8 @@
   "worksitedetail-confirmdelete": "Are you sure you want to delete this worksite?",
   "worksitedetail-confirmDelete-cancelButton": "Cancel",
   "worksitedetail-confirmDelete-deleteButton": "Delete",
+  "worksitedetail-endWorkDay": "End day",
+  "worksitedetail-startWorkDay": "Start day",
 
   "worksiteWorker-select-worker": "Select a worker",
   "worksiteWorker-add-button": "Add worker",

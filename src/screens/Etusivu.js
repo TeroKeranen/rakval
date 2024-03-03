@@ -2,22 +2,32 @@ import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView } from "react
 import {useContext, useEffect, useState} from 'react';
 import { Context as Autcontext} from '../context/AuthContext'
 import {Context as EventContext} from '../context/EventsContext'
-import {Button} from 'react-native-elements'
+import {Context as WorksiteContext} from '../context/WorksiteContext'
+
 import { useTranslation } from "react-i18next";
 import DownloadScreen from "../components/DownloadScreen";
 import { timeStampChanger } from "../utils/timestampChanger";
 import { Ionicons } from "@expo/vector-icons";
+import Events from "../components/EtusivuComponents/Events";
+import Accordion from "../components/EtusivuComponents/Accordion";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import WorksiteReady from "../components/EtusivuComponents/WorksiteReady";
 
 
 const Etusivu = ({navigation}) => {
-  const { t } = useTranslation();
-  const { state, fetchUser } = useContext(Autcontext);
-  const {state: eventState,fetchEvents } = useContext(EventContext)
-  const [events, setEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { t } = useTranslation(); //Säilytä 
+  const { state, fetchUser } = useContext(Autcontext); // SÄILYTÄ
+  const {state: eventState,fetchEvents } = useContext(EventContext) // SÄILYTÄ
+  const {state: worksiteState} = useContext(WorksiteContext)
+  const [events, setEvents] = useState([]); // SÄILYTÄ JA VÄLITÄ EVENTS COMPONENTILLE
+  const [isLoading, setIsLoading] = useState(false);// SÄILYTÄ 
+  // const [searchTerm, setSearchTerm] = useState(''); //MUUTOS
 
-  
+  const [selectedTitle, setSelectedTitle] = useState(null); // Käytetään tätä kun valitaan mitä halutaan näkyväksi
+
+  const handlePress = (title) => {
+    setSelectedTitle(title);
+  }
 
 
 
@@ -39,7 +49,6 @@ const Etusivu = ({navigation}) => {
   })
 
 
-
   useEffect(() => {
     if (eventState.events) {
       // Käännetään lista siten että ekana näkyy uusimmat
@@ -47,185 +56,142 @@ const Etusivu = ({navigation}) => {
       setEvents(reservedEvents);
     }
   }, [eventState.events])
+  const readyWorksites = worksiteState.worksites.filter(worksite => worksite.isReady === true);
+    const notReadyWorksites = worksiteState.worksites.filter(worksite => !worksite.isReady);
 
-  
+  const accordionData = [
+    { title: 'Events', content: <Events events={events} /> },
+    { title: 'Valmiit', content: <WorksiteReady worksites={readyWorksites} title="valmiit" /> },
+    { title: 'Kesken', content: <WorksiteReady worksites={notReadyWorksites} title="Kesken" /> },
+    // Lisää muita otsikoita ja sisältöjä tarpeen mukaan
+  ];
 
-  // Käytetään tätä etusivun haku toiminnossa apuna
-  const translateEventType = (type) => {
-    switch (type) {
-      case 'work-start':
-        return 'työ aloitettu';
-      case 'work-end':
-        return 'työ lopetettu';
-      case 'added-marker':
-        return 'lisätty merkki';
-      case 'added-calendarmark':
-        return 'Lisätty kalenteri merkki';
-      case 'deleted-calendarmark':
-        return 'Poistettu kalenteri merkki'
-      // Lisää muita tapauksia tarvittaessa
-      default:
-        return type;
-    }
-  };
 
-  const displayEvents = searchTerm.length === 0
-    ? events
-    : events.filter(event => {
-      const translatedType = translateEventType(event.type).toLowerCase();
-      return (
-        event.user?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.worksite.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        translatedType.includes(searchTerm.toLocaleLowerCase()) ||
-        timeStampChanger(event.timestamp).includes(searchTerm)
+  // // Käytetään tätä etusivun haku toiminnossa apuna
+  // const translateEventType = (type) => {
+  //   switch (type) {
+  //     case 'work-start':
+  //       return 'työ aloitettu';
+  //     case 'work-end':
+  //       return 'työ lopetettu';
+  //     case 'added-marker':
+  //       return 'lisätty merkki';
+  //     case 'added-calendarmark':
+  //       return 'Lisätty kalenteri merkki';
+  //     case 'deleted-calendarmark':
+  //       return 'Poistettu kalenteri merkki'
+  //     // Lisää muita tapauksia tarvittaessa
+  //     default:
+  //       return type;
+  //   }
+  // };
 
-        // Lisää muita suodatusehtoja tarpeen mukaan
-      );
-    })
+  // const displayEvents = searchTerm.length === 0
+  //   ? events
+  //   : events.filter(event => {
+  //     const translatedType = translateEventType(event.type).toLowerCase();
+  //     return (
+  //       event.user?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       event.worksite.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       translatedType.includes(searchTerm.toLocaleLowerCase()) ||
+  //       timeStampChanger(event.timestamp).includes(searchTerm)
+
+  //       // Lisää muita suodatusehtoja tarpeen mukaan
+  //     );
+  //   })
 
   if (isLoading) {
     return <DownloadScreen message={t('loading')} />
   }
 
   return (
+        
+        <View>
+          
+          <View style={styles.accContainer}>
 
-
-    <View style={styles.mainContainer}>
-      <View style={styles.textinputContainer}>
-        <Ionicons name="ios-options" size={25} />
-        <TextInput
-          placeholder="hae..."
-          style={styles.textinput}
-          value={searchTerm}
-          onChangeText={text => setSearchTerm(text)}
-          />
-      </View>
-      <FlatList
-        data={displayEvents}
-        keyExtractor={(item) => item._id}
-        renderItem={({item}) => {
-          let displayText;
-
-          switch (item.type) {
-            case 'added-marker':
-              displayText ='Lisätty merkki';
-              break;
-            case 'update-marker':
-              displayText ='Merkkiä muokattu';
-              break;
-            case 'work-start':
-              displayText = 'Työ aloitettu';
-              break;
-            case 'work-end':
-              displayText = 'Työ lopetettu';
-              break;
-            case 'remove-marker':
-              displayText = "Merkki poistettu";
-              break;
-            case 'added-calendarmark':
-              displayText = "Lisätty kalenteri merkki";
-              break;
-            case 'updated-calendarmark':
-              displayText = "Muokattu kalenteri merkki";
-              break;
-            case 'deleted-calendarmark':
-              displayText = "Poistettu kalenteri merkki"
-              break;
-            default:
-              displayText = item.type;
-            }
-
-            return (
-
-            <View style={styles.eventContainer}>
-
-              <View>
-                <View style={styles.type}>
-                  {item.markerNumber ?
-                    <Text style={styles.text}>{displayText} ({item.markerNumber})</Text>
-                    : <Text style={styles.text}>{displayText}</Text>
-                  }
-                  
-                  <Text style={styles.text}>{timeStampChanger(item.timestamp)}</Text>
-                </View>
-
-                <Text style={styles.text}>Työmaalle: {item.worksite.address}</Text>
-                {item.calendarDate && 
-                  <Text style={styles.text}>Kalenteri pvm: {item.calendarDate}</Text>
-                }
-                <Text style={styles.text}>Käyttäjä: {item.user?.email}</Text>
-              </View>
-
+          {accordionData.map((item, index) => (
+                    <Accordion 
+                        key={index} 
+                        title={item.title} 
+                        handlePress={() => handlePress(item.title)}
+                    />
+                ))}
           </View>
-          )
-        }}
-        ListEmptyComponent={() => (
-          <View style={styles.emptyListContainer}>
-            <Text style={styles.emptyListText}>ei dataa</Text>
-          </View>
-        )}
-        />
 
-    </View>
+          {accordionData.map((item, index) => (
+                selectedTitle === item.title && <View key={index}>{item.content}</View>
+            ))}
+          
+
+        </View>
+      
+    
   )
 
 };
 
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    marginBottom: 70,
-  },
-  text: {
-    color: "black",
-    fontSize: 16,
-  },
-  eventContainer: {
-    alignSelf: 'center',
-    backgroundColor: '#ddd4d4',
-    width: '90%',
-    marginVertical: 6,
-    padding: 10,
-    borderRadius: 10,
-    elevation: 3,
-    shadowColor: "black",
-    shadowRadius: 4,
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.4,
-
-  },
-  type: {
+  accContainer: {
     flexDirection: 'row',
-    justifyContent:'space-between',
-    marginBottom: 10,
+    justifyContent: 'space-evenly',
+    // Lisää tähän tarvittavat tyylit
+  },
+  
+  // mainContainer: {
+  //   marginBottom: 70,
+  // },
+  // text: {
+  //   color: "black",
+  //   fontSize: 16,
+  // },
+  // eventContainer: {
+  //   alignSelf: 'center',
+  //   backgroundColor: '#ddd4d4',
+  //   width: '90%',
+  //   marginVertical: 6,
+  //   padding: 10,
+  //   borderRadius: 10,
+  //   elevation: 3,
+  //   shadowColor: "black",
+  //   shadowRadius: 4,
+  //   shadowOffset: { width: 1, height: 1 },
+  //   shadowOpacity: 0.4,
 
-  },
-  emptyListContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  emptyListText: {
-    fontSize: 16,
-    color: 'grey',
-  },
-  textinputContainer: {
-    marginVertical: 10,
-    padding: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: 'grey',
-    borderRadius: 5,
-    width: '90%',
-    alignSelf: 'center'
-  },
-  textinput: {
-    padding: 3,
+  // },
+  // type: {
+  //   flexDirection: 'row',
+  //   justifyContent:'space-between',
+  //   marginBottom: 10,
 
-    width: '100%'
-  }
+  // },
+  // emptyListContainer: {
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   padding: 20,
+  // },
+  // emptyListText: {
+  //   fontSize: 16,
+  //   color: 'grey',
+  // },
+  // textinputContainer: {
+  //   marginVertical: 10,
+  //   padding: 5,
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   justifyContent: 'space-between',
+  //   borderWidth: 1,
+  //   borderColor: 'grey',
+  //   borderRadius: 5,
+  //   width: '90%',
+  //   alignSelf: 'center'
+  // },
+  // textinput: {
+  //   padding: 3,
+
+  //   width: '100%'
+  // }
 });
 
 export default Etusivu;

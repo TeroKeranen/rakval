@@ -64,6 +64,8 @@
   "worksitedetail-confirmdelete": "Haluatko varmasti poistaa tämän työmaan",
   "worksitedetail-confirmDelete-cancelButton": "Peruuta",
   "worksitedetail-confirmDelete-deleteButton": "Poista",
+  "worksitedetail-endWorkDay": "Lopeta työpäivä",
+  "worksitedetail-startWorkDay": "Aloita työpäivä",
 
   "worksiteWorker-select-worker": "Valitse työntekijä",
   "worksiteWorker-add-button": "Lisää työntekijä",

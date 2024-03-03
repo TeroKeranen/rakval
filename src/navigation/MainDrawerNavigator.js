@@ -77,7 +77,7 @@ const MainDrawerNavigator = () => {
     // }, [state.user.isVerified])
 
     // Jos käyttäjä ei ole syöttänyt verification koodia niin näytetään VerificationScreen
-    if (!isVerified) {
+    if (state?.user && !isVerified) {
       return <VerificationScreen />
     }
     
