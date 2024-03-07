@@ -40,18 +40,19 @@ const WorksiteDetails = ({route, navigation}) => {
     
     const checkOngoingWorkDay = () => {
       // Varmista, että workDays on olemassa ja se on taulukko
+      
       if (state.currentWorksite && Array.isArray(state.currentWorksite.workDays)) {
         // Tee pyyntö backendiin tarkistaaksesi, onko käyttäjällä käynnissä olevaa työpäivää
         const userId = authState.user._id;
-        const ongoingWorkDay = state.currentWorksite.workDays.find((workDay) => workDay.workerId === userId && workDay.running === true);
-
+        const ongoingWorkDay = state.currentWorksite.workDays.find((workDay) => workDay?.workerId === userId && workDay?.running === true);
+        
         
         setDayIsOn(!!ongoingWorkDay);
         
       }
     };
-
     checkOngoingWorkDay();
+    console.log("dayison", dayIsOn);
   }, [state.currentWorksite, authState.user._id]); // Riippuvuudet päivitetty
 
   const confirmDelete = (worksiteId) => {
@@ -66,18 +67,20 @@ const WorksiteDetails = ({route, navigation}) => {
       },
     ]);
   };
-
+  
   const handleStartDay = async () => {
     
     // Haetaan käyttäjän id
     const userId = authState.user._id;
     
     
-
+    
     // Etsitään onko käyttäjällä missään työmaalla työpäivä käynnissä
     const ongoingWorkDayAnyWorksite = state.worksites.some(worksite => 
+        
         worksite.workDays.find(workDay => workDay.workerId === userId && workDay.running === true)
       )
+      
     if (ongoingWorkDayAnyWorksite) {
       
       Alert.alert(

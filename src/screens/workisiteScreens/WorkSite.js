@@ -17,7 +17,6 @@ const WorkSite = ({navigation, route}) => {
 
   const errorMessage = state.errorMessage;
 
-  console.log("ERRORMESSAGE", errorMessage)
   
   
   

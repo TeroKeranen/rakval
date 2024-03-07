@@ -19,6 +19,7 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const { t } = useTranslation();
     const [address, setAddress] = useState(""); 
     const [city, setCity] = useState("");
+    const [startTime, setStartTime] = useState('');
     const [workType, setWorkType] = useState(t('worksiteform-worktype-worksite')); // asetetaan default valueksi työmaa
     const [imageUri, setImageUri] = useState(null);
     
@@ -35,13 +36,14 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
           }
           if (imageUri) {
             const imageKey = await uploadImageToS3(imageUri);
-            await onSubmit({ address, city, floorplanKey:imageKey, worktype: workType });
+            await onSubmit({ address, city, startTime, floorplanKey:imageKey, worktype: workType });
           } else {
-            await onSubmit({ address, city, worktype: workType });
+            await onSubmit({ address, city, startTime, worktype: workType });
           }
           // nollataan input kentät onnistunee lisäyksen jälkeen
           setAddress("");
           setCity("");
+          setStartTime('');
           
           setImageUri(null);
         } catch (error) {
@@ -53,6 +55,7 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
       navigation.navigate(t("construction-site"))
       setAddress('');
       setCity('');
+      setStartTime('');
       
     }
 
@@ -67,6 +70,8 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
             <Input style={styles.input} placeholder={t("worksiteform-address")} value={address} onChangeText={setAddress} />
 
             <Input style={styles.input} placeholder={t("worksiteform-city")} value={city} onChangeText={setCity} />
+
+            <Input style={styles.input} keyboardType="numeric" placeholder="Aloitus aika muodossa d/m/y" value={startTime} onChangeText={setStartTime} />
 
             <Picker
               selectedValue={workType}

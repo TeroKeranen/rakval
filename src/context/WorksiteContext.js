@@ -286,13 +286,13 @@ const newWorksite = (dispatch) => {
   
     
     const { t } = useTranslation();
-    return async ({address, city, floorplanKey,worktype, navigation }) => {
+    return async ({address, city, startTime, floorplanKey,worktype, navigation }) => {
         try {
             // const token = await AsyncStorage.getItem('token')
             // const token = await SecureStore.getItemAsync('token');
             // const authHeader = `${TOKEN_REPLACE} ${token}`;
 
-            const response = await makeApiRequest('/worksites', 'post', {address,city,floorplanKey, worktype}, dispatch)
+            const response = await makeApiRequest('/worksites', 'post', {address,city, startTime, floorplanKey, worktype}, dispatch)
 
             // const response = await rakval.post('/worksites', {address, city, floorplanKey,worktype}, {
             //     headers: {
@@ -417,15 +417,9 @@ const worksiteReady = (dispatch) => async (worksiteId) => {
 const startWorkDay = (dispatch) => async (worksiteId,userId) => {
    
   try {
-    // const token = await AsyncStorage.getItem('token');
-    // const token = await SecureStore.getItemAsync('token');
-    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+    
     const response = await makeApiRequest(`/worksites/${worksiteId}/startday`, 'post', {userId}, dispatch)
-    // const response = await rakval.post(`/worksites/${worksiteId}/startday`,{userId}, {
-    //   headers: {
-    //     Authorization: authHeader
-    //   }
-    // })
+   
     
     dispatch({ type: 'start_work_day', payload: response.data });
   } catch (error) {

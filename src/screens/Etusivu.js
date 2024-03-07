@@ -12,19 +12,27 @@ import Events from "../components/EtusivuComponents/Events";
 import Accordion from "../components/EtusivuComponents/Accordion";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import WorksiteReady from "../components/EtusivuComponents/WorksiteReady";
+import { getCurrentDate } from "../utils/currentDate";
+
+import {futureStartTime} from '../utils/calcFutureWorksite'
 
 
 const Etusivu = ({navigation}) => {
   const { t } = useTranslation(); //Säilytä 
   const { state, fetchUser } = useContext(Autcontext); // SÄILYTÄ
   const {state: eventState,fetchEvents } = useContext(EventContext) // SÄILYTÄ
-  const {state: worksiteState} = useContext(WorksiteContext)
+  const {state: worksiteState,fetchWorksites} = useContext(WorksiteContext)
   const [events, setEvents] = useState([]); // SÄILYTÄ JA VÄLITÄ EVENTS COMPONENTILLE
   const [isLoading, setIsLoading] = useState(false);// SÄILYTÄ 
   // const [searchTerm, setSearchTerm] = useState(''); //MUUTOS
+  const role = state?.user?.role;
+  const userId = state?.user?._id;
+  
+  
 
+  
   const [selectedTitle, setSelectedTitle] = useState(null); // Käytetään tätä kun valitaan mitä halutaan näkyväksi
-
+  
   const handlePress = (title) => {
     setSelectedTitle(title);
   }
@@ -37,8 +45,9 @@ const Etusivu = ({navigation}) => {
   useEffect(() => {
     const fetchAndSetData = async () => {
       setIsLoading(true);
-      fetchUser();
-      fetchEvents();
+      await fetchUser();
+      await fetchWorksites();
+      await fetchEvents();
       setIsLoading(false)
       
     }
@@ -48,6 +57,7 @@ const Etusivu = ({navigation}) => {
     return unsubscribe;
   })
 
+  
 
   useEffect(() => {
     if (eventState.events) {
@@ -56,13 +66,54 @@ const Etusivu = ({navigation}) => {
       setEvents(reservedEvents);
     }
   }, [eventState.events])
-  const readyWorksites = worksiteState.worksites.filter(worksite => worksite.isReady === true);
-    const notReadyWorksites = worksiteState.worksites.filter(worksite => !worksite.isReady);
+
+
+  let worksitesToShow = worksiteState.worksites;
+  
+  if (role === "user") {
+    worksitesToShow = worksiteState.worksites.filter(worksite => 
+      worksite.workers.includes(userId)
+      )
+  }
+  let futureStart = []; // luodaan muuttuja johon laitetaan tulevaisuudessa alkavat työmaat
+  let notReadyWorksites = []; // luodaan muuttuja johon laitetaan työmaat jotka on aloitettu mutta ei ole valmiina
+  
+  worksitesToShow.forEach(worksite => {
+    if (!worksite.workDays || worksite.workDays.length === 0) {
+      // Jos workDays on tyhjä, tarkista onko työmaan aloitusaika tulevaisuudessa
+      if (futureStartTime(worksite.startTime)) {
+        futureStart.push(worksite);
+      }
+    } else if (!worksite.isReady) {
+      // Jos workDays ei ole tyhjä, mutta työmaa ei ole valmis, lisää notReadyWorksites-listaan
+      notReadyWorksites.push(worksite);
+    }
+  });
+  const readyWorksites = worksitesToShow.filter(worksite => worksite.isReady === true);
+  
+  // const notReadyWorksites = worksitesToShow.filter(worksite => !worksite.isReady);
+  // const futureStart = worksitesToShow.filter(worksite => futureStartTime(worksite.startTime))
+
+  // const readyWorksites = worksiteState.worksites.filter(worksite => worksite.isReady === true);
+  // const notReadyWorksites = worksiteState.worksites.filter(worksite => !worksite.isReady);
+  // const futureStart = worksiteState.worksites.filter(worksite => futureStartTime(worksite.startTime))
+
+  
+
+  
+  
+  
+ 
+
+ 
+  
+  
 
   const accordionData = [
     { title: 'Events', content: <Events events={events} /> },
     { title: 'Valmiit', content: <WorksiteReady worksites={readyWorksites} title="valmiit" /> },
-    { title: 'Kesken', content: <WorksiteReady worksites={notReadyWorksites} title="Kesken" /> },
+    { title: 'Keskeneräiset', content: <WorksiteReady worksites={notReadyWorksites} title="Keskeneräiset" /> },
+    { title: 'alkamassa', content: <WorksiteReady worksites={futureStart} title="Alkamassa" /> },
     // Lisää muita otsikoita ja sisältöjä tarpeen mukaan
   ];
 

@@ -69,12 +69,7 @@ const MainDrawerNavigator = () => {
 
     
 
-    // useEffect(() => {
-    //   if (!isVerified) {
-    //     console.log("vitutole verified")
-        
-    //   }
-    // }, [state.user.isVerified])
+  
 
     // Jos käyttäjä ei ole syöttänyt verification koodia niin näytetään VerificationScreen
     if (state?.user && !isVerified) {

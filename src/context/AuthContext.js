@@ -67,7 +67,7 @@ const clearErrorMessage = dispatch => () => {
 }
 
 const signup = (dispatch) => {
-  console.log("testssi");
+  
   return async ({ email, password,navigation }) => {
     try {
       
@@ -250,7 +250,7 @@ const fetchUser = (dispatch) => async () => {
     // Huomaa, että Axios käsittelee vastausta automaattisesti, joten ei tarvitse kutsua .json()
     const response = await makeApiRequest('/profile', 'get', null, dispatch);
 
-    console.log("fetchuser", response.data);
+    
     dispatch({ type: 'fetch_user', payload: response.data });
   } catch (error) {
     console.error('Virhe haettaessa käyttäjän tietoja:', error.message);

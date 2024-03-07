@@ -19,3 +19,32 @@ export const calculateWorkHours = (startDateString, startTimeString, endDateStri
     return ` ${hours} ${t('workingHour')}, ${minutes} ${t('workingMinutes')}, ${Math.round(seconds)} ${t('workingSeconds')}`;
 
 }
+
+function convertDate(dateString) {
+    // Muuntaa päivämäärän muodosta "DD.MM.YYYY" muotoon "YYYY-MM-DD"
+    const parts = dateString.split(".");
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  }
+
+export const calculateTotaWorkTime = (workDays) => {
+    let totalSeconds = 0;
+    
+    workDays.forEach(workDay => {
+        const startDateString = convertDate(workDay.startDate) + 'T' + workDay.startTime;
+        
+        const endDateString = convertDate(workDay.endDate) + 'T' + workDay.endTime;
+
+        const startDate = new Date(startDateString);
+        const endDate = new Date(endDateString);
+
+        const seconds = (endDate - startDate) / 1000;
+        totalSeconds += seconds;
+    })
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+    return `${hours}h ${minutes}min`;
+
+}
+
