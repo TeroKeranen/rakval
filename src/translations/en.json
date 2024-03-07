@@ -18,6 +18,11 @@
   "title": "Title",
   "text": "Text",
   "save": "Save",
+  "startingDate": "Starting date",
+  "workHours": "Working hours",
+  "user": "User",
+  "constructionSite": "construction site",
+  "date": "date",
 
   "sign-upHeader": "Sign Up",
   "signup-navlink-text": "Already have an account? Sign in instead",
@@ -135,6 +140,11 @@
 
   "addFloorplanImgModalSave": "save",
   "addFloorplanImgModalPlaceholder": "Enter a title",
-  "addFloorplanImgModalTitleError": "Enter a title"
+  "addFloorplanImgModalTitleError": "Enter a title",
+
+  "etusivuEventsButton": "Events", 
+  "etusivuReadyButton": "Ready", 
+  "etusivuUnfinishedButton": "Unfinished", 
+  "etusivuStartingdButton": "Starting" 
   
 }

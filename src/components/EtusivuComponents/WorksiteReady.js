@@ -2,13 +2,13 @@ import { useContext } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import {calculateTotaWorkTime} from '../../utils/workingHours'
-
+import { useTranslation } from "react-i18next";
 
 
 const WorksiteReady = ({worksites, title}) => {
 
   
-
+    const { t } = useTranslation();
 
     return (
         <View style={styles.container}>
@@ -22,10 +22,10 @@ const WorksiteReady = ({worksites, title}) => {
               return (
 
               <View style={styles.renderContainer}>
-                <Text>Kaupunki: {item.city}</Text>
-                <Text>Osoite: {item.address}</Text>
-                {item.startTime && <Text>Ajankohta: {item.startTime}</Text>}
-                <Text>kok: {totalWorkTime}</Text>
+                <Text>{t('worksiteform-city')}: {item.city}</Text>
+                <Text>{t('worksiteform-address')}: {item.address}</Text>
+                {item.startTime && <Text>{t('startingDate')}: {item.startTime}</Text>}
+                <Text>{t('workHours')}: {totalWorkTime}</Text>
                 
                 
 

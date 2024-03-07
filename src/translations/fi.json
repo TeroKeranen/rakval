@@ -18,6 +18,11 @@
   "title": "Otsikko",
   "text": "Teksti",
   "save": "Tallenna",
+  "startingDate": "Aloitus aika",
+  "workHours": "Työtunnit",
+  "user": "Käyttäjä",
+  "constructionSite": "Työmaa",
+  "date": "Date",
   
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
@@ -135,7 +140,12 @@
 
   "addFloorplanImgModalSave": "Tallenna",
   "addFloorplanImgModalPlaceholder": "Syötä otsikko",
-  "addFloorplanImgModalTitleError": "Syötä otsikko"
+  "addFloorplanImgModalTitleError": "Syötä otsikko",
+
+  "etusivuEventsButton": "Tapahtumat", 
+  "etusivuReadyButton": "Valmiit", 
+  "etusivuUnfinishedButton": "Keskeneräiset", 
+  "etusivuStartingdButton": "Keskeneräiset" 
   
 
   

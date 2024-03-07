@@ -19,12 +19,12 @@ import {futureStartTime} from '../utils/calcFutureWorksite'
 
 const Etusivu = ({navigation}) => {
   const { t } = useTranslation(); //Säilytä 
-  const { state, fetchUser } = useContext(Autcontext); // SÄILYTÄ
-  const {state: eventState,fetchEvents } = useContext(EventContext) // SÄILYTÄ
+  const { state, fetchUser } = useContext(Autcontext); 
+  const {state: eventState,fetchEvents } = useContext(EventContext) 
   const {state: worksiteState,fetchWorksites} = useContext(WorksiteContext)
-  const [events, setEvents] = useState([]); // SÄILYTÄ JA VÄLITÄ EVENTS COMPONENTILLE
-  const [isLoading, setIsLoading] = useState(false);// SÄILYTÄ 
-  // const [searchTerm, setSearchTerm] = useState(''); //MUUTOS
+  const [events, setEvents] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false);
+
   const role = state?.user?.role;
   const userId = state?.user?._id;
   
@@ -91,65 +91,18 @@ const Etusivu = ({navigation}) => {
   });
   const readyWorksites = worksitesToShow.filter(worksite => worksite.isReady === true);
   
-  // const notReadyWorksites = worksitesToShow.filter(worksite => !worksite.isReady);
-  // const futureStart = worksitesToShow.filter(worksite => futureStartTime(worksite.startTime))
 
-  // const readyWorksites = worksiteState.worksites.filter(worksite => worksite.isReady === true);
-  // const notReadyWorksites = worksiteState.worksites.filter(worksite => !worksite.isReady);
-  // const futureStart = worksiteState.worksites.filter(worksite => futureStartTime(worksite.startTime))
-
-  
-
-  
-  
-  
- 
-
- 
-  
-  
 
   const accordionData = [
-    { title: 'Events', content: <Events events={events} /> },
-    { title: 'Valmiit', content: <WorksiteReady worksites={readyWorksites} title="valmiit" /> },
-    { title: 'Keskeneräiset', content: <WorksiteReady worksites={notReadyWorksites} title="Keskeneräiset" /> },
-    { title: 'alkamassa', content: <WorksiteReady worksites={futureStart} title="Alkamassa" /> },
+    { title: t('etusivuEventsButton'), content: <Events events={events} /> },
+    { title: t('etusivuReadyButton'), content: <WorksiteReady worksites={readyWorksites} title="valmiit" /> },
+    { title: t('etusivuUnfinishedButton'), content: <WorksiteReady worksites={notReadyWorksites} title="Keskeneräiset" /> },
+    { title: t('etusivuStartingdButton'), content: <WorksiteReady worksites={futureStart} title="Alkamassa" /> },
     // Lisää muita otsikoita ja sisältöjä tarpeen mukaan
   ];
 
 
-  // // Käytetään tätä etusivun haku toiminnossa apuna
-  // const translateEventType = (type) => {
-  //   switch (type) {
-  //     case 'work-start':
-  //       return 'työ aloitettu';
-  //     case 'work-end':
-  //       return 'työ lopetettu';
-  //     case 'added-marker':
-  //       return 'lisätty merkki';
-  //     case 'added-calendarmark':
-  //       return 'Lisätty kalenteri merkki';
-  //     case 'deleted-calendarmark':
-  //       return 'Poistettu kalenteri merkki'
-  //     // Lisää muita tapauksia tarvittaessa
-  //     default:
-  //       return type;
-  //   }
-  // };
 
-  // const displayEvents = searchTerm.length === 0
-  //   ? events
-  //   : events.filter(event => {
-  //     const translatedType = translateEventType(event.type).toLowerCase();
-  //     return (
-  //       event.user?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       event.worksite.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       translatedType.includes(searchTerm.toLocaleLowerCase()) ||
-  //       timeStampChanger(event.timestamp).includes(searchTerm)
-
-  //       // Lisää muita suodatusehtoja tarpeen mukaan
-  //     );
-  //   })
 
   if (isLoading) {
     return <DownloadScreen message={t('loading')} />
@@ -190,59 +143,6 @@ const styles = StyleSheet.create({
     // Lisää tähän tarvittavat tyylit
   },
   
-  // mainContainer: {
-  //   marginBottom: 70,
-  // },
-  // text: {
-  //   color: "black",
-  //   fontSize: 16,
-  // },
-  // eventContainer: {
-  //   alignSelf: 'center',
-  //   backgroundColor: '#ddd4d4',
-  //   width: '90%',
-  //   marginVertical: 6,
-  //   padding: 10,
-  //   borderRadius: 10,
-  //   elevation: 3,
-  //   shadowColor: "black",
-  //   shadowRadius: 4,
-  //   shadowOffset: { width: 1, height: 1 },
-  //   shadowOpacity: 0.4,
-
-  // },
-  // type: {
-  //   flexDirection: 'row',
-  //   justifyContent:'space-between',
-  //   marginBottom: 10,
-
-  // },
-  // emptyListContainer: {
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   padding: 20,
-  // },
-  // emptyListText: {
-  //   fontSize: 16,
-  //   color: 'grey',
-  // },
-  // textinputContainer: {
-  //   marginVertical: 10,
-  //   padding: 5,
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'space-between',
-  //   borderWidth: 1,
-  //   borderColor: 'grey',
-  //   borderRadius: 5,
-  //   width: '90%',
-  //   alignSelf: 'center'
-  // },
-  // textinput: {
-  //   padding: 3,
-
-  //   width: '100%'
-  // }
 });
 
 export default Etusivu;

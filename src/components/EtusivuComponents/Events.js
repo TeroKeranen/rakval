@@ -7,23 +7,51 @@ import { Ionicons } from "@expo/vector-icons";
 
 const Events = ({events}) => {
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [searchTerm, setSearchTerm] = useState(''); 
 
-    
+    const currentLang = i18n.language; // Otetaan käytetty kieli talteen
   // Käytetään tätä etusivun haku toiminnossa apuna
   const translateEventType = (type) => {
     switch (type) {
       case 'work-start':
-        return 'työ aloitettu';
+        if (currentLang === "fi") {
+
+          return 'työ aloitettu';
+        } else {
+          return 'Work started'
+        }
       case 'work-end':
-        return 'työ lopetettu';
+        if (currentLang === "fi") {
+
+          return 'työ lopetettu';
+        } else {
+          return 'Work completed'
+        }
       case 'added-marker':
-        return 'lisätty merkki';
+        if (currentLang === "fi") {
+
+          return 'lisätty merkki';
+          
+        } else {
+          return 'Added marker'
+        }
       case 'added-calendarmark':
-        return 'Lisätty kalenteri merkki';
+        if (currentLang === "fi") {
+
+          return 'Lisätty kalenteri merkki';
+        } else {
+          return 'Added calendar mark'
+        }
+        
       case 'deleted-calendarmark':
-        return 'Poistettu kalenteri merkki'
+        if (currentLang === "fi") {
+
+          return 'Poistettu kalenteri merkki'
+        } else {
+          return 'Deleted calendar mark'
+        }
+        
       // Lisää muita tapauksia tarvittaessa
       default:
         return type;
@@ -64,28 +92,83 @@ const Events = ({events}) => {
 
           switch (item.type) {
             case 'added-marker':
-              displayText ='Lisätty merkki';
+              if (currentLang === "fi") {
+
+                displayText ='Lisätty merkki';
+                
+              } else {
+                displayText = 'Added marker'
+              }      
               break;
+
             case 'update-marker':
-              displayText ='Merkkiä muokattu';
+              if (currentLang === "fi") {
+
+                displayText ='Merkkiä muokattu';
+                
+              } else {
+                displayText = 'Updated marker'
+              }   
+              
               break;
             case 'work-start':
-              displayText = 'Työ aloitettu';
+              if (currentLang === "fi") {
+
+                displayText = 'Työ aloitettu';
+                
+              } else {
+                displayText = 'Work started'
+              }
               break;
             case 'work-end':
-              displayText = 'Työ lopetettu';
+              if (currentLang === "fi") {
+
+                displayText = 'Työ lopetettu';
+                
+              } else {
+                displayText = 'Work completed'
+              }   
+              
               break;
             case 'remove-marker':
-              displayText = "Merkki poistettu";
+              if (currentLang === "fi") {
+
+                displayText = "Merkki poistettu";
+                
+              } else {
+                displayText = 'Deleted marker'
+              }   
+              
               break;
             case 'added-calendarmark':
-              displayText = "Lisätty kalenteri merkki";
+              if (currentLang === "fi") {
+
+                displayText = "Lisätty kalenteri merkki";
+                
+              } else {
+                displayText = 'Added calendar marker'
+              }   
+              
               break;
             case 'updated-calendarmark':
-              displayText = "Muokattu kalenteri merkki";
+              if (currentLang === "fi") {
+
+                displayText = "Muokattu kalenteri merkki";
+                
+              } else {
+                displayText = 'Updated calendar marker'
+              }   
+              
               break;
             case 'deleted-calendarmark':
-              displayText = "Poistettu kalenteri merkki"
+              if (currentLang === "fi") {
+
+                displayText = "Poistettu kalenteri merkki"
+                
+              } else {
+                displayText = 'Deleted calendar marker'
+              }   
+              
               break;
             default:
               displayText = item.type;
@@ -105,11 +188,11 @@ const Events = ({events}) => {
                   <Text style={styles.text}>{timeStampChanger(item.timestamp)}</Text>
                 </View>
 
-                <Text style={styles.text}>Työmaalle: {item.worksite.address}</Text>
+                <Text style={styles.text}>{t('constructionSite')}: {item.worksite.address}</Text>
                 {item.calendarDate && 
-                  <Text style={styles.text}>Kalenteri pvm: {item.calendarDate}</Text>
+                  <Text style={styles.text}>{t('date')}: {item.calendarDate}</Text>
                 }
-                <Text style={styles.text}>Käyttäjä: {item.user?.email}</Text>
+                <Text style={styles.text}>{t('user')}: {item.user?.email}</Text>
               </View>
 
           </View>
