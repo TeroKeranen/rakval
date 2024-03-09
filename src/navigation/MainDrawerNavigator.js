@@ -3,6 +3,10 @@ import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { jwtDecode } from "jwt-decode";
+import { decode } from "base-64";
+global.atob = decode;
+import {useNavigation} from '@react-navigation/native'
 
 // Screens
 
@@ -33,10 +37,10 @@ const Drawer = createDrawerNavigator();
 const MainDrawerNavigator = () => {
 
     const { t } = useTranslation();
-    
+    const navigation = useNavigation();
     const { clearEvents } = useContext(EventContext);
     const { clearCompany } = useContext(CompanyContext);
-    const {state, signout } = useContext(AuthContext);
+    const {state, signout,isTokenExpired } = useContext(AuthContext);
     const { clearWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -48,12 +52,31 @@ const MainDrawerNavigator = () => {
     resetCurrentWorksite();
     signout(); // Kutsutaan signout functio
   };
+    
 
     useEffect(() => {
-      
+        
       
     }, [state]);
 
+    useEffect(() => {
+      const checkTokenExpiration = () => {
+        const currentTime = Date.now() / 1000;
+        const token = state.token;
+        if (token) {
+          const decoded = jwtDecode(token);
+          if (decoded.exp < currentTime) {
+            console.log("Token vanhentunut");
+            signout(); // Kirjautuu ulos ja ohjaa kirjautumissivulle
+          } else {
+            console.log("Token voimassa");
+          }
+        }
+      };
+    
+      checkTokenExpiration();
+    }, [state.token]); // Riippuvuus state.token
+    
     
     const toggleModal = () => {
       setModalVisible(!modalVisible);
