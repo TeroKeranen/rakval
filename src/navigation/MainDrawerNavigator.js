@@ -3,10 +3,11 @@ import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { jwtDecode } from "jwt-decode";
-import { decode } from "base-64";
-global.atob = decode;
+// import { jwtDecode } from "jwt-decode";
+// import { decode } from "base-64";
+// global.atob = decode;
 import {useNavigation} from '@react-navigation/native'
+// import {refreshAccessToken} from '../api/refreshToken'
 
 // Screens
 
@@ -40,7 +41,7 @@ const MainDrawerNavigator = () => {
     const navigation = useNavigation();
     const { clearEvents } = useContext(EventContext);
     const { clearCompany } = useContext(CompanyContext);
-    const {state, signout,isTokenExpired } = useContext(AuthContext);
+    const {state, signout } = useContext(AuthContext);
     const { clearWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -67,7 +68,7 @@ const MainDrawerNavigator = () => {
     //       const decoded = jwtDecode(token);
     //       if (decoded.exp < currentTime) {
     //         console.log("Token vanhentunut");
-    //         signout(); // Kirjautuu ulos ja ohjaa kirjautumissivulle
+    //         refreshAccessToken(); // Kirjautuu ulos ja ohjaa kirjautumissivulle
     //       } else {
     //         console.log("Token voimassa");
     //       }
