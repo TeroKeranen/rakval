@@ -59,23 +59,23 @@ const MainDrawerNavigator = () => {
       
     }, [state]);
 
-    useEffect(() => {
-      const checkTokenExpiration = () => {
-        const currentTime = Date.now() / 1000;
-        const token = state.token;
-        if (token) {
-          const decoded = jwtDecode(token);
-          if (decoded.exp < currentTime) {
-            console.log("Token vanhentunut");
-            signout(); // Kirjautuu ulos ja ohjaa kirjautumissivulle
-          } else {
-            console.log("Token voimassa");
-          }
-        }
-      };
+    // useEffect(() => {
+    //   const checkTokenExpiration = () => {
+    //     const currentTime = Date.now() / 1000;
+    //     const token = state.token;
+    //     if (token) {
+    //       const decoded = jwtDecode(token);
+    //       if (decoded.exp < currentTime) {
+    //         console.log("Token vanhentunut");
+    //         signout(); // Kirjautuu ulos ja ohjaa kirjautumissivulle
+    //       } else {
+    //         console.log("Token voimassa");
+    //       }
+    //     }
+    //   };
     
-      checkTokenExpiration();
-    }, [state.token]); // Riippuvuus state.token
+    //   checkTokenExpiration();
+    // }, [state.token]); // Riippuvuus state.token
     
     
     const toggleModal = () => {
