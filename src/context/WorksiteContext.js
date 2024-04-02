@@ -33,10 +33,10 @@ const worksiteReducer = (state, action) => {
       case "set_error":
         return { ...state, errorMessage: action.payload };
       case "clear_worksites":
-        console.log("suoritetaan clear_worksites");
+        
         return { ...state, worksites: [], errorMessage: "" };
       case "reset_current_worksite":
-        console.log("suoritetaan reset_current_worksite");
+        
         return { ...state, currentWorksite: [] };
       case "delete_worksite":
         return { ...state, worksites: state.worksites.filter((worksite) => worksite._id !== action.payload) };

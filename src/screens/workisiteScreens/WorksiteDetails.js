@@ -52,7 +52,7 @@ const WorksiteDetails = ({route, navigation}) => {
       }
     };
     checkOngoingWorkDay();
-    console.log("dayison", dayIsOn);
+    
   }, [state.currentWorksite, authState.user._id]); // Riippuvuudet päivitetty
 
   const confirmDelete = (worksiteId) => {

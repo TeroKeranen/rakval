@@ -109,6 +109,7 @@ const Etusivu = ({navigation}) => {
   }
 
   return (
+      
         
         <View>
           

@@ -37,7 +37,7 @@ export const makeApiRequest = async (endpoint, method, data, dispatch) => {
   };
 
  export const refreshAccessToken = async (dispatch) => {
-    console.log("suoritetaan refresh token");
+    
     try {
       const refreshToken = await SecureStore.getItemAsync('refreshToken');
       const response = await rakval.post('/refresh', { token: refreshToken });

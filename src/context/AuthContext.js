@@ -46,24 +46,13 @@ const authReducer = (state, action) => {
   }
 };
 
-// const isTokenExpired = (token) => {
-//   try {
-//     const decodedToken = jwtDecode(token);
-//     const currentTime = Date.now() / 1000;
-//     if (decodedToken.exp < currentTime) {
-//       console.log("jeh jeh");
-//     }
-//   } catch (error) {
-//     // Oletetaan, että token on vanhentunut, jos tarkistus epäonnistuu
-//     return true;
-//   }
-// };
+
 
 const tryLocalSignin = dispatch => async () => {
 
   // const token = await AsyncStorage.getItem('token');
   const token = await SecureStore.getItemAsync('token');
-  console.log("Localsigning", token);
+  
   
 
   // if (token && !isTokenExpired(token)) {
@@ -92,7 +81,28 @@ const tryLocalSignin = dispatch => async () => {
 const clearErrorMessage = dispatch => () => {
   dispatch({type: 'clear_error_message'})
 }
+const logout = (dispatch) => async () => {
+  const refreshToken = await SecureStore.getItemAsync('refreshToken')
+  if (!refreshToken) {
+    console.log("Ei refrestokenia");
+  }
 
+  try {
+    await rakval.post('/logout', {refreshToken})
+
+    // await SecureStore.deleteItemAsync('token');
+    // await SecureStore.deleteItemAsync('refreshToken');
+    // await AsyncStorage.removeItem('user');
+    // await AsyncStorage.removeItem('company');
+    // await AsyncStorage.clear();
+    // console.log("User logged out and data removed from AsyncStorage");
+    // dispatch({type: 'signout'})
+
+    
+  } catch (error) {
+    console.error("Logout error: ", error);
+  }
+}
 const signup = (dispatch) => {
   
   return async ({ email, password,navigation }) => {
@@ -401,4 +411,4 @@ const changePassword = dispatch => async ({ oldPassword, newPassword }) => {
 //   }
 // }
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany,changePassword,verifyEmail,setUserEmail}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout,logout, signup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany,changePassword,verifyEmail,setUserEmail}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });

@@ -41,17 +41,21 @@ const MainDrawerNavigator = () => {
     const navigation = useNavigation();
     const { clearEvents } = useContext(EventContext);
     const { clearCompany } = useContext(CompanyContext);
-    const {state, signout } = useContext(AuthContext);
+    const {state, signout,logout } = useContext(AuthContext);
     const { clearWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
     const [modalVisible, setModalVisible] = useState(false);
 
      // käytetään tätä uloskirjautumiseen
   const handleSignout = async () => {
-    clearEvents(); // pyyhitään tapahtumat etusivulta
-    clearWorksites(); // pyyhitään työmaatiedot statesta
-    clearCompany(); // pyyhitään company tiedot statesta
-    resetCurrentWorksite();
-    signout(); // Kutsutaan signout functio
+
+    logout().then(() => {
+
+      clearEvents(); // pyyhitään tapahtumat etusivulta
+      clearWorksites(); // pyyhitään työmaatiedot statesta
+      clearCompany(); // pyyhitään company tiedot statesta
+      resetCurrentWorksite();
+      signout(); // Kutsutaan signout functio
+    })
   };
     
 
