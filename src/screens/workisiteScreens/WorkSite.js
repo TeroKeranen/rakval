@@ -84,8 +84,8 @@ const WorkSite = ({navigation, route}) => {
     );
 
     // Erota työmaat tyypin perusteella
-    const tyomaat = visibleWorksites.filter(worksite => worksite.worktype === "Construction site");
-    const pikkukeikat = visibleWorksites.filter(worksite => worksite.worktype === "Private client");
+    const tyomaat = visibleWorksites.filter(worksite => (worksite.worktype === "Construction site" || worksite.worktype === "Työmaa"));
+    const pikkukeikat = visibleWorksites.filter(worksite => (worksite.worktype === "Private client" || worksite.worktype === "Yksityisasiakas"));
 
     return { tyomaat, pikkukeikat };
   };
