@@ -1,16 +1,25 @@
-import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView } from "react-native";
+import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView, Dimensions } from "react-native";
 import {useContext, useEffect, useState} from 'react';
 
+import { Context as EventContext } from "../../context/EventsContext";
 import {timeStampChanger} from '../../utils/timestampChanger'
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 
+
+
+
 const Events = ({events}) => {
 
-    const { t, i18n } = useTranslation();
-    const [searchTerm, setSearchTerm] = useState(''); 
 
-    const currentLang = i18n.language; // Otetaan käytetty kieli talteen
+  
+  const {state: eventState,fetchEvents } = useContext(EventContext) 
+  const { t, i18n } = useTranslation();
+  const [searchTerm, setSearchTerm] = useState(''); 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const currentLang = i18n.language; // Otetaan käytetty kieli talteen
+
+
   // Käytetään tätä etusivun haku toiminnossa apuna
   const translateEventType = (type) => {
     switch (type) {
@@ -58,6 +67,18 @@ const Events = ({events}) => {
     }
   };
 
+  // Käytetään onRefresh funktiota flatlistissä
+  const onRefresh = () => {
+    setIsRefreshing(true); // Aseta päivitystila todeksi
+    fetchEvents().then(result => {
+      console.log(result); // Logiikka tulosten käsittelyyn
+      setIsRefreshing(false); // Aseta päivitystila epätodeksi, kun olet valmis
+    })
+    .catch(error => {
+      console.error('Failed to refresh events:', error);
+      setIsRefreshing(false); // Aseta päivitystila epätodeksi, jos tulee virhe
+    });
+  }
 
   const displayEvents = searchTerm.length === 0
     ? events
@@ -76,16 +97,21 @@ const Events = ({events}) => {
     return (
         <View style={styles.mainContainer}>
       <View style={styles.textinputContainer}>
-        <Ionicons name="options" size={25} />
+        <Ionicons name="options" size={25} color="white" />
         <TextInput
           placeholder="hae..."
+          placeholderTextColor="white"
           style={styles.textinput}
           value={searchTerm}
           onChangeText={text => setSearchTerm(text)}
           />
       </View>
       <FlatList
+        
         data={displayEvents}
+        contentContainerStyle={{paddingBottom: 200}}
+        refreshing={isRefreshing}  // Päivitysindikaattorin tila
+        onRefresh={onRefresh}      // Päivitysmetodi
         keyExtractor={(item) => item._id}
         renderItem={({item}) => {
           let displayText;
@@ -178,7 +204,7 @@ const Events = ({events}) => {
 
             <View style={styles.eventContainer}>
 
-              <View>
+              <View style={styles.test}>
                 <View style={styles.type}>
                   {item.markerNumber ?
                     <Text style={styles.text}>{displayText} ({item.markerNumber})</Text>
@@ -212,6 +238,7 @@ const Events = ({events}) => {
 
 const styles = StyleSheet.create({
     mainContainer: {
+      height: 'auto',
       marginBottom: 70,
     },
     text: {
@@ -232,6 +259,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.4,
   
     },
+    
     type: {
       flexDirection: 'row',
       justifyContent:'space-between',
@@ -261,7 +289,7 @@ const styles = StyleSheet.create({
     },
     textinput: {
       padding: 3,
-  
+      
       width: '100%'
     }
   });

@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView } from "react-native";
+import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView, ImageBackground } from "react-native";
 import {useContext, useEffect, useState} from 'react';
 import { Context as Autcontext} from '../context/AuthContext'
 import {Context as EventContext} from '../context/EventsContext'
@@ -24,7 +24,7 @@ const Etusivu = ({navigation}) => {
   const {state: worksiteState,fetchWorksites} = useContext(WorksiteContext)
   const [events, setEvents] = useState([]); 
   const [isLoading, setIsLoading] = useState(false);
-
+  
   const role = state?.user?.role;
   const userId = state?.user?._id;
   
@@ -34,7 +34,12 @@ const Etusivu = ({navigation}) => {
   const [selectedTitle, setSelectedTitle] = useState(null); // Käytetään tätä kun valitaan mitä halutaan näkyväksi
   
   const handlePress = (title) => {
-    setSelectedTitle(title);
+    if (selectedTitle === title) {
+      setSelectedTitle(null);
+    } else {
+      setSelectedTitle(title);
+
+    }
   }
 
 
@@ -43,11 +48,11 @@ const Etusivu = ({navigation}) => {
  
 
   useEffect(() => {
-    const fetchAndSetData = async () => {
+    const fetchAndSetData =  () => {
       setIsLoading(true);
-      await fetchUser();
-      await fetchWorksites();
-      await fetchEvents();
+       fetchUser();
+       fetchWorksites();
+       fetchEvents();
       setIsLoading(false)
       
     }
@@ -110,27 +115,43 @@ const Etusivu = ({navigation}) => {
 
   return (
       
-        
-        <View>
+        <ImageBackground
+          source={require('../../assets/logo-color.png')}
+          
+          style={styles.background}
+        >
+        <View style={styles.overlay}>
+
+        <View style={styles.container}>
           
           <View style={styles.accContainer}>
 
           {accordionData.map((item, index) => (
-                    <Accordion 
-                        key={index} 
-                        title={item.title} 
-                        handlePress={() => handlePress(item.title)}
-                    />
-                ))}
+            <Accordion 
+              key={index} 
+              title={item.title} 
+              handlePress={() => handlePress(item.title)}
+              isSelected={selectedTitle === item.title}
+            />
+          ))}
           </View>
-
-          {accordionData.map((item, index) => (
-                selectedTitle === item.title && <View key={index}>{item.content}</View>
-            ))}
+          
+          
+          {selectedTitle ? (
+            accordionData.map((item, index) => (
+              selectedTitle === item.title && <View style={styles.test} key={index}>{item.content}</View>
+            ))
+          ) : (
+            <View style={styles.container}>
+              <Text style={styles.welcomeText}>Tervetuloa</Text>
+            </View>
+          )}
           
 
         </View>
       
+          </View>
+          </ImageBackground>
     
   )
 
@@ -138,10 +159,26 @@ const Etusivu = ({navigation}) => {
 
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: '100%',
+  },
+  test: {
+    alignItems: 'center'
+  },
   accContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     // Lisää tähän tarvittavat tyylit
+  },
+  background: {
+    flex: 1, // Varmista, että ImageBackground täyttää koko näytön
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(40, 42, 54, 0.1)',  // Määritä väri ja läpinäkyvyys tarpeen mukaan
   },
   
 });

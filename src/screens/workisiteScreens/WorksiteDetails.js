@@ -1,5 +1,5 @@
 
-import {View, Text, StyleSheet, ActivityIndicator, Alert, Button, Image, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, ActivityIndicator, Alert, Button, Image, TouchableOpacity, ImageBackground} from 'react-native'
 import {Context as WorksiteContext} from '../../context/WorksiteContext'
 import {Context as AuthContext} from '../../context/AuthContext'
 import { useContext, useEffect, useState } from 'react';
@@ -151,7 +151,14 @@ const WorksiteDetails = ({route, navigation}) => {
   const floorplanKey = state.currentWorksite.floorplanKey;
   return (
     <View style={styles.container}>
+      <ImageBackground
+          source={require('../../../assets/map.jpg')}
+          
+          style={styles.background}
+        >
       <View style={styles.textContainer}>
+        <View style={styles.test}>
+
         <Text style={styles.text}>
           {t("workistedetail-address")}:{state.currentWorksite.address}
         </Text>
@@ -159,9 +166,10 @@ const WorksiteDetails = ({route, navigation}) => {
         <Text style={styles.text}>
           {t("worksitedetail-city")}: {state.currentWorksite.city}
         </Text>
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} style={styles.image} />
         </View>
+        {/* <View style={styles.imageContainer}>
+          <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} style={styles.image} />
+        </View> */}
 
         <View style={styles.buttonContainer}>
           
@@ -182,6 +190,7 @@ const WorksiteDetails = ({route, navigation}) => {
           } 
         </View>
       </View>
+        </ImageBackground>
 
      
       
@@ -207,12 +216,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 20,
   },
-  textContainer: {
+  background: {
     flex: 1,
-    backgroundColor: "#e8e8f0",
-    width: "90%",
-    padding: 40,
+    resizeMode: 'cover',
     borderRadius: 10,
+    padding: 40,
+    
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -221,6 +230,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 3.84,
     elevation: 5,
+    
+  },
+  textContainer: {
+    flex: 1,
+    // backgroundColor: "#e8e8f0",
+    
+    width:'90%',
+    padding: 60,
+    // borderRadius: 10,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.15,
+    // shadowRadius: 3.84,
+    // elevation: 5,
+  },
+  test: {
+    flex:1,
   },
   text: {
     fontSize: 16,
@@ -233,7 +262,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonContainer: {
-    marginTop: 20,
+    marginTop: 60,
   },
   image: {
     

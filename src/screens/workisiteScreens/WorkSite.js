@@ -5,13 +5,17 @@ import {Context as AuthContext} from '../../context/AuthContext'
 import DownloadScreen from "../../components/DownloadScreen";
 import { useTranslation } from "react-i18next";
 
-import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity, Pressable, Dimensions } from "react-native";
+import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity, Pressable, Dimensions, ImageBackground } from "react-native";
 
 const WorkSite = ({navigation, route}) => {
   const { t } = useTranslation();
+
   const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
   const [showWorksites, setShowWorksites] = useState(false);
   const [showSmallGigs, setShowSmallGigs] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+
   const { state, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext); 
   const {state: authState, fetchUser} = useContext(AuthContext);
 
@@ -46,6 +50,18 @@ const WorkSite = ({navigation, route}) => {
     };
     loadWorksites();
   }, []);
+
+  const onRefresh =  async () => {
+    setIsRefreshing(true); // Aseta päivitystila todeksi
+    await fetchWorksites().then(result => {
+      console.log(result); // Logiikka tulosten käsittelyyn
+      setIsRefreshing(false); // Aseta päivitystila epätodeksi, kun olet valmis
+    })
+    .catch(error => {
+      console.error('Failed to refresh events:', error);
+      setIsRefreshing(false); // Aseta päivitystila epätodeksi, jos tulee virhe
+    });
+  }
 
   // Käytetään tätä funktiota kun painetaan tietystä työmaasta
   const handlePressWorksite = (worksiteId) => {
@@ -112,56 +128,67 @@ const WorkSite = ({navigation, route}) => {
   );
   
   return (
-    <View style={styles.container}>
-      
-      
-      <View style={styles.selectJobtype}>
-        <TouchableOpacity onPress={handeleShowWorksites} style={[styles.jobTypeButton, showWorksites ? styles.selectedJobType: null]}>
-          <Text style={[styles.jobTypeButtonText, showWorksites ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-worksite')}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleShowSmallGigs} style={[styles.jobTypeButton, showSmallGigs ? styles.selectedJobType: null]}>
-          <Text style={[styles.jobTypeButtonText, showSmallGigs ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-privateClient')}</Text>
-        </TouchableOpacity>
-      </View>
+    <ImageBackground
+          source={require('../../../assets/logo-color.png')}
+          
+          style={styles.background}
+        >
+      <View style={styles.overlay}>
+        <View style={styles.container}>
+          
+          
+          <View style={styles.selectJobtype}>
+            <TouchableOpacity onPress={handeleShowWorksites} style={[styles.jobTypeButton, showWorksites ? styles.selectedJobType: null]}>
+              <Text style={[styles.jobTypeButtonText, showWorksites ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-worksite')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleShowSmallGigs} style={[styles.jobTypeButton, showSmallGigs ? styles.selectedJobType: null]}>
+              <Text style={[styles.jobTypeButtonText, showSmallGigs ? styles.selectedJobTypeButtonText : null]}>{t('worksiteform-worktype-privateClient')}</Text>
+            </TouchableOpacity>
+          </View>
 
-      {/* {errorMessage && <DownloadScreen message={t('loading')}/>} */}
+          {/* {errorMessage && <DownloadScreen message={t('loading')}/>} */}
 
-      {showWorksites && (
-
-      tyomaat.length > 0 ? (
-        <View style={styles.woksiteContainer}>
-
-          <FlatList
-            data={tyomaat}
-            renderItem={renderWorksite}
-            keyExtractor={(worksite) => `tyomaa-${worksite._id}`}
+          {showWorksites && (
             
-            />
+            tyomaat.length > 0 ? (
+              <View style={styles.woksiteContainer}>
+
+              <FlatList
+                data={tyomaat}
+                renderItem={renderWorksite}
+                refreshing={isRefreshing}  // Päivitysindikaattorin tila
+                onRefresh={onRefresh}      // Päivitysmetodi
+                keyExtractor={(worksite) => `tyomaa-${worksite._id}`}
+                
+                />
+            </View>
+          ) : (
+            <Text style={styles.noWorksiteText}>{t("worksite-no-worksites")}</Text>
+          )
+        )}
+
+          {showSmallGigs && (
+            
+            pikkukeikat.length > 0 ? (
+              <View style={styles.woksiteContainer}>
+
+              <FlatList
+                data={pikkukeikat}
+                renderItem={renderWorksite}
+                refreshing={isRefreshing}  // Päivitysindikaattorin tila
+                onRefresh={onRefresh}      // Päivitysmetodi
+                keyExtractor={(worksite) => `pikkukeikka-${worksite._id}`}
+                
+                
+                />
+            </View>
+          ) : (
+            <Text style={styles.noWorksiteText}>{t("worksite-no-worksites")}</Text>
+          )
+        )}
         </View>
-      ) : (
-        <Text style={styles.noWorksiteText}>{t("worksite-no-worksites")}</Text>
-      )
-      )}
-
-      {showSmallGigs && (
-
-      pikkukeikat.length > 0 ? (
-        <View style={styles.woksiteContainer}>
-
-          <FlatList
-            data={pikkukeikat}
-            renderItem={renderWorksite}
-            keyExtractor={(worksite) => `pikkukeikka-${worksite._id}`}
-            
-            
-            />
-        </View>
-      ) : (
-        <Text style={styles.noWorksiteText}>{t("worksite-no-worksites")}</Text>
-      )
-      )}
     </View>
- 
+  </ImageBackground>
   );
 };
 
@@ -169,6 +196,15 @@ const WorkSite = ({navigation, route}) => {
 const phoneHeight = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1, // Varmista, että ImageBackground täyttää koko näytön
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(40, 42, 54, 0.1)',  // Määritä väri ja läpinäkyvyys tarpeen mukaan
+  },
   pressed: {
     opacity: 0.75,
   },

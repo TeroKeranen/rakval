@@ -14,25 +14,28 @@ const WorksiteReady = ({worksites, title}) => {
         <View style={styles.container}>
           <Text style={styles.title}>{title}</Text>
           
+
           <FlatList
             data={worksites}
             keyExtractor={(item) => item._id}
+            contentContainerStyle={{paddingBottom: 150}}
             renderItem={({ item }) => {
               const totalWorkTime = calculateTotaWorkTime(item.workDays);
               return (
-
-              <View style={styles.renderContainer}>
-                <Text>{t('worksiteform-city')}: {item.city}</Text>
-                <Text>{t('worksiteform-address')}: {item.address}</Text>
-                {item.startTime && <Text>{t('startingDate')}: {item.startTime}</Text>}
-                <Text>{t('workHours')}: {totalWorkTime}</Text>
+                
+                <View style={styles.renderContainer}>
+                <Text >{t('worksiteform-city')}: {item.city}</Text>
+                <Text >{t('worksiteform-address')}: {item.address}</Text>
+                {item.startTime && <Text >{t('startingDate')}: {item.startTime}</Text>}
+                <Text >{t('workHours')}: {totalWorkTime}</Text>
                 
                 
 
                 
               </View>
               )
-}}/>
+            }}/>
+            
         </View>
       );
     
@@ -41,17 +44,31 @@ const WorksiteReady = ({worksites, title}) => {
 
 const styles = StyleSheet.create({
   container: {
+    
+    width: '90%',
+    borderRadius: 5,
+    
+    
   },
+ 
   title: {
+    color: 'white',
     alignSelf: 'center',
     fontSize: 20,
     fontWeight: '600'
   },
   renderContainer: {
-    borderWidth: 1,
-    padding: 8,
-    margin: 3,
-    borderRadius: 3,
+    alignSelf: 'center',
+      backgroundColor: '#ddd4d4',
+      width: '90%',
+      marginVertical: 6,
+      padding: 10,
+      borderRadius: 10,
+      elevation: 3,
+      shadowColor: "black",
+      shadowRadius: 4,
+      shadowOffset: { width: 1, height: 1 },
+      shadowOpacity: 0.4,
     
   }
 })

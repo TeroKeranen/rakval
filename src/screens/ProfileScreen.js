@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 
 const ProfileScreen = ({navigation}) => {
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
+  const [isLoading, setIsLoading] = useState(true); // Käytetään latausindikaattoria
   const { state, fetchUser, signout, joinCompany, clearErrorMessage } = useContext(AuthContext);
   const { clearCompany } = useContext(CompanyContext);
   const { clearWorksites, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
@@ -23,55 +23,35 @@ const ProfileScreen = ({navigation}) => {
 
   // päivitetään tällä fechUser tiedot aina kun menemme sivulle
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      fetchUser(); // Otettu pois mutta jos tulee ongelmia käyttäjätietojen kanssa
+    const unsubscribe = navigation.addListener("focus", async () => {
+      await fetchUser(); // Varmista, että fetchUser on määritelty palauttamaan Promise
       clearErrorMessage();
-      
-      
+      setIsLoading(false); // Asetetaan false, kun tiedot on ladattu
     });
 
-    return unsubscribe;
-  }, [navigation]);
+    return () => unsubscribe();
+  }, [navigation, fetchUser, clearErrorMessage]);
+
+  // console.log("user", state.user.email);
 
 
-
-  const handleJoinCompany = async () => {
-
-    setIsLoading(true);
-    const result = await joinCompany(companyCode);
-    setIsLoading(false);
-
-    if (result.success) {
-     // Onnistunut liittyminen
-      clearErrorMessage();
-      fetchUser(); // jos tulee ongelmia niin laitettaan takaisin
-      fetchWorksites(); // Jos tulee ongelmia niin laitetaan takaisin
-     
-    } else {
-      
-      Alert.alert(t('error'), t('profileScreenCompanycodeError'));
-        return; // Lopeta funktio, jos ehto ei täyty
-      
-     // Näytä virheilmoitus käyttäjälle
-      
-    }
-  };
-
+  
 
   const navigateToChangePassword = () => {
     navigation.navigate('ChangepasswordScreen')
   }
 
   // Latauskuvake jos etsii tietoja
-  if (isLoading) {
-    <DownloadScreen message={t('loading')} />
+  if (isLoading || !state.user) {
+    return <DownloadScreen message={t('loading')} />;
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
-
+        
         <View >
+          {/* {state.user.email ? <Text style={styles.text}>{t('email')}: {state.user.email}</Text> : null} */}
           <Text style={styles.text}>{t('email')}: {state.user.email}</Text>
           <Text style={styles.text}>{t('role')} : {state.user.role}</Text>
           {state.user.company ? <Text>{t('profileScreen-company')}: {state.user.company.name}</Text> : null}

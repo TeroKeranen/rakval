@@ -29,6 +29,7 @@ import { Amplify } from "aws-amplify";
 import awsExports from "./src/aws-exports";
 import ChangepasswordScreen from './src/screens/ChangepasswordScreen';
 import VerificationScreen from './src/screens/VerificationScreen';
+import { ImageBackground, StyleSheet } from 'react-native';
 Amplify.configure(awsExports);
 
 
@@ -54,10 +55,11 @@ function MainStack() {
     checkAuthState();
   }, []);
   return (
+    
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        headerStyle: { backgroundColor: "#4f1c01" },
+        headerStyle: { backgroundColor: "#282A36" },
         headerTintColor: "white",
       }}
     >
@@ -86,6 +88,8 @@ function SignedInNavigator() {
   
 
   return (
+    
+
     <Stack.Navigator screenOptions={{
       headerShown: false,
     }}>
@@ -94,7 +98,9 @@ function SignedInNavigator() {
       {/* muut ruudut, jos niitä on */}
       
     </Stack.Navigator>
+    
   );
+
 }
 
 

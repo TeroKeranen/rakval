@@ -31,7 +31,7 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
             tabBarActiveTintColor: "#f48b28",
             tabBarInactiveTintColor: "#a3845c",
             tabBarStyle: {
-              backgroundColor: "#4f1c01",
+              backgroundColor: "#404558",
             },
   
             tabBarIcon: ({ focused, color, size }) => {

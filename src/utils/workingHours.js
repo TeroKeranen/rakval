@@ -2,6 +2,10 @@ import { useTranslation } from "react-i18next";
 
 export const calculateWorkHours = (startDateString, startTimeString, endDateString, endTimeString,t) => {
     
+    if (!startDateString || !endDateString || !startTimeString || !endTimeString) {
+        console.log("ei tietoja ajoissa")
+        return;
+    }
 
     const [startDay, startMonth, startYear] = startDateString.split('.').map(Number);
     const [endDay, endMonth, endYear] = endDateString.split('.').map(Number);
@@ -22,6 +26,9 @@ export const calculateWorkHours = (startDateString, startTimeString, endDateStri
 
 function convertDate(dateString) {
     // Muuntaa päivämäärän muodosta "DD.MM.YYYY" muotoon "YYYY-MM-DD"
+    if (!dateString) {
+        return;
+    }
     const parts = dateString.split(".");
     return `${parts[2]}-${parts[1]}-${parts[0]}`;
   }
