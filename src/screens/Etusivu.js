@@ -15,6 +15,7 @@ import WorksiteReady from "../components/EtusivuComponents/WorksiteReady";
 import { getCurrentDate } from "../utils/currentDate";
 
 import {futureStartTime} from '../utils/calcFutureWorksite'
+import WorkOn from "../components/EtusivuComponents/WorkOn";
 
 
 const Etusivu = ({navigation}) => {
@@ -24,14 +25,17 @@ const Etusivu = ({navigation}) => {
   const {state: worksiteState,fetchWorksites} = useContext(WorksiteContext)
   const [events, setEvents] = useState([]); 
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedTitle, setSelectedTitle] = useState(null); // Käytetään tätä kun valitaan mitä halutaan näkyväksi
   
   const role = state?.user?.role;
   const userId = state?.user?._id;
+  const worksites = worksiteState.worksites;
   
   
 
+
+
   
-  const [selectedTitle, setSelectedTitle] = useState(null); // Käytetään tätä kun valitaan mitä halutaan näkyväksi
   
   const handlePress = (title) => {
     if (selectedTitle === title) {
@@ -103,6 +107,7 @@ const Etusivu = ({navigation}) => {
     { title: t('etusivuReadyButton'), content: <WorksiteReady worksites={readyWorksites} title="valmiit" /> },
     { title: t('etusivuUnfinishedButton'), content: <WorksiteReady worksites={notReadyWorksites} title="Keskeneräiset" /> },
     { title: t('etusivuStartingdButton'), content: <WorksiteReady worksites={futureStart} title="Alkamassa" /> },
+    { title: "workon", content: <WorkOn worksites={worksites} userRole={role} userId={userId}/> },
     // Lisää muita otsikoita ja sisältöjä tarpeen mukaan
   ];
 
@@ -142,9 +147,7 @@ const Etusivu = ({navigation}) => {
               selectedTitle === item.title && <View style={styles.test} key={index}>{item.content}</View>
             ))
           ) : (
-            <View style={styles.container}>
-              <Text style={styles.welcomeText}>Tervetuloa</Text>
-            </View>
+            null
           )}
           
 
