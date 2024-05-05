@@ -2,6 +2,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Context as AuthContext } from "../../context/AuthContext";
 import { Context as WorksiteContext } from "../../context/WorksiteContext";
 import { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const WorkOn = ({worksites, userRole="admin", userId="12344"}) => {
 
@@ -9,6 +10,7 @@ const WorkOn = ({worksites, userRole="admin", userId="12344"}) => {
     const {state: worksiteState,fetchWorksites} = useContext(WorksiteContext)
     const [userDetails, setUserDetails] = useState({});
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const {t} = useTranslation();
     
     const runningWorkSites = worksites.reduce((acc, worksite) => {
         
@@ -25,7 +27,7 @@ const WorkOn = ({worksites, userRole="admin", userId="12344"}) => {
         return acc;
     }, []);
 
-    console.log("RUNNING", runningWorkSites.length)
+    
     
     const filteredRunningWorksites = runningWorkSites.filter(site => {
         if (userRole === 'admin') {
@@ -80,7 +82,7 @@ const WorkOn = ({worksites, userRole="admin", userId="12344"}) => {
 
     return (
         <View style={styles.container}>
-
+            <Text style={styles.title}>{t('workOn')}</Text>
             <FlatList 
                 data={filteredRunningWorksites}
                 contentContainerStyle={{paddingBottom: 150}}
@@ -101,6 +103,12 @@ const styles = StyleSheet.create({
         
         width: '90%'
     },
+    title: {
+        color: 'white',
+        alignSelf: 'center',
+        fontSize: 20,
+        fontWeight: '600'
+      },
     worksiteItem: {
         alignSelf: 'center',
       backgroundColor: '#ddd4d4',

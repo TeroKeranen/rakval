@@ -54,7 +54,7 @@ const ProfileScreen = ({navigation}) => {
           {/* {state.user.email ? <Text style={styles.text}>{t('email')}: {state.user.email}</Text> : null} */}
           <Text style={styles.text}>{t('email')}: {state.user.email}</Text>
           <Text style={styles.text}>{t('role')} : {state.user.role}</Text>
-          {state.user.company ? <Text>{t('profileScreen-company')}: {state.user.company.name}</Text> : null}
+          {state.user.company ? <Text style={styles.text}>{t('profileScreen-company')}: {state.user.company.name}</Text> : null}
         </View>
 
         <View>

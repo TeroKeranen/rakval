@@ -21,7 +21,7 @@ import { Context as EventContext} from '../context/EventsContext';
 // Navigator
 import HomeTabsNavigator from './HomeTabsNavigator'
 import AdminCompanybtmTab from './adminNavigation/AdminCompanybtmTab'
-import AdminNoCompanybtmTab from './adminNavigation/AdminNoCompanybtmTab'
+
 import AdminTabs from './adminNavigation/AdminTabs'
 import UserWorksiteTabs from './UserWorksiteTabs'
 
@@ -65,24 +65,6 @@ const MainDrawerNavigator = () => {
       
     }, [state]);
 
-    // useEffect(() => {
-    //   const checkTokenExpiration = () => {
-    //     const currentTime = Date.now() / 1000;
-    //     const token = state.token;
-    //     if (token) {
-    //       const decoded = jwtDecode(token);
-    //       if (decoded.exp < currentTime) {
-    //         console.log("Token vanhentunut");
-    //         refreshAccessToken(); // Kirjautuu ulos ja ohjaa kirjautumissivulle
-    //       } else {
-    //         console.log("Token voimassa");
-    //       }
-    //     }
-    //   };
-    
-    //   checkTokenExpiration();
-    // }, [state.token]); // Riippuvuus state.token
-    
     
     const toggleModal = () => {
       setModalVisible(!modalVisible);
@@ -95,11 +77,6 @@ const MainDrawerNavigator = () => {
     const hasCompany = state.user && state.user.company;
 
    
-
-    
-
-  
-
     // Jos käyttäjä ei ole syöttänyt verification koodia niin näytetään VerificationScreen
     if (state?.user && !isVerified) {
       return <VerificationScreen />
@@ -130,7 +107,7 @@ const MainDrawerNavigator = () => {
                 return <MoreTabButton onPress={toggleModal}/>
               }
             }}/>
-            <Drawer.Screen name={t("drawerScreen-worksite")} component={hasCompany ? AdminCompanybtmTab : AdminNoCompanybtmTab} />
+            <Drawer.Screen name={t("drawerScreen-worksite")} component={AdminCompanybtmTab} />
             {/* <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} /> */}
             <Drawer.Screen name={t("drawerScreen-company")} component={AdminTabs} />
             

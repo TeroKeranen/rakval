@@ -30,11 +30,13 @@ const Etusivu = ({navigation}) => {
   const role = state?.user?.role;
   const userId = state?.user?._id;
   const worksites = worksiteState.worksites;
+  const company = state.user?.company;
   
   
-
-
-
+  
+  
+  
+  
   
   
   const handlePress = (title) => {
@@ -42,21 +44,24 @@ const Etusivu = ({navigation}) => {
       setSelectedTitle(null);
     } else {
       setSelectedTitle(title);
-
+      
     }
   }
-
-
-
+  
+  
+  
   // Haetaan AuthCOntect.js avulla tiedot käyttäjästä.
- 
-
+  
+  
   useEffect(() => {
-    const fetchAndSetData =  () => {
+    const fetchAndSetData =  async () => {
       setIsLoading(true);
-       fetchUser();
-       fetchWorksites();
-       fetchEvents();
+       await fetchUser();
+
+       if (company != null) {
+         await fetchWorksites();
+       }
+       await fetchEvents();
       setIsLoading(false)
       
     }
@@ -65,6 +70,9 @@ const Etusivu = ({navigation}) => {
 
     return unsubscribe;
   })
+
+
+  
 
   
 
@@ -104,10 +112,10 @@ const Etusivu = ({navigation}) => {
 
   const accordionData = [
     { title: t('etusivuEventsButton'), content: <Events events={events} /> },
-    { title: t('etusivuReadyButton'), content: <WorksiteReady worksites={readyWorksites} title="valmiit" /> },
-    { title: t('etusivuUnfinishedButton'), content: <WorksiteReady worksites={notReadyWorksites} title="Keskeneräiset" /> },
-    { title: t('etusivuStartingdButton'), content: <WorksiteReady worksites={futureStart} title="Alkamassa" /> },
-    { title: "workon", content: <WorkOn worksites={worksites} userRole={role} userId={userId}/> },
+    { title: t('etusivuReadyButton'), content: <WorksiteReady worksites={readyWorksites} title={t('ready')} /> },
+    { title: t('etusivuUnfinishedButton'), content: <WorksiteReady worksites={notReadyWorksites} title={t('unfinished')} /> },
+    { title: t('etusivuStartingdButton'), content: <WorksiteReady worksites={futureStart} title={t('starting')} /> },
+    { title: "Ongoing", content: <WorkOn worksites={worksites} userRole={role} userId={userId}/> },
     // Lisää muita otsikoita ja sisältöjä tarpeen mukaan
   ];
 

@@ -33,7 +33,10 @@ const WorkSite = ({navigation, route}) => {
   // Käytetään navigation focusta joka hakee työmaat uudestaan kun palataan tälle sivulle. // Kommentoin päivitys napin tätä varten jos tulevaisuudessa tulee ongelmia sekä handler function
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      fetchWorksites();
+      if (authState.user.company != null) {
+
+        fetchWorksites();
+      }
       
       
     });
@@ -44,21 +47,32 @@ const WorkSite = ({navigation, route}) => {
   useEffect(() => {
     const loadWorksites = async () => {
       setIsLoading(true);
-      await fetchWorksites();
-      setIsLoading(false);
+      if (authState.user.company != null) {
+
+        await fetchWorksites()
+          .then(result => {
+            setIsLoading(false);
+          })
+          .catch(error => {
+            
+            setIsLoading(false);
+          })
+      }
       
     };
     loadWorksites();
+    setIsLoading(false);
   }, []);
 
   const onRefresh =  async () => {
     setIsRefreshing(true); // Aseta päivitystila todeksi
     await fetchWorksites().then(result => {
-      console.log(result); // Logiikka tulosten käsittelyyn
+      
       setIsRefreshing(false); // Aseta päivitystila epätodeksi, kun olet valmis
     })
     .catch(error => {
       console.error('Failed to refresh events:', error);
+      
       setIsRefreshing(false); // Aseta päivitystila epätodeksi, jos tulee virhe
     });
   }
@@ -68,6 +82,14 @@ const WorkSite = ({navigation, route}) => {
     navigation.navigate("WorksiteDetails", { worksiteId });
   };
 
+  if (authState.user.company == null) {
+    return (
+      
+      <View style={styles.noCompanyContainer}>
+        <Text style={styles.noCompany}>{authState.user.role === 'admin' ? t('noCompanyAdmin') : t('noCompanyUser')}</Text>
+      </View>
+    )
+  }
   // Jos
   if (isLoading) {
     return <DownloadScreen message={t('loading')} />;
@@ -283,6 +305,21 @@ const styles = StyleSheet.create({
   },
   selectedJobTypeButtonText: {
     color: '#ffffff'
+  },
+  noCompanyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: '80%',
+    
+  },
+  noCompany: {
+
+    textAlign: 'center',
+    marginTop: 20,
+    color: 'red',
+    fontSize: 18,
+    fontWeight: 'bold'
   }
 });
 

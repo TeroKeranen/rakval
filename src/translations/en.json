@@ -23,6 +23,10 @@
   "user": "User",
   "constructionSite": "construction site",
   "date": "date",
+  "ready" : "Ready",
+  "starting": "Starting",
+  "unfinished":"Unfinished",
+  "workOn": "Recording in progress",
 
   "sign-upHeader": "Sign Up",
   "signup-navlink-text": "Already have an account? Sign in instead",
@@ -38,6 +42,8 @@
   "tabScreen-company": "Your company",
   "add-new-construction": "Add new",
   "woksite-detail-header": "construction site details",
+  "noCompanyAdmin": "You need to create a company first before you can add worksites",
+  "noCompanyUser": "You are not affiliated with any company",
 
   "companyScreen-downloadScreen-message": "Retrieving company details",
   "companyScreen-companyInfo": "Company Details",
@@ -71,6 +77,7 @@
   "worksitedetail-confirmDelete-deleteButton": "Delete",
   "worksitedetail-endWorkDay": "End day",
   "worksitedetail-startWorkDay": "Start day",
+  "complete": "Mark the construction site as complete",
 
   "worksiteWorker-select-worker": "Select a worker",
   "worksiteWorker-add-button": "Add worker",

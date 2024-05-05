@@ -23,6 +23,10 @@
   "user": "Käyttäjä",
   "constructionSite": "Työmaa",
   "date": "Date",
+  "ready" : "Valmiit",
+  "starting": "Alkamassa",
+  "unfinished":"Kesken",
+  "workOn": "Nauhoitus päällä",
   
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
@@ -38,6 +42,8 @@
   "tabScreen-company": "Sinun yritys",
   "add-new-construction": "Lisää uusi",
   "woksite-detail-header": "Työmaan tiedot",
+  "noCompanyAdmin": "Sinun pitää ensin luoda yritys, jotta voit lisätä työmaita",
+  "noCompanyUser": "Sinä et ole liittynyt mihinkään yritykseen",
 
   "companyScreen-downloadScreen-message": "Haetaan yrityksen tietoja",
   "companyScreen-companyInfo": "Yrityksen tiedot",
@@ -71,6 +77,7 @@
   "worksitedetail-confirmDelete-deleteButton": "Poista",
   "worksitedetail-endWorkDay": "Lopeta työpäivä",
   "worksitedetail-startWorkDay": "Aloita työpäivä",
+  "complete": "Merkitse työmaa valmiiksi",
 
   "worksiteWorker-select-worker": "Valitse työntekijä",
   "worksiteWorker-add-button": "Lisää työntekijä",

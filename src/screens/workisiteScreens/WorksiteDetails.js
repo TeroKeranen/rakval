@@ -159,13 +159,13 @@ const WorksiteDetails = ({route, navigation}) => {
       <View style={styles.textContainer}>
         <View style={styles.test}>
 
-        <Text style={styles.text}>
-          {t("workistedetail-address")}:{state.currentWorksite.address}
-        </Text>
+          <Text style={styles.text}>
+            {t("workistedetail-address")}:{state.currentWorksite.address}
+          </Text>
 
-        <Text style={styles.text}>
-          {t("worksitedetail-city")}: {state.currentWorksite.city}
-        </Text>
+          <Text style={styles.text}>
+            {t("worksitedetail-city")}: {state.currentWorksite.city}
+          </Text>
         </View>
         {/* <View style={styles.imageContainer}>
           <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} style={styles.image} />
@@ -184,7 +184,7 @@ const WorksiteDetails = ({route, navigation}) => {
             {!worksiteIsReady ? 
             
             <TouchableOpacity style={styles.workDaybutton} onPress={handleWorksiteReady}>
-              <Text style={{color: 'white'}}>Merkitse työmaa valmiiksi</Text>
+              <Text style={{color: 'white'}}>{t('complete')}</Text>
             </TouchableOpacity>
             : null
           } 
@@ -237,7 +237,9 @@ const styles = StyleSheet.create({
     // backgroundColor: "#e8e8f0",
     
     width:'90%',
-    padding: 60,
+    padding: 10,
+
+    
     // borderRadius: 10,
     // shadowColor: "#000",
     // shadowOffset: {
@@ -250,9 +252,18 @@ const styles = StyleSheet.create({
   },
   test: {
     flex:1,
+    padding: 0,
+    margin: 0,
+    
   },
   text: {
-    fontSize: 16,
+    fontSize: 20,
+    fontWeight:'bold',
+    alignSelf: 'center',
+    
+    width: '100%',
+    color: 'white'
+    
 
   },
   imageContainer: {

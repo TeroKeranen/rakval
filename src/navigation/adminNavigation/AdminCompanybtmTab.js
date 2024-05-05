@@ -7,11 +7,18 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import WorkSite from "../../screens/workisiteScreens/WorkSite";
 import AddNewWorksite from "../../screens/workisiteScreens/AddNewWorksite";
 
+import { Context as AuthContext } from "../../context/AuthContext";
+import { useContext } from "react";
+
 const Tab = createBottomTabNavigator();
 
 // Jos adminin on liittynyt yritykseen niin hänellä näkyy nämä alatabit
 const AdminCompanybtmTab = () => {
+
+  const {state} = useContext(AuthContext);
     const { t } = useTranslation();
+
+  
     return (
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -36,8 +43,12 @@ const AdminCompanybtmTab = () => {
           // inactiveTintColor: "white",
         })}
       >
+        
         <Tab.Screen name={t("construction-site")} component={WorkSite} options={{ headerShown: false }} />
-        <Tab.Screen name={t("add-new-construction")} component={AddNewWorksite} options={{ headerShown: false }} />
+
+        {state.user.company && (
+          <Tab.Screen name={t("add-new-construction")} component={AddNewWorksite} options={{ headerShown: false }} />
+        )}
         
       </Tab.Navigator>
     );
