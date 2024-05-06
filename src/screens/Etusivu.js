@@ -56,12 +56,12 @@ const Etusivu = ({navigation}) => {
   useEffect(() => {
     const fetchAndSetData =  async () => {
       setIsLoading(true);
-       await fetchUser();
+       fetchUser();
 
        if (company != null) {
-         await fetchWorksites();
+         fetchWorksites();
        }
-       await fetchEvents();
+       fetchEvents();
       setIsLoading(false)
       
     }

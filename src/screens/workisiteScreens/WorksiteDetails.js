@@ -215,12 +215,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     marginVertical: 20,
+    padding: 20,
+    
   },
   background: {
     flex: 1,
-    resizeMode: 'cover',
+    resizeMode: 'contain',
+    width: '100%',
     borderRadius: 10,
-    padding: 40,
+    padding: 0,
     
     shadowColor: "#000",
     shadowOffset: {
@@ -235,7 +238,7 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     // backgroundColor: "#e8e8f0",
-    
+    alignItems: 'center',
     width:'90%',
     padding: 10,
 
