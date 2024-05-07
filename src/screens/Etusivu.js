@@ -56,12 +56,13 @@ const Etusivu = ({navigation}) => {
   useEffect(() => {
     const fetchAndSetData =  async () => {
       setIsLoading(true);
-       fetchUser();
+       await fetchUser();
 
        if (company != null) {
-         fetchWorksites();
+          console.log("TOTEUTETAAN TÄMÄ")
+         await fetchWorksites();
        }
-       fetchEvents();
+       await fetchEvents();
       setIsLoading(false)
       
     }
@@ -71,9 +72,16 @@ const Etusivu = ({navigation}) => {
     return unsubscribe;
   })
 
-
+  useEffect(() => {
+    
+      
+        fetchWorksites();
+      
+    
+  }, []);
   
 
+  
   
 
   useEffect(() => {
@@ -86,6 +94,8 @@ const Etusivu = ({navigation}) => {
 
 
   let worksitesToShow = worksiteState.worksites;
+
+  
   
   if (role === "user") {
     worksitesToShow = worksiteState.worksites.filter(worksite => 
@@ -120,6 +130,12 @@ const Etusivu = ({navigation}) => {
   ];
 
 
+  const accordionRows = [];
+  for (let i = 0; i < accordionData.length; i += 3) {
+    accordionRows.push(accordionData.slice(i, i + 3));
+  }
+
+
 
 
   if (isLoading) {
@@ -137,17 +153,18 @@ const Etusivu = ({navigation}) => {
 
         <View style={styles.container}>
           
-          <View style={styles.accContainer}>
-
-          {accordionData.map((item, index) => (
-            <Accordion 
-              key={index} 
-              title={item.title} 
-              handlePress={() => handlePress(item.title)}
-              isSelected={selectedTitle === item.title}
-            />
+        {accordionRows.map((row, rowIndex) => (
+            <View style={styles.accContainer} key={rowIndex}>
+              {row.map((item, index) => (
+                <Accordion
+                  key={index}
+                  title={item.title}
+                  handlePress={() => handlePress(item.title)}
+                  isSelected={selectedTitle === item.title}
+                />
+              ))}
+            </View>
           ))}
-          </View>
           
           
           {selectedTitle ? (

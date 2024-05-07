@@ -18,7 +18,7 @@ const WorksiteReady = ({worksites, title}) => {
           <FlatList
             data={worksites}
             keyExtractor={(item) => item._id}
-            contentContainerStyle={{paddingBottom: 150}}
+            contentContainerStyle={{paddingBottom: 200}}
             renderItem={({ item }) => {
               const totalWorkTime = calculateTotaWorkTime(item.workDays);
               return (

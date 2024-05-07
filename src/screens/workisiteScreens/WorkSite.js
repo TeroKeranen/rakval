@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   },
   selectJobtype: {
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-evenly'
   },
   jobTypeButton: {
     backgroundColor: "#74777c",

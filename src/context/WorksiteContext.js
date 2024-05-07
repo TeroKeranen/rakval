@@ -287,6 +287,9 @@ const newWorksite = (dispatch) => {
     
     const { t } = useTranslation();
     return async ({address, city, startTime, floorplanKey,worktype, navigation }) => {
+
+      console.log("startime", startTime);
+      console.log("worktype", worktype);
         try {
             // const token = await AsyncStorage.getItem('token')
             // const token = await SecureStore.getItemAsync('token');

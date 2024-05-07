@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View,TouchableOpacity, Alert } from "react-native";
 import { Text,  Input } from "react-native-elements";
 import { useTranslation } from "react-i18next";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
 
@@ -9,6 +10,8 @@ import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../.
 import { useNavigation } from '@react-navigation/native';
 
 import {Picker} from '@react-native-picker/picker';
+import DownloadScreen from "./DownloadScreen";
+
 
 
 
@@ -17,33 +20,52 @@ import {Picker} from '@react-native-picker/picker';
 
 const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const { t } = useTranslation();
+    const [isLoading, setIsLoading] = useState(false);
     const [address, setAddress] = useState(""); 
     const [city, setCity] = useState("");
-    const [startTime, setStartTime] = useState('');
+    const [startTime, setStartTime] = useState(new Date());
     const [workType, setWorkType] = useState(t('worksiteform-worktype-worksite')); // asetetaan default valueksi työmaa
     const [imageUri, setImageUri] = useState(null);
+    
+    const [showDatePicker, setShowDatePicker] = useState(false);
     
     
     const navigation = useNavigation();
 
+
+    // Käytetään tätä tuomaan aika muotoon 28/01/2024
+    function formatDate(date) {
+      if (!(date instanceof Date)) {
+        date = new Date(date);  // varmistaa, että syöte on Date-objekti
+      }
+      let day = date.getDate().toString().padStart(2, '0');  // Päivä, kaksinumeroinen
+      let month = (date.getMonth() + 1).toString().padStart(2, '0');  // Kuukausi, kaksinumeroinen (getMonth() palauttaa 0-11)
+      let year = date.getFullYear();  // Vuosi, nelinumeroinen
+      return `${day}.${month}.${year}`;  // Palauttaa muodossa "pp.kk.vvvv"
+    }
     
     
     const handleSubmit = async () => {
         try {
+          setIsLoading(true);
           if (!address || !city || !workType) {
             Alert.alert("Error", t('goeswrong'))
             return;
           }
+            const formattedTime = formatDate(startTime)
+            console.log(typeof(formattedTime))
           if (imageUri) {
             const imageKey = await uploadImageToS3(imageUri);
-            await onSubmit({ address, city, startTime, floorplanKey:imageKey, worktype: workType });
+            await onSubmit({ address, city, startTime:formattedTime, floorplanKey:imageKey, worktype: workType });
           } else {
-            await onSubmit({ address, city, startTime, worktype: workType });
+            
+            await onSubmit({ address, city, startTime:formattedTime, worktype: workType });
           }
           // nollataan input kentät onnistunee lisäyksen jälkeen
           setAddress("");
           setCity("");
-          setStartTime('');
+          setStartTime(new Date());
+          setIsLoading(false);
           
           setImageUri(null);
         } catch (error) {
@@ -60,7 +82,16 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     }
 
 
+    const handleDateChange = (event, selectedDate) => {
+      const currentDate = selectedDate || startTime;
+      setShowDatePicker(false);
+      setStartTime(new Date(currentDate));
+  };
 
+    
+  if (isLoading) {
+    return <DownloadScreen message={t("loading")} />;
+  }
 
     return (
       <>
@@ -71,7 +102,21 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
 
             <Input style={styles.input} placeholder={t("worksiteform-city")} value={city} onChangeText={setCity} />
 
-            <Input style={styles.input} keyboardType="numeric" placeholder="Aloitus aika muodossa d/m/y" value={startTime} onChangeText={setStartTime} />
+            {/* <Input style={styles.input} keyboardType="numeric" placeholder="Aloitus aika muodossa d/m/y" value={startTime} onChangeText={setStartTime} />
+             */}
+
+              <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.Dateinput}>
+                  <Text>{startTime ? formatDate(startTime) : 'valitse päivä'}</Text>
+              </TouchableOpacity>
+
+                {showDatePicker && (
+                    <DateTimePicker
+                        value={startTime}
+                        mode="date"
+                        display="default"
+                        onChange={handleDateChange}
+                    />
+                )}
 
             <Picker
               selectedValue={workType}
@@ -131,6 +176,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 50,
     fontSize: 20,
+  },
+  Dateinput: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#808080ba',
+    padding: 5,
+    borderRadius: 5,
   },
   buttonContainer: {
     flexDirection: "row",

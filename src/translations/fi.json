@@ -77,6 +77,7 @@
   "worksitedetail-confirmDelete-deleteButton": "Poista",
   "worksitedetail-endWorkDay": "Lopeta työpäivä",
   "worksitedetail-startWorkDay": "Aloita työpäivä",
+  "plannedStartingDate": "Suunniteltu aloituspäivämäärä",
   "complete": "Merkitse työmaa valmiiksi",
 
   "worksiteWorker-select-worker": "Valitse työntekijä",
@@ -152,7 +153,7 @@
   "etusivuEventsButton": "Tapahtumat", 
   "etusivuReadyButton": "Valmiit", 
   "etusivuUnfinishedButton": "Keskeneräiset", 
-  "etusivuStartingdButton": "Keskeneräiset" 
+  "etusivuStartingdButton": "Alkamassa" 
   
 
   

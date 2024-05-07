@@ -55,6 +55,8 @@ const WorksiteDetails = ({route, navigation}) => {
     
   }, [state.currentWorksite, authState.user._id]); // Riippuvuudet päivitetty
 
+
+  
   const confirmDelete = (worksiteId) => {
     Alert.alert(t("worksitedetail-deleteBtn"), t("worksitedetail-confirmdelete"), [
       { text: t("worksitedetail-confirmDelete-cancelButton"), style: "cancel" },
@@ -166,6 +168,9 @@ const WorksiteDetails = ({route, navigation}) => {
           <Text style={styles.text}>
             {t("worksitedetail-city")}: {state.currentWorksite.city}
           </Text>
+          <Text style={styles.text}>
+            {t('plannedStartingDate')}: {state.currentWorksite.startTime ? state.currentWorksite.startTime : "Ei valittua päivämäärää"}
+          </Text>
         </View>
         {/* <View style={styles.imageContainer}>
           <Image source={{ uri: `${FLOORPLAN_PHOTO_URL}${floorplanKey}` }} style={styles.image} />
@@ -238,8 +243,8 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     // backgroundColor: "#e8e8f0",
-    alignItems: 'center',
-    width:'90%',
+    
+    width:'100%',
     padding: 10,
 
     
@@ -255,6 +260,7 @@ const styles = StyleSheet.create({
   },
   test: {
     flex:1,
+    
     padding: 0,
     margin: 0,
     
@@ -276,7 +282,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonContainer: {
+    width: '100%',
     marginTop: 60,
+    
   },
   image: {
     

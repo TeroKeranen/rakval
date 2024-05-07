@@ -19,6 +19,9 @@ const Accordion = ({title, handlePress, isSelected}) => {
 
 
 const styles = StyleSheet.create({
+  titleContainer: {
+    
+  },
   button: {
     backgroundColor: "#74777c",
     padding: 10,

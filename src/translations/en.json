@@ -77,6 +77,7 @@
   "worksitedetail-confirmDelete-deleteButton": "Delete",
   "worksitedetail-endWorkDay": "End day",
   "worksitedetail-startWorkDay": "Start day",
+  "plannedStartingDate": "planned start date",
   "complete": "Mark the construction site as complete",
 
   "worksiteWorker-select-worker": "Select a worker",
