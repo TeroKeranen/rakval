@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView, Dimensions } from "react-native";
+import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView, Dimensions, Alert } from "react-native";
 import {useContext, useEffect, useState} from 'react';
 
 import { Context as EventContext } from "../../context/EventsContext";
@@ -71,11 +71,11 @@ const Events = ({events}) => {
   const onRefresh = () => {
     setIsRefreshing(true); // Aseta päivitystila todeksi
     fetchEvents().then(result => {
-      console.log(result); // Logiikka tulosten käsittelyyn
+      
       setIsRefreshing(false); // Aseta päivitystila epätodeksi, kun olet valmis
     })
     .catch(error => {
-      console.error('Failed to refresh events:', error);
+      
       setIsRefreshing(false); // Aseta päivitystila epätodeksi, jos tulee virhe
     });
   }

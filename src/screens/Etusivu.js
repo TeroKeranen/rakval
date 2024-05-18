@@ -106,6 +106,11 @@ const Etusivu = ({navigation}) => {
   let notReadyWorksites = []; // luodaan muuttuja johon laitetaan työmaat jotka on aloitettu mutta ei ole valmiina
   
   worksitesToShow.forEach(worksite => {
+    if (!worksite) {
+      console.log("skipping undefined worksite")
+      return;
+    }
+    
     if (!worksite.workDays || worksite.workDays.length === 0) {
       // Jos workDays on tyhjä, tarkista onko työmaan aloitusaika tulevaisuudessa
       if (futureStartTime(worksite.startTime)) {

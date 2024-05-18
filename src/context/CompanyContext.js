@@ -36,15 +36,9 @@ const fetchCompany = (dispatch) => {
   return async () => {
     try {
           
-          // const token = await AsyncStorage.getItem("token");
-          // const token = await SecureStore.getItemAsync('token');
-          // const authHeader = `${TOKEN_REPLACE} ${token}`;
+ 
           const response = await makeApiRequest('/company', 'get', null, dispatch);
-          // const response = await rakval.get("/company", {
-          //   headers: {
-          //     Authorization: authHeader,
-          //   },
-          // });
+          
           
           dispatch({ type: "fetch_company", payload: response.data });
         } catch (error) {
@@ -78,6 +72,7 @@ const fetchWorkers = (dispatch) => {
 // Luodaan uusi yritys
 const createCompany = (dispatch) => {
     return async ({name, address, city, code}) => {
+        
         try {
             
             const response = await makeApiRequest('/createCompany', 'post', {name,address,city,code}, dispatch)
@@ -85,8 +80,10 @@ const createCompany = (dispatch) => {
             if (response.success) {
               
               dispatch({type: 'add_company', payload: response.data})
+              return { success: true };
             } else {
               dispatch({type:'set_error', payload: response.message})
+              return { success: false };
             }
 
             

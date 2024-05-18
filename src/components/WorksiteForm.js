@@ -46,32 +46,39 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     
     
     const handleSubmit = async () => {
-        try {
+      try {
           setIsLoading(true);
           if (!address || !city || !workType) {
-            Alert.alert("Error", t('goeswrong'))
-            return;
+              Alert.alert("Error", t('goeswrong'));
+              setIsLoading(false);
+              return;
           }
-            const formattedTime = formatDate(startTime)
-            console.log(typeof(formattedTime))
-          if (imageUri) {
-            const imageKey = await uploadImageToS3(imageUri);
-            await onSubmit({ address, city, startTime:formattedTime, floorplanKey:imageKey, worktype: workType });
-          } else {
-            
-            await onSubmit({ address, city, startTime:formattedTime, worktype: workType });
-          }
-          // nollataan input kentät onnistunee lisäyksen jälkeen
-          setAddress("");
-          setCity("");
-          setStartTime(new Date());
-          setIsLoading(false);
+          const formattedTime = formatDate(startTime);
+          const result = await onSubmit({ address, city, startTime:formattedTime, floorplanKey:imageUri, worktype: workType });
           
-          setImageUri(null);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+          if (result.success) {
+              // nollataan input kentät onnistuneen lisäyksen jälkeen
+              setAddress("");
+              setCity("");
+              setStartTime(new Date());
+              setImageUri(null);
+          } else {
+              if (result.paidUser === false) {
+                Alert.alert(t('refreshTokenLimitError'))
+              } else {
+
+                Alert.alert(t('refreshTokenLimitError'))
+              }
+              // Näytetään virheilmoitus
+             
+          }
+      } catch (error) {
+          Alert.alert('Error', t('goeswrong'))
+          
+      } finally {
+          setIsLoading(false);
+      }
+  }
 
     const handeCancel = () => {
       navigation.navigate(t("construction-site"))

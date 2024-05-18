@@ -63,8 +63,13 @@ const WorksiteDetails = ({route, navigation}) => {
       {
         text: t("worksitedetail-confirmDelete-deleteButton"),
         onPress: () =>
-          deleteWorksite(worksiteId, () => {
-            navigation.goBack();
+          deleteWorksite(worksiteId, (success) => {
+            if (success) {
+              Alert.alert(t('worksiteDeleteSuccess'))
+              navigation.goBack();
+            } else {
+              Alert.alert(t('worksiteDeleteError'))
+            }
           }),
       },
     ]);
@@ -126,17 +131,23 @@ const WorksiteDetails = ({route, navigation}) => {
   // käytetään tätä kun halutaan merkitä työmaa valmiiksi
   const handleWorksiteReady = async () => {
     Alert.alert(
-      "Vahvista toiminto",
-      "Oletko varma, että haluat merkitä työmaan valmiiksi?",
+      t('confirmTitle'),
+      t('confirmText'),
       [
         {
-          text:"Peruuta",
+          text:t('cancel'),
           onPress: () => console.log("peruutettu"),
           style:"cancel"
         },
         {text: "OK", onPress: async () => {
           try {
-            await worksiteReady(worksiteId)
+            const response = await worksiteReady(worksiteId)
+            if (response.success) {
+              Alert.alert(t('complete-success'))
+            } else {
+              Alert.alert(t('goeswrong'))
+            }
+            
           } catch (err) {
             console.log(err);
           }

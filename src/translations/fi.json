@@ -27,11 +27,18 @@
   "starting": "Alkamassa",
   "unfinished":"Kesken",
   "workOn": "Nauhoitus päällä",
+  "succeeded": "Onnistui",
+  "fail": "Epäonnistui",
   
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
   "signup-alert-vericode": "Lähetimme vahvistuskoodin sähköpostiisi",
   "signup-alert-vericode-attention": "Huom",
+  "signup-userExist": "Käyttäjänimi on jo käytössä",
+
+  "signin-loginSuccess": "Kirjautuminen onnistui",
+  "signin-loginFail": "Kirjatuminen epäonnistui",
+
 
   "drawerScreen-front-page": "etusivu",
   "main-page": "Etusivu",
@@ -52,6 +59,12 @@
   "companyScreen-companyInfo-city": "Kaupunki",
   "companyScreen-companyInfo-code": "Yrityskoodi",
   "companyScreen-create": "Luo yritys",
+  "companyScreen-JoinsuccessText": "Yritykseen liittyminen onnistui",
+  "companyScreen-JoinerrorText": "Jotain meni vikaan yritykseen liittymisessä",
+  "companyScreen-successTitle": "Onnistui",
+  "companyScreen-successText": "Yritys luotu onnistuneesti",
+  "companyScreen-errorText": "Jotain meni vikaan yrityksen luonnissa",
+  "companyScreen-leavecompanyText": "Yrityksestä poistuminen onnistui",
 
   "profileScreen-role": "Olet admin käyttäjä",
   "profileScreen-company": "Olet liittynyt yritykseen",
@@ -79,12 +92,17 @@
   "worksitedetail-startWorkDay": "Aloita työpäivä",
   "plannedStartingDate": "Suunniteltu aloituspäivämäärä",
   "complete": "Merkitse työmaa valmiiksi",
+  "complete-success" : "Työmaa merkitty valmiiksi",
+  "confirmTitle": "Vahvista toiminto",
+  "confirmText": "Oletko varma että haluat merkitä työmaan valmiiksi?",
+  
 
   "worksiteWorker-select-worker": "Valitse työntekijä",
   "worksiteWorker-add-button": "Lisää työntekijä",
   "worksiteWorker-workers": "Työntekijät tässä työmaassa",
   "worksiteWorker-markerModal-deletemarker-title": "Poista työntekijä",
   "worksiteWorker-markerModal-deletemarker-confirmtext": "Oletko varma, että haluat poistaa tämän työntekijän?",
+  "worksiteWorker-alreadyAddeError": "Työntekijä on jo lisätty työmaahan",
 
   "floorplanscreen-add-marker": "Lisää merkintä",
   "floorplanscreen-add-image": "Lisää kuva",
@@ -99,7 +117,8 @@
   "floorplanscreen-markerModal-deletemarker-confirmtext": "Oletko varma, että haluat poistaa tämän merkinnän?",
   "floorplanscreen-markerModal-deletemarker-cancel": "Peruuta",
   "floorplanscreen-markerModal-deletemarker-yes": "Kyllä",
-
+  
+  "worksiteDeleteSuccess": "Työmaan poisto onnistui",
   "worksiteDeleteError": "Työmaan poisto epäonnistui",
   "worksiteFetchByIdError": "Työmaan tietojen haku epäonnistui",
   "worksiteFetchError" : "Yleinen virhe datan haussa",
@@ -153,7 +172,14 @@
   "etusivuEventsButton": "Tapahtumat", 
   "etusivuReadyButton": "Valmiit", 
   "etusivuUnfinishedButton": "Keskeneräiset", 
-  "etusivuStartingdButton": "Alkamassa" 
+  "etusivuStartingdButton": "Alkamassa" ,
+
+  "refreshTokenLimitError" : "Olet saavuttanut työmaiden luomisen rajan",
+  "refreshTokenResorceError" : "Resurssia ei löydy.",
+  "refreshTokenDataError" : " Tietojen vahvistaminen epäonnistui.",
+
+  "calendarModal-successText" : "Kalenterimerkinnän lisääminen onnistui",
+  "calendarModal-errorText": "Kalenterimerkinnän lisääminen epäonnistui"
   
 
   

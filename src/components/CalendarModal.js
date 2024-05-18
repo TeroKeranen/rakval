@@ -1,4 +1,4 @@
-import { Button, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Button, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Context as WorksiteContext } from "../context/WorksiteContext";
 import { useContext, useEffect, useState } from "react";
@@ -34,18 +34,8 @@ const CalendarModal = ({isVisible, onClose, onSave, title, date,setSelectedDate,
         }
     },[date, worksiteState.currentWorksite.calendarEntries, setTitle, setText]) 
 
-    // const handleSave = async () => {
 
         
-    //     const worksiteId = worksiteState.currentWorksite._id;
-    //     await saveCalendarEntry(worksiteId, date, title,text);
-    //     onSave(title, text);
-    //     fetchCalendarEntries(worksiteId);
-    //     onClose();
-        
-        
-        
-    // }
     const handleSave = async () => {
         setIsLoading(true);
         try {
@@ -55,9 +45,10 @@ const CalendarModal = ({isVisible, onClose, onSave, title, date,setSelectedDate,
             fetchCalendarEntries(worksiteId);
             setSelectedDate('')
             onClose();
+            Alert.alert(t('succeeded'), t('calendarModal-successText'))
             
         } catch (error) {
-            console.log("Errorrrorororo calendarModal");
+            Alert.alert(t('fail'), t('calendarModal-errorText'))
         }
         setIsLoading(false);
         
@@ -68,11 +59,11 @@ const CalendarModal = ({isVisible, onClose, onSave, title, date,setSelectedDate,
         setIsLoading(true);
         try {
             await deleteCalendarEntry(worksiteId, entryId, date);
-            
+            Alert.alert(t('succeeded'))
             onClose();
             
         } catch (error) {
-            console.log("handledelete calendarmodal")
+            Alert.alert(t('fail'), t('goeswrong'))
         }
         setSelectedDate('');
         setIsLoading(false);

@@ -15,6 +15,7 @@ const authReducer = (state, action) => {
     case "add_error":
       return { ...state, errorMessage: action.payload };
     case "signup":
+      
       return { ...state,errorMessage: "", token: action.payload.token, user: action.payload.user };
     // case "signin":
     //   return {errorMessage: "", token: action.payload.token, user:action.payload.user};
@@ -58,22 +59,7 @@ const tryLocalSignin = dispatch => async () => {
   // if (token && !isTokenExpired(token)) {
     dispatch({type: 'autosignin', payload: token})
     
-  // } else {
-  //   console.log("token vanhentunut");
-  //         const refreshToken = await SecureStore.getItemAsync('refreshToken');
-  //         const response = await rakval.post('/refresh', { token: refreshToken });
-
-  //   if (response.status === 200) {
-  //           const { accessToken } = response.data;
-  //           await SecureStore.setItemAsync('token', accessToken);
-  //           dispatch({ type: 'update_token', payload: accessToken });
-  //           return accessToken;
-  //         } else {
-  //           // Käsittele virhetilanne (esim. ohjaa kirjautumissivulle)
-  //           console.log("jotain meni vikaan")
-  //         }
-          
-  // }
+ 
 
 }
 
@@ -109,24 +95,30 @@ const signup = (dispatch) => {
     try {
       
       const response = await rakval.post("/signup", { email, password });
-      const {accessToken, refreshToken} = response.data
 
-      await SecureStore.setItemAsync('token', accessToken);
-      await SecureStore.setItemAsync("refreshToken", refreshToken)
-      // await AsyncStorage.setItem("token", response.data.token);
-      await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
+      
+      if (response.data.success) {
+        const {accessToken, refreshToken} = response.data
+        await SecureStore.setItemAsync('token', accessToken);
+        await SecureStore.setItemAsync("refreshToken", refreshToken)
+        await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
+        // await AsyncStorage.setItem("token", response.data.token);
+        dispatch({ type: "signup", payload: { token: accessToken, user: response.data.user } });
+        return {success:true}
+
+      }
+
       
       
       
-      dispatch({ type: "signup", payload: { token: accessToken, user: response.data.user } });
       
     } catch (err) {
-      console.log(err.response.data.error);
+      console.log("JOOOOU", err.response.data);
       dispatch({
         type: "add_error",
         payload: err.response.data.error,
       });
-      throw new Error(err.response.data.error);
+      return {success:false, existingUser: true}
     }
   };
 };
@@ -137,20 +129,28 @@ const signin = (dispatch) => {
   return async ({ email, password }) => {
     try {
       const response = await rakval.post("/signin", { email, password });
-      const {accessToken, refreshToken} = response.data
-     
-      // await AsyncStorage.setItem("token", response.data.token); // tallennetaan token
-      await SecureStore.setItemAsync('token', accessToken);
-      await SecureStore.setItemAsync("refreshToken", refreshToken)
-      await AsyncStorage.setItem('user', JSON.stringify(response.data.user)) // tallennetaan rooli
+      
+      
+      if (response.data.success) {
+        const {accessToken, refreshToken} = response.data
 
-      dispatch({ type: "signin", payload: {token: accessToken, user: response.data.user} });
-      navigate('main');
+        // await AsyncStorage.setItem("token", response.data.token); // tallennetaan token
+        await SecureStore.setItemAsync('token', accessToken);
+        await SecureStore.setItemAsync("refreshToken", refreshToken)
+        await AsyncStorage.setItem('user', JSON.stringify(response.data.user)) // tallennetaan rooli
+        
+        dispatch({ type: "signin", payload: {token: accessToken, user: response.data.user} });
+        navigate('main');
+        return {success:true}
+      }
     } catch (err) {
+      
+      
       dispatch({
         type: "add_error",
         payload: err.response.data.error,
       });
+      return {success:false}
     }
   };
 };
@@ -162,42 +162,27 @@ const verifyEmail = (dispatch) => {
     try {
       // Lähetä pyyntö käyttäen makeApiRequest-funktiota
       const response = await makeApiRequest('/verify', 'post', { email, verificationCode }, dispatch);
-
-      if (response.status === 200) {
+      
+      if (response.success) {
+        
         dispatch({ type: 'email_verified', payload: response.data.user });
         return { success: true };
       } else {
         // Käsittele muita tilanteita (esim. virheet)
-        throw new Error(response.data.error || "Failed to verify email");
+        const errorMsg = response && response.data && response.data.error ? response.data.error : "Failed to verify email";
+        return {success:false, message: errorMsg}
       }
     } catch (error) {
-      console.error("Error verifying email:", error.message);
+      
+      
+      const message = error.response && error.response.data ? error.response.data.error : error.message || "Failed to verify email";
+      console.error("Error verifying email:", message);
       dispatch({ type: 'add_error', payload: error.message || "Failed to verify email" });
       return { success: false };
     }
   }
 };
-// const verifyEmail = (dispatch) => {
-//   return async ({email, verificationCode}) => {
-    
-//     try {
-//       // const token = await AsyncStorage.getItem('token');
-//       const token = await SecureStore.getItemAsync('token');
-//       const authHeader = `${TOKEN_REPLACE} ${token}`;
-      
-//       const response = await rakval.post('/verify', {email, verificationCode}
-//       )
-      
-//       dispatch({type: 'email_verified', payload: response.data.user})
-//       return({success:true})
-//     } catch (error) {
-//       console.log("Error verifying email:", error.response?.data?.error || "Failed to verify email");
-//       // Välitä tarkempi virheviesti dispatch-kutsussa
-//       dispatch({ type: 'add_error', payload: error.response?.data?.error || "Failed to verify email" });
-//       return({success: false})
-//     }
-//   }
-// }
+
 
 // Kätetään kun käyttäjä ei heti syötä verification koodia, vaan menee myöhemmin signin kauttaa, ja hänellä ei ole koodia syötettynä.
 const setUserEmail = (dispatch) => (email) => {
@@ -217,9 +202,9 @@ const joinCompany = (dispatch) => async (companyCode) => {
       { userId: user._id, companyCode },
       dispatch
     );
-
+    
     // Tarkista, että palvelimen vastauksessa on data-kenttä
-    if (response.data) {
+    if (response.success) {
       const updatedUser = response.data; // Tämä on oletettu päivitetty käyttäjä
       await AsyncStorage.setItem("user", JSON.stringify(updatedUser));
       dispatch({ type: "join_company", payload: updatedUser });
@@ -235,29 +220,7 @@ const joinCompany = (dispatch) => async (companyCode) => {
   }
 };
 
-// const leaveCompany = (dispatch) => async (userId) => {
 
-//   try {
-//     // const token = await AsyncStorage.getItem('token');
-//     const token = await SecureStore.getItemAsync('token');
-//     const authHeader = `${TOKEN_REPLACE} ${token}`;
-//     const response = await rakval.post('/leave-company', {userId},{
-//       headers: {
-//         Authorization: authHeader
-//       }
-//     })
-//     if (response.data) {
-//       dispatch({type: 'leave_company'})
-//       return {success: true}
-
-//     } else {
-//       return {success:false}
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     return { success: false, error };
-//   }
-// }
 const leaveCompany = (dispatch) => async (userId) => {
   try {
     // Käytä makeApiRequest-funktiota API-pyynnön tekemiseen
@@ -295,30 +258,7 @@ const fetchUser = (dispatch) => async () => {
   }
 };
 
-// const fetchUser = (dispatch) => async () => {
-  
-//   try {
 
-//     // const token = await AsyncStorage.getItem('token');
-//     const token = await SecureStore.getItemAsync('token');
-//     const authHeader = `${TOKEN_REPLACE} ${token}`;
-//     // const storedUser = await AsyncStorage.getItem('user');
-//     // const user = JSON.parse(storedUser)
-    
-
-//     if (token) {
-//       const response = await rakval.get('/profile', {
-//         headers: {Authorization: authHeader}
-//       })
-      
-      
-//       dispatch({type: 'fetch_user', payload: response.data})
-//     }
-//   } catch (error) {
-//     console.log("something goes wrong")
-    
-//   }
-// }
 
 // haetaan käyttäjän tiedot id perusteella. Tätä käytetään worksiteWorkers.js tiedostossa kun näytämme listan jotka on lisätty työmaahan
 const fetchUserWithId = (dispatch) => {

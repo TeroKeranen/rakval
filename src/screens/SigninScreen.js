@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet,FlatList, ScrollView } from "react-native";
+import { Text, View, StyleSheet,FlatList, ScrollView, Alert } from "react-native";
 import i18next from '../../services/i18n'
 import { useTranslation } from "react-i18next";
 
@@ -9,12 +9,13 @@ import { Context as AuthContext } from "../context/AuthContext";
 import ChangeLanguage from "../components/ChangeLanguage";
 import VerificationScreen from "./VerificationScreen";
 
+
 const SigninScreen = ({navigation}) => {
 
   const {t} = useTranslation();
   const { state, signin, clearErrorMessage } = useContext(AuthContext);
   
-  
+  console.log(t('signin-loginSuccess')); 
   // Käytetään tätä tyhjentämään errormessage jos tulee virhe ja vaihdetaan toiselle sivulle, Näin virhe ei seuraa mukana
   useEffect(() => {
     
@@ -28,6 +29,25 @@ const SigninScreen = ({navigation}) => {
     }
   }, [navigation])
 
+  const handleSigIn = async({email, password}) => {
+
+    try {
+      const response = await signin({email, password})
+
+      if (response.success) {
+        Alert.alert(t('signin-loginSuccess'))
+      } else {
+        Alert.alert(t('signin-loginFail'))
+      }
+
+      console.log("response handleSigni", response);
+    } catch (error) {
+      console.log("Signin error",error);
+      Alert.alert(t('goeswrong'))
+    }
+
+  }
+
   
   
   return (
@@ -36,7 +56,7 @@ const SigninScreen = ({navigation}) => {
 
       <View style={styles.container}>
         {/* signin */}
-        <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t("signinHeader")} onSubmit={signin} />
+        <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t("signinHeader")} onSubmit={handleSigIn} />
         <NavLink text={t("signin-navlink-text")} routeName="signup" />
         <ChangeLanguage />
       </View>

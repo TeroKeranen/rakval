@@ -40,9 +40,16 @@ const CompanyScreen = ({ navigation }) => {
 
   const handleCreateCompany = async () => {
     setIsLoading(true);
-    await createCompany({ name, address, city });
-    await fetchUser();
-    setIsLoading(false);
+    const result =  await createCompany({ name, address, city });
+    
+    if (result.success) {
+      Alert.alert(t('companyScreen-successTitle'), t('companyScreen-successText'))
+      await fetchUser();
+      setIsLoading(false);
+    } else {
+      Alert.alert(t('error'), t('companyScreen-errorText'))
+    }
+
   };
 
   const handleJoinCompany = async () => {
@@ -54,37 +61,21 @@ const CompanyScreen = ({ navigation }) => {
     if (result.success) {
      // Onnistunut liittyminen
       // clearErrorMessage();
+      Alert.alert(t('companyScreen-successTitle'), t('companyScreen-JoinsuccessText'))
       fetchUser(); // jos tulee ongelmia niin laitettaan takaisin
       fetchWorksites(); // Jos tulee ongelmia niin laitetaan takaisin
      
     } else {
       
-      Alert.alert(t('error'), t('profileScreenCompanycodeError'));
-        return; // Lopeta funktio, jos ehto ei täyty
+      Alert.alert(t('error'), t('companyScreen-JoinerrorText'));
+      
       
      // Näytä virheilmoitus käyttäjälle
       
     }
   };
 
-  // const handleLeaveCompany = async () => {
 
-  //   const result = await leaveCompany(authState.user._id);
-  //   if (result.success) {
-  //     // päivitetään tila authContextissa
-  //     fetchUser();
-
-  //     // tyhjennetään työmaatiedot worksiteContextissa
-  //     clearWorksites();
-  //     resetCurrentWorksite();
-
-  //     Alert.alert("eroaminen onnistui", "Olet eronnut yrityksestä")
-  //   } else {
-  //     Alert.alert("virhe", "eroaminen yrityksestä epäonnistui")
-  //   }
-  //   setCompanyCode('');
-    
-  // }
 
   const handleLeaveCompany =  () => {
     Alert.alert(
@@ -100,7 +91,9 @@ const CompanyScreen = ({ navigation }) => {
           text: "Poista",
           onPress: async () => {
             const result = await leaveCompany(authState.user._id)
+            
             if (result.success) {
+              Alert.alert(t('companyScreen-successTitle'), t('companyScreen-leavecompanyText'))
               fetchUser();
               clearWorksites();
               // tyhjennetään työmaatiedot worksiteContextissa

@@ -30,6 +30,10 @@ const WorksiteWorkers = () => {
 
       
     }, []);
+
+    useEffect(() => {
+      // console.log("Current Worksite Updated:", worksiteState.currentWorksite);
+    }, [worksiteState.currentWorksite]);
     
     useEffect(() => {
         if (companyState.company && companyState.company._id) {
@@ -48,14 +52,21 @@ const WorksiteWorkers = () => {
         
     }
 
-    const handleAddWorker = () => {
-        if (selectedWorker && worksiteState.currentWorksite) {
-            addWorkerToWorksite(worksiteState.currentWorksite._id, selectedWorker);
-        }
-        setSelecterWorker(null);
-        
-        
-    }
+    const handleAddWorker = async () => {
+      if (selectedWorker && worksiteState.currentWorksite) {
+          const result = await addWorkerToWorksite(worksiteState.currentWorksite._id, selectedWorker);
+          // console.log("result", result);
+  
+          if (result.success && result.alreadyAdded) {
+              Alert.alert(t('worksiteWorker-alreadyAddeError'));
+          } else if (result.success) {
+              Alert.alert("Työntekijä lisätty onnistuneesti");
+              setSelecterWorker(null);
+          } else {
+              Alert.alert("Virhe", result.message);
+          }
+      }
+  };
 
     // kerätään työntekijöiden tiedot ja tallennetaan ne worksiteworkers useStateen
     const fetchAllWorkersInfo = async () => {
@@ -144,6 +155,7 @@ const WorksiteWorkers = () => {
                {companyState.workers
                     .filter(worker => worker._id !== authState.user._id) // Suodata pois nykyinen käyttäjä
                     .map((worker) => (
+                        
                         <Picker.Item label={worker.email} value={worker._id} key={worker._id} />
                     ))
                 }

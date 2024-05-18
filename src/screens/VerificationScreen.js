@@ -37,7 +37,7 @@ const VerificationScreen = ({navigation}) => {
             
             
         } catch (error) {
-            console.log("verificationereror",error);
+            console.log("verification error:", error);
             
         }
 

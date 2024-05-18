@@ -50,7 +50,8 @@ const worksiteReducer = (state, action) => {
         };
         case "update_worksite":
           const updatedWorksites = state.worksites.map((worksite) => (worksite._id === action.payload._id ? action.payload : worksite));
-          return { ...state, worksites: updatedWorksites, currentWorksite: action.payload };
+          
+          return { ...state, worksites: updatedWorksites, currentWorksite: action.payload.data };
         case 'add_markers':
           const existingMarkerIds = new Set(state.currentWorksite.markers.map(marker => marker._id));
   const newMarkers = action.payload.markers.filter(marker => !existingMarkerIds.has(marker._id));
@@ -155,23 +156,27 @@ const deleteWorksite = (dispatch) => {
     return async (worksiteId, callback) => {
       
     try {
-      // const token = await AsyncStorage.getItem('token');
-      // const token = await SecureStore.getItemAsync('token');
       
-      // const authHeader = `${TOKEN_REPLACE} ${token}`;
 
-      await makeApiRequest(`/worksites/${worksiteId}`, "delete", null, dispatch);
-      
-      // await rakval.delete(`/worksites/${worksiteId}`, {
-      //   headers: {
-      //     Authorization: authHeader
-      //   }
-      // })
-      if (callback) {
-        callback();
+      const response = await makeApiRequest(`/worksites/${worksiteId}`, "delete", null, dispatch);
+
+
+      if (response.success) {
+        
+        dispatch({type:"delete_worksite", payload: worksiteId})
+        if (callback) {
+          callback(true);
+        }
+        return {success:true}
+      } else {
+        if (callback) {
+          callback(false);
+        }
+        return {success:false}
       }
       
-      dispatch({type:"delete_worksite", payload: worksiteId})
+      
+      
     } catch (error) {
       console.log(error)
       dispatch({type:'set_error', payload: 'työmaan poisto epäonnistui'})
@@ -239,29 +244,31 @@ const fetchWorksites = (dispatch) => {
 
 
   // Lisätään työntekijä työmaalle
-  const addWorkerToWorksite = (dispatch) => async (worksiteId,workerId) => {
-        
+  const addWorkerToWorksite = (dispatch) => async (worksiteId, workerId) => {
     try {
-      
-      // const token = await AsyncStorage.getItem("token");
-      // const token = await SecureStore.getItemAsync('token');
-      // const authHeader = `${TOKEN_REPLACE} ${token}`;
-      const response = await makeApiRequest(`/worksites/${worksiteId}/add-worker`, 'post', {workerId}, dispatch);
-      // const response = await rakval.post(`/worksites/${worksiteId}/add-worker`,{ workerId },
-      //       {
-      //         headers: {
-      //           Authorization: authHeader,
-      //             },
-      //       }
-      //   );
+        const response = await makeApiRequest(`/worksites/${worksiteId}/add-worker`, 'post', {workerId}, dispatch);
         
-      dispatch({ type: "update_worksite", payload: response.data });
-                  
-  } catch (error) {
-    
-  }
-}
 
+        if (response.success) {
+            if (response.data) {
+                if (response.data.alreadyAdded) {
+                    return {success: true, alreadyAdded: true};
+                } else {
+                    dispatch({ type: "update_worksite", payload: response.data });
+                    return {success: true, alreadyAdded: false};
+                }
+            } else {
+                // Jos dataa ei ole, käsittele tilanne
+                return {success: false, message: 'Ei vastaustietoja'};
+            }
+        } else {
+            return {success: false, message: response.message || "Operation failed"};
+        }
+    } catch (error) {
+        console.error("addWorkerToWorksite error:", error);
+        return {success: false, message: 'Verkkovirhe'};
+    }
+};
 // Poistetaan työntekijä työmaasta
 const deleteWorkerFromWorksite = (dispatch) => {
     return async (worksiteId, workerId) => {
@@ -291,29 +298,41 @@ const newWorksite = (dispatch) => {
       console.log("startime", startTime);
       console.log("worktype", worktype);
         try {
-            // const token = await AsyncStorage.getItem('token')
-            // const token = await SecureStore.getItemAsync('token');
-            // const authHeader = `${TOKEN_REPLACE} ${token}`;
+           
 
             const response = await makeApiRequest('/worksites', 'post', {address,city, startTime, floorplanKey, worktype}, dispatch)
 
-            // const response = await rakval.post('/worksites', {address, city, floorplanKey,worktype}, {
-            //     headers: {
-            //         Authorization: authHeader,
-                    
-                    
-            //     }
-            // })
-            
-            
-            dispatch({type: 'add_worksite', payload:response.data})
+        
+            if (response.success) {
+              dispatch({type: 'add_worksite', payload:response.data})
+              navigation.navigate(t("construction-site"));
+              return {success:true}
 
-            navigation.navigate(t("construction-site"));
+            } else {
+              
+              dispatch({type:'set_error', payload: response.message})
+              return { success: false, message: response.message };
+            }
+            
+
             
             
         } catch (error) {
-            dispatch({type: 'set_error', payload: 'jotai meni vikaan'})
-            console.log(error)
+
+            // Varmistetaan, että virheellä on 'response' ja että 'response' sisältää 'status'
+            if (error.response && error.response.status) {
+              console.log("HTTP status code:", error.response.status);
+              if (error.response.status === 403) {
+                return { success: false, message: error.response.data.error || "Access denied. You have reached the limit for creating worksites." };
+              } else {
+                console.log("Error", "An unexpected error occurred.");
+              }
+          } else {
+              // Jos 'response' ei ole määritelty, kyseessä voi olla verkkovirhe tai muu ongelma.
+              console.log("Network error", "Unable to connect to the server. Please try again later.");
+          }
+          dispatch({ type: 'set_error', payload: 'Something went wrong' });
+          console.log("Network or server error:", error);
                         
         }
     }
@@ -323,19 +342,24 @@ const newWorksite = (dispatch) => {
 const floorplankeySend = (dispatch) => async (worksiteId, floorplan) => {
   try {
     
-    // const token = await AsyncStorage.getItem('token')
-    // const token = await SecureStore.getItemAsync('token');
-    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+
     
     const response = await makeApiRequest(`worksites/${worksiteId}/floorplan`, 'post', floorplan, dispatch)
-    // const response = await rakval.post(`/worksites/${worksiteId}/floorplan`, floorplan, {
-    //   headers: {
-    //     Authorization: authHeader
-    //   }
-    // })
-    dispatch({type: 'add_worksite_floorplan', payload:{worksiteId, floorplanKey: response.data.floorplanKey}})
+
+    console.log("FLOORPLANres", response);
+    if (response.success) {
+      console.log("kuvan lähetys onnistui")
+      dispatch({type: 'add_worksite_floorplan', payload:{worksiteId, floorplanKey: response.data.floorplanKey}})
+      return {success:true}
+
+    } else {
+      console.log("EI  onnistunut")
+      return {success:false}
+    }
+ 
   } catch (error) {
-    
+    console.log("floorplankeysend error", error);
+    return {success:false}
   }
 }
 
@@ -405,10 +429,12 @@ const worksiteReady = (dispatch) => async (worksiteId) => {
   try {
     const response = await makeApiRequest(`/worksites/${worksiteId}/worksiteready`, "post", null, dispatch)
     
-    if (response && response.status === 200) {
+    if (response && response.success) {
       dispatch({type:"update_worksite", payload:response.data})
+      return {success:true}
     } else {
-      console.log("virhe päivittäessä työmaan tilaa.1")
+      dispatch({type: 'set_error', payload: 'Virhe päivittäessä työmaan valmiustilaa'});
+      return {success:false}
     }
   } catch (error) {
     console.log('Virhe worksiteReady-funktiossa:', error);
@@ -448,15 +474,10 @@ const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
 
 const saveCalendarEntry = (dispatch) => async (worksiteId, date,title,text) => {
   try {
-    // const token = await AsyncStorage.getItem('token');
-    // const token = await SecureStore.getItemAsync('token');
-    // const authHeader = `${TOKEN_REPLACE} ${token}`;
+   
     const response = await makeApiRequest(`/worksites/${worksiteId}/calendar-entry`, 'post', {date,title,text}, dispatch)
-    // const response = await rakval.post(`/worksites/${worksiteId}/calendar-entry`, {date, title, text}, {
-    //   headers: {
-    //     Authorization: authHeader
-    //   }
-    // })
+    
+    
     dispatch({type:'add_calendar_entry', payload: response.data})
   } catch (error) {
     

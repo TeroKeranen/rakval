@@ -24,7 +24,7 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
         imageKey = await uploadImageToS3(imageUri) 
         deleteModalImage(imageKey);
       } catch (error) {
-        console.log("handleimapickedERROR", error);
+        Alert.alert('Error', t('goeswrong'))
       } finally {
 
         SetIsLoading(false);

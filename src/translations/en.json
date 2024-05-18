@@ -27,11 +27,17 @@
   "starting": "Starting",
   "unfinished":"Unfinished",
   "workOn": "Recording in progress",
+  "succeeded": "Succeeded",
+  "fail": "Failed",
 
   "sign-upHeader": "Sign Up",
   "signup-navlink-text": "Already have an account? Sign in instead",
   "signup-alert-vericode": "We sent a verification code to your email",
   "signup-alert-vericode-attention": "Attention",
+  "signup-userExist": "Username is already in use",
+
+  "signin-loginSuccess": "Login was successful",
+  "signin-loginFail": "Login failed",
 
   "drawerScreen-front-page": "front page",
   "main-page": "Main page",
@@ -52,6 +58,12 @@
   "companyScreen-companyInfo-city": "City",
   "companyScreen-companyInfo-code": "Company code",
   "companyScreen-create": "Create a Company",
+  "companyScreen-JoinsuccessText": "Joining the company was successful.",
+  "companyScreen-JoinerrorText": "Something went wrong while joining the company.",
+  "companyScreen-successTitle": "succeeded",
+  "companyScreen-successText": "company created successfully",
+  "companyScreen-errorText": "Something went wrong during the creation of the company.",
+  "companyScreen-leavecompanyText": "Successfully exited the company.",
 
   "profileScreen-role": "You are an admin user",
   "profileScreen-company": "You have joined the company called",
@@ -79,12 +91,16 @@
   "worksitedetail-startWorkDay": "Start day",
   "plannedStartingDate": "planned start date",
   "complete": "Mark the construction site as complete",
+  "complete-success" : "The worksite has been marked as completed",
+  "confirmTitle": "Confirm action",
+  "confirmText": "Are you sure you want to mark the worksite as completed?",
 
   "worksiteWorker-select-worker": "Select a worker",
   "worksiteWorker-add-button": "Add worker",
   "worksiteWorker-workers": "Workers at this construction site",
   "worksiteWorker-markerModal-deletemarker-title": "Delete worker",
   "worksiteWorker-markerModal-deletemarker-confirmtext": "Are you sure you want to delete this worker?",
+  "worksiteWorker-alreadyAddeError": "The worker has already been added to the worksite",
 
   "floorplanscreen-add-marker": "Add marker",
   "floorplanscreen-add-image": "Add image",
@@ -100,6 +116,7 @@
   "floorplanscreen-markerModal-deletemarker-cancel": "Cancel",
   "floorplanscreen-markerModal-deletemarker-yes": "Yes",
 
+  "worksiteDeleteSuccess": "The worksite was successfully deleted",
   "worksiteDeleteError": "Worksite deletion failed",
   "worksiteFetchByIdError": "Fetching worksite information by ID failed",
   "worksiteFetchError" : "General error in data retrieva",
@@ -153,6 +170,13 @@
   "etusivuEventsButton": "Events", 
   "etusivuReadyButton": "Ready", 
   "etusivuUnfinishedButton": "Unfinished", 
-  "etusivuStartingdButton": "Starting" 
+  "etusivuStartingdButton": "Starting",
+
+  "refreshTokenLimitError" : "You have reached the limit for creating worksites.",
+  "refreshTokenResorceError" : "Resource not found.",
+  "refreshTokenDataError" : "Data validation failed.",
+
+  "calendarModal-successText" : "Adding the calendar entry was successful",
+  "calendarModal-errorText": "Adding the calendar entry failed"
   
 }

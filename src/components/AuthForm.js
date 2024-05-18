@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Context as AuthContext } from "../context/AuthContext";
-import { StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import {Text, Button, Input} from 'react-native-elements'
 import { useTranslation } from "react-i18next";
 
@@ -17,9 +17,15 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText}) => {
     
 
     // setUserEmail on sitä varten jos käyttäjä ei heti syötä signupin yhteydessä verification koodia, vaan menee signin kautta
-    const handleSubmit = () => {
-      setUserEmail(email);
-      onSubmit({email, password})
+    const handleSubmit = async ()  => {
+      // setUserEmail(email);
+      const result = await onSubmit({email, password})
+        // console.log("result", result);
+        // if (result.success) {
+        //   Alert.alert("onnistui");
+        // } else {
+        //   Alert.alert("Jotain meni vikaan");
+        // }
     }
     return (
         <>
@@ -39,9 +45,9 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText}) => {
             autoCapitalize="none"
             autoCorrect={false}     
             />
-            {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
+            {/* {errorMessage ? <Text style={styles.errorMessage}>{t('goeswrong')}</Text> : null} */}
             
-           <Button title={submitButtonText} onPress={() => handleSubmit()} />
+           <Button title={submitButtonText} onPress={handleSubmit} />
         </>
     )
 

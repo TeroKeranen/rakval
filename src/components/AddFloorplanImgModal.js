@@ -39,7 +39,15 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
                 const imageKey = await uploadImageToS3(imageUri);
                 const floorplan = {key: imageKey, title: imageTitle};
                 
-                await floorplankeySend(worksiteState.currentWorksite._id, floorplan);
+                await floorplankeySend(worksiteState.currentWorksite._id, floorplan).
+                    then(result => {
+                        
+                        if (result.success) {
+                            Alert.alert(t('succeeded'))
+                        } else {
+                            Alert.alert(t('fail'))
+                        }
+                    })
                 onUpdate && onUpdate(floorplan);
             }
             if (!imageTitle) {
@@ -52,7 +60,8 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
             onClose();
             
         } catch (error) {
-            console.log("imgmodal", error);
+            
+            Alert.alert("Error", "Jotain meni vikaan")
         }
     }
       const delImage = () => {
