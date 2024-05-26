@@ -11,6 +11,7 @@ import { useContext, useEffect } from "react";
 import FloorplanScreen from "../screens/workisiteScreens/FloorplanScreen";
 import WorksiteEventsScreen from "../screens/workisiteScreens/WorksiteEventsScreen";
 import CalendarScreen from "../screens/workisiteScreens/CalendarScreen";
+import ProductScreen from "../screens/workisiteScreens/ProductScreen";
 
 
 const Tab = createBottomTabNavigator();
@@ -47,6 +48,8 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
                 iconName = focused ? "list" : 'list-outline';
               } else if (route.name === "Calendar" || route.name === "Kalenteri") {
                 iconName = focused ? "calendar" : "calendar-outline";
+              } else if (route.name === "Products" || route.name === "Tuotteet") {
+                iconName = focused ? "hammer" : "hammer-outline";
               }
               return <Ionicons name={iconName} size={size} color={color} />;
             },
@@ -59,6 +62,7 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
             <Tab.Screen name={t('floorplan')} component={FloorplanScreen} options={{headerShown:false}} />
             <Tab.Screen name={t('workEntries')} component={WorksiteEventsScreen} options={{headerShown: false}} />
             <Tab.Screen name={t('calenderScreenNavigator')} component={CalendarScreen} options={{headerShown: false}} />
+            <Tab.Screen name={t('products')} component={ProductScreen} options={{headerShown: false}} />
             
             
             {isAdmin ? <Tab.Screen name={t('workers')} component={WorksiteWorkers} options={{headerShown: false}} /> : null}

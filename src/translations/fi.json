@@ -8,6 +8,7 @@
   "worksiteDetail": "Työmaa",
   "workers": "Työntekijät",
   "floorplan": "Pohjakuva",
+  "products": "Tuotteet",
   "error": "Virhe",
   "edit": "Muokkaa",
   "loading": "Ladataan",
@@ -29,12 +30,18 @@
   "workOn": "Nauhoitus päällä",
   "succeeded": "Onnistui",
   "fail": "Epäonnistui",
+  "add": "Lisää",
+  "update": "Muokkaa",
+  "yes": "Kyllä", 
+
+
   
   "sign-upHeader": "Luo tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
   "signup-alert-vericode": "Lähetimme vahvistuskoodin sähköpostiisi",
   "signup-alert-vericode-attention": "Huom",
   "signup-userExist": "Käyttäjänimi on jo käytössä",
+  "signup-missingDataError": "Tietoja puuttuu",
 
   "signin-loginSuccess": "Kirjautuminen onnistui",
   "signin-loginFail": "Kirjatuminen epäonnistui",
@@ -179,7 +186,12 @@
   "refreshTokenDataError" : " Tietojen vahvistaminen epäonnistui.",
 
   "calendarModal-successText" : "Kalenterimerkinnän lisääminen onnistui",
-  "calendarModal-errorText": "Kalenterimerkinnän lisääminen epäonnistui"
+  "calendarModal-errorText": "Kalenterimerkinnän lisääminen epäonnistui",
+
+  "productScreen-updateTitle": "Muokkaa tuotetta",
+  "productScreen-updateSure": "Oletko varma että haluat muokata tuotetta?",
+  "productScreen-deleteTitle": "Poista tuote",
+  "productScreen-deleteSure": "Oletko varma että haluat poistaa tuotteen?"
   
 
   

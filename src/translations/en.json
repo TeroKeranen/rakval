@@ -8,6 +8,7 @@
   "worksiteDetail": "Construction site",
   "workers": "Workers",
   "floorplan": "Floor plan",
+  "products": "Products",
   "error": "Error",
   "edit": "Edit",
   "loading": "Loading",
@@ -29,12 +30,16 @@
   "workOn": "Recording in progress",
   "succeeded": "Succeeded",
   "fail": "Failed",
+  "add": "Add",
+  "update": "Update",
+  "yes": "Yes",
 
   "sign-upHeader": "Sign Up",
   "signup-navlink-text": "Already have an account? Sign in instead",
   "signup-alert-vericode": "We sent a verification code to your email",
   "signup-alert-vericode-attention": "Attention",
   "signup-userExist": "Username is already in use",
+  "signup-missingDataError": "Data is missing",
 
   "signin-loginSuccess": "Login was successful",
   "signin-loginFail": "Login failed",
@@ -177,6 +182,11 @@
   "refreshTokenDataError" : "Data validation failed.",
 
   "calendarModal-successText" : "Adding the calendar entry was successful",
-  "calendarModal-errorText": "Adding the calendar entry failed"
+  "calendarModal-errorText": "Adding the calendar entry failed",
+
+  "productScreen-updateTitle": "Edit product",
+  "productScreen-updateSure": "Are you sure you want to edit the product?",
+  "productScreen-deleteTitle": "Delete product",
+  "productScreen-deleteSure": "Are you sure you want to delete the product?"
   
 }

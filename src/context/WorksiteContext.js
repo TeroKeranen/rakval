@@ -125,6 +125,41 @@ const worksiteReducer = (state, action) => {
             calendarEntries:updatedCalendarEntriess
           }
         }
+      case 'delete_product':
+        console.log("DELETE_PRODUCT", action.payload);
+        const updatedWorksiteProducts = state.currentWorksite.products.filter(
+          product => product._id !== action.payload.productId
+        )
+      
+        return {
+          ...state,
+          currentWorksite: {
+            ...state.currentWorksite,
+            products: updatedWorksiteProducts
+          }
+        }
+      
+        case 'update_product':
+          const updatedProducts = state.currentWorksite.products.map(product => 
+            product._id === action.payload.productId ? { ...product, _id: action.payload.productId, name: action.payload.productName, quantity: action.payload.quantity } : product
+          );
+          
+          return {
+            ...state,
+            currentWorksite: {
+              ...state.currentWorksite,
+              products: updatedProducts
+            }
+          };
+        
+
+        case 'add_product':
+          // console.log("wwwoorskite", action.payload);
+          return {
+            ...state,
+            currentWorksite: action.payload.worksite
+          }
+
       default:
         return state;
     }
@@ -542,6 +577,47 @@ const deleteCalendarEntry = (dispatch) => async (worksiteId, entryId,date) => {
 
 }
 
+const deleteProductFromWorksite = (dispatch) => async (worksiteId, productId) => {
+
+  try {
+    const url = `/worksites/${worksiteId}/products/${productId}`;
+    const response = await makeApiRequest(url, 'delete', null, dispatch);
+
+    dispatch({type: 'delete_product', payload: {productId}})
+    return response.data
+  } catch (error) {
+
+    console.log("Virhe poistettaessa tuotetta")
+    
+  }
+}
+
+const updateProduct = (dispatch)  => async (worksiteId, productId, productName, quantity) => {
+
+  try {
+    const url = `/worksites/${worksiteId}/products/${productId}`;
+    const response = await makeApiRequest(url, 'put', {productName, quantity}, dispatch);
+
+    dispatch({type: 'update_product', payload: {productId, productName, quantity}})
+    return response.data
+  } catch (error) {
+    console.log("virhe tuotteen muokkauksessa")
+  }
+
+}
+
+const addProduct = (dispatch) => async (worksiteId, productData) => {
+  try {
+    const url = `/worksites/${worksiteId}/add-product`;
+    const response = await makeApiRequest(url, 'post', productData, dispatch);
+
+    dispatch({type: 'add_product', payload: response.data})
+    return response
+  } catch (error) {
+    console.log("virhe tuotteen luomisessa")
+  }
+}
+
 
 export const { Provider, Context } = createDataContext(worksiteReducer, {
    newWorksite,
@@ -562,6 +638,9 @@ export const { Provider, Context } = createDataContext(worksiteReducer, {
              updateCalendarEntry,
              deleteCalendarEntry,
              floorplankeySend,
-             worksiteReady
+             worksiteReady,
+             deleteProductFromWorksite,
+             updateProduct,
+             addProduct
              },
               { worksites: [], errorMessage: "", currentWorksite: [] });

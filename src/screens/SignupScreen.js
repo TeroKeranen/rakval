@@ -34,7 +34,7 @@ const SignupScreen = ({navigation}) => {
     try {
       const response = await signup({email, password});
 
-      console.log("handleSignup", response);
+    
 
       if (response.success) {
         
@@ -66,6 +66,7 @@ const SignupScreen = ({navigation}) => {
       <View style={styles.container}>
         {/* signup */}
         <AuthForm headerText={t("sign-upHeader")} errorMessage={state.errorMessage} submitButtonText={t("sign-upHeader")} onSubmit={handleSignUp} />
+        <NavLink text="Rekisteröidy admin käyttäjäksi" routeName="signupAdmin" />
         <NavLink text={t("signup-navlink-text")} routeName="signin" />
       </View>
     </ScrollView>
