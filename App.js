@@ -3,20 +3,20 @@ import './services/i18n'
 import "react-native-gesture-handler";
 import { useContext, useState, useEffect } from "react";
 import { Context as AuthContext } from "./src/context/AuthContext";
-import { StatusBar } from 'expo-status-bar';
+
 
 
 import {NavigationContainer} from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 
-import WorksiteDetails from './src/screens/workisiteScreens/WorksiteDetails'
+
 import ResolveAuthScreen from "./src/screens/ResolveAuthScreen";
 import { Provider as AuthProvider} from './src/context/AuthContext'
 import {Provider as WorksiteProvider} from './src/context/WorksiteContext'
 import {Provider as CompanyProvider} from './src/context/CompanyContext'
 import {Provider as EventsProvider} from './src/context/EventsContext'
-import {Ionicons} from '@expo/vector-icons'
+
 import { useTranslation } from "react-i18next";
 
 // Navigations
@@ -27,9 +27,7 @@ import WorksiteDetailsTabsNavigator from './src/navigation/WorksiteDetailTabsNav
 //AWS
 import { Amplify } from "aws-amplify";
 import awsExports from "./src/aws-exports";
-import ChangepasswordScreen from './src/screens/ChangepasswordScreen';
-import VerificationScreen from './src/screens/VerificationScreen';
-import { ImageBackground, StyleSheet } from 'react-native';
+
 Amplify.configure(awsExports);
 
 

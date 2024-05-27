@@ -15,7 +15,7 @@ const SigninScreen = ({navigation}) => {
   const {t} = useTranslation();
   const { state, signin, clearErrorMessage } = useContext(AuthContext);
   
-  console.log(t('signin-loginSuccess')); 
+  
   // Käytetään tätä tyhjentämään errormessage jos tulee virhe ja vaihdetaan toiselle sivulle, Näin virhe ei seuraa mukana
   useEffect(() => {
     
@@ -40,9 +40,9 @@ const SigninScreen = ({navigation}) => {
         Alert.alert(t('signin-loginFail'))
       }
 
-      console.log("response handleSigni", response);
+      
     } catch (error) {
-      console.log("Signin error",error);
+      
       Alert.alert(t('goeswrong'))
     }
 

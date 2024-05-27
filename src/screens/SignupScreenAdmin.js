@@ -29,7 +29,7 @@ const SignupScreenAdmin = () => {
           Alert.alert(t('fail'))
         }
       } catch (error) {
-        const errorData = JSON.parse(error.message);
+        // const errorData = JSON.parse(error.message);
         
         Alert.alert(t('fail'))
       }

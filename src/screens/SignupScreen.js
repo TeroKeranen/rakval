@@ -39,7 +39,7 @@ const SignupScreen = ({navigation}) => {
       if (response.success) {
         
         Alert.alert(t('signup-alert-vericode-attention'), t('signup-alert-vericode'));
-      } else if (response.existingUser) {
+      } else if (response?.existingUser) {
         Alert.alert(t('signup-userExist'))
       }
       // navigation.navigate('verification');
@@ -47,7 +47,7 @@ const SignupScreen = ({navigation}) => {
     } catch (error) {
       const errorData = JSON.parse(error.message);
       
-      if (errorData.existingUser) {
+      if (errorData?.existingUser) {
         Alert.alert("Error", t('signup-userExist'))
       } else {
 
