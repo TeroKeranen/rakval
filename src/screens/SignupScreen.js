@@ -35,24 +35,25 @@ const SignupScreen = ({navigation}) => {
       const response = await signup({email, password});
 
     
-
-      if (response.success) {
+      console.log("onnistui")
+      // if (response.success) {
         
-        Alert.alert(t('signup-alert-vericode-attention'), t('signup-alert-vericode'));
-      } else if (response?.existingUser) {
-        Alert.alert(t('signup-userExist'))
-      }
-      // navigation.navigate('verification');
+      //   Alert.alert(t('signup-alert-vericode-attention'), t('signup-alert-vericode'));
+      // } else if (response?.existingUser) {
+      //   Alert.alert(t('signup-userExist'))
+      // }
+      
       
     } catch (error) {
-      const errorData = JSON.parse(error.message);
+      // const errorData = JSON.parse(error.message);
+      console.log("epännostio")
       
-      if (errorData?.existingUser) {
-        Alert.alert("Error", t('signup-userExist'))
-      } else {
+      // if (errorData?.existingUser) {
+      //   Alert.alert("Error", t('signup-userExist'))
+      // } else {
 
-        Alert.alert("Error", t('goeswrong'));
-      }
+      //   Alert.alert("Error", t('goeswrong'));
+      // }
     }
     
   }
@@ -66,7 +67,7 @@ const SignupScreen = ({navigation}) => {
       <View style={styles.container}>
         {/* signup */}
         <AuthForm headerText={t("sign-upHeader")} errorMessage={state.errorMessage} submitButtonText={t("sign-upHeader")} onSubmit={handleSignUp} />
-        <NavLink text="Rekisteröidy admin käyttäjäksi" routeName="signupAdmin" />
+        {/* <NavLink text="Rekisteröidy admin käyttäjäksi" routeName="signupAdmin" /> */}
         <NavLink text={t("signup-navlink-text")} routeName="signin" />
       </View>
     </ScrollView>

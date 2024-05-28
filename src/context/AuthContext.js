@@ -19,8 +19,8 @@ const authReducer = (state, action) => {
       return { ...state,errorMessage: "", token: action.payload.token, user: action.payload.user };
     // case "signin":
     //   return {errorMessage: "", token: action.payload.token, user:action.payload.user};
-    case "adminsignup":
-      return {...state, errorMessage: "", token: action.payload.token, user:action.payload.user}
+    // case "adminsignup":
+    //   return {...state, errorMessage: "", token: action.payload.token, user:action.payload.user}
     case "signin": 
       return {...state, errorMessage: "", token: action.payload.token, user: action.payload.user}
     case "autosignin":
@@ -125,42 +125,42 @@ const signup = (dispatch) => {
   };
 };
 
-const adminSignup = (dispatch) => {
-  return async ({email, password,role, companyDetails}) => {
-    try {
+// const adminSignup = (dispatch) => {
+//   return async ({email, password,role, companyDetails}) => {
+//     try {
       
-      const response = await rakval.post('/signupAdmin', {email, password,role, companyDetails})
+//       const response = await rakval.post('/signupAdmin', {email, password,role, companyDetails})
       
-      if (response.data.success) {
-        const {accessToken, refreshToken} = response.data
-        await SecureStore.setItemAsync('token', accessToken);
-        await SecureStore.setItemAsync("refreshToken", refreshToken)
-        await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
-        // await AsyncStorage.setItem("token", response.data.token);
-        dispatch({ type: "adminsignup", payload: { token: accessToken, user: response.data.user } });
-        return {success:true}
+//       if (response.data.success) {
+//         const {accessToken, refreshToken} = response.data
+//         await SecureStore.setItemAsync('token', accessToken);
+//         await SecureStore.setItemAsync("refreshToken", refreshToken)
+//         await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
+//         // await AsyncStorage.setItem("token", response.data.token);
+//         dispatch({ type: "adminsignup", payload: { token: accessToken, user: response.data.user } });
+//         return {success:true}
 
-      }
+//       }
       
-    } catch (err) {
+//     } catch (err) {
       
-      if (err.response.data.invalidData) {
-        return {success:false, invalidData:true}
-      } else if (err.response.data.existingUser) {
+//       if (err.response.data.invalidData) {
+//         return {success:false, invalidData:true}
+//       } else if (err.response.data.existingUser) {
         
-        return {success:false, existingUser: true}
-      } else {
-        return {success:false}
-      }
+//         return {success:false, existingUser: true}
+//       } else {
+//         return {success:false}
+//       }
       
-      console.log("Error response data:", err.response ? err.response.data : err.message);
-      dispatch({
-        type: "add_error",
-        payload: err.response.data.error,
-      });
-    }
-  }
-}
+//       console.log("Error response data:", err.response ? err.response.data : err.message);
+//       dispatch({
+//         type: "add_error",
+//         payload: err.response.data.error,
+//       });
+//     }
+//   }
+// }
 
 
 

@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet,FlatList, ScrollView, Alert } from "react-native";
-import i18next from '../../services/i18n'
+// import i18next from '../../services/i18n'
 import { useTranslation } from "react-i18next";
 
 import AuthForm from "../components/AuthForm";
@@ -34,16 +34,16 @@ const SigninScreen = ({navigation}) => {
     try {
       const response = await signin({email, password})
 
-      if (response.success) {
-        Alert.alert(t('signin-loginSuccess'))
-      } else {
-        Alert.alert(t('signin-loginFail'))
-      }
-
+      // if (response.success) {
+      //   Alert.alert(t('signin-loginSuccess'))
+      // } else {
+      //   Alert.alert(t('signin-loginFail'))
+      // }
+      console.log("onnistui")
       
     } catch (error) {
-      
-      Alert.alert(t('goeswrong'))
+      console.log("epäonnistui")
+      // Alert.alert(t('goeswrong'))
     }
 
   }
