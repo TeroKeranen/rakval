@@ -390,4 +390,4 @@ const changePassword = dispatch => async ({ oldPassword, newPassword }) => {
 //   }
 // }
 
-export const { Provider, Context } = createDataContext(authReducer, { signin, signout,logout, signup, adminSignup, fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany,changePassword,verifyEmail,setUserEmail}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
+export const { Provider, Context } = createDataContext(authReducer, { signin, signout,logout, signup,  fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany,changePassword,verifyEmail,setUserEmail}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
