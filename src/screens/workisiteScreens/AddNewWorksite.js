@@ -7,24 +7,30 @@ import WorksiteForm from "../../components/WorksiteForm";
 
 
 const AddNewWorksite = ({navigation}) => {
-  
-  const {state, newWorksite, clearErrorMessage} = useContext(WorksiteContext);
-  
+
   return (
-    <View style={styles.container}>
-      {/* <WorksiteForm errorMessage={state.errorMessage} clearError={() => clearErrorMessage()} onSubmit={(data) => newWorksite({...data, navigation})}/> */}
-      <WorksiteForm errorMessage={state.errorMessage} onSubmit={(data) => newWorksite({...data, navigation})}/>
+    <View>
+        <Text>jou</Text>
     </View>
-  );
+)
+  
+  // const {state, newWorksite, clearErrorMessage} = useContext(WorksiteContext);
+  
+  // return (
+  //   <View style={styles.container}>
+  //     {/* <WorksiteForm errorMessage={state.errorMessage} clearError={() => clearErrorMessage()} onSubmit={(data) => newWorksite({...data, navigation})}/> */}
+  //     <WorksiteForm errorMessage={state.errorMessage} onSubmit={(data) => newWorksite({...data, navigation})}/>
+  //   </View>
+  // );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  // container: {
+  //   flex: 1,
     
     
     
-  },
+  // },
   
   
 });
