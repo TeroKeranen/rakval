@@ -1,21 +1,21 @@
-import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView, ImageBackground } from "react-native";
-import {useContext, useEffect, useState} from 'react';
-import { Context as Autcontext} from '../context/AuthContext'
-import {Context as EventContext} from '../context/EventsContext'
-import {Context as WorksiteContext} from '../context/WorksiteContext'
+import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView, ImageBackground, TouchableOpacity  } from "react-native";
+// import {useContext, useEffect, useState} from 'react';
+// import { Context as Autcontext} from '../context/AuthContext'
+// import {Context as EventContext} from '../context/EventsContext'
+// import {Context as WorksiteContext} from '../context/WorksiteContext'
 
-import { useTranslation } from "react-i18next";
-import DownloadScreen from "../components/DownloadScreen";
-import { timeStampChanger } from "../utils/timestampChanger";
-import { Ionicons } from "@expo/vector-icons";
-import Events from "../components/EtusivuComponents/Events";
-import Accordion from "../components/EtusivuComponents/Accordion";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import WorksiteReady from "../components/EtusivuComponents/WorksiteReady";
-import { getCurrentDate } from "../utils/currentDate";
+// import { useTranslation } from "react-i18next";
+// import DownloadScreen from "../components/DownloadScreen";
+// import { timeStampChanger } from "../utils/timestampChanger";
+// import { Ionicons } from "@expo/vector-icons";
+// import Events from "../components/EtusivuComponents/Events";
+// import Accordion from "../components/EtusivuComponents/Accordion";
+// import { TouchableOpacity } from "react-native-gesture-handler";
+// import WorksiteReady from "../components/EtusivuComponents/WorksiteReady";
+// import { getCurrentDate } from "../utils/currentDate";
 
-import {futureStartTime} from '../utils/calcFutureWorksite'
-import WorkOn from "../components/EtusivuComponents/WorkOn";
+// import {futureStartTime} from '../utils/calcFutureWorksite'
+// import WorkOn from "../components/EtusivuComponents/WorkOn";
 
 
 const Etusivu = ({navigation}) => {
