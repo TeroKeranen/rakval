@@ -3,5 +3,5 @@ import axios from 'axios'
 import { BASE_URL } from "@env";
 
 export default axios.create({
-  baseURL: BASE_URL,
+  baseURL:  "https://rakval-1a943ba6019b.herokuapp.com",
 });

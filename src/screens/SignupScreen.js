@@ -62,15 +62,15 @@ const SignupScreen = ({navigation}) => {
 
   return (
     <>
-    <ScrollView>
+    
 
       <View style={styles.container}>
         {/* signup */}
         <AuthForm headerText={t("sign-upHeader")} errorMessage={state.errorMessage} submitButtonText={t("sign-upHeader")} onSubmit={handleSignUp} />
-        <NavLink text="Rekisteröidy admin käyttäjäksi" routeName="signupAdmin" />
+        <NavLink text={t('adminRegister')} routeName="signupAdmin" />
         <NavLink text={t("signup-navlink-text")} routeName="signin" />
       </View>
-    </ScrollView>
+    
     </>
   );
 };

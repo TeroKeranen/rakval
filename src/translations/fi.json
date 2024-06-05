@@ -191,7 +191,9 @@
   "productScreen-updateTitle": "Muokkaa tuotetta",
   "productScreen-updateSure": "Oletko varma että haluat muokata tuotetta?",
   "productScreen-deleteTitle": "Poista tuote",
-  "productScreen-deleteSure": "Oletko varma että haluat poistaa tuotteen?"
+  "productScreen-deleteSure": "Oletko varma että haluat poistaa tuotteen?",
+  "adminRegister": "Rekisteröidy admin käyttäjäksi",
+  "standardRegister": "Rekisteröidy normi käyttäjäksi"
   
 
   

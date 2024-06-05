@@ -44,7 +44,7 @@ const SignupScreenAdmin = () => {
             {/* signup */}
             {/* <AuthForm headerText={t("sign-upHeader")} errorMessage={state.errorMessage} submitButtonText={t("sign-upHeader")} onSubmit={handleSignUp} /> */}
             <AuthFormAdmin headerText={t("sign-upHeader")} errorMessage="tyhjä" submitButtonText={t("sign-upHeader")}  onSubmit={handleAdminSignUp}/>
-            <NavLink text="Rekisteröidy normi käyttäjäksi" routeName="signup" />
+            <NavLink text={t('standardRegister')} routeName="signup" />
             <NavLink text={t("signup-navlink-text")} routeName="signin" />
           </View>
         </ScrollView>

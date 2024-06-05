@@ -54,15 +54,15 @@ const SigninScreen = ({navigation}) => {
   
   return (
     <>
-    <ScrollView>
+    
 
       <View style={styles.container}>
         {/* signin */}
-        <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText="kirjaudu sisään"  onSubmit={handleSigIn} />
+        <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t('signinHeader')}  onSubmit={handleSigIn} />
         <NavLink text={t("signin-navlink-text")} routeName="signup" />
         <ChangeLanguage />
       </View>
-    </ScrollView>
+    
     </>
   );
 };
