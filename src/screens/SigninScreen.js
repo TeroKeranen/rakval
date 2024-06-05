@@ -30,7 +30,8 @@ const SigninScreen = ({navigation}) => {
   }, [navigation])
 
   const handleSigIn = async({email, password}) => {
-
+    console.log("email", email)
+    console.log("pass",password)
     try {
       const response = await signin({email, password})
 
@@ -42,6 +43,7 @@ const SigninScreen = ({navigation}) => {
       console.log("onnistui")
       
     } catch (error) {
+      console.log(error);
       console.log("epäonnistui")
       // Alert.alert(t('goeswrong'))
     }
@@ -56,7 +58,7 @@ const SigninScreen = ({navigation}) => {
 
       <View style={styles.container}>
         {/* signin */}
-        <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t("signinHeader")} onSubmit={handleSigIn} />
+        <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText="kirjaudu sisään"  onSubmit={handleSigIn} />
         <NavLink text={t("signin-navlink-text")} routeName="signup" />
         <ChangeLanguage />
       </View>

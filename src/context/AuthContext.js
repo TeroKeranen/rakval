@@ -166,6 +166,9 @@ const adminSignup = (dispatch) => {
 
 const signin = (dispatch) => {
   return async ({ email, password }) => {
+
+    console.log("autcontext email", email)
+    console.log("autcontext pass", password)
     try {
       const response = await rakval.post("/signin", { email, password });
       
@@ -184,7 +187,7 @@ const signin = (dispatch) => {
       }
     } catch (err) {
       
-      
+      console.log("authcofntext", err);
       dispatch({
         type: "add_error",
         payload: err.response.data.error,

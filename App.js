@@ -114,7 +114,12 @@ function App() {
   useEffect(() => {
     
     const checkAuthState = async () => {
-      await tryLocalSignin();
+      try {
+        
+        await tryLocalSignin();
+      } catch (error) {
+        
+      }
       // await fetchUser();
       setLoading(false);
     };
