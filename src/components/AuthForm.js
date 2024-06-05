@@ -29,7 +29,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText}) => {
     }
     return (
         <>
-        <Text h3 style={styles.text}>{headerText}</Text>
+        <Text h3 style={styles.text}>TEKSTITEKSTI</Text>
            <Input 
             label={t('email')} 
             value={email} 

@@ -34,11 +34,11 @@ const SigninScreen = ({navigation}) => {
     try {
       const response = await signin({email, password})
 
-      // if (response.success) {
-      //   Alert.alert(t('signin-loginSuccess'))
-      // } else {
-      //   Alert.alert(t('signin-loginFail'))
-      // }
+      if (response.success) {
+        Alert.alert(t('signin-loginSuccess'))
+      } else {
+        Alert.alert(t('signin-loginFail'))
+      }
       console.log("onnistui")
       
     } catch (error) {

@@ -579,43 +579,43 @@ const deleteCalendarEntry = (dispatch) => async (worksiteId, entryId,date) => {
 
 const deleteProductFromWorksite = (dispatch) => async (worksiteId, productId) => {
 
-  // try {
-  //   const url = `/worksites/${worksiteId}/products/${productId}`;
-  //   const response = await makeApiRequest(url, 'delete', null, dispatch);
+  try {
+    const url = `/worksites/${worksiteId}/products/${productId}`;
+    const response = await makeApiRequest(url, 'delete', null, dispatch);
 
-  //   dispatch({type: 'delete_product', payload: {productId}})
-  //   return response.data
-  // } catch (error) {
+    dispatch({type: 'delete_product', payload: {productId}})
+    return response.data
+  } catch (error) {
 
-  //   console.log("Virhe poistettaessa tuotetta")
+    console.log("Virhe poistettaessa tuotetta")
     
-  // }
+  }
 }
 
 const updateProduct = (dispatch)  => async (worksiteId, productId, productName, quantity) => {
 
-  // try {
-  //   const url = `/worksites/${worksiteId}/products/${productId}`;
-  //   const response = await makeApiRequest(url, 'put', {productName, quantity}, dispatch);
+  try {
+    const url = `/worksites/${worksiteId}/products/${productId}`;
+    const response = await makeApiRequest(url, 'put', {productName, quantity}, dispatch);
 
-  //   dispatch({type: 'update_product', payload: {productId, productName, quantity}})
-  //   return response.data
-  // } catch (error) {
-  //   console.log("virhe tuotteen muokkauksessa")
-  // }
+    dispatch({type: 'update_product', payload: {productId, productName, quantity}})
+    return response.data
+  } catch (error) {
+    console.log("virhe tuotteen muokkauksessa")
+  }
 
 }
 
 const addProduct = (dispatch) => async (worksiteId, productData) => {
-  // try {
-  //   const url = `/worksites/${worksiteId}/add-product`;
-  //   const response = await makeApiRequest(url, 'post', productData, dispatch);
+  try {
+    const url = `/worksites/${worksiteId}/add-product`;
+    const response = await makeApiRequest(url, 'post', productData, dispatch);
 
-  //   dispatch({type: 'add_product', payload: response.data})
-  //   return response
-  // } catch (error) {
-  //   console.log("virhe tuotteen luomisessa")
-  // }
+    dispatch({type: 'add_product', payload: response.data})
+    return response
+  } catch (error) {
+    console.log("virhe tuotteen luomisessa")
+  }
 }
 
 
