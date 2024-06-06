@@ -7,6 +7,8 @@ import WorksiteForm from "../../components/WorksiteForm";
 
 
 const AddNewWorksite = ({navigation}) => {
+
+
   
   const {state, newWorksite, clearErrorMessage} = useContext(WorksiteContext);
   

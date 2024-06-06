@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 const VerificationScreen = ({navigation}) => {
 
+ 
     const { t } = useTranslation();
     const {state: authState, verifyEmail,signout } = useContext(authContext)
     const [code, setCode] = useState('');

@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+// import { useFocusEffect } from "@react-navigation/native";
 import { Context as WorksiteContext } from "../../context/WorksiteContext";
 import {Context as AuthContext} from '../../context/AuthContext'
 import DownloadScreen from "../../components/DownloadScreen";
@@ -8,6 +8,8 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity, Pressable, Dimensions, ImageBackground } from "react-native";
 
 const WorkSite = ({navigation, route}) => {
+
+  
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria

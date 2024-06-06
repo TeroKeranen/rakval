@@ -9,6 +9,8 @@ import DownloadScreen from "../../components/DownloadScreen";
 
 const ProductScreen = () => {
 
+
+
     const { t } = useTranslation();
     const {state, deleteProductFromWorksite, updateProduct, addProduct} = useContext(WorksiteContext);
     const [modalVisible, setModalVisible] = useState(false); // tuotteen updatea varten

@@ -187,6 +187,8 @@
   "productScreen-updateTitle": "Edit product",
   "productScreen-updateSure": "Are you sure you want to edit the product?",
   "productScreen-deleteTitle": "Delete product",
-  "productScreen-deleteSure": "Are you sure you want to delete the product?"
+  "productScreen-deleteSure": "Are you sure you want to delete the product?",
+  "adminRegister": "Register as an admin user",
+  "standardRegister": "Register as a standard user"
   
 }

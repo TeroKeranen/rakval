@@ -13,6 +13,8 @@ import { useTranslation } from "react-i18next";
 
 
 const CompanyScreen = ({ navigation }) => {
+
+ 
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false); // Käytetään latausindikaattoria
   const { state, createCompany, fetchCompany } = useContext(CompanyContext);

@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 // admi2 JH6xHY2UEK
 
 const ProfileScreen = ({navigation}) => {
+
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true); // Käytetään latausindikaattoria
   const { state, fetchUser, signout, joinCompany, clearErrorMessage } = useContext(AuthContext);

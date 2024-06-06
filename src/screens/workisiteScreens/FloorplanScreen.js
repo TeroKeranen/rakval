@@ -24,6 +24,8 @@ import AddMarkerForm from "../../components/FloorplanScreen/AddMarkerForm";
 
 
 const FloorplanScreen = ({route, navigation}) => {
+
+
   const { t } = useTranslation();
   const { state, saveMarkerToDatabase, fetchWorksiteDetails, deleteMarker, updateMarker } = useContext(WorksiteContext);
   const {state: authState } = useContext(AuthContext)

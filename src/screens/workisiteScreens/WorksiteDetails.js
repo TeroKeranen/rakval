@@ -9,6 +9,8 @@ import {FLOORPLAN_PHOTO_URL} from '@env'
 
 
 const WorksiteDetails = ({route, navigation}) => {
+
+  
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const { worksiteId } = route.params;

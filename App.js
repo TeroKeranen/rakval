@@ -3,6 +3,7 @@ import './services/i18n'
 import "react-native-gesture-handler";
 import { useContext, useState, useEffect } from "react";
 import { Context as AuthContext } from "./src/context/AuthContext";
+import { StatusBar } from 'expo-status-bar';
 
 
 
@@ -43,15 +44,15 @@ function MainStack() {
  
   const { t } = useTranslation();
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    const checkAuthState = async () => {
+  //   const checkAuthState = async () => {
       
-      await fetchUser();
+  //     await fetchUser();
       
-    };
-    checkAuthState();
-  }, []);
+  //   };
+  //   checkAuthState();
+  // }, []);
   return (
     
     <Stack.Navigator
@@ -79,8 +80,8 @@ function MainStack() {
 
 // Tämä renderöidään appin sisällä jos käyttäjä löytyy
 function SignedInNavigator() {
-  const { state, tryLocalSignin, fetchUser } = useContext(AuthContext);
-  const isVerified = state?.user?.isVerified;
+  // const { state, tryLocalSignin, fetchUser } = useContext(AuthContext);
+  // const isVerified = state?.user?.isVerified;
   
   
   
@@ -107,13 +108,18 @@ function App() {
   const { state, tryLocalSignin, fetchUser } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
   const [loading, setLoading] = useState(true); // asetetaan loading
   
-  const isVerified = state?.user?.isVerified;
+  // const isVerified = state?.user?.isVerified;
   
 
   useEffect(() => {
     
     const checkAuthState = async () => {
-      await tryLocalSignin();
+      try {
+        
+        await tryLocalSignin();
+      } catch (error) {
+        
+      }
       // await fetchUser();
       setLoading(false);
     };

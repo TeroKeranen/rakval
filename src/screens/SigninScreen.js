@@ -30,18 +30,20 @@ const SigninScreen = ({navigation}) => {
   }, [navigation])
 
   const handleSigIn = async({email, password}) => {
-
+    console.log("email", email)
+    console.log("pass",password)
     try {
       const response = await signin({email, password})
 
-      // if (response.success) {
-      //   Alert.alert(t('signin-loginSuccess'))
-      // } else {
-      //   Alert.alert(t('signin-loginFail'))
-      // }
+      if (response.success) {
+        Alert.alert(t('signin-loginSuccess'))
+      } else {
+        Alert.alert(t('signin-loginFail'))
+      }
       console.log("onnistui")
       
     } catch (error) {
+      console.log(error);
       console.log("epäonnistui")
       // Alert.alert(t('goeswrong'))
     }
@@ -52,15 +54,15 @@ const SigninScreen = ({navigation}) => {
   
   return (
     <>
-    <ScrollView>
+    
 
       <View style={styles.container}>
         {/* signin */}
-        <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t("signinHeader")} onSubmit={handleSigIn} />
+        <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t('signinHeader')}  onSubmit={handleSigIn} />
         <NavLink text={t("signin-navlink-text")} routeName="signup" />
         <ChangeLanguage />
       </View>
-    </ScrollView>
+    
     </>
   );
 };
