@@ -126,7 +126,7 @@ const worksiteReducer = (state, action) => {
           }
         }
       case 'delete_product':
-        console.log("DELETE_PRODUCT", action.payload);
+        
         const updatedWorksiteProducts = state.currentWorksite.products.filter(
           product => product._id !== action.payload.productId
         )
@@ -154,7 +154,7 @@ const worksiteReducer = (state, action) => {
         
 
         case 'add_product':
-          // console.log("wwwoorskite", action.payload);
+          
           return {
             ...state,
             currentWorksite: action.payload.worksite
@@ -213,7 +213,7 @@ const deleteWorksite = (dispatch) => {
       
       
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       dispatch({type:'set_error', payload: 'työmaan poisto epäonnistui'})
       
     }
@@ -239,7 +239,7 @@ const fetchWorksiteDetails = (dispatch) => async (worksiteId) => {
     
   } catch (error) {
     dispatch({ type: "set_error", payload: "työmään tietojen haku epäonnistui" });
-    console.log(error);
+    
       }
 }
 
@@ -269,7 +269,7 @@ const fetchWorksites = (dispatch) => {
       
     } catch (error) {
       
-      console.log("fetchworksitesError", error);
+      // console.log("fetchworksitesError", error);
       
       
     
@@ -311,12 +311,14 @@ const deleteWorkerFromWorksite = (dispatch) => {
       // const token = await AsyncStorage.getItem("token");
       // const token = await SecureStore.getItemAsync('token');
       // const authHeader = `${TOKEN_REPLACE} ${token}`;
-      await makeApiRequest(`/worksites/${worksiteId}/workers/${workerId}`, 'delete', null, dispatch)
+      const response = await makeApiRequest(`/worksites/${worksiteId}/workers/${workerId}`, 'delete', null, dispatch)
       // await rakval.delete(`/worksites/${worksiteId}/workers/${workerId}`, {
       //   headers: { Authorization: authHeader },
       // });
       // Päivitä worksiteState sen jälkeen kun työntekijä on poistettu
+      
       dispatch({ type: "delete_worker_from_worksite", payload: { worksiteId, workerId } });
+      return response.data
     } catch (error) {
       // Käsittely virheille
     }
@@ -330,8 +332,7 @@ const newWorksite = (dispatch) => {
     const { t } = useTranslation();
     return async ({address, city, startTime, floorplanKey,worktype, navigation }) => {
 
-      console.log("startime", startTime);
-      console.log("worktype", worktype);
+      
         try {
            
 
@@ -356,18 +357,18 @@ const newWorksite = (dispatch) => {
 
             // Varmistetaan, että virheellä on 'response' ja että 'response' sisältää 'status'
             if (error.response && error.response.status) {
-              console.log("HTTP status code:", error.response.status);
+              // console.log("HTTP status code:", error.response.status);
               if (error.response.status === 403) {
                 return { success: false, message: error.response.data.error || "Access denied. You have reached the limit for creating worksites." };
               } else {
-                console.log("Error", "An unexpected error occurred.");
+                // console.log("Error", "An unexpected error occurred.");
               }
           } else {
               // Jos 'response' ei ole määritelty, kyseessä voi olla verkkovirhe tai muu ongelma.
               console.log("Network error", "Unable to connect to the server. Please try again later.");
           }
           dispatch({ type: 'set_error', payload: 'Something went wrong' });
-          console.log("Network or server error:", error);
+          // console.log("Network or server error:", error);
                         
         }
     }
@@ -381,20 +382,35 @@ const floorplankeySend = (dispatch) => async (worksiteId, floorplan) => {
     
     const response = await makeApiRequest(`worksites/${worksiteId}/floorplan`, 'post', floorplan, dispatch)
 
-    console.log("FLOORPLANres", response);
+    
     if (response.success) {
-      console.log("kuvan lähetys onnistui")
+      
       dispatch({type: 'add_worksite_floorplan', payload:{worksiteId, floorplanKey: response.data.floorplanKey}})
       return {success:true}
 
     } else {
-      console.log("EI  onnistunut")
+      
       return {success:false}
     }
  
   } catch (error) {
-    console.log("floorplankeysend error", error);
+    // console.log("floorplankeysend error", error);
     return {success:false}
+  }
+}
+
+const getSignedUrl = (dispatch) => async (bucketName, objectKey) => {
+  try {
+    const response = await makeApiRequest(`get-signed-url?bucketName=${encodeURIComponent(bucketName)}&objectKey=${encodeURIComponent(objectKey)}`, 'get', null, dispatch)
+
+    if (response.success) {
+      
+      return response.data;  // Olettaen että 'data' sisältää tarvittavan URL:n tai muun hyödyllisen tiedon
+    } else {
+      throw new Error(response.message || 'API request failed without a specific error');
+    }
+  } catch (error) {
+    // console.log("GETSIGNURL error", error)
   }
 }
 
@@ -416,7 +432,7 @@ const saveMarkerToDatabase = (dispatch) => async (worksiteId, markerData) => {
           
           dispatch({ type: "add_markers", payload: response.data });
   } catch (error) {
-    console.log("SavemarkerTodatabaseERROR",error);
+    // console.log("SavemarkerTodatabaseERROR",error);
     
   }
 }
@@ -434,9 +450,10 @@ const updateMarker = (dispatch) => async (worksiteId, markerId, updatedMarkerDat
     //   headers: {Authorization: authHeader}
     // })
     dispatch({type: 'update_marker', payload: {markerId, updateMarker: response.data}})
+    return response
   } catch (error) {
     dispatch({type: 'set_error', payload: 'jotai meni vikaan'})
-    console.log(error)
+    // console.log(error)
   }
 }
 
@@ -456,7 +473,7 @@ const deleteMarker = (dispatch) => async (worksiteId, markerId,markerNumber) => 
     // })
     dispatch({type: "delete_marker", payload: {markerId}})
   } catch (error) {
-    console.log("deletemarkerERROR",error);
+    
   }
 }
 
@@ -472,7 +489,7 @@ const worksiteReady = (dispatch) => async (worksiteId) => {
       return {success:false}
     }
   } catch (error) {
-    console.log('Virhe worksiteReady-funktiossa:', error);
+    // console.log('Virhe worksiteReady-funktiossa:', error);
     dispatch({type: 'set_error', payload: 'Virhe päivittäessä työmaan valmiustilaa'});
   }
   
@@ -487,7 +504,7 @@ const startWorkDay = (dispatch) => async (worksiteId,userId) => {
     
     dispatch({ type: 'start_work_day', payload: response.data });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }
 const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
@@ -502,7 +519,7 @@ const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
 
     dispatch({ type: 'end_work_day', payload: response.data });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     // Virheenkäsittely
   }
 };
@@ -534,7 +551,7 @@ const fetchCalendarEntries = (dispatch) => async (worksiteId) => {
       dispatch({ type: 'set_calendar_entries', payload: response.data });
     
   } catch (error) {
-    console.log("Virher kalenterimerkintöjen haussa", error);
+    // console.log("Virher kalenterimerkintöjen haussa", error);
   }
 }
 
@@ -587,7 +604,7 @@ const deleteProductFromWorksite = (dispatch) => async (worksiteId, productId) =>
     return response.data
   } catch (error) {
 
-    console.log("Virhe poistettaessa tuotetta")
+    // console.log("Virhe poistettaessa tuotetta")
     
   }
 }
@@ -601,7 +618,7 @@ const updateProduct = (dispatch)  => async (worksiteId, productId, productName, 
     dispatch({type: 'update_product', payload: {productId, productName, quantity}})
     return response.data
   } catch (error) {
-    console.log("virhe tuotteen muokkauksessa")
+    // console.log("virhe tuotteen muokkauksessa")
   }
 
 }
@@ -614,7 +631,7 @@ const addProduct = (dispatch) => async (worksiteId, productData) => {
     dispatch({type: 'add_product', payload: response.data})
     return response
   } catch (error) {
-    console.log("virhe tuotteen luomisessa")
+    // console.log("virhe tuotteen luomisessa")
   }
 }
 
@@ -641,6 +658,7 @@ export const { Provider, Context } = createDataContext(worksiteReducer, {
              worksiteReady,
              deleteProductFromWorksite,
              updateProduct,
-             addProduct
+             addProduct,
+             getSignedUrl
              },
               { worksites: [], errorMessage: "", currentWorksite: [] });

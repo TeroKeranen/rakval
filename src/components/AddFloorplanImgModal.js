@@ -1,4 +1,4 @@
-import { Alert, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
 import { useTranslation } from "react-i18next";
@@ -77,6 +77,8 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
 
     return (
         <Modal animationType="slide" transparent={true} visible={isVisible} onRequestClose={onClose}>
+            <SafeAreaView style={{flex: 1}}>
+
             <View style={styles.container}>
                 
                 <View style={styles.modalView}>
@@ -108,7 +110,7 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
                             </TouchableOpacity>
                         </View>
                         :
-
+                        
                         <View>
                             <TouchableOpacity onPress={handleSelectImage} style={styles.button}>
                                 <Text style={{ color: "white" }}>{t("worksiteform-add-photo")}</Text>
@@ -117,6 +119,7 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
                     }
                 </View>
             </View>
+        </SafeAreaView>
         </Modal>
     )
 

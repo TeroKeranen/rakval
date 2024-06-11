@@ -1,5 +1,5 @@
 
-import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import DownloadScreen from './DownloadScreen';
@@ -19,6 +19,8 @@ const MarkerinfoModal = ({isVisible, onClose, marker, onEdit, onDelete, isModalM
         visible={isVisible}
         onRequestClose={onClose}
       >
+        <SafeAreaView style={{flex: 1}}>
+
         <View style={styles.modalView}>
           <View style={styles.delBtnContainer}>
             <View>
@@ -48,8 +50,8 @@ const MarkerinfoModal = ({isVisible, onClose, marker, onEdit, onDelete, isModalM
 
               {isModalMarkerImage && (
                 
-              <Image resizeMode={'stretch'} width={300} height={300} source={{ uri: `${FLOORPLAN_PHOTO_URL}${isModalMarkerImage}` }} style={styles.image} />
-              )}
+                <Image resizeMode={'stretch'} width={300} height={300} source={{ uri: `${FLOORPLAN_PHOTO_URL}${isModalMarkerImage}` }} style={styles.image} />
+                )}
               </ScrollView>
               
             {/* </View> */}
@@ -58,6 +60,7 @@ const MarkerinfoModal = ({isVisible, onClose, marker, onEdit, onDelete, isModalM
             <Text style={{color:'white'}}>{t("floorplanscreen-close-marker")}</Text>
           </TouchableOpacity>
         </View>
+        </SafeAreaView>
       </Modal>
     )
 }

@@ -1,4 +1,4 @@
-import { Alert, Button, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Button, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Context as WorksiteContext } from "../context/WorksiteContext";
 import { useContext, useEffect, useState } from "react";
@@ -56,17 +56,35 @@ const CalendarModal = ({isVisible, onClose, onSave, title, date,setSelectedDate,
 
     const handleDelete = (entryId) => async () => {
         const worksiteId = worksiteState.currentWorksite._id;
-        setIsLoading(true);
-        try {
-            await deleteCalendarEntry(worksiteId, entryId, date);
-            Alert.alert(t('succeeded'))
-            onClose();
-            
-        } catch (error) {
-            Alert.alert(t('fail'), t('goeswrong'))
-        }
+        Alert.alert(
+            t('delete'),
+            t('delete-sure'),
+            [
+                {
+                    text: t('floorplanscreen-markerModal-deletemarker-cancel'),
+                    onPress: () => {},
+                    style: "cancel"
+                },
+                {
+                    text: t('floorplanscreen-markerModal-deletemarker-yes'),
+                    onPress: async () => {
+                        
+                        setIsLoading(true);
+                        try {
+                            await deleteCalendarEntry(worksiteId, entryId, date);
+                            Alert.alert(t('succeeded'))
+                            setIsLoading(false);
+                            
+                            
+                        } catch (error) {
+                            Alert.alert(t('fail'), t('goeswrong'))
+                        }
+                    }
+                }
+            ]
+        )
+        onClose();
         setSelectedDate('');
-        setIsLoading(false);
         
     }
 
@@ -78,71 +96,74 @@ const CalendarModal = ({isVisible, onClose, onSave, title, date,setSelectedDate,
 
     return (
         <Modal animationType="slide" transparent={true} visible={isVisible} onRequestClose={onClose}>
-            <View style={styles.container}>
-                
-            <View style={styles.modalView}>
-                    {isEditing ? (
-                        <>
-                            <View style={styles.inputView}>
+            <SafeAreaView style={{flex: 1}}>
+                <View style={styles.container}>
+                    
+                <View style={styles.modalView}>
+                        {isEditing ? (
+                            <>
 
-                                <TextInput
-                                    style={styles.titleInput}
-                                    placeholder={t('title')}
-                                    value={title}
-                                    onChangeText={setTitle}
-                                    editable={true}
-                                    />
-                                <TextInput
-                                    style={styles.bodyInput}
-                                    placeholder={t('text')}
-                                    value={text}
-                                    onChangeText={setText}
-                                    editable={true}
-                                    multiline={true}
-                                    textAlignVertical="top"
-                                    
-                                    />
-                            </View>
-                            <View style={styles.buttonView}>
-                                <Button title={t('save')} onPress={handleSave}/>
-                            </View>
-                        </>
-                    ) : (
-                        <>
-                            <View style={styles.entries}>
+                                <View style={styles.inputView}>
 
-                                <ScrollView>
-                                    {entries.map(entry => (
+                                    <TextInput
+                                        style={styles.titleInput}
+                                        placeholder={t('title')}
+                                        value={title}
+                                        onChangeText={setTitle}
+                                        editable={true}
+                                        />
+                                    <TextInput
+                                        style={styles.bodyInput}
+                                        placeholder={t('text')}
+                                        value={text}
+                                        onChangeText={setText}
+                                        editable={true}
+                                        multiline={true}
+                                        textAlignVertical="top"
+                                        
+                                        />
+                                </View>
+                                <View style={styles.buttonView}>
+                                    <Button title={t('save')} onPress={handleSave}/>
+                                </View>
+                            </>
+                        ) : (
+                            <>
+                                <View style={styles.entries}>
 
-                                        <View style={styles.singleMark}  key={entry._id}>
-                                            <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
-                                                <Text style={styles.markTitle}>{entry.title}</Text>
-                                                {/* <Button title="Poista" onPress={handleDelete(entry._id)}/> */}
-                                                {isAdmin && <TouchableOpacity onPress={handleDelete(entry._id)}>
-                                                    <Ionicons name="trash" size={20} />
-                                                </TouchableOpacity>}
+                                    <ScrollView>
+                                        {entries.map(entry => (
+                                            
+                                            <View style={styles.singleMark}  key={entry._id}>
+                                                <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
+                                                    <Text style={styles.markTitle}>{entry.title}</Text>
+                                                    {/* <Button title="Poista" onPress={handleDelete(entry._id)}/> */}
+                                                    {isAdmin && <TouchableOpacity onPress={handleDelete(entry._id)}>
+                                                        <Ionicons name="trash" size={20} />
+                                                    </TouchableOpacity>}
+                                                    
+                                                </View>
+                                                <View>
+                                                    <Text style={styles.markText}>{entry.text}</Text>
+                                                </View>
+                                                
                                                 
                                             </View>
-                                            <View>
-                                                <Text style={styles.markText}>{entry.text}</Text>
-                                            </View>
-                                            
-                                            
-                                        </View>
-                                    ))}
-                                </ScrollView>
-                            </View>
-                            {/* <Text style={styles.text}>{title}</Text>
-                            <Text style={styles.text}>{text}</Text>
-                            <Button title="Muokkaa" onPress={() => isEditing = true}/>
-                            <Button title="Poista" onPress={handleDelete}/> */}
-                        </>
-                    )}
-                    <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                        <Ionicons name="close" size={24} color="#f5f5f5" />
-                    </TouchableOpacity>
+                                        ))}
+                                    </ScrollView>
+                                </View>
+                                {/* <Text style={styles.text}>{title}</Text>
+                                <Text style={styles.text}>{text}</Text>
+                                <Button title="Muokkaa" onPress={() => isEditing = true}/>
+                                <Button title="Poista" onPress={handleDelete}/> */}
+                            </>
+                        )}
+                        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                            <Ionicons name="close" size={24} color="#f5f5f5" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
+            </SafeAreaView>
         </Modal>
     )
 

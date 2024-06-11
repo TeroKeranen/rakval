@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Text, View, FlatList, TouchableOpacity, StyleSheet,Alert } from "react-native";
+import { Text, View, FlatList, TouchableOpacity, StyleSheet,Alert, SafeAreaView } from "react-native";
 import {Context as WorksiteContext} from '../../context/WorksiteContext';
 import {Context as CompanyContext} from '../../context/CompanyContext'
 import {Context as AuthContext} from '../../context/AuthContext'
@@ -112,9 +112,19 @@ const WorksiteWorkers = () => {
           },
           {
             text: t("floorplanscreen-markerModal-deletemarker-yes"),
-            onPress: () => {
+            onPress: async () => {
               const worksiteId = worksiteState.currentWorksite._id;
-              deleteWorkerFromWorksite(worksiteId, workerId);
+              try {
+                const response = await deleteWorkerFromWorksite(worksiteId, workerId);
+                if (response.success) {
+                  Alert.alert(t('succeeded'))
+                } else {
+                  Alert.alert(t('fail'))
+                }
+                
+              } catch (error) {
+                Alert.alert(t('goeswrong'))
+              }
             },
           },
         ],
@@ -139,44 +149,47 @@ const WorksiteWorkers = () => {
       return <DownloadScreen message={t('loading')} />
     }
     return (
-      <View style={styles.container}>
-        <View style={styles.textContainer}>
-          <View style={styles.pickerContainer}>
-            <Text style={styles.title}>{t("worksiteWorker-select-worker")}</Text>
-            
-            <Picker
-            style={styles.pickerstyle}
+      <SafeAreaView style={{flex: 1}}>
+
+        <View style={styles.container}>
+          <View style={styles.textContainer}>
+            <View style={styles.pickerContainer}>
+              <Text style={styles.title}>{t("worksiteWorker-select-worker")}</Text>
+              
+              <Picker
+              style={styles.pickerstyle}
               selectedValue={selectedWorker}
               onValueChange={(itemValue, itemIndex) => setSelecterWorker(itemValue)
-            }
-            >
-              {/* {companyState.workers.filter(worker => worker._id !== authState.user._id).map((worker) => (
-                 <Picker.Item label={worker.email} value={worker._id} key={worker._id} />
-              ))} */}
-                    <Picker.Item label="--" value="--" key="--"/>
-               {companyState.workers
-                    .filter(worker => worker._id !== authState.user._id) // Suodata pois nykyinen käyttäjä
-                    .map((worker) => (
+                }
+                >
+                {/* {companyState.workers.filter(worker => worker._id !== authState.user._id).map((worker) => (
+                  <Picker.Item label={worker.email} value={worker._id} key={worker._id} />
+                  ))} */}
+                      <Picker.Item label="--" value="--" key="--"/>
+                {companyState.workers
+                      .filter(worker => worker._id !== authState.user._id) // Suodata pois nykyinen käyttäjä
+                      .map((worker) => (
                         
                         <Picker.Item label={worker.email} value={worker._id} key={worker._id} />
-                    ))
-                }
-            </Picker>
+                        ))
+                        }
+              </Picker>
 
-            <Button title={t("worksiteWorker-add-button")} onPress={handleAddWorker} disabled={!selectedWorker} />
-          </View>
-          <View style={styles.workersContainer}>
-            <Text style={styles.title}>{t("worksiteWorker-workers")}</Text>
-            <View style={styles.workers}>
-              <FlatList 
-                data={worksiteWorkers} 
-                renderItem={renderItem} 
-                keyExtractor={(item, index) => `worker-${index}`} />
+              <Button title={t("worksiteWorker-add-button")} onPress={handleAddWorker} disabled={!selectedWorker} />
             </View>
-            
+            <View style={styles.workersContainer}>
+              <Text style={styles.title}>{t("worksiteWorker-workers")}</Text>
+              <View style={styles.workers}>
+                <FlatList 
+                  data={worksiteWorkers} 
+                  renderItem={renderItem} 
+                  keyExtractor={(item, index) => `worker-${index}`} />
+              </View>
+              
+            </View>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     );
 
 }
@@ -202,7 +215,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  pickerContainer: {
+  pickerContainer: { 
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f0edf1",

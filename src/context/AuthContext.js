@@ -72,19 +72,13 @@ const clearErrorMessage = dispatch => () => {
 const logout = (dispatch) => async () => {
   const refreshToken = await SecureStore.getItemAsync('refreshToken')
   if (!refreshToken) {
-    console.log("Ei refrestokenia");
+    
   }
 
   try {
     await rakval.post('/logout', {refreshToken})
 
-    // await SecureStore.deleteItemAsync('token');
-    // await SecureStore.deleteItemAsync('refreshToken');
-    // await AsyncStorage.removeItem('user');
-    // await AsyncStorage.removeItem('company');
-    // await AsyncStorage.clear();
-    // console.log("User logged out and data removed from AsyncStorage");
-    // dispatch({type: 'signout'})
+    
 
     
   } catch (error) {
@@ -115,12 +109,12 @@ const signup = (dispatch) => {
       
       
     } catch (err) {
-      console.log("JOOOOU", err.response.data);
+      
       dispatch({
         type: "add_error",
         payload: err.response.data.error,
       });
-      return {success:false, existingUser: true}
+      return err.response.data
     }
   };
 };
@@ -138,7 +132,7 @@ const adminSignup = (dispatch) => {
         await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
         // await AsyncStorage.setItem("token", response.data.token);
         dispatch({ type: "adminsignup", payload: { token: accessToken, user: response.data.user } });
-        return {success:true}
+        return response.data
 
       }
       
@@ -149,15 +143,18 @@ const adminSignup = (dispatch) => {
       } else if (err.response.data.existingUser) {
         
         return {success:false, existingUser: true}
-      } else {
+      } else if (err.response.data.passwordtypeError) {
+        return {success:false, passwordtypeError: true}
+      }else {
+        
         return {success:false}
       }
       
-      console.log("Error response data:", err.response ? err.response.data : err.message);
-      dispatch({
-        type: "add_error",
-        payload: err.response.data.error,
-      });
+      // console.log("Error response data:", err.response ? err.response.data : err.message);
+      // dispatch({
+      //   type: "add_error",
+      //   payload: err.response.data.error,
+      // });
     }
   }
 }
@@ -167,8 +164,7 @@ const adminSignup = (dispatch) => {
 const signin = (dispatch) => {
   return async ({ email, password }) => {
 
-    console.log("autcontext email", email)
-    console.log("autcontext pass", password)
+    
     try {
       const response = await rakval.post("/signin", { email, password });
       
@@ -187,7 +183,7 @@ const signin = (dispatch) => {
       }
     } catch (err) {
       
-      console.log("authcofntext", err);
+      
       dispatch({
         type: "add_error",
         payload: err.response.data.error,
@@ -344,7 +340,7 @@ const signout = (dispatch) => {
     await AsyncStorage.removeItem('user');
     await AsyncStorage.removeItem('company');
     await AsyncStorage.clear();
-     console.log("User logged out and data removed from AsyncStorage");
+    //  console.log("User logged out and data removed from AsyncStorage");
     dispatch({type: 'signout'})
     
     
@@ -355,18 +351,16 @@ const changePassword = dispatch => async ({ oldPassword, newPassword }) => {
   try {
     const response = await makeApiRequest('/change-password', 'post', { oldPassword, newPassword }, dispatch);
     
-    if (response.status === 200) {
-      // Oletetaan, että onnistunut vastaus tarkoittaa, että salasanan vaihto onnistui
-      return { success: true };
+
+    if (response.success) {
+      return response.data;
     } else {
-      // Käsittele muita tilanteita, kuten mahdollisia virheitä
-      const errorData = await response.data;
-      return { success: false, message: errorData.error || "Salasanan vaihto epäonnistui" };
+      
+      return response;
     }
   } catch (error) {
     
-    dispatch({ type: "add_error", payload: error.message || "Salasanan vaihto epäonnistui" });
-    return { success: false, message: error.message || "Salasanan vaihto epäonnistui" };
+    return { success: false, message: "Password change failed" }; // Yleinen virheilmoitus
   }
 };
 // const changePassword = dispatch => async  ({oldPassword, newPassword}) => {

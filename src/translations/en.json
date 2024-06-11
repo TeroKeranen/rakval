@@ -9,6 +9,8 @@
   "workers": "Workers",
   "floorplan": "Floor plan",
   "products": "Products",
+  "quantity": "Quantity",
+  "product": "Product",
   "error": "Error",
   "edit": "Edit",
   "loading": "Loading",
@@ -33,8 +35,11 @@
   "add": "Add",
   "update": "Update",
   "yes": "Yes",
+  "delete": "Delete",
+  "delete-sure": "Are you sure you want to delete this?",
 
   "sign-upHeader": "Sign Up",
+  "sign-upAdminHeader": "Create an admin account",
   "signup-navlink-text": "Already have an account? Sign in instead",
   "signup-alert-vericode": "We sent a verification code to your email",
   "signup-alert-vericode-attention": "Attention",
@@ -69,6 +74,8 @@
   "companyScreen-successText": "company created successfully",
   "companyScreen-errorText": "Something went wrong during the creation of the company.",
   "companyScreen-leavecompanyText": "Successfully exited the company.",
+  "companyScreen-leavecompanyTitle": "Delete the company",
+  "companyScreen-leavecompanySure": "Are you sure you want to delete the company",
 
   "profileScreen-role": "You are an admin user",
   "profileScreen-company": "You have joined the company called",
@@ -106,6 +113,7 @@
   "worksiteWorker-markerModal-deletemarker-title": "Delete worker",
   "worksiteWorker-markerModal-deletemarker-confirmtext": "Are you sure you want to delete this worker?",
   "worksiteWorker-alreadyAddeError": "The worker has already been added to the worksite",
+  "worksiteWorker-addWorkerSuccess": "Employee added successfully",
 
   "floorplanscreen-add-marker": "Add marker",
   "floorplanscreen-add-image": "Add image",
@@ -136,6 +144,8 @@
   "markerUpdatemodalSaveBtn": "Save",
   "markerUpdatemodalImgBtn": "Take a picture",
   "markerUpdatemodaDelImageBtn": "Delete the picture",
+  "markerUpdatemodal-EditingTitle": "Editing the entry",
+  "markerUpdatemodal-EditingAsk": "Are you sure you want to edit this?",
 
   "worksiteEventScreenTitle": "Logs",
   "worksiteEventScreenRunning": "work in progress",
@@ -188,7 +198,18 @@
   "productScreen-updateSure": "Are you sure you want to edit the product?",
   "productScreen-deleteTitle": "Delete product",
   "productScreen-deleteSure": "Are you sure you want to delete the product?",
+  "productScreen-addproductBtn": "Add product",
+
   "adminRegister": "Register as an admin user",
-  "standardRegister": "Register as a standard user"
+  "standardRegister": "Register as a standard user",
+  "register-passregexErr": "The password must be at least 6 characters long and include at least one special character",
+
+  "adminSignUp-companyName": "Company name",
+  "adminSignUp-companyAddress": "Company address",
+  "adminSignUp-companyCity": "Company location",
+
+  "imagePicker-alert": "Insufficient permission",
+  "imagePicker-alert-message": "You need to grant camera permissions to use this app"
+
   
 }

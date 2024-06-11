@@ -58,9 +58,9 @@ const CompanyScreen = ({ navigation }) => {
 
     setIsLoading(true);
     const result = await joinCompany(companyCode);
-    setIsLoading(false);
-
+    
     if (result.success) {
+      setIsLoading(false);
      // Onnistunut liittyminen
       // clearErrorMessage();
       Alert.alert(t('companyScreen-successTitle'), t('companyScreen-JoinsuccessText'))
@@ -68,7 +68,7 @@ const CompanyScreen = ({ navigation }) => {
       fetchWorksites(); // Jos tulee ongelmia niin laitetaan takaisin
      
     } else {
-      
+      setIsLoading(false);
       Alert.alert(t('error'), t('companyScreen-JoinerrorText'));
       
       
@@ -81,20 +81,22 @@ const CompanyScreen = ({ navigation }) => {
 
   const handleLeaveCompany =  () => {
     Alert.alert(
-      "Poistetaan yritys",
-      "Oletko varma että haluat poistaa yrityksen",
+      t('companyScreen-leavecompanyTitle'),
+      t('companyScreen-leavecompanySure'),
       [
         {
-          text: "peruuta",
+          text: t('cancel'),
           onPress: () => console.log("peruutettu"),
           style: 'cancel'
         },
         {
-          text: "Poista",
+          text: t('delete'),
           onPress: async () => {
+            setIsLoading(true);
             const result = await leaveCompany(authState.user._id)
             
             if (result.success) {
+              setIsLoading(false)
               Alert.alert(t('companyScreen-successTitle'), t('companyScreen-leavecompanyText'))
               fetchUser();
               clearWorksites();
@@ -102,7 +104,8 @@ const CompanyScreen = ({ navigation }) => {
               resetCurrentWorksite();
 
             } else {
-              Alert.alert("virhe", "eroaminen yrityksestä epäonnistui")
+              setIsLoading(false)
+              Alert.alert(t('error'), t('goeswrong'))
             }
 
           },
@@ -110,6 +113,7 @@ const CompanyScreen = ({ navigation }) => {
       ],
       {cancelable: true}
     )
+    setIsLoading(false);
     setCompanyCode('');
   }
 

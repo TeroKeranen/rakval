@@ -29,11 +29,13 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
     
     return (
         <Tab.Navigator screenOptions={({ route }) => ({
+            headerShown: false,
             tabBarActiveTintColor: "#f48b28",
             tabBarInactiveTintColor: "#a3845c",
             tabBarStyle: {
               backgroundColor: "#404558",
             },
+            
   
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;

@@ -1,14 +1,40 @@
 
-import { launchCameraAsync } from 'expo-image-picker'
+import { launchCameraAsync, useCameraPermissions, PermissionStatus } from 'expo-image-picker'
 import { useState } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Alert, Image, StyleSheet } from 'react-native';
 import { View, Button, Text, TouchableOpacity } from "react-native";
 
 function ImagePicker ({onImagePicked}) {
 
+    const {t} = useTranslation();
+    const [cameraPermissionInformation, requestPermission] = useCameraPermissions();
+
+    async function verifyPermissions() {
+      if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
+        const permissionResponse = await requestPermission();
+
+        return permissionResponse.granted;
+      }
+
+      if (cameraPermissionInformation.status === PermissionStatus.DENIED) {
+        Alert.alert(
+          t('imagePicker-alert'),
+          t('imagePicker-alert-message')
+        )
+        return false;
+      }
+      return true;
+    }
+
     const [pickedImage, setPickedImage] = useState('');
 
     async function takeImageHandler () {
+        const hasPermission = await verifyPermissions();
+
+        if (!hasPermission) {
+          return;
+        }
         const image = await launchCameraAsync({
             // allowsEditing: true,
             aspect: [16,9],
@@ -51,9 +77,9 @@ function ImagePicker ({onImagePicked}) {
       </View>
     );
 
-    <TouchableOpacity style={styles.modalButton} onPress={takeImageHandler}>
-      <Text style={{color:'white'}}>Ota uusi kuva</Text>
-    </TouchableOpacity>
+    // <TouchableOpacity style={styles.modalButton} onPress={takeImageHandler}>
+    //   <Text style={{color:'white'}}>Ota uusi kuva</Text>
+    // </TouchableOpacity>
 
 }
 const styles = StyleSheet.create({

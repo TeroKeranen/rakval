@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { getCurrentDate } from "../../utils/currentDate";
 import { calculateNextMarkerNumber } from "../../utils/calculateNextMarkerNumber";
 
-import { FLOORPLAN_PHOTO_URL } from "@env";
+// import { FLOORPLAN_PHOTO_URL } from "@env";
 import {Context as WorksiteContext} from '../../context/WorksiteContext'
 import {Context as AuthContext} from '../../context/AuthContext'
 
@@ -27,7 +27,7 @@ const FloorplanScreen = ({route, navigation}) => {
 
 
   const { t } = useTranslation();
-  const { state, saveMarkerToDatabase, fetchWorksiteDetails, deleteMarker, updateMarker } = useContext(WorksiteContext);
+  const { state, saveMarkerToDatabase, fetchWorksiteDetails, deleteMarker, updateMarker, getSignedUrl } = useContext(WorksiteContext);
   const {state: authState } = useContext(AuthContext)
   // const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKey); // asetetaan kuvan uri tietokannasta tänne.
   // const [floorplanKey, setFloorplanKey] = useState(state.currentWorksite.floorplanKeys); // asetetaan kuvan uri tietokannasta tänne.
@@ -53,6 +53,7 @@ const FloorplanScreen = ({route, navigation}) => {
   const [editableMarkerInfo, setEditableMarkerInfo] = useState('');
 
   const [imageUri, setImageUri] = useState(null);
+  
   // const [imageModalVisible, setImageModalVisible] = useState(false);
 
   const [floorplanKeys, setFloorplanKeys] = useState(state.currentWorksite.floorplanKeys || []); // Asetetaan kuvien floorplanKey arvot tänne
@@ -65,6 +66,28 @@ const FloorplanScreen = ({route, navigation}) => {
 
 
  
+  const fetchDoneRef = useRef(false);
+  
+
+  useEffect(() => {
+    if (!fetchDoneRef.current) {
+      
+      const fetchUrls = async () => {
+        const urls = await Promise.all(floorplanKeys.map(async (item) => {
+          const signedUrl = await getSignedUrl(process.env.BUCKET_NAME, item.key);
+          return { ...item, signedUrl };
+        }));
+        
+        // Päivitä vain, jos uudet URLit ovat erilaisia
+        if (JSON.stringify(urls) !== JSON.stringify(floorplanKeys)) {
+          setFloorplanKeys(urls);
+        }
+        fetchDoneRef.current = true;
+      };
+      
+      fetchUrls();
+    }
+  }, []);
   
 
   useEffect(() => {
@@ -174,7 +197,7 @@ useEffect(() => {
 
       if (pressedMarkerIndex !== -1) {
         // Painallus osui markeriin, tee jotain
-        console.log(`Markeria painettu indeksissä: ${pressedMarkerIndex}`);
+        // console.log(`Markeria painettu indeksissä: ${pressedMarkerIndex}`);
       }
     }
   };
@@ -222,38 +245,64 @@ useEffect(() => {
 
   // Markerin muokkaus
   const handleEditMarker = () => {
+    
     setEditableMarkerInfo(selectedMarker.info);
     setEditModalVisible(true);
+    setModalVisible(false);
   }
-
+  
   // MARKERIN UPDATE
   const handleUpdateMarker = async () => {
-    // Kutsu backendin päivitysfunktiota ja lähetä muokatut tiedot
-    // ...
     
-    try {
-      
-      // console.log(modalMarkerImage);
-      const updatedMarkerData = {
-        ...selectedMarker,
-        info: editableMarkerInfo,
-        imageUri: modalMarkerImage
-        
-        
-        
-      }
-      if (!updatedMarkerData.info) {
-        Alert.alert(t('Error'), t('worksiteUpdateError'));
-        return; // Lopeta funktio, jos ehto ei täyty
-      }
-      
-      await updateMarker(state.currentWorksite._id, selectedMarker._id, updatedMarkerData)
-      setSelectedMarker(updatedMarkerData)
-      setEditModalVisible(false);
-      fetchWorksiteDetails(state.currentWorksite._id)
-    } catch (error) {
-      console.error("Error updating marker:", error);
-    }
+    Alert.alert(
+      t('markerUpdatemodal-EditingTitle'),
+      t('markerUpdatemodal-EditingAsk'),
+      [
+        {
+          text: t("floorplanscreen-markerModal-deletemarker-cancel"),
+          onPress: () => {},
+          style: 'cancel'
+        },
+        {
+          text: t("floorplanscreen-markerModal-deletemarker-yes"),
+          onPress: async () => {
+            try {
+              SetIsLoading(true)
+              // console.log(modalMarkerImage);
+              const updatedMarkerData = {
+                ...selectedMarker,
+                info: editableMarkerInfo,
+                imageUri: modalMarkerImage
+                
+                
+                
+              }
+              if (!updatedMarkerData.info) {
+                Alert.alert(t('Error'), t('worksiteUpdateError'));
+                return; // Lopeta funktio, jos ehto ei täyty
+              }
+              
+              const response = await updateMarker(state.currentWorksite._id, selectedMarker._id, updatedMarkerData)
+              if (response.data.success) {
+                setSelectedMarker(updatedMarkerData)
+                setEditModalVisible(false);
+                fetchWorksiteDetails(state.currentWorksite._id)
+                SetIsLoading(false)
+                Alert.alert(t('succeeded'))
+              } else {
+                Alert.alert(t('fail'))
+                SetIsLoading(false);
+              }
+
+            } catch (error) {
+              return;
+            }
+          }
+        }
+      ]
+    )
+    
+   
     
   };
 
@@ -304,34 +353,38 @@ useEffect(() => {
     };
   }, []);
 
-  const [imageSize, setImageSize] = useState({ width: 200, height: 400 }); // Alkuarvot
+  const [imageSize, setImageSize] = useState({ width: 300, height: 400 }); // Alkuarvot
 
   const handleImageLoad = (event) => {
-    const { width, height } = event.nativeEvent.source;
+    // const { width, height } = event.nativeEvent.source;
+    // console.log('Image dimensions', width, height);
 
-    // Säädä kuvan kokoa säilyttäen kuvasuhde
-    const maxWidth = 300 // tai jokin muu maksimileveys
-    const maxHeight = 300; // tai jokin muu maksimikorkeus
-    let newWidth, newHeight;
+    // // Säädä kuvan kokoa säilyttäen kuvasuhde
+    // const maxWidth = 300 // tai jokin muu maksimileveys
+    // const maxHeight = 300; // tai jokin muu maksimikorkeus
+    // let newWidth, newHeight;
 
-    if (width > maxWidth) {
-      newWidth = maxWidth;
-      newHeight = (height / width) * maxWidth;
-    } else if (height > maxHeight) {
-      newHeight = maxHeight;
-      newWidth = (width / height) * maxHeight;
-    } else {
-      newWidth = width;
-      newHeight = height;
-    }
+    // if (width > maxWidth) {
+    //   newWidth = maxWidth;
+    //   newHeight = (height / width) * maxWidth;
+    // } else if (height > maxHeight) {
+    //   newHeight = maxHeight;
+    //   newWidth = (width / height) * maxHeight;
+    // } else {
+    //   newWidth = width;
+    //   newHeight = height;
+    // }
 
-    setImageSize({ width: newWidth, height: newHeight });
+    // setImageSize({ width: newWidth, height: newHeight });
   };
 
 
 
 
   const renderFloorplanItem = ({ item,index }) => {
+   
+    
+    
     
     const isSelected = selectedFloorplanIndex === index; // käytetään tätä tuomaan border väri kuvaan
     const markersForThisImage = state.currentWorksite.markers.filter(marker => marker.floorplanIndex === index && index === selectedImageIndex); // näytetään tämän avulla valitun kuvan markerit
@@ -345,8 +398,8 @@ useEffect(() => {
           <ImageZoom 
             cropWidth={Dimensions.get("window").width}
             cropHeight={700} // Muokkaa korkeutta tarpeen mukaan
-            imageWidth={imageSize.width}
-            imageHeight={imageSize.height}
+            imageWidth={200}
+            imageHeight={200}
             panToMove={true}
             pinchToZoom={true}
             onMove={handleMove}
@@ -356,7 +409,9 @@ useEffect(() => {
               
               <Image 
               style={[{ width: '100%', height: '100%', resizeMode: 'cover' }, isSelected ? styles.selectedImage : {}]}
-              source={{ uri: `${FLOORPLAN_PHOTO_URL}${item.key}` }}
+              // source={{ uri: `${process.env.FLOORPLAN_PHOTO_URL}${item.key}` }}
+              source={{ uri: item.signedUrl?.url || 'fallbackURL' }}
+              
               onLoad={handleImageLoad}
               />
               
@@ -364,7 +419,7 @@ useEffect(() => {
                 
                 <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
                     
-                      <Image style={[{ width: '100%', height: '100%', resizeMode: 'cover' }, isSelected ? styles.selectedImage : {}]} source={{ uri: `${FLOORPLAN_PHOTO_URL}${item.key}` }} onLoad={handleImageLoad} />
+                      <Image style={[{ width: '100%', height: '100%', resizeMode: 'cover' }, isSelected ? styles.selectedImage : {}]} source={{ uri: item.signedUrl?.url }} onLoad={handleImageLoad} />
                       
                     
                   </TouchableOpacity>

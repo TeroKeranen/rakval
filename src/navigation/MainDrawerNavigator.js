@@ -90,6 +90,7 @@ const MainDrawerNavigator = () => {
       <>
       <Drawer.Navigator
         screenOptions={{
+          
           headerStyle: { backgroundColor: "#404558" }, // Headerin väri
           headerTintColor: "white", // Headerin title ja burderin väri
           sceneContainerStyle: { backgroundColor: "#3f2f25" }, // mikä tämä on ??

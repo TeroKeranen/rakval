@@ -1,7 +1,7 @@
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-// import { Ionicons } from "@expo/vector-icons";
-// import { useTranslation } from "react-i18next";
+import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 
 const UpdateProductModal = ({isVisible, onClose, product, onUpdate}) => {

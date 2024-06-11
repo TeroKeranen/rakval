@@ -19,14 +19,14 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText}) => {
     // setUserEmail on sitä varten jos käyttäjä ei heti syötä signupin yhteydessä verification koodia, vaan menee signin kautta
     const handleSubmit = async ()  => {
       // setUserEmail(email);
-      console.log("autform", email);
+      
       // try {
         
         const result = await onSubmit({email, password})
       // } catch (error) {
         
       // }
-        // console.log("result", result);
+        
         // if (result.success) {
         //   Alert.alert("onnistui");
         // } else {
@@ -67,6 +67,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText}) => {
 
 const styles = StyleSheet.create({
   text: {
+    fontSize: 25,
     alignSelf: "center",
     marginBottom: 50,
   },

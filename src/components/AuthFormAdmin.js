@@ -33,12 +33,12 @@ const AuthFormAdmin = ({ headerText, errorMessage, onSubmit, submitButtonText}) 
         
 
         
-          console.log("result", result);
-          if (result.success) {
-            Alert.alert("onnistui");
-          } else {
-            Alert.alert("Jotain meni vikaan");
-          }
+          
+          // if (result.success) {
+          //   Alert.alert("onnistui");
+          // } else {
+          //   Alert.alert("Jotain meni vikaan");
+          // }
       }
       return (
           <>
@@ -59,21 +59,21 @@ const AuthFormAdmin = ({ headerText, errorMessage, onSubmit, submitButtonText}) 
               autoCorrect={false}     
               />
               <Input 
-                label="CompanyName"
+                label={t('adminSignUp-companyName')}
                 value={companyName}
                 onChangeText={setCompanyName}
                 autoCapitalize="none"
                 autoCorrect={false}
               />
               <Input 
-                label="companyAddress"
+                label={t('adminSignUp-companyAddress')}
                 value={companyAddress}
                 onChangeText={setCompanyAddress}
                 autoCapitalize="none"
                 autoCorrect={false}
               />
               <Input 
-                label="companyCity"
+                label={t('adminSignUp-companyCity')}
                 value={companyCity}
                 onChangeText={setCompanyCity}
                 autoCapitalize="none"
@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
     text: {
         alignSelf: "center",
         marginBottom: 50,
+        fontSize: 25
       },
       errorMessage: {
         fontSize: 16,

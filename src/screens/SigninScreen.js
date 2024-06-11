@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet,FlatList, ScrollView, Alert } from "react-native";
+import { Text, View, StyleSheet,FlatList, ScrollView, Alert, SafeAreaView } from "react-native";
 // import i18next from '../../services/i18n'
 import { useTranslation } from "react-i18next";
 
@@ -30,8 +30,7 @@ const SigninScreen = ({navigation}) => {
   }, [navigation])
 
   const handleSigIn = async({email, password}) => {
-    console.log("email", email)
-    console.log("pass",password)
+    
     try {
       const response = await signin({email, password})
 
@@ -40,11 +39,11 @@ const SigninScreen = ({navigation}) => {
       } else {
         Alert.alert(t('signin-loginFail'))
       }
-      console.log("onnistui")
+     
       
     } catch (error) {
-      console.log(error);
-      console.log("epäonnistui")
+      
+      
       // Alert.alert(t('goeswrong'))
     }
 
@@ -53,8 +52,9 @@ const SigninScreen = ({navigation}) => {
   
   
   return (
-    <>
+    <SafeAreaView style={{flex: 1}}>
     
+    <ScrollView>
 
       <View style={styles.container}>
         {/* signin */}
@@ -62,8 +62,9 @@ const SigninScreen = ({navigation}) => {
         <NavLink text={t("signin-navlink-text")} routeName="signup" />
         <ChangeLanguage />
       </View>
+    </ScrollView>
     
-    </>
+    </SafeAreaView>
   );
 };
 

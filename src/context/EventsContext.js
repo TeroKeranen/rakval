@@ -43,7 +43,7 @@ const fetchEvents = (dispatch) => async () => {
         dispatch({type: "fetch_events", payload: response.data})
 
     } catch (error) {
-        console.log("fetcheventsERROR", error);
+        
     }
 }
 

@@ -1,9 +1,11 @@
 
 import './services/i18n'
 import "react-native-gesture-handler";
+import { Image } from 'react-native';
 import { useContext, useState, useEffect } from "react";
 import { Context as AuthContext } from "./src/context/AuthContext";
 import { StatusBar } from 'expo-status-bar';
+
 
 
 
@@ -62,7 +64,7 @@ function MainStack() {
         headerTintColor: "white",
       }}
     >
-      <Stack.Screen name="MainDrawer" component={MainDrawerNavigator} />
+      <Stack.Screen name="MainDrawer" component={MainDrawerNavigator} options={{headerTitle: ''}}/>
       <Stack.Screen
         name="WorksiteDetails"
         component={WorksiteDetailsTabsNavigator}
@@ -109,7 +111,7 @@ function App() {
   const [loading, setLoading] = useState(true); // asetetaan loading
   
   // const isVerified = state?.user?.isVerified;
-  
+ 
 
   useEffect(() => {
     

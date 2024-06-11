@@ -1,5 +1,5 @@
 
-import { Modal, Text, TouchableOpacity, View, FlatList, StyleSheet } from "react-native";
+import { Modal, Text, TouchableOpacity, View, FlatList, StyleSheet, SafeAreaView } from "react-native";
 import i18next, { languageResources } from "../../services/i18n"
 import {useTranslation} from 'react-i18next'
 import { useState } from "react";
@@ -19,15 +19,18 @@ const ChangeLanguage = () => {
     return (
         <View>
             <Modal style={styles.modal} visible={visible} onRequestClose={() => setVisible(false)}>
-                <View style={styles.modalcontainer}>
-                    <FlatList 
-                        data={Object.keys(languageResources)} 
-                        renderItem={({item}) => (
+                <SafeAreaView style={{flex:1}}>
+
+                  <View style={styles.modalcontainer}>
+                      <FlatList 
+                          data={Object.keys(languageResources)} 
+                          renderItem={({item}) => (
                             <TouchableOpacity style={styles.modalButton} onPress={() => changeLng(item)}>
-                                <Text style={styles.modalText}>{languageList[item].nativeName}</Text>
-                            </TouchableOpacity> 
-                            )}/>
-                </View>
+                                  <Text style={styles.modalText}>{languageList[item].nativeName}</Text>
+                              </TouchableOpacity> 
+                              )}/>
+                  </View>
+                </SafeAreaView>
             </Modal>
 
             <TouchableOpacity style={styles.button} onPress={() => setVisible(true)}>
@@ -41,11 +44,13 @@ const ChangeLanguage = () => {
 const styles = StyleSheet.create({
   modal: {
     margin: 0, // Voit asettaa marginaalit nollaksi tai säätää ne tarpeen mukaan
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   modalcontainer: {
+    flex: 1,
     backgroundColor: "white", // Taustaväri modalille
+    
     padding: 20,
     borderRadius: 10, // Pyöristetyt kulmat
     shadowOpacity: 0.25, // Varjon läpinäkyvyys

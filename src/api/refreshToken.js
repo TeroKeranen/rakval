@@ -32,7 +32,7 @@ export const makeApiRequest = async (endpoint, method, data, dispatch) => {
         case 404:
           return { success: false, message: error.response.data.error || "Resource not found." };
         case 422:
-          return { success: false, message: error.response.data.error || "Data validation failed." };
+          return { success: false, ...error.response.data };
         default:
           console.log("API error:", error.response.data.error);
           break;

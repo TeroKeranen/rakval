@@ -9,6 +9,8 @@
   "workers": "Työntekijät",
   "floorplan": "Pohjakuva",
   "products": "Tuotteet",
+  "quantity": "Määrä",
+  "product": "Tuote",
   "error": "Virhe",
   "edit": "Muokkaa",
   "loading": "Ladataan",
@@ -33,10 +35,13 @@
   "add": "Lisää",
   "update": "Muokkaa",
   "yes": "Kyllä", 
+  "delete": "Poista",
+  "delete-sure": "Oletko varma että haluat poistaa tämän?",
 
 
   
   "sign-upHeader": "Luo tunnus",
+  "sign-upAdminHeader": "Luo admin tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
   "signup-alert-vericode": "Lähetimme vahvistuskoodin sähköpostiisi",
   "signup-alert-vericode-attention": "Huom",
@@ -72,6 +77,8 @@
   "companyScreen-successText": "Yritys luotu onnistuneesti",
   "companyScreen-errorText": "Jotain meni vikaan yrityksen luonnissa",
   "companyScreen-leavecompanyText": "Yrityksestä poistuminen onnistui",
+  "companyScreen-leavecompanyTitle": "Poistutaan yrityksestä",
+  "companyScreen-leavecompanySure": "oletko varma että haluat poistaa yrityksen",
 
   "profileScreen-role": "Olet admin käyttäjä",
   "profileScreen-company": "Olet liittynyt yritykseen",
@@ -110,6 +117,7 @@
   "worksiteWorker-markerModal-deletemarker-title": "Poista työntekijä",
   "worksiteWorker-markerModal-deletemarker-confirmtext": "Oletko varma, että haluat poistaa tämän työntekijän?",
   "worksiteWorker-alreadyAddeError": "Työntekijä on jo lisätty työmaahan",
+  "worksiteWorker-addWorkerSuccess": "Työntekijä lisätty onnistuneesti",
 
   "floorplanscreen-add-marker": "Lisää merkintä",
   "floorplanscreen-add-image": "Lisää kuva",
@@ -140,6 +148,8 @@
   "markerUpdatemodalSaveBtn": "Tallenna",
   "markerUpdatemodalImgBtn": "Ota kuva",
   "markerUpdatemodaDelImageBtn": "Poista kuva",
+  "markerUpdatemodal-EditingTitle": "Muokataan merkintää",
+  "markerUpdatemodal-EditingAsk": "Oletko varma että haluat muokata tätä?",
 
   "worksiteEventScreenTitle": "Työkirjaukset",
   "worksiteEventScreenRunning": "Työ käynnissä",
@@ -192,8 +202,18 @@
   "productScreen-updateSure": "Oletko varma että haluat muokata tuotetta?",
   "productScreen-deleteTitle": "Poista tuote",
   "productScreen-deleteSure": "Oletko varma että haluat poistaa tuotteen?",
+  "productScreen-addproductBtn": "Lisää tuote",
+  
   "adminRegister": "Rekisteröidy admin käyttäjäksi",
-  "standardRegister": "Rekisteröidy normi käyttäjäksi"
+  "standardRegister": "Rekisteröidy normi käyttäjäksi",
+  "register-passregexErr": "Salasanan tulee olla vähintään 6 merkkiä pitkä ja sisältää ainakin yhden erikoismerkin",
+
+  "adminSignUp-companyName": "Yrityksen nimi",
+  "adminSignUp-companyAddress": "Yrityksen osoite",
+  "adminSignUp-companyCity": "Yrityksen paikkakunta",
+
+    "imagePicker-alert": "Riittämätön oikeus",
+  "imagePicker-alert-message": "Sinun täytyy myöntää kameraoikeudet käyttääksesi tätä sovellusta."
   
 
   

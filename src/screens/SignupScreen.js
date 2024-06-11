@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 
-import { View, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, StyleSheet, TouchableOpacity, ScrollView, Alert,SafeAreaView } from "react-native";
 import { useTranslation } from "react-i18next";
 import {Context as AuthContext} from '../context/AuthContext'
 import AuthForm from "../components/AuthForm";
@@ -35,25 +35,26 @@ const SignupScreen = ({navigation}) => {
       const response = await signup({email, password});
 
     
-      console.log("onnistui")
+      
       if (response.success) {
         
         Alert.alert(t('signup-alert-vericode-attention'), t('signup-alert-vericode'));
-      } else if (response?.existingUser) {
-        Alert.alert(t('signup-userExist'))
+      } else {
+        // Handle errors based on the backend response
+        if (response.passwordtypeError) {
+          Alert.alert("Error", t('register-passregexErr'));
+        } else if (response.existingUser) {
+          Alert.alert("Error", t('signup-userExist'));
+        } else {
+          Alert.alert("Error", t('fail'));
+        }
       }
-      
       
     } catch (error) {
       const errorData = JSON.parse(error.message);
-      console.log("epännostio")
-      
-      if (errorData?.existingUser) {
-        Alert.alert("Error", t('signup-userExist'))
-      } else {
 
-        Alert.alert("Error", t('goeswrong'));
-      }
+      console.error("Signup error:", error);
+      Alert.alert("Network Error", "Unable to connect to server.");
     }
     
   }
@@ -62,7 +63,9 @@ const SignupScreen = ({navigation}) => {
 
   return (
     <>
-    
+    <SafeAreaView style={{flex: 1}}>
+
+    <ScrollView>
 
       <View style={styles.container}>
         {/* signup */}
@@ -71,6 +74,8 @@ const SignupScreen = ({navigation}) => {
         <NavLink text={t("signup-navlink-text")} routeName="signin" />
       </View>
     
+    </ScrollView>
+    </SafeAreaView>
     </>
   );
 };

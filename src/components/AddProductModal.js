@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View, TextInput } from "react-native";
+import { Modal, StyleSheet, Text, TouchableOpacity, View, TextInput, SafeAreaView } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
@@ -24,38 +24,41 @@ const AddProductModal = ({isVisible, onClose, handleAdd}) => {
     return (
 
         <Modal animationType="slide" transparent={true} visible={isVisible} >
-        <View style={styles.container}>
+            <SafeAreaView style={{flex: 1}}>
 
-            <View style={styles.modalView}>
-                <View style={styles.inputs}>
+                <View style={styles.container}>
 
-                    <TextInput
-                        style={styles.titleInput}
-                        placeholder="name"
-                        value={name}
-                        onChangeText={setName}
-                        
-                        />
-                    <TextInput
-                        style={styles.titleInput}
-                        placeholder="quantity"
-                        value={quantity}
-                        onChangeText={setQuantity}
-                        keyboardType="numeric"
-                        
-                        />
+                    <View style={styles.modalView}>
+                        <View style={styles.inputs}>
+
+                            <TextInput
+                                style={styles.titleInput}
+                                placeholder="name"
+                                value={name}
+                                onChangeText={setName}
+                                
+                                />
+                            <TextInput
+                                style={styles.titleInput}
+                                placeholder="quantity"
+                                value={quantity}
+                                onChangeText={setQuantity}
+                                keyboardType="numeric"
+                                
+                                />
+                        </View>
+                        <TouchableOpacity onPress={handleAddProduct}  style={styles.addButton}>
+                            <Text style={{color:'white'}}>{t('add')}</Text>
+                        </TouchableOpacity>
+                    <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton}>
+                        <Ionicons name="close" size={24} color="#ffffff" />
+                    </TouchableOpacity>
+                    </View>
+
+
                 </View>
-                <TouchableOpacity onPress={handleAddProduct}  style={styles.addButton}>
-                    <Text style={{color:'white'}}>{t('add')}</Text>
-                </TouchableOpacity>
-            <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton}>
-                <Ionicons name="close" size={24} color="#ffffff" />
-            </TouchableOpacity>
-            </View>
 
-
-        </View>
-
+        </SafeAreaView>
     </Modal>
     )
 
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         borderWidth: 1,
         borderRadius: 3,
-        padding: 3,
+        padding: 5,
         
       },
     addButton: {

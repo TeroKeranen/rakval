@@ -42,7 +42,7 @@ const fetchCompany = (dispatch) => {
           
           dispatch({ type: "fetch_company", payload: response.data });
         } catch (error) {
-          console.log("ei ole fetchcompany dataa", error);
+          
         }
     }
 }
@@ -90,7 +90,7 @@ const createCompany = (dispatch) => {
             
         } catch (error) {
             dispatch({type: 'set_error', payload: "Jotain meni vikaa (yritysluonnissa)"})
-            console.log(error);
+            
             
         }
     }

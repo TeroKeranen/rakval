@@ -60,7 +60,7 @@ const Etusivu = ({navigation}) => {
        await fetchUser();
 
        if (company != null) {
-          console.log("TOTEUTETAAN TÄMÄ")
+          
          await fetchWorksites();
        }
        await fetchEvents();
@@ -108,7 +108,7 @@ const Etusivu = ({navigation}) => {
   
   worksitesToShow.forEach(worksite => {
     if (!worksite) {
-      console.log("skipping undefined worksite")
+      
       return;
     }
     

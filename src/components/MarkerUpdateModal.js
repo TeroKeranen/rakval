@@ -1,4 +1,4 @@
-import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, TextInput, ScrollView } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, TextInput, ScrollView, SafeAreaView } from 'react-native';
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -38,15 +38,20 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
         <Modal 
             animationType='slide'
             visible={isVisible}
+
         >
+          <SafeAreaView style={{flex: 1}}>
+
+          <ScrollView>
+
 
            
             
             {isLoading ? (
               <DownloadScreen message={t('loading')} />
-            ) : 
-
-            <View style={styles.modalView}>
+              ) : 
+              
+              <View style={styles.modalView}>
 
 
             <View style={styles.editModalTitleContainer}>
@@ -73,7 +78,7 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
                   </View>
                   : (
                     <ImagePicker onImagePicked={handleImagePicked} />
-                  )}
+                    )}
                 {/* </ScrollView> */}
                 </View>
               {/* </View> */}
@@ -90,6 +95,8 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
         
             
        
+      </ScrollView>
+      </SafeAreaView>
       </Modal>
 
     )

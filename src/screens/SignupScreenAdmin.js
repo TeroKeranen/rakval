@@ -1,4 +1,4 @@
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View, SafeAreaView } from "react-native";
 import AuthForm from "../components/AuthForm";
 import NavLink from "../components/NavLink";
 import { useTranslation } from "react-i18next";
@@ -18,6 +18,7 @@ const SignupScreenAdmin = () => {
         
         const response = await adminSignup({email, password, role,companyDetails})
 
+       
         
         if (response.success) {
           Alert.alert(t('signup-alert-vericode-attention'), t('signup-alert-vericode'));
@@ -25,6 +26,8 @@ const SignupScreenAdmin = () => {
           Alert.alert(t('signup-userExist'))
         } else if (response.invalidData) {
           Alert.alert(t('signup-missingDataError'));
+        } else if (response.passwordtypeError) {
+          Alert.alert("Error", t('register-passregexErr'));
         } else {
           Alert.alert(t('fail'))
         }
@@ -37,18 +40,18 @@ const SignupScreenAdmin = () => {
 
 
     return (
-        <>
+        <SafeAreaView style={{flex: 1}}>
         <ScrollView>
     
           <View style={styles.container}>
             {/* signup */}
             {/* <AuthForm headerText={t("sign-upHeader")} errorMessage={state.errorMessage} submitButtonText={t("sign-upHeader")} onSubmit={handleSignUp} /> */}
-            <AuthFormAdmin headerText={t("sign-upHeader")} errorMessage="tyhjä" submitButtonText={t("sign-upHeader")}  onSubmit={handleAdminSignUp}/>
+            <AuthFormAdmin headerText={t("sign-upAdminHeader")} errorMessage="tyhjä" submitButtonText={t("sign-upHeader")}  onSubmit={handleAdminSignUp}/>
             <NavLink text={t('standardRegister')} routeName="signup" />
             <NavLink text={t("signup-navlink-text")} routeName="signin" />
           </View>
         </ScrollView>
-        </>
+        </SafeAreaView>
       );
 
 }

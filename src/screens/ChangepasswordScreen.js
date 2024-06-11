@@ -29,29 +29,40 @@ const ChangepasswordScreen = ({navigation}) => {
     //     changePassword({oldPassword, newPassword})
 
     // }
-
-    const handlePasswordChange =  async ()  => {
+    const handlePasswordChange = async () => {
         setIsLoading(true);
+        
         if (newPassword !== confirmNewPassword) {
-            Alert.alert("Error", t('changePasswordScreenAlertWithPasswords'));
-            setIsLoading(false);
-            return;
+                    Alert.alert("Error", t('changePasswordScreenAlertWithPasswords'));
+                    setIsLoading(false);
+                    return;
+                }
+        try {
+          const result = await changePassword({ oldPassword, newPassword });
+          
+      
+          if (result.success) {
+                Alert.alert(t('changePasswordScreenAlertSuccessTitle'), t('changePasswordScreenAlertSuccess'));
+                setIsLoading(false);
+                setOldPassword('');
+                setNewPassword('');
+                setConfirmNewPassword('')
+            
+          } else {
+            if (result.passwordtypeError) {
+              Alert.alert("Error", t('register-passregexErr'));
+            } else {
+              Alert.alert("Error", t('fail'));
+            }
+          }
+        } catch (error) {
+          
+          Alert.alert("Network Error", "Unable to connect to server.");
+        } finally {
+          setIsLoading(false);
         }
-        const result = await changePassword({oldPassword, newPassword});
-
-        if (result.success) {
-            Alert.alert(t('changePasswordScreenAlertSuccessTitle'), t('changePasswordScreenAlertSuccess'));
-            setIsLoading(false);
-            setOldPassword('');
-            setNewPassword('');
-            setConfirmNewPassword('')
-            return;
-        } else {
-            Alert.alert("Error", t('changePasswordScreenAlertFailed'));
-            setIsLoading(false);
-            return;
-        }
-    }
+      };
+ 
     
     if (isLoading) {
         return <DownloadScreen message={t('loading')} />

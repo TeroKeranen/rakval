@@ -60,7 +60,7 @@ const WorkOn = ({worksites, userRole="admin", userId="12344"}) => {
     const onRefresh =  async () => {
         setIsRefreshing(true); // Aseta päivitystila todeksi
         await fetchWorksites().then(result => {
-          console.log(result); // Logiikka tulosten käsittelyyn
+          
           setIsRefreshing(false); // Aseta päivitystila epätodeksi, kun olet valmis
         })
         .catch(error => {

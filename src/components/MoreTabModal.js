@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import { Modal, TouchableOpacity, View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import ChangeLanguage from "./ChangeLanguage";
 import SignoutButton from "./SignoutButton";
@@ -8,18 +8,21 @@ import SignoutButton from "./SignoutButton";
 const MoreTabModal = ({ isVisible, onClose, onLogout }) => {
   return (
     <Modal animationType="slide" transparent={true} visible={isVisible} onRequestClose={onClose}>
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <SignoutButton onLogout={onLogout}/>
-          {/* <TouchableOpacity onPress={onLogout} style={styles.logoutButton}>
-            <Text>Kirjaudu ulos</Text>
-          </TouchableOpacity> */}
-          <ChangeLanguage />
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color="#f5f5f5" />
-          </TouchableOpacity>
+      <SafeAreaView style={{flex:1}}>
+
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <SignoutButton onLogout={onLogout}/>
+            {/* <TouchableOpacity onPress={onLogout} style={styles.logoutButton}>
+              <Text>Kirjaudu ulos</Text>
+              </TouchableOpacity> */}
+            <ChangeLanguage />
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color="#f5f5f5" />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 };

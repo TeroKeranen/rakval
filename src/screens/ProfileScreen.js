@@ -33,7 +33,7 @@ const ProfileScreen = ({navigation}) => {
     return () => unsubscribe();
   }, [navigation, fetchUser, clearErrorMessage]);
 
-  // console.log("user", state.user.email);
+  
 
 
   

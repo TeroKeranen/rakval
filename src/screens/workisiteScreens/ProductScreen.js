@@ -183,7 +183,8 @@ const ProductScreen = () => {
 
             <View>
                 <TouchableOpacity onPress={() => openAddProductModal()} style={styles.workDaybutton} >
-                    <Text style={{color: 'white'}}>Lisää tuote</Text>
+                    {/* <Text style={{color: 'white'}}>{t('productScreen-addproductBtn')}</Text> */}
+                    <Ionicons style={{color: 'white'}} name="add-circle-outline" size={30} />
                 </TouchableOpacity>
             </View>
 
