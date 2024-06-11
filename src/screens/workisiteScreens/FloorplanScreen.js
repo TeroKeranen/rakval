@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, Dimensions, ScrollView, Button, TextInput, Modal, Alert, FlatList } from "react-native";
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react";
-import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
-import { Ionicons } from "@expo/vector-icons";
+
+
 import { getCurrentDate } from "../../utils/currentDate";
 import { calculateNextMarkerNumber } from "../../utils/calculateNextMarkerNumber";
 

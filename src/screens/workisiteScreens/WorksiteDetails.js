@@ -5,7 +5,7 @@ import {Context as AuthContext} from '../../context/AuthContext'
 import { useContext, useEffect, useState } from 'react';
 import DownloadScreen from '../../components/DownloadScreen';
 import { useTranslation } from "react-i18next";
-import {FLOORPLAN_PHOTO_URL} from '@env'
+
 
 
 const WorksiteDetails = ({route, navigation}) => {

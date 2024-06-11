@@ -2,7 +2,7 @@
 import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
-import DownloadScreen from './DownloadScreen';
+
 
 import { FLOORPLAN_PHOTO_URL } from "@env";
 import { useState } from 'react';

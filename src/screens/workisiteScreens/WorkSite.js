@@ -5,7 +5,7 @@ import {Context as AuthContext} from '../../context/AuthContext'
 import DownloadScreen from "../../components/DownloadScreen";
 import { useTranslation } from "react-i18next";
 
-import { StyleSheet, View, Button, Text, FlatList, TouchableOpacity, Pressable, Dimensions, ImageBackground } from "react-native";
+import { StyleSheet, View, Button, Text, FlatList,RefreshControl, TouchableOpacity, Pressable, Dimensions, ImageBackground } from "react-native";
 
 const WorkSite = ({navigation, route}) => {
 
@@ -183,6 +183,13 @@ const WorkSite = ({navigation, route}) => {
                 refreshing={isRefreshing}  // Päivitysindikaattorin tila
                 onRefresh={onRefresh}      // Päivitysmetodi
                 keyExtractor={(worksite) => `tyomaa-${worksite._id}`}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={isRefreshing}
+                    onRefresh={onRefresh}
+                    tintColor="white" // Asettaa päivitysindikaattorin värin valkoiseksi
+                  />
+                }
                 
                 />
             </View>
@@ -202,6 +209,13 @@ const WorkSite = ({navigation, route}) => {
                 refreshing={isRefreshing}  // Päivitysindikaattorin tila
                 onRefresh={onRefresh}      // Päivitysmetodi
                 keyExtractor={(worksite) => `pikkukeikka-${worksite._id}`}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={isRefreshing}
+                    onRefresh={onRefresh}
+                    tintColor="white" // Asettaa päivitysindikaattorin värin valkoiseksi
+                  />
+                }
                 
                 
                 />

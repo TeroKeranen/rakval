@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView, Dimensions, Alert } from "react-native";
+import { Text, View, StyleSheet, FlatList,RefreshControl, TextInput, SafeAreaView, Dimensions, Alert } from "react-native";
 import {useContext, useEffect, useState} from 'react';
 
 import { Context as EventContext } from "../../context/EventsContext";
@@ -229,7 +229,16 @@ const Events = ({events}) => {
             <Text style={styles.emptyListText}>ei dataa</Text>
           </View>
         )}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+            tintColor="white" // Asettaa päivitysindikaattorin värin valkoiseksi
+          />
+        }
+        
         />
+        
 
     </View>
     )

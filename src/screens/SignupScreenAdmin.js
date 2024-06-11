@@ -1,5 +1,4 @@
 import { Alert, ScrollView, StyleSheet, Text, View, SafeAreaView } from "react-native";
-import AuthForm from "../components/AuthForm";
 import NavLink from "../components/NavLink";
 import { useTranslation } from "react-i18next";
 import AuthFormAdmin from "../components/AuthFormAdmin";

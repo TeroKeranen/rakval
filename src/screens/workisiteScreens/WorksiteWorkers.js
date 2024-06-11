@@ -8,7 +8,7 @@ import {Picker} from '@react-native-picker/picker';
 import { Button } from "react-native-elements";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
-import ImagePicker from "../../components/ImagePicker";
+
 import DownloadScreen from "../../components/DownloadScreen";
 
 

@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { Context as AuthContext } from "../context/AuthContext";
 import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-// import {Text, Button, Input} from 'react-native-elements'
+
 import { useTranslation } from "react-i18next";
 
 

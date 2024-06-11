@@ -1,6 +1,6 @@
 import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, TextInput, ScrollView, SafeAreaView } from 'react-native';
 import { useTranslation } from "react-i18next";
-import { Ionicons } from "@expo/vector-icons";
+
 
 import { FLOORPLAN_PHOTO_URL } from "@env";
 import ImagePicker from './ImagePicker';
@@ -213,26 +213,3 @@ const styles = StyleSheet.create({
 })
 
 export default MarkerUpdateModal;
-//   editModalView: {
-//       height: "50%",
-//       margin: 20,
-//       backgroundColor: "white",
-//       borderRadius: 20,
-//       // padding: 20,
-//       alignItems: "center",
-//       shadowColor: "#000",
-//       shadowOffset: {
-//         width: 0,
-//         height: 2,
-//       },
-//       shadowOpacity: 0.25,
-//       shadowRadius: 4,
-//       elevation: 5,
-//     },
-
- // scrollViewStyle: {
-  //   // flexGrow: 1, // Tämä auttaa varmistamaan, että sisältö näkyy oikein
-  //   // justifyContent: 'flex-start', // Aseta sisältö alkamaan ylhäältä
-  //   width: '90%',
-    
-  // },

@@ -4,7 +4,7 @@ import { Input } from "react-native-elements";
 import { useTranslation } from "react-i18next";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
+
 
 
 import { useNavigation } from '@react-navigation/native';

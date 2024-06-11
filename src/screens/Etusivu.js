@@ -6,12 +6,11 @@ import {Context as WorksiteContext} from '../context/WorksiteContext'
 
 import { useTranslation } from "react-i18next";
 import DownloadScreen from "../components/DownloadScreen";
-import { timeStampChanger } from "../utils/timestampChanger";
-import { Ionicons } from "@expo/vector-icons";
+
 import Events from "../components/EtusivuComponents/Events";
 import Accordion from "../components/EtusivuComponents/Accordion";
 import WorksiteReady from "../components/EtusivuComponents/WorksiteReady";
-import { getCurrentDate } from "../utils/currentDate";
+
 
 import {futureStartTime} from '../utils/calcFutureWorksite'
 import WorkOn from "../components/EtusivuComponents/WorkOn";
@@ -55,23 +54,21 @@ const Etusivu = ({navigation}) => {
   
   
   useEffect(() => {
-    const fetchAndSetData =  async () => {
-      setIsLoading(true);
-       await fetchUser();
-
-       if (company != null) {
-          
-         await fetchWorksites();
-       }
-       await fetchEvents();
-      setIsLoading(false)
-      
-    }
-    const unsubscribe = navigation.addListener('focus', fetchAndSetData)
-
-
+    const fetchAndSetData = async () => {
+      if (!worksiteState.worksites.length || !eventState.events.length) {
+        setIsLoading(true);
+        await fetchUser();
+        if (company) {
+          await fetchWorksites();
+        }
+        await fetchEvents();
+        setIsLoading(false);
+      }
+    };
+  
+    const unsubscribe = navigation.addListener('focus', fetchAndSetData);
     return unsubscribe;
-  })
+  }, [worksiteState.worksites, eventState.events]); 
 
   useEffect(() => {
     

@@ -1,10 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import createDataContext from "./createDataContext";
 import rakval from "../api/rakval";
-import { useContext } from "react";
+
 import { navigate, resetAndNavigate } from '../navigationRef';
-import {Context as CompanyContext} from './CompanyContext'
-import {TOKEN_REPLACE} from '@env'
+
+
 import * as SecureStore from 'expo-secure-store';
 import { makeApiRequest} from "../api/refreshToken";
 // import jwtDecode from 'jwt-decode';

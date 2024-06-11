@@ -1,11 +1,11 @@
 import {Text, View, StyleSheet, Alert, TextInput,TouchableOpacity} from "react-native";
-import { Button } from "react-native-elements";
+
 import { useContext, useEffect, useState } from "react";
 import { Context as AuthContext } from "../context/AuthContext";
 import {Context as WorksiteContext} from '../context/WorksiteContext'
 import {Context as CompanyContext} from '../context/CompanyContext'
 import DownloadScreen from "../components/DownloadScreen";
-import ChangeLanguage from "../components/ChangeLanguage";
+
 import { useTranslation } from "react-i18next";
 
 
