@@ -152,7 +152,11 @@ const ProductScreen = () => {
     const renderItem = ({item}) => (
         <View style={styles.productlist}>
 
-            <Text>{item.name} {item.quantity}</Text>
+            <View style={styles.product}>
+
+            <Text style={styles.text}>{t('product')}: {item.name}</Text>
+            <Text style={styles.text}>{t('kpl')}: {item.quantity}</Text>
+            </View>
             {/* <Text>{item._id}</Text> */}
 
             <View style={styles.buttonsContainer}>
@@ -247,13 +251,16 @@ const styles = StyleSheet.create({
       },
       productlist: {
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
-        alignItems:'center',
+        
         marginVertical: 10,
         backgroundColor: '#e2dbdb',
         padding: 10,
         borderRadius: 5,
+      },
+      product: {
+        marginBottom: 10
       },
       listContentContainer: {
         paddingBottom: 20
@@ -264,6 +271,10 @@ const styles = StyleSheet.create({
         
         flexDirection: 'row',
         justifyContent: 'space-between'
+      },
+      text: {
+        fontSize: 18,
+        margin: 5,
       }
 
 })

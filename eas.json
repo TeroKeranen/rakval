@@ -11,9 +11,7 @@
       "android": {
         "buildType": "apk"
       },
-      "ios": {
-        "buildType": "development-client"
-      },
+      
       "distribution": "internal"
     },
     "production": {}

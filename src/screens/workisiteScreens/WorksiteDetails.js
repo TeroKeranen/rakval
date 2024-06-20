@@ -175,14 +175,14 @@ const WorksiteDetails = ({route, navigation}) => {
         <View style={styles.test}>
 
           <Text style={styles.text}>
-            {t("workistedetail-address")}:{state.currentWorksite.address}
+            {t("workistedetail-address")}: {state.currentWorksite.address}
           </Text>
 
           <Text style={styles.text}>
             {t("worksitedetail-city")}: {state.currentWorksite.city}
           </Text>
           <Text style={styles.text}>
-            {t('plannedStartingDate')}: {state.currentWorksite.startTime ? state.currentWorksite.startTime : "Ei valittua päivämäärää"}
+            {t('plannedStartingDate')}: {state.currentWorksite.startTime ? state.currentWorksite.startTime : ""}
           </Text>
         </View>
         {/* <View style={styles.imageContainer}>

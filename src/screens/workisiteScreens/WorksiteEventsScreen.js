@@ -86,14 +86,14 @@ const WorksiteEventsScreen = () => {
                             <View style={styles.workRunning}>
 
                                 <Text style={styles.text}>{item.userName} - {item.startDate} ({t('worksiteEventScreenRunning')})</Text>
-                                <Text style={styles.text}>Työ aloitettu: {item.startDate} -- {item.startTime}</Text>
+                                <Text style={styles.text}>{t('worksiteEventScreenStartedAt')}: {item.startDate} -- {item.startTime}</Text>
                             </View> :
                             <View style={styles.workDone}>
                                 <View style={styles.header}>
                                     <Text style={styles.text}>{item.userName} - {item.startDate}</Text>
                                 </View>
-                                <Text style={styles.text}>{t('worksiteEventScreenStartedAt')}: {item.startDate} kello {item.startTime}</Text>
-                                <Text style={styles.text}>{t('worksiteEventScreenCompletedAt')}: {item.endDate} kello {item.endTime}</Text>
+                                <Text style={styles.text}>{t('worksiteEventScreenStartedAt')}: {item.startDate} {t('at')} {item.startTime}</Text>
+                                <Text style={styles.text}>{t('worksiteEventScreenCompletedAt')}: {item.endDate} {t('at')} {item.endTime}</Text>
                                 
                                 <Text style={styles.text}>{t('worksiteEventScreenSpentTime')} : 
                                     {item.endDate && item.endTime
