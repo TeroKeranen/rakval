@@ -128,7 +128,7 @@ const Etusivu = ({navigation}) => {
     { title: t('etusivuReadyButton'), content: <WorksiteReady worksites={readyWorksites} title={t('ready')} /> },
     { title: t('etusivuUnfinishedButton'), content: <WorksiteReady worksites={notReadyWorksites} title={t('unfinished')} /> },
     { title: t('etusivuStartingdButton'), content: <WorksiteReady worksites={futureStart} title={t('starting')} /> },
-    { title: "Ongoing", content: <WorkOn worksites={worksites} userRole={role} userId={userId}/> },
+    { title: t('etusivuActive'), content: <WorkOn worksites={worksites} userRole={role} userId={userId}/> },
     // Lisää muita otsikoita ja sisältöjä tarpeen mukaan
   ];
 

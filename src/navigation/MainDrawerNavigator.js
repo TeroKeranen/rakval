@@ -30,6 +30,7 @@ import MoreTabModal from "../components/MoreTabModal";
 
 import VerificationScreen from "../screens/VerificationScreen";
 import { ImageBackground, StyleSheet } from "react-native";
+import InstructionScreen from "../screens/InstructionScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -111,6 +112,7 @@ const MainDrawerNavigator = () => {
             <Drawer.Screen name={t("drawerScreen-worksite")} component={AdminCompanybtmTab} />
             {/* <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} /> */}
             <Drawer.Screen name={t("drawerScreen-company")} component={AdminTabs} />
+            <Drawer.Screen name={t('drawerScreen-instruction')} component={InstructionScreen} />
             
           </>
         ) : (
@@ -122,6 +124,7 @@ const MainDrawerNavigator = () => {
             }}/>
             <Drawer.Screen name={t("drawerScreen-worksite")} component={UserWorksiteTabs} />
             <Drawer.Screen name={t("drawerScreen-company")} component={AdminTabs} />
+            <Drawer.Screen name={t('drawerScreen-instruction')} component={InstructionScreen} />
             
           </>
         )}
