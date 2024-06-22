@@ -52,6 +52,7 @@
   "signin-loginFail": "Login failed",
 
   "drawerScreen-front-page": "front page",
+  "drawerScreen-instruction": "Instruction",
   "main-page": "Main page",
   "profile": "Profile",
   "construction-site": "Construction sites",
@@ -188,6 +189,7 @@
   "etusivuReadyButton": "Ready", 
   "etusivuUnfinishedButton": "Unfinished", 
   "etusivuStartingdButton": "Starting",
+  "etusivuActive": "Active",
 
   "refreshTokenLimitError" : "You have reached the limit for creating worksites.",
   "refreshTokenResorceError" : "Resource not found.",
@@ -211,7 +213,37 @@
   "adminSignUp-companyCity": "Company location",
 
   "imagePicker-alert": "Insufficient permission",
-  "imagePicker-alert-message": "You need to grant camera permissions to use this app"
+  "imagePicker-alert-message": "You need to grant camera permissions to use this app",
+
+  "adminInfoTitle1": "Admin Instructions",
+  "adminInfoText1": "When you log in with admin credentials, you can access different pages from the top left corner menu. The following pages are currently available:",
+
+  "adminInfoTitle2": "Home Page",
+  "adminInfoText2": "Here, you can monitor various activities such as time entries and calendar events.You will also find your profile page where you can change your password.",
+
+  "adminInfoTitle3": "Worksite Page",
+  "adminInfoText3": "On this page, you can create new worksites or open existing ones.",
+
+  "adminInfoTitle4": "Company Page",
+  "adminInfoText4": "This page displays the information about your company. To allow an employee to join your company, you need to share the company code with them.",
+
+  "adminInfoTitle5": "Adding workers",
+  "adminInfoText5": "When you create a worksite, and an employee has joined your company using the company code, you can add the employee to the worksite. To do this, go to the worksite page, find the section for workers, search for the employee, and add them to the specific worksite",
+
+  "adminInfoTitle6": "Instructions Page",
+  "adminInfoText6": "This page contains various instructions and guidelines.These functionalities are designed to help you manage and monitor your work efficiently.",
+
+  "userInfoTitle1": "User Instructions",
+  "userInfoText1": "When you log in with user credentials, you can access different pages from the top left corner menu. The following pages are currently available:",
+
+  "userInfoTitle2": "Home Page",
+  "userInfoText2": "Here, you can monitor various activities such as time entries and calendar events. You will also find your profile page where you can change your password.",
+
+  "userInfoTitle3": "Worksite Page",
+  "userInfoText3": "On this page, you will find the worksites you have been assigned to.",
+
+  "userInfoTitle4": "Company Page",
+  "userInfoText4": "On this screen, you can join a company. You will need a company code provided by the company owner. Entering this code will allow you to join the company."
 
   
 }

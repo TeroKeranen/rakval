@@ -56,6 +56,7 @@
 
 
   "drawerScreen-front-page": "etusivu",
+  "drawerScreen-instruction": "Ohje",
   "main-page": "Etusivu",
   "profile": "Profiili",
   "construction-site": "Työmaat",
@@ -193,6 +194,7 @@
   "etusivuReadyButton": "Valmiit", 
   "etusivuUnfinishedButton": "Keskeneräiset", 
   "etusivuStartingdButton": "Alkamassa" ,
+  "etusivuActive": "Aktiivinen",
 
   "refreshTokenLimitError" : "Olet saavuttanut työmaiden luomisen rajan",
   "refreshTokenResorceError" : "Resurssia ei löydy.",
@@ -216,7 +218,37 @@
   "adminSignUp-companyCity": "Yrityksen paikkakunta",
 
     "imagePicker-alert": "Riittämätön oikeus",
-  "imagePicker-alert-message": "Sinun täytyy myöntää kameraoikeudet käyttääksesi tätä sovellusta."
+  "imagePicker-alert-message": "Sinun täytyy myöntää kameraoikeudet käyttääksesi tätä sovellusta.",
+
+  "adminInfoTitle1": "Admin ohjeet",
+  "adminInfoText1": "Kun kirjaudut sisään admin-tunnuksilla, voit avata vasemmasta ylänurkasta eri sivut. Seuraavat sivut ovat tällä hetkellä käytettävissä:",
+
+  "adminInfoTitle2": "Päänäkymä",
+  "adminInfoText2": "Täällä voit seurata erilaisia tapahtumia, kuten tuntikirjauksia ja kalenterimerkintöjä. Löydät myös oman profiilisivusi, jossa voit vaihtaa salasanan.",
+
+  "adminInfoTitle3": "Työmaa näyttö",
+  "adminInfoText3": "Tällä sivulla voit luoda uusia työmaita tai avata olemassa olevia työmaita.",
+
+  "adminInfoTitle4": "Yritys näyttö",
+  "adminInfoText4": "Tämä sivu näyttää tietoja yrityksestäsi. Jotta työntekijä voi liittyä yritykseesi, sinun pitää jakaa hänelle yrityskoodi.",
+
+  "adminInfoTitle5": "Lisää työntekijä",
+  "adminInfoText5": "Kun luot työmaan, ja työntekijä on liittynyt yritykseesi yrityskoodin avulla, voit lisätä työntekijän työmaalle. Voit tehdä tämän menemällä työmaasivulle, etsimällä kohdan työntekijät, hakemalla työntekijän ja lisäämällä hänet tietylle työmaalle.",
+
+  "adminInfoTitle6": "Ohje näyttö",
+  "adminInfoText6": "Tämä sivu sisältää erilaisia ohjeita ja oppaita. Nämä toiminnot on suunniteltu auttamaan sinua hallitsemaan ja seuraamaan työtäsi tehokkaasti.",
+
+  "userInfoTitle1": "Default käyttäjän ohjeet",
+  "userInfoText1": "Kun kirjaudut sisään käyttäjän tunnuksilla, voit avata vasemmasta ylänurkasta eri sivut. Seuraavat sivut ovat tällä hetkellä käytettävissä:",
+
+  "userInfoTitle2": "Päänäkymä",
+  "userInfoText2": "Täällä voit seurata erilaisia tapahtumia, kuten tuntikirjauksia ja kalenterimerkintöjä. Löydät myös oman profiilisivusi, jossa voit vaihtaa salasanan.",
+
+  "userInfoTitle3": "Työmaa näyttö",
+  "userInfoText3": "Tällä sivulla löydät työmaat, joihin sinut on liitetty.",
+
+  "userInfoTitle4": "Yritys näyttö",
+  "userInfoText4": "Tällä näytöllä voit liittyä yritykseen. Tarvitset yrityksen haltijalta yrityskoodin, jonka syöttämällä voit liittyä yritykseen."
   
 
   
