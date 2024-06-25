@@ -248,7 +248,13 @@
   "userInfoText3": "Tällä sivulla löydät työmaat, joihin sinut on liitetty.",
 
   "userInfoTitle4": "Yritys näyttö",
-  "userInfoText4": "Tällä näytöllä voit liittyä yritykseen. Tarvitset yrityksen haltijalta yrityskoodin, jonka syöttämällä voit liittyä yritykseen."
+  "userInfoText4": "Tällä näytöllä voit liittyä yritykseen. Tarvitset yrityksen haltijalta yrityskoodin, jonka syöttämällä voit liittyä yritykseen.",
+
+  "profileScreen-delUser-button": "Poista tunnuksesi",
+  "profileScreen-delUser-title": "Poistetaan tunnus",
+  "profileScreen-delUser-text": "Oletko varma että haluat poistaa tunnuksen?",
+  "profileScreen-delUser-again": "Olen varma",
+  "profileScreen-delUser-success": "Tunnus poistettu"
   
 
   

@@ -243,7 +243,13 @@
   "userInfoText3": "On this page, you will find the worksites you have been assigned to.",
 
   "userInfoTitle4": "Company Page",
-  "userInfoText4": "On this screen, you can join a company. You will need a company code provided by the company owner. Entering this code will allow you to join the company."
+  "userInfoText4": "On this screen, you can join a company. You will need a company code provided by the company owner. Entering this code will allow you to join the company.",
+
+  "profileScreen-delUser-button": "Remove your account",
+  "profileScreen-delUser-title": "Removing account",
+  "profileScreen-delUser-text": "Are you sure you want to remove the account?",
+  "profileScreen-delUser-again": "I am sure",
+  "profileScreen-delUser-success": "Account removed"
 
   
 }

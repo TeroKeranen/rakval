@@ -85,6 +85,8 @@ const logout = (dispatch) => async () => {
     console.error("Logout error: ", error);
   }
 }
+
+
 const signup = (dispatch) => {
   
   return async ({ email, password,navigation }) => {
@@ -363,6 +365,22 @@ const changePassword = dispatch => async ({ oldPassword, newPassword }) => {
     return { success: false, message: "Password change failed" }; // Yleinen virheilmoitus
   }
 };
+
+const deleteAccount = (dispatch) => {
+  return async () => {
+    try {
+      const response = await makeApiRequest('/deleteAccount', 'delete', null, dispatch);
+
+      if (response.data.success) {
+        return response.data;
+      }
+      console.log("deleteresss", response);
+    } catch (error) {
+      return {success: false, message: "Deleting account failed"}
+      
+    }
+  }
+}
 // const changePassword = dispatch => async  ({oldPassword, newPassword}) => {
 
 //   try {
@@ -387,4 +405,4 @@ const changePassword = dispatch => async ({ oldPassword, newPassword }) => {
 //   }
 // }
 
-export const { Provider, Context } = createDataContext(authReducer, { signin,adminSignup, signout,logout, signup,  fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany,changePassword,verifyEmail,setUserEmail}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
+export const { Provider, Context } = createDataContext(authReducer, { signin,adminSignup, signout,logout, signup,  fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany,changePassword,verifyEmail,setUserEmail,deleteAccount}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });

@@ -17,7 +17,7 @@ const ProfileScreen = ({navigation}) => {
 
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true); // Käytetään latausindikaattoria
-  const { state, fetchUser, signout, joinCompany, clearErrorMessage } = useContext(AuthContext);
+  const { state, fetchUser, signout, joinCompany, clearErrorMessage,deleteAccount } = useContext(AuthContext);
   const { clearCompany } = useContext(CompanyContext);
   const { clearWorksites, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
   const [companyCode, setCompanyCode] = useState("");
@@ -35,7 +35,44 @@ const ProfileScreen = ({navigation}) => {
 
   
 
+  const handleDeleteUser = async () => {
 
+    Alert.alert(
+      t('profileScreen-delUser-title'),
+      t('profileScreen-delUser-text'), 
+    [
+      {
+        text: t('cancel'),
+        onPress: () => console.log("peruutettu"),
+        style: 'cancel'
+      },
+      {
+        text: t('profileScreen-delUser-again'),
+        onPress: async () => {
+          setIsLoading(true);
+          try {
+            const result = await deleteAccount();
+
+            if (result.success) {
+              Alert.alert(t('profileScreen-delUser-success'));
+              signout()
+              setIsLoading(false)
+            } else {
+              Alert.alert(t('fail'))
+              setIsLoading(false)
+            }
+            
+          } catch (error) {
+            Alert.alert(t('fail'))
+            setIsLoading(false)
+          }
+
+        } 
+      }
+    ],
+    {cancelable: true}
+    )
+  }
   
 
   const navigateToChangePassword = () => {
@@ -61,6 +98,10 @@ const ProfileScreen = ({navigation}) => {
         <View>
           <TouchableOpacity onPress={navigateToChangePassword} style={styles.button}>
             <Text style={{color:'white'}}>{t('profileScreenChangePassword')}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={handleDeleteUser} style={styles.button}>
+            <Text style={{color:'white'}}>{t('profileScreen-delUser-button')}</Text>
           </TouchableOpacity>
         </View>
       
