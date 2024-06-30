@@ -195,6 +195,21 @@ const signin = (dispatch) => {
   };
 };
 
+const deleteAccountRequest = (dispatch) => async (title, text) => {
+  try {
+    const response = await makeApiRequest(`/sendAccountDelete`, 'post', {title, text}, dispatch);
+
+    // console.log("delteaccountrequest", response);
+    if (response.success) {
+      return response.data
+    } else {
+      return response.data
+    }
+  } catch (error) {
+    console.log("delteaccountrequest error", error);
+  }
+}
+
 
 // Käytetään tätä kun käyttäjä syöttää verification koodin signupin yhteydessä
 const verifyEmail = (dispatch) => {
@@ -381,6 +396,8 @@ const deleteAccount = (dispatch) => {
     }
   }
 }
+
+
 // const changePassword = dispatch => async  ({oldPassword, newPassword}) => {
 
 //   try {
@@ -405,4 +422,19 @@ const deleteAccount = (dispatch) => {
 //   }
 // }
 
-export const { Provider, Context } = createDataContext(authReducer, { signin,adminSignup, signout,logout, signup,  fetchUser, clearErrorMessage, tryLocalSignin, joinCompany, fetchUserWithId, leaveCompany,changePassword,verifyEmail,setUserEmail,deleteAccount}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
+export const { Provider, Context } = createDataContext(authReducer, {
+   signin,
+   adminSignup,
+    signout,
+    logout,
+     signup,
+       fetchUser,
+        clearErrorMessage,
+         tryLocalSignin,
+          joinCompany,
+           fetchUserWithId,
+            leaveCompany,
+            changePassword,
+            verifyEmail,
+            setUserEmail,
+            deleteAccount, deleteAccountRequest}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });

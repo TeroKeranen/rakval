@@ -7,6 +7,7 @@ import {Context as CompanyContext} from '../context/CompanyContext'
 import DownloadScreen from "../components/DownloadScreen";
 
 import { useTranslation } from "react-i18next";
+import DeleteRequestModal from "../components/DeleteRequestModal";
 
 
 //TO6b2PchlA
@@ -17,10 +18,15 @@ const ProfileScreen = ({navigation}) => {
 
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true); // Käytetään latausindikaattoria
-  const { state, fetchUser, signout, joinCompany, clearErrorMessage,deleteAccount } = useContext(AuthContext);
+  const [modalVisible, setModalVisible] = useState(false) // käytetään tätä apuna kun avataan deleteRequestModal
+  const [title, setTitle] = useState(''); // Deleterequestia varten
+  const [text, setText] = useState(''); // Deleterequestia varten
+
+  const [companyCode, setCompanyCode] = useState("");
+
+  const { state, fetchUser, signout, joinCompany, clearErrorMessage,deleteAccount, deleteAccountRequest } = useContext(AuthContext);
   const { clearCompany } = useContext(CompanyContext);
   const { clearWorksites, fetchWorksites, resetCurrentWorksite } = useContext(WorksiteContext);
-  const [companyCode, setCompanyCode] = useState("");
 
   // päivitetään tällä fechUser tiedot aina kun menemme sivulle
   useEffect(() => {
@@ -34,6 +40,11 @@ const ProfileScreen = ({navigation}) => {
   }, [navigation, fetchUser, clearErrorMessage]);
 
   
+
+  // Modalin avaamiseen 
+  const openModal = () => {
+    setModalVisible(true);
+  }
 
   const handleDeleteUser = async () => {
 
@@ -79,6 +90,51 @@ const ProfileScreen = ({navigation}) => {
     navigation.navigate('ChangepasswordScreen')
   }
 
+  // Modal request
+  const onSubmit = async() => {
+
+    Alert.alert(
+      t('profileScreen-delUser-title'),
+      t('profileScreen-delUser-text'),
+      [
+        {
+          text: t('cancel'),
+          onPress: () => console.log("peruutettu"),
+          style: 'cancel'
+        },
+        {
+          text: t('profileScreen-delUser-again'),
+          onPress: async () => {
+            setIsLoading(true);
+            try {
+              
+              const response = await deleteAccountRequest(title,text);
+
+              if (response.success) {
+                Alert.alert(t('profileScreen-delUser-success'));
+                setIsLoading(false);
+                setModalVisible(false);
+                setText("");
+                setTitle("");
+              } else {
+                Alert.alert(t('fail'))
+                setIsLoading(false)
+              }
+            } catch (error) {
+              Alert.alert(t('fail'))
+              setIsLoading(false)
+            }
+          }
+        }
+      ],
+      {cancelable: true}
+    )
+
+    
+  
+    
+  }
+
   // Latauskuvake jos etsii tietoja
   if (isLoading || !state.user) {
     return <DownloadScreen message={t('loading')} />;
@@ -100,13 +156,31 @@ const ProfileScreen = ({navigation}) => {
             <Text style={{color:'white'}}>{t('profileScreenChangePassword')}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={handleDeleteUser} style={styles.button}>
+          {/* <TouchableOpacity onPress={handleDeleteUser} style={styles.button}>
+            <Text style={{color:'white'}}>{t('profileScreen-delUser-button')}</Text>
+          </TouchableOpacity> */}
+
+          <TouchableOpacity onPress={openModal} style={styles.button}>
             <Text style={{color:'white'}}>{t('profileScreen-delUser-button')}</Text>
           </TouchableOpacity>
         </View>
       
 
       </View>
+
+      <DeleteRequestModal 
+        isVisible={modalVisible}
+        onClose={() => {
+          setModalVisible(false);
+          setText("");
+          setTitle("");
+        }}
+        title={title}
+        setTitle={setTitle}
+        text={text}
+        setText={setText}
+        onSubmit={onSubmit}
+      />
     </View>
   );
 }
