@@ -40,6 +40,7 @@
   "at": "at",
   "kpl": "pcs",
   "send": "send",
+  "search": "search",
 
   "sign-upHeader": "Sign Up",
   "sign-upAdminHeader": "Create an admin account",
@@ -86,6 +87,7 @@
   "profileScreen-placeholder": "Enter company code",
   "profileScreen-joincompany": "Add company",
   "profileScreen-signout": "Sign Out",
+  "profileSceen-accountRemove-btn":"Request account deletion",
 
   "worksiteform-title": "Add new construction site",
   "worksiteform-button": "Add construction site",
@@ -250,7 +252,10 @@
   "profileScreen-delUser-title": "Sending account deletion request",
   "profileScreen-delUser-text": "Are you sure you want to delete your account and send this message?",
   "profileScreen-delUser-again": "I am sure",
-  "profileScreen-delUser-success": "Message sent successfully"
+  "profileScreen-delUser-success": "Message sent successfully",
+
+  "deleteRequestModal-title": "Account deletion request",
+  "deleteRequestModal-text": "If you want to delete your account and all associated data, please fill out the form below and enter the email address used to create the account. Please note that this action is permanent and cannot be undone."
 
   
 }

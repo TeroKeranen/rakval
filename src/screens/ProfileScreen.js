@@ -161,7 +161,7 @@ const ProfileScreen = ({navigation}) => {
           </TouchableOpacity> */}
 
           <TouchableOpacity onPress={openModal} style={styles.button}>
-            <Text style={{color:'white'}}>{t('profileScreen-delUser-button')}</Text>
+            <Text style={{color:'white'}}>{t('profileSceen-accountRemove-btn')}</Text>
           </TouchableOpacity>
         </View>
       

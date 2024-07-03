@@ -99,7 +99,7 @@ const Events = ({events}) => {
       <View style={styles.textinputContainer}>
         <Ionicons name="options" size={25} color="white" />
         <TextInput
-          placeholder="hae..."
+          placeholder={t('search')}
           placeholderTextColor="white"
           style={styles.textinput}
           value={searchTerm}

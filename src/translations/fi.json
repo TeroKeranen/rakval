@@ -40,6 +40,7 @@
   "at": "kello",
   "kpl": "kpl",
   "send": "Lähetä",
+  "search": "hae",
  
 
 
@@ -90,6 +91,7 @@
   "profileScreen-placeholder": "Lisää yrityskoodi",
   "profileScreen-joincompany": "Lisää yritys",
   "profileScreen-signout": "Kirjaudu ulos",
+  "profileSceen-accountRemove-btn":"Pyydän tunnuksen poistamista",
 
   "worksiteform-title": "Lisää uusi työmaa",
   "worksiteform-button": "Lisää työmaa",
@@ -255,7 +257,10 @@
   "profileScreen-delUser-title": "Lähetetään tunnuksen poisto pyyntö",
   "profileScreen-delUser-text": "Oletko varma että haluat poistaa tunnuksesi ja lähettää tämän viestin?",
   "profileScreen-delUser-again": "Olen varma",
-  "profileScreen-delUser-success": "Viesti lähetetty onnistuneesti"
+  "profileScreen-delUser-success": "Viesti lähetetty onnistuneesti",
+
+  "deleteRequestModal-title": "Tunnusten poistopyyntö",
+  "deleteRequestModal-text": "Jos haluat poistaa tunnuksesi ja kaikki siihen liittyvät tiedot, täytä alla oleva lomake ja syötä sähköpostiosoite, jolla tunnus on tehty. Huomioithan, että tämä toimenpide on pysyvä, eikä sitä voi peruuttaa."
   
 
   

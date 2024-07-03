@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DownloadScreen from "./DownloadScreen";
 import { Ionicons } from "@expo/vector-icons";
+import { color } from "react-native-elements/dist/helpers";
 
 
 const DeleteRequestModal = ({isVisible, onClose, title, text,setTitle, setText, onSubmit}) => {
@@ -28,6 +29,10 @@ const DeleteRequestModal = ({isVisible, onClose, title, text,setTitle, setText, 
             <View style={styles.container}>
                     
                     <View style={styles.modalView}>
+                        <View>
+                            <Text style={styles.title}>{t('deleteRequestModal-title')}</Text>
+                            <Text style={styles.text}>{t('deleteRequestModal-text')}</Text>
+                        </View>
                                 
                                     <View style={styles.inputView}>
     
@@ -50,7 +55,7 @@ const DeleteRequestModal = ({isVisible, onClose, title, text,setTitle, setText, 
                                         />
                                     </View>
                                     <View style={styles.buttonView} >
-                                        <Button title={t('send')} onPress={onSubmit}/>
+                                        <Button style={{color:'white'}} title={t('send')} onPress={onSubmit}/>
                                     </View>
                                 
                             
@@ -109,6 +114,24 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         height: '50%'
       },
+      buttonView: {
+        // backgroundColor: "#d9d9da",
+        // padding: 10,
+        // borderRadius: 5,
+        // marginVertical: 10,
+        // // width: "50%",
+        // alignItems: "center",
+        // alignSelf:'center',
+        // shadowColor: "#000",
+        // shadowOffset: {
+        //   width: 0,
+        //   height: 2,
+        // },
+        // shadowOpacity: 0.25,
+        // shadowRadius: 4,
+        // elevation: 5,
+        // flexDirection:'row'
+      },
       closeButton: {
         position: "absolute",
         right: 0,
@@ -134,6 +157,11 @@ const styles = StyleSheet.create({
             shadowRadius: 4,
             elevation: 5,
             flexDirection:'row'
+      },
+      title: {
+        fontSize: 20,
+        fontWeight: '800',
+        marginBottom: 10,
       }
 
 })
