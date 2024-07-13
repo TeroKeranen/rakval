@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
@@ -34,41 +34,44 @@ const UpdateProductModal = ({isVisible, onClose, product, onUpdate}) => {
     return (
 
         <Modal animationType="slide" transparent={true} visible={isVisible} >
-        <View style={styles.container}>
+        <SafeAreaView style={{flex:1}}>
 
-            <View style={styles.modalView}>
-                <View style={styles.inputs}>
+            <View style={styles.container}>
 
-                    <TextInput
-                        style={styles.titleInput}
-                        placeholder="name"
-                        value={name}
-                        onChangeText={setName}
-                        editable={true}
-                        />
-                    <TextInput
-                        style={styles.titleInput}
-                        placeholder="quantity"
-                        value={quantity}
-                        onChangeText={setQuantity}
-                        keyboardType="numeric"
-                        
-                        />
+                <View style={styles.modalView}>
+                    <View style={styles.inputs}>
+
+                        <TextInput
+                            style={styles.titleInput}
+                            placeholder="name"
+                            value={name}
+                            onChangeText={setName}
+                            editable={true}
+                            />
+                        <TextInput
+                            style={styles.titleInput}
+                            placeholder="quantity"
+                            value={quantity}
+                            onChangeText={setQuantity}
+                            keyboardType="numeric"
+                            
+                            />
+                    </View>
+
+                    <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
+                        <Text style={{color: 'white'}}>{t('update')}</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton}>
+                        <Ionicons name="close" size={24} color="#ffffff" />
+                    </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
-                    <Text style={{color: 'white'}}>{t('update')}</Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton}>
-                    <Ionicons name="close" size={24} color="#ffffff" />
-                </TouchableOpacity>
             </View>
 
-
-        </View>
-
-    </Modal>
+        </SafeAreaView>
+        </Modal>
     )
 }
 
