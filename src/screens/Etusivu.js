@@ -31,6 +31,9 @@ const Etusivu = ({navigation}) => {
   const userId = state?.user?._id;
   const worksites = worksiteState.worksites;
   const company = state.user?.company;
+  const eventsState = eventState;
+
+  
   
   
   
@@ -56,13 +59,16 @@ const Etusivu = ({navigation}) => {
   useEffect(() => {
     const fetchAndSetData = async () => {
       if (!worksiteState.worksites.length || !eventState.events.length) {
-        setIsLoading(true);
+        // setIsLoading(true);
         await fetchUser();
         if (company) {
-          await fetchWorksites();
+          await Promise.all([fetchWorksites(), fetchEvents()])
+          // await fetchWorksites();
+        } else {
+          await fetchEvents();
         }
-        await fetchEvents();
-        setIsLoading(false);
+        // await fetchEvents();
+        // setIsLoading(false);
       }
     };
   

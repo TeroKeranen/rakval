@@ -398,7 +398,7 @@ useEffect(() => {
           <ImageZoom 
             cropWidth={Dimensions.get("window").width}
             cropHeight={700} // Muokkaa korkeutta tarpeen mukaan
-            imageWidth={200}
+            // imageWidth={200}
             imageHeight={200}
             panToMove={true}
             pinchToZoom={true}
@@ -408,7 +408,7 @@ useEffect(() => {
               
               
               <Image 
-              style={[{ width: '100%', height: '100%', resizeMode: 'cover' }, isSelected ? styles.selectedImage : {}]}
+              style={[{ width: '100%', height: '100%', resizeMode: 'contain' }, isSelected ? styles.selectedImage : {}]}
               // source={{ uri: `${process.env.FLOORPLAN_PHOTO_URL}${item.key}` }}
               source={{ uri: item.signedUrl?.url || 'fallbackURL' }}
               
@@ -419,7 +419,7 @@ useEffect(() => {
                 
                 <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
                     
-                      <Image style={[{ width: '100%', height: '100%', resizeMode: 'cover' }, isSelected ? styles.selectedImage : {}]} source={{ uri: item.signedUrl?.url }} onLoad={handleImageLoad} />
+                      <Image style={[{ width: '100%', height: '100%', resizeMode: 'contain' }, isSelected ? styles.selectedImage : {}]} source={{ uri: item.signedUrl?.url }} onLoad={handleImageLoad} />
                       
                     
                   </TouchableOpacity>

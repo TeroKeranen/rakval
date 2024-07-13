@@ -30,15 +30,9 @@ const clearEvents = (dispatch) => {
 const fetchEvents = (dispatch) => async () => {
     try {
         
-        // const token = await AsyncStorage.getItem('token');
-        // const token = await SecureStore.getItemAsync('token');
-        // const authHeader = `${TOKEN_REPLACE} ${token}`;
+
         const response = await makeApiRequest('/events', 'get', null, dispatch)
-        // const response = await rakval.get('/events', {
-        //     headers: {
-        //         Authorization: authHeader,
-        //     },
-        // });
+
         
         dispatch({type: "fetch_events", payload: response.data})
 
