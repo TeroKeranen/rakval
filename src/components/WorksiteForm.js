@@ -112,8 +112,9 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
 
             {/* <Input style={styles.input} keyboardType="numeric" placeholder="Aloitus aika muodossa d/m/y" value={startTime} onChangeText={setStartTime} />
              */}
-
+      
               <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.Dateinput}>
+                  <Text style={styles.greyText}>{t('worksiteform-startDate')}</Text>
                   <Text>{startTime ? formatDate(startTime) : 'valitse päivä'}</Text>
               </TouchableOpacity>
 
@@ -223,6 +224,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     marginVertical: 20,
     
+  },
+  greyText:{
+    color: "#8080808b",
+    marginVertical: 5
+
   }
 });
 

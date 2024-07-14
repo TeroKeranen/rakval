@@ -64,31 +64,33 @@ const FloorplanScreen = ({route, navigation}) => {
   
  
 
-
- 
-  const fetchDoneRef = useRef(false);
   
+  
+  const fetchDoneRef = useRef(false);
+  // useEffect(() => {
+  //   // Hakee työmaan tiedot aina kun floorplanKeys muuttuu
+  //   fetchWorksiteDetails(state.currentWorksite._id);
+  // }, [floorplanKeys]);
 
   useEffect(() => {
-    if (!fetchDoneRef.current) {
-      
-      const fetchUrls = async () => {
-        const urls = await Promise.all(floorplanKeys.map(async (item) => {
-          const signedUrl = await getSignedUrl(process.env.BUCKET_NAME, item.key);
-          return { ...item, signedUrl };
-        }));
-        
-        // Päivitä vain, jos uudet URLit ovat erilaisia
-        if (JSON.stringify(urls) !== JSON.stringify(floorplanKeys)) {
-          setFloorplanKeys(urls);
-        }
-        fetchDoneRef.current = true;
-      };
-      
+    const fetchUrls = async () => {
+      const urls = await Promise.all(floorplanKeys.map(async (item) => {
+        const signedUrl = await getSignedUrl(process.env.BUCKET_NAME, item.key);
+        return { ...item, signedUrl };
+      }));
+
+      // Päivitä vain, jos uudet URLit ovat erilaisia
+      if (JSON.stringify(urls) !== JSON.stringify(floorplanKeys)) {
+        setFloorplanKeys(urls);
+      }
+    };
+
+    if (fetchDoneRef.current) {
       fetchUrls();
+    } else {
+      fetchDoneRef.current = true;
     }
-  }, []);
-  
+  }, [floorplanKeys]);
 
   useEffect(() => {
     
@@ -326,7 +328,9 @@ useEffect(() => {
 
   // käytetään tätä päivittämään näkymä kun lisätää floorplanimage
   const updateFloorplanKeys = (newKey) => {
-    setFloorplanKeys([...floorplanKeys, newKey]);
+    // setFloorplanKeys([...floorplanKeys, newKey]);
+    setFloorplanKeys(prevKeys => [...prevKeys, newKey])
+    // fetchWorksiteDetails(state.currentWorksite._id)
     // Tarvittaessa kutsu fetchWorksiteDetails tai muita päivitysfunktioita
   };
 
@@ -356,6 +360,8 @@ useEffect(() => {
   const [imageSize, setImageSize] = useState({ width: 300, height: 400 }); // Alkuarvot
 
   const handleImageLoad = (event) => {
+    
+    
     // const { width, height } = event.nativeEvent.source;
     // console.log('Image dimensions', width, height);
 
@@ -464,6 +470,7 @@ useEffect(() => {
         horizontal={false}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
+        extraData={floorplanKeys}
         />
      
       {/* Modal markerin tiedoille */}

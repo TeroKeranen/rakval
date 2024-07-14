@@ -96,6 +96,7 @@
   "worksiteform-add-photo": "Add floor plan",
   "worksiteform-worktype-worksite": "Construction site",
   "worksiteform-worktype-privateClient": "Private client",
+  "worksiteform-startDate": "Select the start date of the job",
 
   "worksitedetail-downloadscreen-msg": "Loading construction site information",
   "workistedetail-address": "Address",

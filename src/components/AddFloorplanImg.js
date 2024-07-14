@@ -14,6 +14,7 @@ const AddFloorplanImg = ({ imageUri, setImageUri, isVisible, onClose, onUpdate }
 
       const handleModal = () => {
         setImageModalVisible(true);
+        
       }
     return (
         <View>

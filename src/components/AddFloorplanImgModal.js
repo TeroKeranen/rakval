@@ -1,4 +1,4 @@
-import { Alert, Image, Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { pickImage, uploadImageToS3, requestMediaLibraryPermissions } from "../../services/ImageService";
 import { useTranslation } from "react-i18next";
@@ -44,11 +44,12 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
                         
                         if (result.success) {
                             Alert.alert(t('succeeded'))
+                            onUpdate && onUpdate(floorplan);
                         } else {
                             Alert.alert(t('fail'))
                         }
                     })
-                onUpdate && onUpdate(floorplan);
+                // onUpdate && onUpdate(floorplan);
             }
             if (!imageTitle) {
                 Alert.alert("Error", t('addFloorplanImgModalTitleError'))
@@ -69,11 +70,11 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
         
       }
 
-      if (isLoading) {
-        return (
-            <DownloadScreen message={t('loading')} />
-        )
-      }
+    //   if (isLoading) {
+    //     return (
+    //         <DownloadScreen message={t('loading')} />
+    //     )
+    //   }
 
     return (
         <Modal animationType="slide" transparent={true} visible={isVisible} onRequestClose={onClose}>
@@ -101,13 +102,17 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
                                 {/* <Button title="Lataa kuva" onPress={() => uploadImageToS3(imageUri)} /> */}
                             </View>
 
-                            <TouchableOpacity onPress={handelSaveImage} style={styles.button}>
-                            <Text style={{ color: "white" }}>{t('addFloorplanImgModalSave')}</Text>
-                            </TouchableOpacity>
+                            {!isLoading &&
+                            <>
+                                <TouchableOpacity onPress={handelSaveImage} style={styles.button}>
+                                    <Text style={{ color: "white" }}>{t('addFloorplanImgModalSave')}</Text>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity onPress={delImage}>
-                                <Ionicons name="trash" size={20} />
-                            </TouchableOpacity>
+                                <TouchableOpacity onPress={delImage}>
+                                    <Ionicons name="trash" size={20} />
+                                </TouchableOpacity>
+                            </>
+                            }
                         </View>
                         :
                         
@@ -117,6 +122,11 @@ const AddFloorplanImgModal = ({isVisible, onClose, onUpdate}) => {
                             </TouchableOpacity>
                         </View>
                     }
+
+                    {isLoading && (
+                        <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator} />
+                    )}
+
                 </View>
             </View>
         </SafeAreaView>
@@ -130,6 +140,9 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems:'center'
     },
+    loadingIndicator: {
+        marginTop: 20,
+      },
     modalView: {
         backgroundColor: "white",
         borderRadius: 20,
