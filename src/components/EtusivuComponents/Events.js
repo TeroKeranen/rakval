@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     },
     textinput: {
       padding: 3,
-      
+      color: 'white',
       width: '100%'
     }
   });
