@@ -1,17 +1,42 @@
 
-import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Dimensions, SafeAreaView } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Dimensions, SafeAreaView, ActivityIndicator } from 'react-native';
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
-
+import {Context as WorksiteContext} from '../context/WorksiteContext'
 
 import { FLOORPLAN_PHOTO_URL } from "@env";
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+
 const MarkerinfoModal = ({isVisible, onClose, marker, onEdit, onDelete, isModalMarkerImage}) => {
     const { t } = useTranslation();
-    const [isLoading, SetIsLoading] = useState(false);
+    const {state, getSignedUrl} = useContext(WorksiteContext)
+    const [isLoading, setIsLoading] = useState(false);
+    const [signedUrl, setSignedUrl] = useState(null);
     
-          
+    
 
+    useEffect(() => {
+      const fetchSignedUrl = async () => {
+          if (isModalMarkerImage) {
+              setIsLoading(true);
+              try {
+                  const url = await getSignedUrl(process.env.BUCKET_NAME, isModalMarkerImage);
+                  setSignedUrl(url);
+              } catch (error) {
+                  console.error('Error fetching signed URL:', error);
+              } finally {
+                  setIsLoading(false);
+              }
+          }
+      };
+
+      if (isVisible) {
+          fetchSignedUrl();
+      } else {
+          setSignedUrl(null); // Reset URL when modal is not visible
+      }
+  }, [isVisible, isModalMarkerImage, getSignedUrl]);
+  
     return (
         <Modal
         animationType="slide"
@@ -20,8 +45,10 @@ const MarkerinfoModal = ({isVisible, onClose, marker, onEdit, onDelete, isModalM
         onRequestClose={onClose}
       >
         <SafeAreaView style={{flex: 1}}>
-
         <View style={styles.modalView}>
+        {isLoading && (
+        <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator} />
+        )}
           <View style={styles.delBtnContainer}>
             <View>
 
@@ -48,9 +75,9 @@ const MarkerinfoModal = ({isVisible, onClose, marker, onEdit, onDelete, isModalM
               <Text style={{ fontWeight: "bold", fontSize: 20, marginBottom: 10 }}>{t("floorplanscreen-markerModal-info")}</Text>
               <Text style={{ fontSize: 16 }}>{marker ? marker.info : ""}</Text>
 
-              {isModalMarkerImage && (
+              {isModalMarkerImage && signedUrl && (
                 
-                <Image resizeMode={'stretch'} width={300} height={300} source={{ uri: `${FLOORPLAN_PHOTO_URL}${isModalMarkerImage}` }} style={styles.image} />
+                <Image resizeMode={'stretch'} width={300} height={300} source={{ uri: signedUrl.url }} style={styles.image} />
                 )}
               </ScrollView>
               
@@ -131,6 +158,12 @@ const styles = StyleSheet.create({
         marginBottom: 40,
         borderRadius: 10,
         // resizeMode: 'contain'
+      },
+      loadingIndicator: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: [{ translateX: -25 }, { translateY: -25 }],
       },
     
 

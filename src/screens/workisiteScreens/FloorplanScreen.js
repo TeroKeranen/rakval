@@ -71,6 +71,20 @@ const FloorplanScreen = ({route, navigation}) => {
   //   // Hakee työmaan tiedot aina kun floorplanKeys muuttuu
   //   fetchWorksiteDetails(state.currentWorksite._id);
   // }, [floorplanKeys]);
+  
+
+  // Haetaan kuvat komponentin aluksi
+  useEffect(() => {
+    const fetchInitialUrls = async () => {
+      const initialUrls = await Promise.all(floorplanKeys.map(async (item) => {
+        const signedUrl = await getSignedUrl(process.env.BUCKET_NAME, item.key);
+        return { ...item, signedUrl };
+      }));
+      setFloorplanKeys(initialUrls);
+    };
+
+    fetchInitialUrls();
+  }, []);
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -91,6 +105,8 @@ const FloorplanScreen = ({route, navigation}) => {
       fetchDoneRef.current = true;
     }
   }, [floorplanKeys]);
+
+  // console.log("floorplankeys", floorplanKeys);
 
   useEffect(() => {
     
@@ -173,7 +189,7 @@ useEffect(() => {
 
     const pressedMarker = markersForThisImage[index];
     // const pressedMarker = state.currentWorksite.markers[index];
-
+    
     
     setModalMarkerImage(pressedMarker.imageUri);
     setSelectedMarker(pressedMarker);

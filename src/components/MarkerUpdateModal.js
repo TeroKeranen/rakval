@@ -1,16 +1,41 @@
 import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, TextInput, ScrollView, SafeAreaView } from 'react-native';
 import { useTranslation } from "react-i18next";
 
-
+import {Context as WorksiteContext} from '../context/WorksiteContext'
 import { FLOORPLAN_PHOTO_URL } from "@env";
 import ImagePicker from './ImagePicker';
 import { uploadImageToS3 } from '../../services/ImageService';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import DownloadScreen from './DownloadScreen';
 
 const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,updateMarker,isModalMarkerImage, deleteModalImage}) => {
     const { t } = useTranslation();
-    const [isLoading, SetIsLoading] = useState(false);
+    const {state, getSignedUrl} = useContext(WorksiteContext)
+    const [isLoading, setIsLoading] = useState(false);
+    const [signedUrl, setSignedUrl] = useState(null);
+
+    useEffect(() => {
+      const fetchSignedUrl = async () => {
+          if (isModalMarkerImage) {
+              setIsLoading(true);
+              try {
+                  const url = await getSignedUrl(process.env.BUCKET_NAME, isModalMarkerImage);
+                  setSignedUrl(url);
+              } catch (error) {
+                  console.error('Error fetching signed URL:', error);
+              } finally {
+                  setIsLoading(false);
+              }
+          }
+      };
+
+      if (isVisible) {
+          fetchSignedUrl();
+      } else {
+          setSignedUrl(null); // Reset URL when modal is not visible
+      }
+  }, [isVisible, isModalMarkerImage, getSignedUrl]);
+
 
     const handleRemoveImage = () => {
       deleteModalImage(null);
@@ -20,14 +45,14 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
     const handleImagePicked = async (imageUri) => {
       // Päivitä modalMarkerImage uudella kuvalla
       try {
-        SetIsLoading(true);
+        setIsLoading(true);
         imageKey = await uploadImageToS3(imageUri) 
         deleteModalImage(imageKey);
       } catch (error) {
         Alert.alert('Error', t('goeswrong'))
       } finally {
 
-        SetIsLoading(false);
+        setIsLoading(false);
       }
   };
 
@@ -67,14 +92,14 @@ const MarkerUpdateModal = ({isVisible, markerInfo, editTableMarkerInfo, onClose,
             </View>
 
               <View style={styles.imageContainer}>
-                {isModalMarkerImage ? 
+                {isModalMarkerImage && signedUrl ? 
                   <View>
 
                   
                   <TouchableOpacity onPress={handleRemoveImage} style={styles.delButton}>
                     <Text style={{color: 'white'}}>{t('markerUpdatemodaDelImageBtn')}</Text>
                   </TouchableOpacity>
-                  <Image resizeMode={'stretch'} width={100} height={100} source={{ uri: `${FLOORPLAN_PHOTO_URL}${isModalMarkerImage}` }} style={styles.image} />
+                  <Image resizeMode={'stretch'} width={100} height={100} source={{ uri: signedUrl.url  }} style={styles.image} />
                   </View>
                   : (
                     <ImagePicker onImagePicked={handleImagePicked} />
