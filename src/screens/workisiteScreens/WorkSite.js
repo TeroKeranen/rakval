@@ -122,20 +122,22 @@ const WorkSite = ({navigation, route}) => {
     const visibleWorksites = state.worksites.filter((worksite) => 
       authState.user.role === "admin" || worksite.workers.includes(authState.user._id)
     );
-
+    
     // Erota työmaat tyypin perusteella
     const tyomaat = visibleWorksites.filter(worksite => (worksite.worktype === "Construction site" || worksite.worktype === "Työmaa"));
+    
     const pikkukeikat = visibleWorksites.filter(worksite => (worksite.worktype === "Private client" || worksite.worktype === "Yksityisasiakas"));
-
+    
     return { tyomaat, pikkukeikat };
   };
 
   const { tyomaat, pikkukeikat } = visibleWorksitesHandler();
 
   const renderWorksite = ({ item }) => (
+    
     <Pressable onPress={() => handlePressWorksite(item._id)} style={({pressed}) => pressed && styles.pressed}>
       <View style={styles.worksiteItem}>
-        <View style={styles.worksiteContainer}>
+        <View style={[styles.worksiteContainer, item.isReady && styles.readyWorksite]}>
           <Text style={styles.worksiteText}>
             {t("workistedetail-address")}: {item.address}
           </Text>
@@ -245,6 +247,10 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.75,
+  },
+  readyWorksite: {
+    backgroundColor: '#60a360', // Taustaväri vihreäksi valmiille työmaille
+    
   },
   container : {
     flex: 1,

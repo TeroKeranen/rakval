@@ -20,7 +20,7 @@ const WorksiteDetails = ({route, navigation}) => {
   const worksiteIsReady = state.currentWorksite?.isReady; // katsotaan onko työmaa valmis vai ei
   
   const [dayIsOn, setDayIsOn] = useState(false);
-
+  
   useEffect(() => {
     
     async function loadDetails() {
@@ -145,7 +145,15 @@ const WorksiteDetails = ({route, navigation}) => {
           try {
             const response = await worksiteReady(worksiteId)
             if (response.success) {
-              Alert.alert(t('complete-success'))
+              Alert.alert(t('complete-success'),
+              "",
+              [{
+                text: "Ok",
+                onPress: () => {
+                  navigation.goBack();
+                }
+              }]
+            )
             } else {
               Alert.alert(t('goeswrong'))
             }
@@ -163,7 +171,7 @@ const WorksiteDetails = ({route, navigation}) => {
     return <DownloadScreen message={t("worksitedetail-downloadscreen-msg")} />;
   }
 
-  const floorplanKey = state.currentWorksite.floorplanKey;
+  // const floorplanKey = state.currentWorksite.floorplanKey;
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -175,14 +183,14 @@ const WorksiteDetails = ({route, navigation}) => {
         <View style={styles.test}>
 
           <Text style={styles.text}>
-            {t("workistedetail-address")}: {state.currentWorksite.address}
+            {t("workistedetail-address")}: {state.currentWorksite?.address}
           </Text>
 
           <Text style={styles.text}>
-            {t("worksitedetail-city")}: {state.currentWorksite.city}
+            {t("worksitedetail-city")}: {state.currentWorksite?.city}
           </Text>
           <Text style={styles.text}>
-            {t('plannedStartingDate')}: {state.currentWorksite.startTime ? state.currentWorksite.startTime : ""}
+            {t('plannedStartingDate')}: {state.currentWorksite?.startTime ? state.currentWorksite?.startTime : ""}
           </Text>
         </View>
         {/* <View style={styles.imageContainer}>
