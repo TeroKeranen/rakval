@@ -3,6 +3,7 @@ import SigninScreen from "../screens/SigninScreen";
 import SignupScreen from "../screens/SignupScreen";
 import VerificationScreen from "../screens/VerificationScreen";
 import SignupScreenAdmin from "../screens/SignupScreenAdmin";
+import ResetRequest from "../screens/resetRequest";
 
 
 const Stack = createNativeStackNavigator();
@@ -16,6 +17,7 @@ const SignedOutNavigator = () => {
       <Stack.Screen name="signin" component={SigninScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />
       <Stack.Screen name="signupAdmin" component={SignupScreenAdmin} />
+      <Stack.Screen name="resetpassword" component={ResetRequest} />
       
       
       
