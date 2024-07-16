@@ -60,6 +60,7 @@ const SigninScreen = ({navigation}) => {
         {/* signin */}
         <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t('signinHeader')}  onSubmit={handleSigIn} />
         <NavLink text={t("signin-navlink-text")} routeName="signup" />
+        <NavLink text={t('signin-forgotpassword')} routeName="resetpassword" />
         <ChangeLanguage />
       </View>
     </ScrollView>

@@ -389,10 +389,24 @@ const deleteAccount = (dispatch) => {
       if (response.data.success) {
         return response.data;
       }
-      console.log("deleteresss", response);
+      
     } catch (error) {
       return {success: false, message: "Deleting account failed"}
       
+    }
+  }
+}
+
+const resetPasswordRequst = (dispatch) => {
+  return async (email) => {
+    try {
+      const response = await rakval.post('/password-reset', {email})
+      
+      if (response.data.success) {
+        return response.data;
+      }
+    } catch (error) {
+      return {success: false, message: "reset passwordrequest failed"}
     }
   }
 }
@@ -427,14 +441,16 @@ export const { Provider, Context } = createDataContext(authReducer, {
    adminSignup,
     signout,
     logout,
-     signup,
-       fetchUser,
-        clearErrorMessage,
-         tryLocalSignin,
-          joinCompany,
-           fetchUserWithId,
-            leaveCompany,
-            changePassword,
-            verifyEmail,
-            setUserEmail,
-            deleteAccount, deleteAccountRequest}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
+    signup,
+    fetchUser,
+    clearErrorMessage,
+    tryLocalSignin,
+    joinCompany,
+    fetchUserWithId,
+    leaveCompany,
+    changePassword,
+    verifyEmail,
+    setUserEmail,
+    deleteAccount,
+    deleteAccountRequest,
+    resetPasswordRequst}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });

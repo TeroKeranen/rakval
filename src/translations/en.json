@@ -52,6 +52,7 @@
 
   "signin-loginSuccess": "Login was successful",
   "signin-loginFail": "Login failed",
+  "signin-forgotpassword": "Forgot password?",
 
   "drawerScreen-front-page": "front page",
   "drawerScreen-instruction": "Instruction",
@@ -256,7 +257,13 @@
   "profileScreen-delUser-success": "Message sent successfully",
 
   "deleteRequestModal-title": "Account deletion request",
-  "deleteRequestModal-text": "If you want to delete your account and all associated data, please fill out the form below and enter the email address used to create the account. Please note that this action is permanent and cannot be undone."
+  "deleteRequestModal-text": "If you want to delete your account and all associated data, please fill out the form below and enter the email address used to create the account. Please note that this action is permanent and cannot be undone.",
 
+  "resetRequest-succesMessage": "We have sent a reset link to your email. Please check your spam folder if you do not find the email in your inbox",
+  "resetRequest-placeholder": "Enter your email address",
+  "resetRequest-button": "Send reset link",
+  "resetRequest-title": "Reset password"
+
+  
   
 }

@@ -55,6 +55,7 @@
 
   "signin-loginSuccess": "Kirjautuminen onnistui",
   "signin-loginFail": "Kirjatuminen epäonnistui",
+  "signin-forgotpassword": "Unohtuiko salasana?",
 
 
   "drawerScreen-front-page": "etusivu",
@@ -261,8 +262,14 @@
   "profileScreen-delUser-success": "Viesti lähetetty onnistuneesti",
 
   "deleteRequestModal-title": "Tunnusten poistopyyntö",
-  "deleteRequestModal-text": "Jos haluat poistaa tunnuksesi ja kaikki siihen liittyvät tiedot, täytä alla oleva lomake ja syötä sähköpostiosoite, jolla tunnus on tehty. Huomioithan, että tämä toimenpide on pysyvä, eikä sitä voi peruuttaa."
+  "deleteRequestModal-text": "Jos haluat poistaa tunnuksesi ja kaikki siihen liittyvät tiedot, täytä alla oleva lomake ja syötä sähköpostiosoite, jolla tunnus on tehty. Huomioithan, että tämä toimenpide on pysyvä, eikä sitä voi peruuttaa.",
+
+  "resetRequest-succesMessage": "Lähetimme resetointilinkin sähköpostiisi. Tarkista roskapostikansiosi, jos et löydä sähköpostia saapuneista.",
+  "resetRequest-placeholder": "Syötä sähköpostiosoitteesi",
+  "resetRequest-button": "Lähetä resetointilinkki",
+  "resetRequest-title": "Resetoi salasana"
   
+
 
   
 }
