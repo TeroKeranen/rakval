@@ -2,7 +2,7 @@
   "expo": {
     "name": "Rakival",
     "slug": "Rakval",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -15,7 +15,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "1.0.3",
+      "buildNumber": "1.0.4",
       "supportsTablet": false,
       "bundleIdentifier": "com.amiractor.rakval"
     },
@@ -47,6 +47,12 @@
       "eas": {
         "projectId": "3c53df2d-b8e7-4d57-b1e0-290877b4af5d"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/3c53df2d-b8e7-4d57-b1e0-290877b4af5d"
     }
   }
 }
