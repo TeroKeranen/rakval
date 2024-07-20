@@ -93,6 +93,9 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const handleDateChange = (event, selectedDate) => {
       const currentDate = selectedDate || startTime;
       setShowDatePicker(false);
+      if (event?.type === "dismissed") {
+        setStartTime(selectedDate);
+      }
       setStartTime(new Date(currentDate));
   };
 
@@ -120,7 +123,7 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
 
                 {showDatePicker && (
                     <DateTimePicker
-                        value={startTime}
+                        value={startTime || new Date()}
                         mode="date"
                         display="default"
                         onChange={handleDateChange}
