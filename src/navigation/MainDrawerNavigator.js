@@ -40,7 +40,8 @@ const Drawer = createDrawerNavigator();
 const MainDrawerNavigator = () => {
 
     const { t } = useTranslation();
-    const navigation = useNavigation();
+    // const navigation = useNavigation();
+    
     const { clearEvents } = useContext(EventContext);
     const { clearCompany } = useContext(CompanyContext);
     const {state, signout,logout } = useContext(AuthContext);
@@ -71,6 +72,20 @@ const MainDrawerNavigator = () => {
       setModalVisible(!modalVisible);
     };
 
+      const CustomHeaderLeft = () => {
+    const navigation = useNavigation();
+    return (
+      <Ionicons
+        name="menu"
+        size={24}
+        color="white"
+        style={{ marginLeft: 15 }}
+        onPress={() => navigation.toggleDrawer()}
+      />
+    );
+  };
+
+
 
     const isAdmin = state.user && state.user.role === "admin";
     const isVerified = state.user?.isVerified; 
@@ -99,6 +114,10 @@ const MainDrawerNavigator = () => {
           drawerInactiveTintColor: "white", // sivulla olevien linkkien väri
           drawerActiveTintColor: "#351401", // sivulla olevan linkin väri kun aktiicinen
           drawerActiveBackgroundColor: "#e4baa1", // sivulla olevan linkin laatikon väri kun aktiivinen
+          headerLeft: () => (
+            <CustomHeaderLeft 
+            />
+          ),
         }}
         >
         
