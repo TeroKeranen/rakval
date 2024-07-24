@@ -11,7 +11,7 @@ import Events from "../components/EtusivuComponents/Events";
 import Accordion from "../components/EtusivuComponents/Accordion";
 import WorksiteReady from "../components/EtusivuComponents/WorksiteReady";
 
-
+import LogoImage from '../../assets/logo-color.png'
 import {futureStartTime} from '../utils/calcFutureWorksite'
 import WorkOn from "../components/EtusivuComponents/WorkOn";
 
@@ -154,7 +154,7 @@ const Etusivu = ({navigation}) => {
   return (
       
         <ImageBackground
-          source={require('../../assets/logo-color.png')}
+          source={LogoImage}
           
           style={styles.background}
         >
