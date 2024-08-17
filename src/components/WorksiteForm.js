@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import {Picker} from '@react-native-picker/picker';
 import DownloadScreen from "./DownloadScreen";
+import {getCurrentSubscription} from '../utils/subscription'
 
 
 
@@ -18,7 +19,7 @@ import DownloadScreen from "./DownloadScreen";
 
 
 
-const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
+const WorksiteForm = ({onSubmit, errorMessage, clearError, currentWorksitesCount}) => {
   
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
@@ -27,12 +28,49 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const [startTime, setStartTime] = useState(new Date());
     const [workType, setWorkType] = useState(t('worksiteform-worktype-worksite')); // asetetaan default valueksi työmaa
     const [imageUri, setImageUri] = useState(null);
+    const [maxWorksites, setMaxWorksites] = useState(0); // tila työmaiden maksimimäärälle
+    const [currentWorksites, setCurrentWorksites] = useState(0); // tila nykyisten työmaiden määrälle
     
     const [showDatePicker, setShowDatePicker] = useState(false);
     
     
     const navigation = useNavigation();
 
+    // Katsotaan käyttäjän tilaus ja asetetaan maximi määrä miten monta työmaata hän voi lisätä
+
+    useEffect(() => {
+      console.log("määärä", currentWorksitesCount)
+      const fetchSubscription = async () => {
+        const activeSubscription = await getCurrentSubscription();
+
+        if (activeSubscription) {
+          switch (activeSubscription.productIdentifier) {
+            case 'b4sic':
+            setMaxWorksites(3);
+            break;
+          case 'exted3d':
+            setMaxWorksites(5);
+            break;
+          case 'prof3ss10':
+            setMaxWorksites(10);
+            break;
+          case 'unl1m1t3d':
+            setMaxWorksites(Infinity); // Ei rajoitusta
+            break;
+          default:
+            setMaxWorksites(0);
+            break;
+          }
+        } else {
+          Alert.alert("Virhe", "Aktiivista tilausta ei löytynyt.");
+          setMaxWorksites(1);
+        }
+
+        setCurrentWorksites(currentWorksitesCount)
+      }
+
+      fetchSubscription();
+    },[currentWorksitesCount])
 
     // Käytetään tätä tuomaan aika muotoon 28/01/2024
     function formatDate(date) {
@@ -49,6 +87,14 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const handleSubmit = async () => {
       try {
           setIsLoading(true);
+
+          if (currentWorksites >= maxWorksites && maxWorksites !== Infinity) {
+            Alert.alert("Rajoitus", "Olet saavuttanut maksimimäärän työmaita.");
+            setIsLoading(false);
+            return;
+          }
+
+
           if (!address || !city || !workType) {
               Alert.alert("Error", t('goeswrong'));
               setIsLoading(false);

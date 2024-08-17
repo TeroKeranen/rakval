@@ -43,6 +43,14 @@ const authReducer = (state, action) => {
       return {...state, email: action.payload}
     case "update_token":
       return {...state, token:action.payload}
+    case 'update_subscription':
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          subscription: action.payload.subscription,
+        }
+      }
     
     default:
       return state;
@@ -411,6 +419,38 @@ const resetPasswordRequst = (dispatch) => {
   }
 }
 
+const subscriptionDatabaseUpdate =(dispatch) => async (subscriptionType, durationInMonths) => {
+  try {
+    console.log("AUTHCONTEXT",subscriptionType);
+    const response = await makeApiRequest('/updateSubscription', 'post', {subscriptionType, durationInMonths}, dispatch);
+
+    if (response.data.success) {
+      return response.data;
+    }
+
+  } catch (error) {
+    return {success: false, message: "Updating database failed2"}
+  }
+}
+
+
+const updateSubscription = (dispatch) => async (subscription) => {
+  try {
+    const userJson = await AsyncStorage.getItem('user');
+    const user = JSON.parse(userJson);
+    const updatedUser = {...user, subscription};
+
+    await AsyncStorage.setItem('user', JSON.stringify(updatedUser))
+
+    dispatch({type: 'update_subscription', payload: {subscription}})
+
+    console.log("SUUBBB", subscription);
+  } catch (error) {
+    console.error('Virhe tilaustietojen päivittämisessä:', error);
+  }
+}
+
+
 
 // const changePassword = dispatch => async  ({oldPassword, newPassword}) => {
 
@@ -453,4 +493,8 @@ export const { Provider, Context } = createDataContext(authReducer, {
     setUserEmail,
     deleteAccount,
     deleteAccountRequest,
-    resetPasswordRequst}, { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
+    resetPasswordRequst,
+    updateSubscription,
+    subscriptionDatabaseUpdate
+  }, 
+  { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });
