@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 
 import DownloadScreen from "../../components/DownloadScreen";
+import { fetchSubscription } from "../../utils/subscription";
 
 
 const WorksiteWorkers = () => {
@@ -24,7 +25,11 @@ const WorksiteWorkers = () => {
 
     const [worksiteWorkers, setWorksiteWorkers] = useState([]) // Tallennetaan työntekijät jotka ovat lisätty työmaahan
     const [isLoading, setIsLoading] = useState(false);
+    const [maxWorkers, setMaxWorkers] = useState(0); // Tila työntekijöitten maksimimäärälle
+    const [currentWorkers, setCurrentWorkers] = useState(0) // tila nykyisten työntekijöitten määrälle
     const isAdmin = authState.user.role;
+    
+    const currentWorkersLenght = worksiteState?.currentWorksite?.workers.length;
     
 
     useEffect(() => {
@@ -46,8 +51,12 @@ const WorksiteWorkers = () => {
         
     },[companyState.company, authState])
 
-    
+    useEffect(() => {
+      
+      fetchSubscription(setMaxWorkers, setCurrentWorkers, currentWorkersLenght)
+    },[currentWorkersLenght])
 
+    
     const handleSelectWorker = (workerId) => {
         const worksiteId = worksiteState.currentWorksite._id;
         setSelecterWorker(workerId)
@@ -55,6 +64,12 @@ const WorksiteWorkers = () => {
     }
 
     const handleAddWorker = async () => {
+
+      if (currentWorkers >= maxWorkers && maxWorkers !== Infinity) {
+        Alert.alert("Rajoitus", "Olet saavuttanut maksimimäärän työntekijöitä");
+        return;
+      }
+
       if (selectedWorker && worksiteState.currentWorksite) {
           const result = await addWorkerToWorksite(worksiteState.currentWorksite._id, selectedWorker);
           // console.log("result", result);
@@ -183,7 +198,9 @@ const WorksiteWorkers = () => {
                 <FlatList 
                   data={worksiteWorkers} 
                   renderItem={renderItem} 
-                  keyExtractor={(item, index) => `worker-${index}`} />
+                  keyExtractor={(item, index) => `worker-${index}`} 
+                  style={{maxHeight: 160}}
+                  />
               </View>
               
             </View>

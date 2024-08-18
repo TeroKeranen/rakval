@@ -42,9 +42,6 @@
   "send": "Lähetä",
   "search": "hae",
  
-
-
-  
   "sign-upHeader": "Luo tunnus",
   "sign-upAdminHeader": "Luo admin tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
@@ -56,7 +53,6 @@
   "signin-loginSuccess": "Kirjautuminen onnistui",
   "signin-loginFail": "Kirjatuminen epäonnistui",
   "signin-forgotpassword": "Unohtuiko salasana?",
-
 
   "drawerScreen-front-page": "etusivu",
   "drawerScreen-instruction": "Ohje",
@@ -119,7 +115,6 @@
   "confirmTitle": "Vahvista toiminto",
   "confirmText": "Oletko varma että haluat merkitä työmaan valmiiksi?",
   
-
   "worksiteWorker-select-worker": "Valitse työntekijä",
   "worksiteWorker-add-button": "Lisää työntekijä",
   "worksiteWorker-workers": "Työntekijät tässä työmaassa",
@@ -222,7 +217,7 @@
   "adminSignUp-companyAddress": "Yrityksen osoite",
   "adminSignUp-companyCity": "Yrityksen paikkakunta",
 
-    "imagePicker-alert": "Riittämätön oikeus",
+  "imagePicker-alert": "Riittämätön oikeus",
   "imagePicker-alert-message": "Sinun täytyy myöntää kameraoikeudet käyttääksesi tätä sovellusta.",
 
   "adminInfoTitle1": "Admin ohjeet",

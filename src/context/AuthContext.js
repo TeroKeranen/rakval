@@ -444,7 +444,7 @@ const updateSubscription = (dispatch) => async (subscription) => {
 
     dispatch({type: 'update_subscription', payload: {subscription}})
 
-    console.log("SUUBBB", subscription);
+    
   } catch (error) {
     console.error('Virhe tilaustietojen päivittämisessä:', error);
   }

@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import {Picker} from '@react-native-picker/picker';
 import DownloadScreen from "./DownloadScreen";
-import {getCurrentSubscription} from '../utils/subscription'
+import {getCurrentSubscription, fetchSubscription} from '../utils/subscription'
 
 
 
@@ -38,38 +38,13 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError, currentWorksitesCount
 
     // Katsotaan käyttäjän tilaus ja asetetaan maximi määrä miten monta työmaata hän voi lisätä
 
+    console.log("määärä", currentWorksitesCount)
     useEffect(() => {
       console.log("määärä", currentWorksitesCount)
-      const fetchSubscription = async () => {
-        const activeSubscription = await getCurrentSubscription();
 
-        if (activeSubscription) {
-          switch (activeSubscription.productIdentifier) {
-            case 'b4sic':
-            setMaxWorksites(3);
-            break;
-          case 'exted3d':
-            setMaxWorksites(5);
-            break;
-          case 'prof3ss10':
-            setMaxWorksites(10);
-            break;
-          case 'unl1m1t3d':
-            setMaxWorksites(Infinity); // Ei rajoitusta
-            break;
-          default:
-            setMaxWorksites(0);
-            break;
-          }
-        } else {
-          Alert.alert("Virhe", "Aktiivista tilausta ei löytynyt.");
-          setMaxWorksites(1);
-        }
+      // katsotaan nykyinen tilaus ja asetetaan määrä montako työmaata käyttäjä voi lisätä
+      fetchSubscription(setMaxWorksites, setCurrentWorksites,currentWorksitesCount);
 
-        setCurrentWorksites(currentWorksitesCount)
-      }
-
-      fetchSubscription();
     },[currentWorksitesCount])
 
     // Käytetään tätä tuomaan aika muotoon 28/01/2024
