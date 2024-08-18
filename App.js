@@ -106,7 +106,7 @@ function SignedInNavigator() {
 
 
 function App() {
-  
+  console.log("kajksjdkllajsldjlkasj")
   const { state, tryLocalSignin, fetchUser } = useContext(AuthContext); // Otetaan trylocalSignin Autcontext.js sisältä
   const [loading, setLoading] = useState(true); // asetetaan loading
   

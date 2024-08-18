@@ -29,7 +29,7 @@ const WorksiteWorkers = () => {
     const [currentWorkers, setCurrentWorkers] = useState(0) // tila nykyisten työntekijöitten määrälle
     const isAdmin = authState.user.role;
     
-    const currentWorkersLenght = worksiteState?.currentWorksite?.workers.length;
+    // const currentWorkersLenght = worksiteState?.currentWorksite?.workers.length;
     
 
     useEffect(() => {
@@ -51,10 +51,10 @@ const WorksiteWorkers = () => {
         
     },[companyState.company, authState])
 
-    useEffect(() => {
+    // useEffect(() => {
       
-      fetchSubscription(setMaxWorkers, setCurrentWorkers, currentWorkersLenght)
-    },[currentWorkersLenght])
+    //   fetchSubscription(setMaxWorkers, setCurrentWorkers, currentWorkersLenght)
+    // },[currentWorkersLenght])
 
     
     const handleSelectWorker = (workerId) => {
@@ -65,10 +65,10 @@ const WorksiteWorkers = () => {
 
     const handleAddWorker = async () => {
 
-      if (currentWorkers >= maxWorkers && maxWorkers !== Infinity) {
-        Alert.alert("Rajoitus", "Olet saavuttanut maksimimäärän työntekijöitä");
-        return;
-      }
+      // if (currentWorkers >= maxWorkers && maxWorkers !== Infinity) {
+      //   Alert.alert("Rajoitus", "Olet saavuttanut maksimimäärän työntekijöitä");
+      //   return;
+      // }
 
       if (selectedWorker && worksiteState.currentWorksite) {
           const result = await addWorkerToWorksite(worksiteState.currentWorksite._id, selectedWorker);

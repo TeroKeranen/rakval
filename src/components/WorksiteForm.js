@@ -38,14 +38,14 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError, currentWorksitesCount
 
     // Katsotaan käyttäjän tilaus ja asetetaan maximi määrä miten monta työmaata hän voi lisätä
 
-    console.log("määärä", currentWorksitesCount)
-    useEffect(() => {
-      console.log("määärä", currentWorksitesCount)
+    // console.log("määärä", currentWorksitesCount)
+    // useEffect(() => {
+    //   console.log("määärä", currentWorksitesCount)
 
-      // katsotaan nykyinen tilaus ja asetetaan määrä montako työmaata käyttäjä voi lisätä
-      fetchSubscription(setMaxWorksites, setCurrentWorksites,currentWorksitesCount);
+    //   // katsotaan nykyinen tilaus ja asetetaan määrä montako työmaata käyttäjä voi lisätä
+    //   fetchSubscription(setMaxWorksites, setCurrentWorksites,currentWorksitesCount);
 
-    },[currentWorksitesCount])
+    // },[currentWorksitesCount])
 
     // Käytetään tätä tuomaan aika muotoon 28/01/2024
     function formatDate(date) {
@@ -63,11 +63,11 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError, currentWorksitesCount
       try {
           setIsLoading(true);
 
-          if (currentWorksites >= maxWorksites && maxWorksites !== Infinity) {
-            Alert.alert("Rajoitus", "Olet saavuttanut maksimimäärän työmaita.");
-            setIsLoading(false);
-            return;
-          }
+          // if (currentWorksites >= maxWorksites && maxWorksites !== Infinity) {
+          //   Alert.alert("Rajoitus", "Olet saavuttanut maksimimäärän työmaita.");
+          //   setIsLoading(false);
+          //   return;
+          // }
 
 
           if (!address || !city || !workType) {
