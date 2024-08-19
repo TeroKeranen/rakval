@@ -231,6 +231,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     
+    
   },
   infoCard: {
     backgroundColor: "#e8e8f0",

@@ -11,7 +11,7 @@ const AddNewWorksite = ({navigation}) => {
 
   
   const {state, newWorksite, clearErrorMessage} = useContext(WorksiteContext);
-  // const currentWorksitesCount = state.worksites.length;
+  const currentWorksitesCount = state.worksites.length;
   
   return (
     <View style={styles.container}>

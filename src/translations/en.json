@@ -54,7 +54,8 @@
   "signin-loginFail": "Login failed",
   "signin-forgotpassword": "Forgot password?",
 
-  "drawerScreen-front-page": "front page",
+  "drawerScreen-membership": "Membership",
+  "drawerScreen-front-page": "Front page",
   "drawerScreen-instruction": "Instruction",
   "main-page": "Main page",
   "profile": "Profile",
@@ -262,7 +263,30 @@
   "resetRequest-succesMessage": "We have sent a reset link to your email. Please check your spam folder if you do not find the email in your inbox",
   "resetRequest-placeholder": "Enter your email address",
   "resetRequest-button": "Send reset link",
-  "resetRequest-title": "Reset password"
+  "resetRequest-title": "Reset password",
+
+  "subscription-screen-orderSuccessTitle": "Purchase Successful",
+  "subscription-screen-orderSuccessText": "The subscription will be activated shortly, please wait",
+  "subscription-screen-orderErrorTitle": "Purchase Failed",
+  "subscription-screen-orderErrorText": "Something went wrong, please try again later",
+  "subscription-screen-btn": "Subscribe",
+  "subscription-screen-active": "Subscription is active",
+  "subscription-screen-limit-warning": "Restriction",
+  "subscription-screen-limit-warning-workers": "You have reached the maximum number of workers",
+  "subscription-screen-limit-warning-worksite": "You have reached the maximum number of sites",
+
+  "subscription-product-title1": "Basic Package",
+  "subscription-product-description1": "Add 3 sites and 3 workers",
+  
+  "subscription-product-title2": "Extended Package",
+  "subscription-product-description2": "Add 5 sites and 5 workers",
+  
+  "subscription-product-title3": "Professional Package",
+  "subscription-product-description3": "Add 10 sites and 10 workers",
+  
+  "subscription-product-title4": "Unlimited Package",
+  "subscription-product-description4": "Add as many sites and workers as you want"
+
 
   
   

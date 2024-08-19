@@ -31,7 +31,7 @@ import MoreTabModal from "../components/MoreTabModal";
 import VerificationScreen from "../screens/VerificationScreen";
 import { ImageBackground, StyleSheet } from "react-native";
 import InstructionScreen from "../screens/InstructionScreen";
-// import Subscription from "../screens/Subscription";
+import Subscription from "../screens/Subscription";
 
 const Drawer = createDrawerNavigator();
 
@@ -110,7 +110,7 @@ const MainDrawerNavigator = () => {
           
           headerStyle: { backgroundColor: "#404558" }, // Headerin väri
           headerTintColor: "white", // Headerin title ja burderin väri
-          sceneContainerStyle: { backgroundColor: "#3f2f25" }, // mikä tämä on ??
+          sceneContainerStyle: { backgroundColor: "white" }, // mikä tämä on ??
           drawerContentStyle: { backgroundColor: "#404558" }, // sivulta tulevan listan background color
           drawerInactiveTintColor: "white", // sivulla olevien linkkien väri
           drawerActiveTintColor: "#351401", // sivulla olevan linkin väri kun aktiicinen
@@ -132,7 +132,7 @@ const MainDrawerNavigator = () => {
             <Drawer.Screen name={t("drawerScreen-worksite")} component={AdminCompanybtmTab} />
             {/* <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} /> */}
             <Drawer.Screen name={t("drawerScreen-company")} component={AdminTabs} />
-            {/* <Drawer.Screen name="Ostot" component={Subscription} /> */}
+            <Drawer.Screen name={t('drawerScreen-membership')} component={Subscription} />
             <Drawer.Screen name={t('drawerScreen-instruction')} component={InstructionScreen} />
             
           </>

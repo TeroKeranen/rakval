@@ -8,6 +8,7 @@ export const getCurrentSubscription = async () => {
 
     try {
         const customerInfo = await Purchases.getCustomerInfo();
+        console.log("KUSTORMERS INFOOOO", customerInfo);
         // access latest customerInfo
           // Etsi aktiivinen tilaus käyttäjän entitlementsista
         const activeSubscription = Object.keys(customerInfo.entitlements.active).map(key => {
@@ -31,40 +32,7 @@ export const getCurrentSubscription = async () => {
     }
 }
 
-// katsotaan nykyinen tilaus ja asetetaan määrä montako työmaata käyttäjä voi lisätä
-// export const fetchSubscription = async (currentWorksitesCount, setMaxWorksites, setCurrentWorksites) => {
-//   try {
-//     const activeSubscription = await getCurrentSubscription();
 
-//     if (activeSubscription) {
-//       switch (activeSubscription.productIdentifier) {
-//         case 'b4sic':
-//           setMaxWorksites(3);
-//           break;
-//         case 'exted3d':
-//           setMaxWorksites(5);
-//           break;
-//         case 'prof3ss10':
-//           setMaxWorksites(10);
-//           break;
-//         case 'unl1m1t3d':
-//           setMaxWorksites(Infinity); // Ei rajoitusta
-//           break;
-//         default:
-//           setMaxWorksites(0);
-//           break;
-//       }
-//     } else {
-//       Alert.alert("Virhe", "Aktiivista tilausta ei löytynyt.");
-//       setMaxWorksites(1);
-//     }
-
-//     setCurrentWorksites(currentWorksitesCount);
-//   } catch (error) {
-//     Alert.alert("Virhe", "Tilauksen tarkistuksessa tapahtui virhe.");
-//     setMaxWorksites(0);
-//   }
-// };
 
 export const fetchSubscription = async (setMaxItems, setCurrentItems, currentItemsCount) => {
   try {
@@ -91,7 +59,7 @@ export const fetchSubscription = async (setMaxItems, setCurrentItems, currentIte
       }
       setMaxItems(maxItems);
     } else {
-      Alert.alert("Virhe", "Aktiivista tilausta ei löytynyt.");
+      // Alert.alert("huom", "Sinulla ei ole aktiivista tilausta");
       setMaxItems(1);
     }
 
