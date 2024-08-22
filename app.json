@@ -2,7 +2,7 @@
   "expo": {
     "name": "Rakival",
     "slug": "Rakval",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -15,7 +15,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "1.1.0",
+      "buildNumber": "1.2.0",
       "supportsTablet": false,
       "bundleIdentifier": "com.amiractor.rakval"
     },
