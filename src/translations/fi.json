@@ -285,7 +285,12 @@
   "subscription-product-description3": "Lisää 10 työmaata ja 10 työntekijää",
   
   "subscription-product-title4": "Rajoittamaton paketti",
-  "subscription-product-description4": "Lisää niin monta työmaata ja työntekijää kuin haluat"
+  "subscription-product-description4": "Lisää niin monta työmaata ja työntekijää kuin haluat",
+
+  "subscription-screen-restore-btn": "Palauta ostos",
+"subscription-screen-restore-success": "Ostokset palautettu onnistuneesti!",
+"subscription-screen-restore-noPurchase": "Ei palautettavia ostoksia.",
+"subscription-screen-restore-failed": "Ostojen palautus epäonnistui. Yritä uudelleen."
   
 
 

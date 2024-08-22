@@ -8,7 +8,7 @@ export const getCurrentSubscription = async () => {
 
     try {
         const customerInfo = await Purchases.getCustomerInfo();
-        console.log("KUSTORMERS INFOOOO", customerInfo);
+        
         // access latest customerInfo
           // Etsi aktiivinen tilaus käyttäjän entitlementsista
         const activeSubscription = Object.keys(customerInfo.entitlements.active).map(key => {

@@ -5,6 +5,8 @@ import Purchases, { LOG_LEVEL } from "react-native-purchases";
 import { useFocusEffect } from "@react-navigation/native";
 import DownloadScreen from "../components/DownloadScreen";
 import { useTranslation } from "react-i18next";
+import RestorePurchasesButton from "../components/RestorePurchasesButton";
+
 
 
 
@@ -23,7 +25,7 @@ const Subscription = () => {
     const [isLoading, setIsLoading] = useState(false);
     
 
-    console.log("jiyyy",activeProductIdentifier);
+    
 
     // // console.log("userState", state);
     // useFocusEffect(
@@ -82,6 +84,7 @@ const Subscription = () => {
                     Purchases.setLogLevel(LOG_LEVEL.DEBUG);
                     
                     const customerInfo = await Purchases.getCustomerInfo();
+                    console.log("CUSTOMERINGOOSOSOS", customerInfo);
                     const activeSubscription = Object.keys(customerInfo.entitlements.active).map(key => {
                     return customerInfo.entitlements.active[key];
                 })[0];
@@ -226,7 +229,7 @@ const Subscription = () => {
     return (
         <SafeAreaView style={{flex:1, backgroundColor: "#404558"}}>
 
-
+                {!activeProductIdentifier && <RestorePurchasesButton setIsLoading={setIsLoading} isLoading={isLoading}/>}
 
                 <View style={styles.container}>
                     

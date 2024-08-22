@@ -22,7 +22,7 @@ const WorksiteDetailsTabsNavigator = ({route}) => {
 
     const {state, fetchUser} = useContext(AuthContext)
 
-    const isAdmin = state.user.role === 'admin';
+    const isAdmin = state.user.role === 'admin' || state.user.role === 'superAdmin';
 
     
     

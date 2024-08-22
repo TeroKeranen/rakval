@@ -19,7 +19,8 @@ import {getCurrentSubscription, fetchSubscription} from '../utils/subscription'
 
 
 
-const WorksiteForm = ({onSubmit, errorMessage, clearError, currentWorksitesCount}) => {
+const WorksiteForm = ({onSubmit, errorMessage, clearError, currentWorksitesCount,  userRole}) => {
+  
   
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +39,7 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError, currentWorksitesCount
 
     // Katsotaan käyttäjän tilaus ja asetetaan maximi määrä miten monta työmaata hän voi lisätä
 
-    console.log("määärä", currentWorksitesCount)
+    
     useEffect(() => {
       const updateSubscriptionInfo = async () => {
         // Päivitetään tilaustiedot (esim. fetchSubscription)
@@ -64,7 +65,7 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError, currentWorksitesCount
       try {
           setIsLoading(true);
 
-          if (currentWorksites >= maxWorksites && maxWorksites !== Infinity) {
+          if (userRole !== "superAdmin" && currentWorksites >= maxWorksites && maxWorksites !== Infinity) {
             Alert.alert(t('subscription-screen-limit-warning'), t('subscription-screen-limit-warning-worksite'));
             setIsLoading(false);
             return;

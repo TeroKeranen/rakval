@@ -205,7 +205,7 @@ const CompanyScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {authState.user.role === 'admin' && !authState.user.company ? 
+      {(authState.user.role === 'admin'|| authState.user.role === 'superAdmin')  && !authState.user.company ? 
         renderCreateForm() : 
         authState.user.company ? 
           renderCompanyInfo() : 

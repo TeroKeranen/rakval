@@ -16,7 +16,7 @@ const WorksiteDetails = ({route, navigation}) => {
   const { worksiteId } = route.params;
   const { state, fetchWorksiteDetails, fetchWorksites, resetCurrentWorksite, deleteWorksite, startWorkDay, endWorkDay,worksiteReady } = useContext(WorksiteContext);
   const { state: authState } = useContext(AuthContext); // Etsitään käyttäjän tiedot
-  const isAdmin = authState.user && authState.user.role === "admin"; // jos on käyttäjä ja rooli on admin === true
+  const isAdmin = authState.user && authState.user.role === "admin" || authState.user.role === "superAdmin"; // jos on käyttäjä ja rooli on admin === true
   const worksiteIsReady = state.currentWorksite?.isReady; // katsotaan onko työmaa valmis vai ei
   
   const [dayIsOn, setDayIsOn] = useState(false);

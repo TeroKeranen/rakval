@@ -38,7 +38,7 @@ const WorksiteEventsScreen = () => {
             // await fetchWorksiteDetails(state.currentWorksite._id);
 
             let workDays;
-            if (authState.user.role === 'admin') {
+            if (authState.user.role === 'admin' || authState.user.role === 'superAdmin') {
                 workDays = state.currentWorksite.workDays;
                 
             } else {
@@ -71,7 +71,7 @@ const WorksiteEventsScreen = () => {
     }
 
 
-    const isAdmin = authState.user.role === 'admin';
+    const isAdmin = authState.user.role === 'admin' ||authState.user.role === 'superAdmin';
     
     return (
         <View style={styles.container}>

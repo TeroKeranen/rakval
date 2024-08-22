@@ -88,7 +88,7 @@ const MainDrawerNavigator = () => {
 
 
 
-    const isAdmin = state.user && state.user.role === "admin";
+    const isAdmin = state.user && state.user.role === "admin" ||state.user && state.user.role === "superAdmin";
     const isVerified = state.user?.isVerified; 
     
     const hasCompany = state.user && state.user.company;

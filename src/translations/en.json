@@ -285,7 +285,13 @@
   "subscription-product-description3": "Add 10 sites and 10 workers",
   
   "subscription-product-title4": "Unlimited Package",
-  "subscription-product-description4": "Add as many sites and workers as you want"
+  "subscription-product-description4": "Add as many sites and workers as you want",
+
+  "subscription-screen-restore-btn": "Restore purchase",
+  "subscription-screen-restore-success": "Purchases restored successfully!",
+  "subscription-screen-restore-noPurchase": "No purchases found to restore.",
+  "subscription-screen-restore-failed": "Failed to restore purchases. Please try again."
+
 
 
   
