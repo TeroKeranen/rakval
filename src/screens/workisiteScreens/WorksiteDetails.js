@@ -5,6 +5,7 @@ import {Context as AuthContext} from '../../context/AuthContext'
 import { useContext, useEffect, useState } from 'react';
 import DownloadScreen from '../../components/DownloadScreen';
 import { useTranslation } from "react-i18next";
+import { datePicker } from '../../utils/currentDate';
 
 
 
@@ -83,6 +84,8 @@ const WorksiteDetails = ({route, navigation}) => {
     const userId = authState.user._id;
     
     
+    const startTime = datePicker();
+
     
     // Etsitään onko käyttäjällä missään työmaalla työpäivä käynnissä
     const ongoingWorkDayAnyWorksite = state.worksites.some(worksite => 
@@ -107,13 +110,13 @@ const WorksiteDetails = ({route, navigation}) => {
       return;
     }
 
-    await startWorkDay(state.currentWorksite._id, authState.user._id);
+    await startWorkDay(state.currentWorksite._id, authState.user._id,startTime);
     await fetchWorksiteDetails(state.currentWorksite._id);
     setDayIsOn(true);
   };
 
   const handleEndDay = async () => {
-    
+    const endTime = datePicker();
     // Hae käyttäjän id
     const userId = authState.user._id;
 
@@ -122,7 +125,7 @@ const WorksiteDetails = ({route, navigation}) => {
     
     
     if (ongoingWorkDay) {
-      await endWorkDay(state.currentWorksite._id, ongoingWorkDay._id);
+      await endWorkDay(state.currentWorksite._id, ongoingWorkDay._id,endTime );
       await fetchWorksiteDetails(state.currentWorksite._id);
       setDayIsOn(false);
     } else {

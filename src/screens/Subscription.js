@@ -25,48 +25,7 @@ const Subscription = () => {
     const [isLoading, setIsLoading] = useState(false);
     
 
-    
 
-    // // console.log("userState", state);
-    // useFocusEffect(
-    //     React.useCallback(() => {
-    //         const setup = async () => {
-    //             if (Platform.OS === "android") {
-    //                 console.log("Ei androidille ole tuotteita");
-    //                 return;
-    //             } else {
-    //                 await Purchases.configure({ apiKey: APIkeys.apple });
-    //             }
-
-    //             Purchases.setLogLevel(LOG_LEVEL.DEBUG);
-
-    //             // Kuuntelija päivittää käyttäjän tilaustiedot AuthContextiin
-    //             Purchases.addCustomerInfoUpdateListener((customerInfo) => {
-    //                 // console.log("customerInfo", customerInfo);
-                    
-    //                 const activeSubscription = Object.keys(customerInfo.entitlements.active).map(key => {
-    //                     return customerInfo.entitlements.active[key];
-    //                 })[0]; // Oletetaan että käyttäjällä on vain yksi aktiivinen tilaus
-
-    //                 console.log("AKTIIVINENSUBSRCRIPTON",activeSubscription)
-
-    //                 if (activeSubscription) {
-
-    //                     setActiveProductIdentifier(activeSubscription.productIdentifier); // Aseta aktiivinen tilaustunnus
-    //                     const subscription = {
-    //                         productIdentifier: activeSubscription.productIdentifier,
-    //                         purchaseDate: activeSubscription.latestPurchaseDate,
-    //                     };
-    //                     updateSubscription(subscription);
-    //                 }
-    //             });
-
-    //             await loadOfferings();
-    //         };
-
-    //         setup();
-    //     }, []) // Tämä tyhjä taulukko tarkoittaa, että koukku aktivoituu vain, kun sivu tulee näkyville
-    // );
 
     useFocusEffect(
         React.useCallback(() => {
@@ -84,7 +43,7 @@ const Subscription = () => {
                     Purchases.setLogLevel(LOG_LEVEL.DEBUG);
                     
                     const customerInfo = await Purchases.getCustomerInfo();
-                    console.log("CUSTOMERINGOOSOSOS", customerInfo);
+                    
                     const activeSubscription = Object.keys(customerInfo.entitlements.active).map(key => {
                     return customerInfo.entitlements.active[key];
                 })[0];
@@ -168,7 +127,7 @@ const Subscription = () => {
 
     const renderProduct = ({item}) => {
         const isActiveSubscription = item.product.identifier === activeProductIdentifier;
-        console.log("KSKSK", item);
+        
             // Määritellään tuotteen tunnisteiden perusteella käännökset 
         let productTitleKey;
         let productDescriptionKey;

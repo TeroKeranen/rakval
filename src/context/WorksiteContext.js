@@ -495,11 +495,11 @@ const worksiteReady = (dispatch) => async (worksiteId) => {
   
 }
 
-const startWorkDay = (dispatch) => async (worksiteId,userId) => {
+const startWorkDay = (dispatch) => async (worksiteId,userId,startTime) => {
    
   try {
     
-    const response = await makeApiRequest(`/worksites/${worksiteId}/startday`, 'post', {userId}, dispatch)
+    const response = await makeApiRequest(`/worksites/${worksiteId}/startday`, 'post', {userId,startTime}, dispatch)
    
     
     dispatch({ type: 'start_work_day', payload: response.data });
@@ -507,12 +507,12 @@ const startWorkDay = (dispatch) => async (worksiteId,userId) => {
     // console.log(error);
   }
 }
-const endWorkDay = (dispatch) => async (worksiteId, workDayId) => {
+const endWorkDay = (dispatch) => async (worksiteId, workDayId, endTime) => {
     try {
     // const token = await AsyncStorage.getItem('token');
     // const token = await SecureStore.getItemAsync('token');
     // const authHeader = `${TOKEN_REPLACE} ${token}`;
-    const response = await makeApiRequest(`/worksites/${worksiteId}/endday`, 'post', {workDayId}, dispatch)
+    const response = await makeApiRequest(`/worksites/${worksiteId}/endday`, 'post', {workDayId, endTime}, dispatch)
     // const response = await rakval.post(`/worksites/${worksiteId}/endday`, { workDayId }, {
     //   headers: { Authorization: authHeader }
     // });

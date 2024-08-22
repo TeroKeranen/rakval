@@ -421,7 +421,7 @@ const resetPasswordRequst = (dispatch) => {
 
 const subscriptionDatabaseUpdate =(dispatch) => async (subscriptionType, durationInMonths) => {
   try {
-    console.log("AUTHCONTEXT",subscriptionType);
+    
     const response = await makeApiRequest('/updateSubscription', 'post', {subscriptionType, durationInMonths}, dispatch);
 
     if (response.data.success) {
