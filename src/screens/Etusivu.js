@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from 'react';
 import { Context as Autcontext} from '../context/AuthContext'
 import {Context as EventContext} from '../context/EventsContext'
 import {Context as WorksiteContext} from '../context/WorksiteContext'
+import {Context as CompanyContext} from '../context/CompanyContext'
 
 import { useTranslation } from "react-i18next";
 import DownloadScreen from "../components/DownloadScreen";
@@ -23,6 +24,7 @@ const Etusivu = ({navigation}) => {
   const { state, fetchUser } = useContext(Autcontext); 
   const {state: eventState,fetchEvents } = useContext(EventContext) 
   const {state: worksiteState,fetchWorksites} = useContext(WorksiteContext)
+  const {state: companyState,fetchCompany} = useContext(CompanyContext);
   const [events, setEvents] = useState([]); 
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTitle, setSelectedTitle] = useState(null); // Käytetään tätä kun valitaan mitä halutaan näkyväksi
@@ -33,7 +35,19 @@ const Etusivu = ({navigation}) => {
   const company = state.user?.company;
   const eventsState = eventState;
 
-  
+  useEffect(() => {
+    
+    const loadCompany = async () => {
+      setIsLoading(true);
+      // await fetchCompany();
+      fetchCompany();
+      
+      setIsLoading(false);
+    };
+    loadCompany();
+    
+  }, []);
+
   
   
   

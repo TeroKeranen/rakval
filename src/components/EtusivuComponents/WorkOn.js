@@ -30,7 +30,7 @@ const WorkOn = ({worksites, userRole="admin", userId="12344"}) => {
     
     
     const filteredRunningWorksites = runningWorkSites.filter(site => {
-        if (userRole === 'admin') {
+        if (userRole === 'admin' || userRole === 'superAdmin') {
             return true;
         } else {
             return site.activeWorkerIds.includes(userId);

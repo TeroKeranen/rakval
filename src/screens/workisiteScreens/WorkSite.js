@@ -88,7 +88,7 @@ const WorkSite = ({navigation, route}) => {
     return (
       
       <View style={styles.noCompanyContainer}>
-        <Text style={styles.noCompany}>{authState.user.role === 'admin' ? t('noCompanyAdmin') : t('noCompanyUser')}</Text>
+        <Text style={styles.noCompany}>{authState.user.role === 'admin' ||authState.user.role === 'superAdmin' ? t('noCompanyAdmin') : t('noCompanyUser')}</Text>
       </View>
     )
   }
@@ -120,7 +120,7 @@ const WorkSite = ({navigation, route}) => {
   const visibleWorksitesHandler = () => {
     // Suodatetaan työmaat, joissa käyttäjä on työntekijöiden listalla
     const visibleWorksites = state.worksites.filter((worksite) => 
-      authState.user.role === "admin" || worksite.workers.includes(authState.user._id)
+      authState.user.role === "admin" || authState.user.role === "superAdmin" || worksite.workers.includes(authState.user._id)
     );
     
     // Erota työmaat tyypin perusteella

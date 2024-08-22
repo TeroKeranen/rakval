@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import {Picker} from '@react-native-picker/picker';
 import DownloadScreen from "./DownloadScreen";
+import {getCurrentSubscription, fetchSubscription} from '../utils/subscription'
 
 
 
@@ -18,7 +19,8 @@ import DownloadScreen from "./DownloadScreen";
 
 
 
-const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
+const WorksiteForm = ({onSubmit, errorMessage, clearError, currentWorksitesCount,  userRole}) => {
+  
   
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
@@ -27,12 +29,25 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const [startTime, setStartTime] = useState(new Date());
     const [workType, setWorkType] = useState(t('worksiteform-worktype-worksite')); // asetetaan default valueksi työmaa
     const [imageUri, setImageUri] = useState(null);
+    const [maxWorksites, setMaxWorksites] = useState(0); // tila työmaiden maksimimäärälle
+    const [currentWorksites, setCurrentWorksites] = useState(0); // tila nykyisten työmaiden määrälle
     
     const [showDatePicker, setShowDatePicker] = useState(false);
     
     
     const navigation = useNavigation();
 
+    // Katsotaan käyttäjän tilaus ja asetetaan maximi määrä miten monta työmaata hän voi lisätä
+
+    
+    useEffect(() => {
+      const updateSubscriptionInfo = async () => {
+        // Päivitetään tilaustiedot (esim. fetchSubscription)
+        await fetchSubscription(setMaxWorksites, setCurrentWorksites, currentWorksitesCount);
+      };
+   
+      updateSubscriptionInfo();
+    }, [currentWorksitesCount]); // Kun currentWorksitesCount muuttuu, päivitetään tilaustiedot
 
     // Käytetään tätä tuomaan aika muotoon 28/01/2024
     function formatDate(date) {
@@ -49,6 +64,14 @@ const WorksiteForm = ({onSubmit, errorMessage, clearError}) => {
     const handleSubmit = async () => {
       try {
           setIsLoading(true);
+
+          if (userRole !== "superAdmin" && currentWorksites >= maxWorksites && maxWorksites !== Infinity) {
+            Alert.alert(t('subscription-screen-limit-warning'), t('subscription-screen-limit-warning-worksite'));
+            setIsLoading(false);
+            return;
+          }
+
+
           if (!address || !city || !workType) {
               Alert.alert("Error", t('goeswrong'));
               setIsLoading(false);

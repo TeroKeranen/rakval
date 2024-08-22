@@ -42,9 +42,6 @@
   "send": "Lähetä",
   "search": "hae",
  
-
-
-  
   "sign-upHeader": "Luo tunnus",
   "sign-upAdminHeader": "Luo admin tunnus",
   "signup-navlink-text": "Sinulla on jo luotu tili? Kirjaudu sisään sittenkin",
@@ -57,7 +54,7 @@
   "signin-loginFail": "Kirjatuminen epäonnistui",
   "signin-forgotpassword": "Unohtuiko salasana?",
 
-
+  "drawerScreen-membership": "Jäsenyys",
   "drawerScreen-front-page": "etusivu",
   "drawerScreen-instruction": "Ohje",
   "main-page": "Etusivu",
@@ -119,7 +116,6 @@
   "confirmTitle": "Vahvista toiminto",
   "confirmText": "Oletko varma että haluat merkitä työmaan valmiiksi?",
   
-
   "worksiteWorker-select-worker": "Valitse työntekijä",
   "worksiteWorker-add-button": "Lisää työntekijä",
   "worksiteWorker-workers": "Työntekijät tässä työmaassa",
@@ -222,7 +218,7 @@
   "adminSignUp-companyAddress": "Yrityksen osoite",
   "adminSignUp-companyCity": "Yrityksen paikkakunta",
 
-    "imagePicker-alert": "Riittämätön oikeus",
+  "imagePicker-alert": "Riittämätön oikeus",
   "imagePicker-alert-message": "Sinun täytyy myöntää kameraoikeudet käyttääksesi tätä sovellusta.",
 
   "adminInfoTitle1": "Admin ohjeet",
@@ -267,7 +263,34 @@
   "resetRequest-succesMessage": "Lähetimme resetointilinkin sähköpostiisi. Tarkista roskapostikansiosi, jos et löydä sähköpostia saapuneista.",
   "resetRequest-placeholder": "Syötä sähköpostiosoitteesi",
   "resetRequest-button": "Lähetä resetointilinkki",
-  "resetRequest-title": "Resetoi salasana"
+  "resetRequest-title": "Resetoi salasana",
+
+  "subscription-screen-orderSuccessTitle": "Osto onnistui",
+  "subscription-screen-orderSuccessText": "Tilaus aktivoituu, odota hetki",
+  "subscription-screen-orderErrorTitle": "Osto epäonnistui",
+  "subscription-screen-orderErrorText": "Jotain meni pieleen, kokeile hetken päästä uudestaan",
+  "subscription-screen-btn": "Tilaa jäsenyys",
+  "subscription-screen-active": "Tilaus on aktiivinen",
+  "subscription-screen-limit-warning": "Rajoitus",
+  "subscription-screen-limit-warning-workers": "Olet saavuttanut maksimimäärän työntekijöitä",
+  "subscription-screen-limit-warning-worksite": "Olet saavuttanut maksimimäärän työmaita",
+
+  "subscription-product-title1": "Peruspaketti",
+  "subscription-product-description1": "Lisää 3 työmaata ja 3 työntekijää",
+  
+  "subscription-product-title2": "Laajennettu paketti",
+  "subscription-product-description2": "Lisää 5 työmaata ja 5 työntekijää",
+  
+  "subscription-product-title3": "Ammattilaispaketti",
+  "subscription-product-description3": "Lisää 10 työmaata ja 10 työntekijää",
+  
+  "subscription-product-title4": "Rajoittamaton paketti",
+  "subscription-product-description4": "Lisää niin monta työmaata ja työntekijää kuin haluat",
+
+  "subscription-screen-restore-btn": "Palauta ostos",
+"subscription-screen-restore-success": "Ostokset palautettu onnistuneesti!",
+"subscription-screen-restore-noPurchase": "Ei palautettavia ostoksia.",
+"subscription-screen-restore-failed": "Ostojen palautus epäonnistui. Yritä uudelleen."
   
 
 
