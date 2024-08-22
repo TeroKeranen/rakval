@@ -11,7 +11,7 @@ import RestorePurchasesButton from "../components/RestorePurchasesButton";
 
 
 const APIkeys = {
-    apple:"appl_wHjihsMCXNIMqxwrRuAHWKfeAFz"
+    apple: process.env.apikey
 }
 
 const { width, height } = Dimensions.get('window'); // Saadaan näytön leveys
