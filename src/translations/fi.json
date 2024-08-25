@@ -41,6 +41,7 @@
   "kpl": "kpl",
   "send": "Lähetä",
   "search": "hae",
+  "month": "Kuukausi",
  
   "sign-upHeader": "Luo tunnus",
   "sign-upAdminHeader": "Luo admin tunnus",
@@ -276,21 +277,25 @@
   "subscription-screen-limit-warning-worksite": "Olet saavuttanut maksimimäärän työmaita",
 
   "subscription-product-title1": "Peruspaketti",
-  "subscription-product-description1": "Lisää 3 työmaata ja 3 työntekijää",
+  "subscription-product-description1": "Voit lisätä 3 työmaata.",
+  "subscription-product-description1-2": "Voit lisätä 3 työntekijää per työmaa.",
+  
   
   "subscription-product-title2": "Laajennettu paketti",
-  "subscription-product-description2": "Lisää 5 työmaata ja 5 työntekijää",
+  "subscription-product-description2": "Voit lisätä 5 työmaata.",
+  "subscription-product-description2-2": "Voit lisätä 5 työntekijää per työmaa.",
   
-  "subscription-product-title3": "Ammattilaispaketti",
-  "subscription-product-description3": "Lisää 10 työmaata ja 10 työntekijää",
+  "subscription-product-description3": "Voit lisätä 10 työmaata.",
+  "subscription-product-description3-2": "Voit lisätä 10 työntekijää per työmaa.",
   
   "subscription-product-title4": "Rajoittamaton paketti",
-  "subscription-product-description4": "Lisää niin monta työmaata ja työntekijää kuin haluat",
+  "subscription-product-description4": "Lisää niin monta työmaata kuin haluat.",
+  "subscription-product-description4-2": "Lisää niin monta työntekijää per työmaa kuin haluat.",
 
   "subscription-screen-restore-btn": "Palauta ostos",
-"subscription-screen-restore-success": "Ostokset palautettu onnistuneesti!",
-"subscription-screen-restore-noPurchase": "Ei palautettavia ostoksia.",
-"subscription-screen-restore-failed": "Ostojen palautus epäonnistui. Yritä uudelleen."
+  "subscription-screen-restore-success": "Ostokset palautettu onnistuneesti!",
+  "subscription-screen-restore-noPurchase": "Ei palautettavia ostoksia.",
+  "subscription-screen-restore-failed": "Ostojen palautus epäonnistui. Yritä uudelleen."
   
 
 

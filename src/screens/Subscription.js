@@ -131,23 +131,28 @@ const Subscription = () => {
             // Määritellään tuotteen tunnisteiden perusteella käännökset 
         let productTitleKey;
         let productDescriptionKey;
+        let productDescriptionKeySecond;
 
     switch (item.product.identifier) {
         case 'b4sic':
             productTitleKey = 'subscription-product-title1';
             productDescriptionKey = 'subscription-product-description1';
+            productDescriptionKeySecond = 'subscription-product-description1-2'
             break;
         case 'exted3d':
             productTitleKey = 'subscription-product-title2';
             productDescriptionKey = 'subscription-product-description2';
+            productDescriptionKeySecond = 'subscription-product-description2-2'
             break;
         case 'prof3ss10':
             productTitleKey = 'subscription-product-title3';
             productDescriptionKey = 'subscription-product-description3';
+            productDescriptionKeySecond = 'subscription-product-description3-2'
             break;
         case 'unl1m1t3d':
             productTitleKey = 'subscription-product-title4';
             productDescriptionKey = 'subscription-product-description4';
+            productDescriptionKeySecond = 'subscription-product-description4-2'
             break;
         default:
             productTitleKey = item.product.title; // Oletusarvoisesti näytetään alkuperäinen englanninkielinen title
@@ -160,18 +165,24 @@ const Subscription = () => {
         return (
             
             <View style={[styles.productContainer, isActiveSubscription && styles.activeProduct]}>
-            <Text style={styles.title}>{t(productTitleKey)}</Text>
-            <Text>{t(productDescriptionKey)}</Text>
-            <Text style={styles.price}>{item.product.priceString}</Text>
-            {isActiveSubscription ? (
-                <Text style={styles.activeText}>{t('subscription-screen-active')}</Text>
-            ) : (
-                <TouchableOpacity onPress={() => purchasePackage(item)} style={styles.button}>
-                    <Text >{t('subscription-screen-btn')}</Text>
-                </TouchableOpacity>
-            )}
-            
-            {/* <Button title={isActiveSubscription ? "Tilaus on aktiivinen": "Osta"} onPress={() => purchasePackage(item)} disabled={isActiveSubscription}/> */}
+
+                <View style={styles.textContainer}>
+                    <Text style={styles.title}>{t(productTitleKey)}</Text>
+                    <Text style={styles.descriptionText}>{t(productDescriptionKey)}</Text>
+                    <Text style={styles.descriptionText}>{t(productDescriptionKeySecond)}</Text>
+                </View>
+                <View style={styles.priceContainer}>
+                    <Text style={styles.price}>{item.product.priceString} / {t('month')}</Text>
+                    {isActiveSubscription ? (
+                        <Text style={styles.activeText}>{t('subscription-screen-active')}</Text>
+                    ) : (
+                        <TouchableOpacity onPress={() => purchasePackage(item)} style={styles.button}>
+                            <Text >{t('subscription-screen-btn')}</Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
+                
+                {/* <Button title={isActiveSubscription ? "Tilaus on aktiivinen": "Osta"} onPress={() => purchasePackage(item)} disabled={isActiveSubscription}/> */}
         </View>
         )
     }
@@ -238,17 +249,32 @@ const styles = StyleSheet.create({
     productContainer: {
         width: width, // Asetetaan tuotteen leveys näytön leveydeksi
         height: height,
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
         backgroundColor: "#dad0d0", 
         borderColor: '#ccc',
         borderRadius: 5,
     },
+    textContainer: {
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        
+    },
+    priceContainer: {
+        flex: 1,
+        // borderWidth: 1,
+    },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10,
+    },
+    descriptionText: {
+        fontSize: 19,
+        fontWeight: '500',
+        margin: 4,
     },
     price: {
         marginVertical: 6,

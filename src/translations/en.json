@@ -41,6 +41,7 @@
   "kpl": "pcs",
   "send": "send",
   "search": "search",
+  "month": "Month",
 
   "sign-upHeader": "Sign Up",
   "sign-upAdminHeader": "Create an admin account",
@@ -276,16 +277,20 @@
   "subscription-screen-limit-warning-worksite": "You have reached the maximum number of sites",
 
   "subscription-product-title1": "Basic Package",
-  "subscription-product-description1": "Add 3 sites and 3 workers",
+  "subscription-product-description1": "You can add 3 worksites.",
+  "subscription-product-description1-2": "You can add 3 employees per worksite",
   
   "subscription-product-title2": "Extended Package",
-  "subscription-product-description2": "Add 5 sites and 5 workers",
+  "subscription-product-description2": "You can add 5 worksites.",
+  "subscription-product-description2-2": "You can add 5 employees per worksite",
   
   "subscription-product-title3": "Professional Package",
-  "subscription-product-description3": "Add 10 sites and 10 workers",
+  "subscription-product-description3": "You can add 10 worksites.",
+  "subscription-product-description3-2": "You can add 10 employees per worksite",
   
   "subscription-product-title4": "Unlimited Package",
-  "subscription-product-description4": "Add as many sites and workers as you want",
+  "subscription-product-description4": "Add as many worksites as you want",
+  "subscription-product-description4-2": "Add as many employees per worksite as you want",
 
   "subscription-screen-restore-btn": "Restore purchase",
   "subscription-screen-restore-success": "Purchases restored successfully!",
