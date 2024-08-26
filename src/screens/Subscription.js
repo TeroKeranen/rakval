@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Context as Autcontext} from '../context/AuthContext'
-import { Alert, FlatList, Platform, StyleSheet, Text, View,Button, ImageBackground, Dimensions, SafeAreaView, TouchableOpacity } from "react-native"
+import { Alert, FlatList, Platform, StyleSheet, Text, View,Button, ImageBackground, Dimensions, SafeAreaView, TouchableOpacity, Linking } from "react-native"
 import Purchases, { LOG_LEVEL } from "react-native-purchases";
 import { useFocusEffect } from "@react-navigation/native";
 import DownloadScreen from "../components/DownloadScreen";
 import { useTranslation } from "react-i18next";
 import RestorePurchasesButton from "../components/RestorePurchasesButton";
+import Checkbox from 'expo-checkbox';
+
 
 
 
@@ -22,6 +24,7 @@ const Subscription = () => {
     const [products, setProducts] = useState([]);
     const [activeProductIdentifier, setActiveProductIdentifier] = useState(null); //tila aktiiviselle tilaukselle
     const [currentIndex, setCurrentIndex] = useState(0); // Nykyinen näkyvillä oleva sivu
+    const [isChecked, setIsChecked] = useState(false); // Valintaruutu
     const [isLoading, setIsLoading] = useState(false);
     
 
@@ -86,6 +89,11 @@ const Subscription = () => {
     };
 
     const purchasePackage = async (purchasePackage) => {
+
+        if (!isChecked) {
+            Alert.alert(t('subscription-screen-errorTitle'), t('subscription-screen-acceptTermsError'));
+            return;
+        }
         try {
             setIsLoading(true);
             const purchaseInfo = await Purchases.purchasePackage(purchasePackage);
@@ -168,16 +176,29 @@ const Subscription = () => {
 
                 <View style={styles.textContainer}>
                     <Text style={styles.title}>{t(productTitleKey)}</Text>
-                    <Text style={styles.descriptionText}>{t(productDescriptionKey)}</Text>
-                    <Text style={styles.descriptionText}>{t(productDescriptionKeySecond)}</Text>
+                    <View style={styles.includeText}>
+
+                        <View style={styles.bulletPointContainer}>
+
+                        <View style={styles.bulletPoint} />
+                            <Text style={styles.descriptionText}>{t(productDescriptionKey)}</Text>
+                        </View>
+
+                        <View style={styles.bulletPointContainer}>
+
+                        <View style={styles.bulletPoint} />
+                            <Text style={styles.descriptionText}>{t(productDescriptionKeySecond)}</Text>
+                        </View>
+
+                    </View>
                 </View>
                 <View style={styles.priceContainer}>
                     <Text style={styles.price}>{item.product.priceString} / {t('month')}</Text>
                     {isActiveSubscription ? (
                         <Text style={styles.activeText}>{t('subscription-screen-active')}</Text>
                     ) : (
-                        <TouchableOpacity onPress={() => purchasePackage(item)} style={styles.button}>
-                            <Text >{t('subscription-screen-btn')}</Text>
+                        <TouchableOpacity onPress={() => purchasePackage(item)} style={[styles.button, !isChecked && styles.notActiveBtn]}>
+                            <Text style={{color:'white'}}>{t('subscription-screen-btn')}</Text>
                         </TouchableOpacity>
                     )}
                 </View>
@@ -225,6 +246,31 @@ const Subscription = () => {
                                 />
                             ))}
                     </View>
+
+
+                    {/* EULA ja Privacy Policy linkit ja checkbox */}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
+                        <Checkbox
+                            value={isChecked}
+                            onValueChange={setIsChecked}
+                            style={{ marginRight: 10 }}
+                        />
+
+                        <View style={{flexDirection: 'row'}}>
+
+                            <Text>{t('subscription-screen-acceptTerms')}</Text>
+
+                            <TouchableOpacity onPress={() => Linking.openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')}>
+                                <Text style={{ color: 'blue' }}>{t('subscription-screen-eula')}</Text>
+                            </TouchableOpacity>
+                            <Text> and </Text>
+                            <TouchableOpacity onPress={() => Linking.openURL('https://rakival.com/privacypolicy')}>
+                                <Text style={{ color: 'blue' }}>{t('subscription-screen-privacyPolicy')}</Text>
+                            </TouchableOpacity>
+
+                        </View>
+                    </View>
+
                 </View>
             
         </SafeAreaView>
@@ -262,6 +308,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         
     },
+    includeText: {
+        
+    },
+    bulletPointContainer: {
+        flexDirection: 'row', // Tämä asettaa pallon ja tekstin samalle riville
+        alignItems: 'center', // Tämä keskittää tekstin pystysuunnassa suhteessa palloon
+        marginBottom: 8, // Etäisyys seuraavaan kohtaan
+    },
+    bulletPoint: {
+        width: 8, // Pallon leveys
+        height: 8, // Pallon korkeus
+        borderRadius: 4, // Pyöreä pallo (puolet leveydestä/korkeudesta)
+        backgroundColor: '#000', // Pallon väri
+        marginRight: 8, // Etäisyys pallon ja tekstin välillä
+    },
     priceContainer: {
         flex: 1,
         // borderWidth: 1,
@@ -287,6 +348,21 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: "#507ab8",
+        padding: 10,
+        borderRadius: 5,
+        marginVertical: 10,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    notActiveBtn: {
+        backgroundColor: "#656a70",
         padding: 10,
         borderRadius: 5,
         marginVertical: 10,

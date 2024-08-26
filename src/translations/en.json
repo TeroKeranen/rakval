@@ -55,9 +55,9 @@
   "signin-loginFail": "Login failed",
   "signin-forgotpassword": "Forgot password?",
 
-  "drawerScreen-membership": "Membership",
-  "drawerScreen-front-page": "Front page",
-  "drawerScreen-instruction": "Instruction",
+  "drawerScreen-membership": "membership",
+  "drawerScreen-front-page": "front page",
+  "drawerScreen-instruction": "instruction",
   "main-page": "Main page",
   "profile": "Profile",
   "construction-site": "Construction sites",
@@ -295,7 +295,14 @@
   "subscription-screen-restore-btn": "Restore purchase",
   "subscription-screen-restore-success": "Purchases restored successfully!",
   "subscription-screen-restore-noPurchase": "No purchases found to restore.",
-  "subscription-screen-restore-failed": "Failed to restore purchases. Please try again."
+  "subscription-screen-restore-failed": "Failed to restore purchases. Please try again.",
+
+  "subscription-screen-acceptTerms": "I accept ",
+  "subscription-screen-eula": "the Terms",
+  "subscription-screen-privacyPolicy": "Privacy Policy",
+
+  "subscription-screen-errorTitle": "Accept the Terms",
+  "subscription-screen-acceptTermsError": "You need to accept the Terms and Privacy Policy to continue"
 
 
 

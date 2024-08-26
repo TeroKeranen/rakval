@@ -55,7 +55,7 @@
   "signin-loginFail": "Kirjatuminen epäonnistui",
   "signin-forgotpassword": "Unohtuiko salasana?",
 
-  "drawerScreen-membership": "Jäsenyys",
+  "drawerScreen-membership": "jäsenyys",
   "drawerScreen-front-page": "etusivu",
   "drawerScreen-instruction": "Ohje",
   "main-page": "Etusivu",
@@ -295,8 +295,14 @@
   "subscription-screen-restore-btn": "Palauta ostos",
   "subscription-screen-restore-success": "Ostokset palautettu onnistuneesti!",
   "subscription-screen-restore-noPurchase": "Ei palautettavia ostoksia.",
-  "subscription-screen-restore-failed": "Ostojen palautus epäonnistui. Yritä uudelleen."
-  
+  "subscription-screen-restore-failed": "Ostojen palautus epäonnistui. Yritä uudelleen.",
+
+  "subscription-screen-acceptTerms": "Hyväksyn ",
+  "subscription-screen-eula": "Ehdot",
+  "subscription-screen-privacyPolicy": "Tietosuojakäytännön",
+
+  "subscription-screen-errorTitle": "Hyväksy ehdot",
+  "subscription-screen-acceptTermsError": "Sinun pitää hyväksy Ehdot ja Tietosuojakäytäntö voidaaksesi jatkaa"
 
 
   
