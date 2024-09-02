@@ -1,4 +1,4 @@
-import { Alert, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Button, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Context as WorksiteContext } from "../../context/WorksiteContext"
 import { useContext, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -6,6 +6,7 @@ import UpdateProductModal from "../../components/UpdateProductModal";
 import AddProductModal from "../../components/AddProductModal";
 import { useTranslation } from "react-i18next";
 import DownloadScreen from "../../components/DownloadScreen";
+import {CameraView,Camera, useCameraPermissions} from "expo-camera";
 
 const ProductScreen = () => {
 
@@ -20,6 +21,23 @@ const ProductScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
     const products = state.currentWorksite?.products;
     const worksiteId = state.currentWorksite._id;
+
+    //barcode
+    // const [permission, requestPermission] = useCameraPermissions();
+    // const [hasPermission, setHasPermission] = useState(null);
+    // const [scanned, setScanned] = useState(false);
+
+    // useEffect(() => {
+    //     (async () => {
+        
+    //       const { status } = await Camera.requestCameraPermissionsAsync();
+    //       setHasPermission(status === 'granted');
+    //     })();
+    //   }, []);
+
+
+
+
     
     useEffect(() => {
         
@@ -176,6 +194,20 @@ const ProductScreen = () => {
     )
 
 
+    // const handleBarCodeScanned = ({ type, data }) => {
+    //     console.log("Jsjsjsj")
+    //     setScanned(true);
+    //     Alert.alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    //   };
+
+    
+    // if (hasPermission === null) {
+    //     return <Text>reguest camerapermission</Text>;
+    //   }
+    //   if (hasPermission === false) {
+    //     return <Text>ei yhteyttä kameraan</Text>;
+    //   }
+
     if (isLoading) {
         return (
             <DownloadScreen message={t('loading')} />
@@ -184,6 +216,25 @@ const ProductScreen = () => {
 
     return (
         <View style={styles.container}>
+
+                {/* <View style={styles.containerS}>
+                    <CameraView
+                        
+                        style={StyleSheet.absoluteFillObject}
+                        facing="back"
+                        onBarcodeScanned={({type,data}) => {
+                            console.log("data", data)
+                            console.log("type", type);
+                        }}
+                        // onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                        barcodeScannerSettings={{
+                            barcodeTypes: ['aztec', 'ean13', 'ean8', 'qr', 'pdf417', 'upc_e', 'datamatrix', 'code39', 'code93', 'itf14', 'codabar', 'code128', 'upc_a'],
+                          }}
+                        
+                    />
+                        {scanned && <Button title="tap to scan again" onPress={() => setScanned(false)} />}
+                            
+                </View> */}
 
             <View>
                 <TouchableOpacity onPress={() => openAddProductModal()} style={styles.workDaybutton} >
@@ -228,6 +279,11 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#fff',
     },
+    // containerS: {
+    //     flex: 1,
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //   },
     workDaybutton: {
         backgroundColor: "#507ab8",
             padding: 10,

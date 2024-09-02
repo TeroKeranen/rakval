@@ -11,6 +11,9 @@
   "products": "Products",
   "quantity": "Quantity",
   "product": "Product",
+  "description": "Description",
+  "price": "Price",
+  "barcodeNumber": "Barcode number",
   "error": "Error",
   "edit": "Edit",
   "loading": "Loading",
@@ -302,8 +305,24 @@
   "subscription-screen-privacyPolicy": "Privacy Policy",
 
   "subscription-screen-errorTitle": "Accept the Terms",
-  "subscription-screen-acceptTermsError": "You need to accept the Terms and Privacy Policy to continue"
+  "subscription-screen-acceptTermsError": "You need to accept the Terms and Privacy Policy to continue",
 
+  "productsData-screen-barcodeBtn": "Search by Barcode",
+  "productsData-screen-searchBtn": "Products",
+  "productsData-screen-clearBtn": "Clear",
+  "productsData-screen-validPriceError": "The price is not valid",
+  "productsData-screen-validQuantityError": "The quantity is not a valid number",
+  "productsData-screen-addedProduct-success": "Product added successfully",
+  "productsData-screen-addedProduct-fail": "Error adding product",
+  "productsData-screen-scannerFoundItem": "Product found by barcode",
+  "productsData-screen-scannerNotFoundItem-title": "Product not found",
+  "productsData-screen-scannerNotFoundItem-text": "Add a new product",
+
+  "fetchCompanyProducts-inputPlaceholder": "Search product by name",
+
+  "barCodeScanner-request-permission": "Requires camera permission.",
+  "barCodeScanner-camera-no-access": "No access to the camera.",
+  "barCodeScanner-scanAgain": "Tap to scan again"
 
 
   

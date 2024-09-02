@@ -2,7 +2,7 @@
   "expo": {
     "name": "Rakival",
     "slug": "Rakval",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -15,7 +15,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "1.2.2",
+      "buildNumber": "1.2.3",
       "supportsTablet": false,
       "bundleIdentifier": "com.amiractor.rakval"
     },
@@ -41,7 +41,16 @@
           "cameraPermission": "The app need access to your camera in order to take photos"
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ]
     ],
     "extra": {
       "eas": {

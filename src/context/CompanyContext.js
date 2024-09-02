@@ -15,6 +15,9 @@ const CompanyReducer = (state, action) => {
         return { ...state, company: action.payload };
       case "fetch_company":
         return { ...state, company: action.payload };
+      case "set_products":
+        
+          return { ...state, products: action.payload }; // Päivitetään tuotteet tilassa
       case 'set_workers':
         return {...state, workers:action.payload}
       case "set_error":
@@ -96,4 +99,57 @@ const createCompany = (dispatch) => {
     }
 }
 
-export const {Provider, Context } = createDataContext(CompanyReducer, {createCompany, fetchCompany, clearCompany,fetchWorkers}, {workers:[],company: null, errorMessage:''})
+const addCompanyProduct = (dispatch) => {
+  return async ({ companyId, barcode, name, description, quantity, price }) => {
+
+    
+    try {
+
+      const response = await makeApiRequest('/companyAddProducts', 'post', {
+        companyId,
+        barcode,
+        name,
+        description,
+        quantity,
+        price
+      })
+
+      
+
+      if (response && response.data) {
+        dispatch({type: 'fetch_company', payload: response.data})
+        return {success:true}
+      } else {
+        dispatch({type: 'set_error', payload: 'tuotetta lisättäessä tapahtui virhe'})
+        return {success: false, error: response.message}
+      }
+    } catch (error) {
+      dispatch({ type: 'set_error', payload: 'Tuotetta lisättäessä tapahtui virhe' });
+      return { success: false, error: error.message || 'Tuotteen lisäys epäonnistui' };
+    }
+  }
+}
+
+const getCompanyProducts = (dispatch) => {
+  return async (companyId) => {
+    try {
+      const response = await makeApiRequest(`/companyProducts?companyId=${companyId}`, 'get', null, dispatch)
+
+
+      // console.log("reeesdlkdlkalksöl ", response);
+
+      if (response && response.data) {
+        dispatch({ type: 'set_products', payload: response.data });
+        return { success: true };
+    } else {
+        dispatch({ type: 'set_error', payload: 'Tuotteiden hakemisessa tapahtui virhe' });
+        return { success: false, error: response.message };
+    }
+    } catch (error) {
+      dispatch({ type: 'set_error', payload: 'Tuotteiden hakemisessa tapahtui virhe' });
+      return { success: false, error: error.message || 'Tuotteiden haku epäonnistui' };
+    }
+  }
+}
+
+export const {Provider, Context } = createDataContext(CompanyReducer, {createCompany, fetchCompany, clearCompany,fetchWorkers,addCompanyProduct, getCompanyProducts}, {workers:[],company: null, errorMessage:''})

@@ -228,7 +228,7 @@ const Subscription = () => {
                         data={products}
                         renderItem={renderProduct}
                         keyExtractor={(item) => item.identifier}
-                        horizontal={true} 
+                        horizontal={true}
                         pagingEnabled={true}
                         showsHorizontalScrollIndicator={false} // Piilottaa vaakasuoran vierityspalkin
                         onScroll={handleScroll} // Kutsutaan, kun käyttäjä selaa

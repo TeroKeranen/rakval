@@ -11,6 +11,9 @@
   "products": "Tuotteet",
   "quantity": "Määrä",
   "product": "Tuote",
+  "description": "Kuvaus",
+  "price": "Hinta",
+  "barcodeNumber": "Viivakoodin numero",
   "error": "Virhe",
   "edit": "Muokkaa",
   "loading": "Ladataan",
@@ -302,7 +305,25 @@
   "subscription-screen-privacyPolicy": "Tietosuojakäytännön",
 
   "subscription-screen-errorTitle": "Hyväksy ehdot",
-  "subscription-screen-acceptTermsError": "Sinun pitää hyväksy Ehdot ja Tietosuojakäytäntö voidaaksesi jatkaa"
+  "subscription-screen-acceptTermsError": "Sinun pitää hyväksy Ehdot ja Tietosuojakäytäntö voidaaksesi jatkaa",
+
+  "productsData-screen-barcodeBtn": "Etsi viivakoodilla",
+  "productsData-screen-searchBtn": "Tuotteet",
+  "productsData-screen-clearBtn": "Tyhjennä",
+  "productsData-screen-validPriceError": "Hinta ei ole kelvollinen",
+  "productsData-screen-validQuantityError": "Määrä ei ole kelvollinen numero",
+  "productsData-screen-addedProduct-success": "Tuote lisätty onnistuneesti",
+  "productsData-screen-addedProduct-fail": "Virhe tuotetta lisättäessä",
+  "productsData-screen-scannerFoundItem": "Tuote löytyi viivakoodin avulla",
+  "productsData-screen-scannerNotFoundItem-title": "Tuotetta ei löytynyt",
+  "productsData-screen-scannerNotFoundItem-text": "Lisää uusi tuote",
+
+  "fetchCompanyProducts-inputPlaceholder": "Hae tuotetta nimellä",
+
+  "barCodeScanner-request-permission": "Vaatii kameran käyttöluvan.",
+  "barCodeScanner-camera-no-access": "Ei yhteyttä kameraan",
+  "barCodeScanner-scanAgain": "Skannaa uudestaan"
+
 
 
   

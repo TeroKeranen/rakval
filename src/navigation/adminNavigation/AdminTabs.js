@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Screens
 import AdminScreen from '../../screens/adminScreens/CompanyScreen'
+import ProductsData from "../../screens/ProductsData";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,6 +26,8 @@ const AdminTabs = () => {
 
           if (route.name === "Your company" || route.name === "Sinun yritys") {
             iconName = focused ? "key" : "key";
+          } else if (route.name === "Products" || route.name === "Tuotteet") {
+            iconName = focused ? "pricetags-outline" : "pricetags-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -34,6 +37,7 @@ const AdminTabs = () => {
       })}
     >
       <Tab.Screen name={t("tabScreen-company")} component={AdminScreen} options={{ headerShown: false }} />
+      <Tab.Screen name={t('products')} component={ProductsData} options={{headerShown:false}} />
     </Tab.Navigator>
   );
 };
