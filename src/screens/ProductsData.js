@@ -43,22 +43,22 @@ const ProductsData = () => {
     const [modalVisible, setModalVisible] = useState(false); // Käytetään tätä  tuomaan viivakoodilukija esille
 
     const [searchVisible, setSearchVisible] = useState(false); // Kun tämä on true, niin tuotteet ja hakukenttä tulee esille
-    const [searchQuery, setSearchQuery] = useState("");
-    const [filteredProducts, setFilteredProducts] = useState(products); // tänne tuodaan suodatetut tuotteet ja tämä viedään flatlistiin joka näyttää käyttäjälle tuotteen / tuotteet
+    // const [searchQuery, setSearchQuery] = useState("");
+    // const [filteredProducts, setFilteredProducts] = useState(products); // tänne tuodaan suodatetut tuotteet ja tämä viedään flatlistiin joka näyttää käyttäjälle tuotteen / tuotteet
     const [isLoading, setIsLoading] = useState(false);
 
     
         // Päivitetään suodatettu tuotelista hakukyselyn perusteella
-        useEffect(() => {
-            if (searchQuery.trim().length > 0) {
-                const filtered = products.filter((product) =>
-                    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-                );
-                setFilteredProducts(filtered);
-            } else {
-                setFilteredProducts(products);
-            }
-        }, [searchQuery, products]);
+        // useEffect(() => {
+        //     if (searchQuery.trim().length > 0) {
+        //         const filtered = products.filter((product) =>
+        //             product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        //         );
+        //         setFilteredProducts(filtered);
+        //     } else {
+        //         setFilteredProducts(products);
+        //     }
+        // }, [searchQuery, products]);
 
     const handleBarCodeScanned = (type, data) => {
         setScannedData({ type, data });
@@ -201,7 +201,7 @@ const ProductsData = () => {
 
                 {searchVisible && 
 
-                    <FetchCompanyProducts filteredProducts={filteredProducts} onHandleProductSelect={handleProductSelect} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    <FetchCompanyProducts products={products}  onHandleProductSelect={handleProductSelect}   />
                 }
                 <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} isVisible={modalVisible} onClose={() => setModalVisible(false)}/>
 

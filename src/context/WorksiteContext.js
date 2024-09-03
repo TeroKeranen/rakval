@@ -153,12 +153,23 @@ const worksiteReducer = (state, action) => {
           };
         
 
-        case 'add_product':
+          case 'add_product':
+            return {
+              ...state,
+              currentWorksite: action.payload.worksite,
+          };
+
+          case 'update_company':
+            return {
+              ...state,
+              company: action.payload,
+          };
+        // case 'add_product':
           
-          return {
-            ...state,
-            currentWorksite: action.payload.worksite
-          }
+        //   return {
+        //     ...state,
+        //     currentWorksite: action.payload.worksite
+        //   }
 
       default:
         return state;
@@ -600,7 +611,11 @@ const deleteProductFromWorksite = (dispatch) => async (worksiteId, productId) =>
     const url = `/worksites/${worksiteId}/products/${productId}`;
     const response = await makeApiRequest(url, 'delete', null, dispatch);
 
-    dispatch({type: 'delete_product', payload: {productId}})
+    if (response.success) {
+
+      dispatch({type: 'delete_product', payload: {productId}})
+    }
+
     return response.data
   } catch (error) {
 
@@ -609,16 +624,26 @@ const deleteProductFromWorksite = (dispatch) => async (worksiteId, productId) =>
   }
 }
 
-const updateProduct = (dispatch)  => async (worksiteId, productId, productName, quantity) => {
+const updateProduct = (dispatch)  => async (worksiteId, productId, productName, quantity, companyId, barcode) => {
 
   try {
     const url = `/worksites/${worksiteId}/products/${productId}`;
-    const response = await makeApiRequest(url, 'put', {productName, quantity}, dispatch);
+    const response = await makeApiRequest(url, 'put', {productName, quantity, companyId, barcode}, dispatch);
+    // console.log("reeee",response.response.data)
+    if (response.success) {
 
-    dispatch({type: 'update_product', payload: {productId, productName, quantity}})
+      dispatch({type: 'update_product', payload: {productId, productName, quantity}})
+    } 
+    // if (response.response.data.stockvaluelow) {
+    //   return response.response.data;
+    // }
+
+    
+
     return response.data
   } catch (error) {
     // console.log("virhe tuotteen muokkauksessa")
+    console.log(error)
   }
 
 }

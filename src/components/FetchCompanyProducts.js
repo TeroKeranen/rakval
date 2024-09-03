@@ -1,15 +1,32 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { Input } from "react-native-elements";
 
 
-const FetchCompanyProducts = ({filteredProducts, onHandleProductSelect, searchQuery, setSearchQuery}) => {
+const FetchCompanyProducts = ({products, onHandleProductSelect}) => {
 
     const {t} = useTranslation();
+
+    const [filteredProducts, setFilteredProducts] = useState(products);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const handleTouchableSearchView = () => {
         handleOpenSearch();
     }
+
+
+            // Päivitetään suodatettu tuotelista hakukyselyn perusteella
+            useEffect(() => {
+                if (searchQuery.trim().length > 0) {
+                    const filtered = products.filter((product) =>
+                        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+                    );
+                    setFilteredProducts(filtered);
+                } else {
+                    setFilteredProducts(products);
+                }
+            }, [searchQuery, products]);
 
 
     return (

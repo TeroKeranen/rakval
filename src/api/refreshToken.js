@@ -24,7 +24,7 @@ export const makeApiRequest = async (endpoint, method, data, dispatch) => {
             throw new Error('Token renewal failed');
           }
         case 400:
-          return {success:false, message: error.response.data.error || "Somethin goes wrong"}
+          return {success:false, message: error.response.data.error, response: error.response || "Somethin goes wrong2"}
         case 403:
           
           return { success: false, paidUser: false};

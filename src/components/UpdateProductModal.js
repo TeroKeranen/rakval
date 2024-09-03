@@ -10,6 +10,8 @@ const UpdateProductModal = ({isVisible, onClose, product, onUpdate}) => {
     const [name, setName] = useState(product.name);
     const [quantity, setQuantity] = useState(String(product.quantity));
 
+    
+
     useEffect(() => {
         setName(product.name);
         setQuantity(String(product.quantity));
