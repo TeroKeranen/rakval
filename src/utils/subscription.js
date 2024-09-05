@@ -26,7 +26,7 @@ export const getCurrentSubscription = async () => {
           }
       } catch (e) {
        // Error fetching customer info
-       console.error("Virhe tarkistettaessa aktiivista tilausta:", error);
+      //  console.error("Virhe tarkistettaessa aktiivista tilausta:", error);
        return null;
       
     }
