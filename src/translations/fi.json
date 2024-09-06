@@ -88,6 +88,12 @@
   "companyScreen-leavecompanyTitle": "Poistutaan yrityksestä",
   "companyScreen-leavecompanySure": "oletko varma että haluat poistaa yrityksen",
 
+  "companyScreen-titleTwo": "Anna Admin oikeudet",
+  "companyScreen-roleChange": "Roolin vaihto",
+  "companyScreen-roleChange-sure": "Haluatko varmasti vaihtaa käyttäjän roolin",
+  "companyScreen-roleChange-admin": "adminiksi",
+  "companyScreen-roleChange-user": "normi käyttäjäksi",
+
   "profileScreen-role": "Olet admin käyttäjä",
   "profileScreen-company": "Olet liittynyt yritykseen",
   "profileScreen-placeholder": "Lisää yrityskoodi",

@@ -24,6 +24,15 @@ const CompanyReducer = (state, action) => {
         return { ...state, errorMessage: action.payload };
       case "clear_company":
         return { ...state, company: null, workers:[] };
+        case "update_worker_role":
+          return {
+            ...state,
+            workers: state.workers.map((worker) =>
+              worker._id === action.payload.userId
+                ? { ...worker, role: action.payload.newRole }
+                : worker
+            ),
+          };
       default:
         return state;
     }
@@ -152,4 +161,24 @@ const getCompanyProducts = (dispatch) => {
   }
 }
 
-export const {Provider, Context } = createDataContext(CompanyReducer, {createCompany, fetchCompany, clearCompany,fetchWorkers,addCompanyProduct, getCompanyProducts}, {workers:[],company: null, errorMessage:''})
+const updateUserRole = (dispatch) => async (userId, newRole) => {
+
+  try {
+    const response = await makeApiRequest(`/update-role/${userId}`, 'put', {role: newRole}, dispatch)
+
+    if (response.success) {
+      const updatedUser = response.data.user;
+      dispatch({ type: "update_worker_role", payload: { userId, newRole } });
+      return { success: true };
+    } else {
+      dispatch({ type: 'set_error', payload: 'Roolin päivittämisessä tapahtui virhe' });
+      return { success: false };
+    }
+  } catch (error) {
+    dispatch({ type: "add_error", payload: "Virhe roolin päivittämisessä" });
+    return { success: false, error };
+  }
+}
+
+
+export const {Provider, Context } = createDataContext(CompanyReducer, {createCompany, fetchCompany, clearCompany,fetchWorkers,addCompanyProduct, getCompanyProducts, updateUserRole}, {workers:[],company: null, errorMessage:''})

@@ -44,13 +44,9 @@ const authReducer = (state, action) => {
     case "update_token":
       return {...state, token:action.payload}
     case 'update_subscription':
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          subscription: action.payload.subscription,
-        }
-      }
+      return {...state,user: {...state.user,subscription: action.payload.subscription,}}
+
+      
     
     default:
       return state;
@@ -495,6 +491,7 @@ export const { Provider, Context } = createDataContext(authReducer, {
     deleteAccountRequest,
     resetPasswordRequst,
     updateSubscription,
-    subscriptionDatabaseUpdate
+    subscriptionDatabaseUpdate,
+    
   }, 
   { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });

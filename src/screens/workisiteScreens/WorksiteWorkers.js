@@ -107,14 +107,14 @@ const WorksiteWorkers = () => {
         console.error(error);
       }
     };
-
     useEffect(() => {
       if (worksiteState.currentWorksite && worksiteState.currentWorksite.workers) {
         fetchAllWorkersInfo();
       }
       
     }, [worksiteState.currentWorksite]);
-
+    
+    
     const handleRemoveWorker = (workerId) => {
       Alert.alert(
         t("worksiteWorker-markerModal-deletemarker-title"),

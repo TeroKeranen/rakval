@@ -88,6 +88,12 @@
   "companyScreen-leavecompanyTitle": "Delete the company",
   "companyScreen-leavecompanySure": "Are you sure you want to delete the company",
 
+  "companyScreen-titleTwo": "Grant Admin Rights",
+  "companyScreen-roleChange": "Role Change",
+  "companyScreen-roleChange-sure": "Are you sure you want to change the user's role to",
+  "companyScreen-roleChange-admin": "admin",
+  "companyScreen-roleChange-user": "regular user",
+
   "profileScreen-role": "You are an admin user",
   "profileScreen-company": "You have joined the company called",
   "profileScreen-placeholder": "Enter company code",
