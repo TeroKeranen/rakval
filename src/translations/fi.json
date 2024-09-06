@@ -86,7 +86,7 @@
   "companyScreen-errorText": "Jotain meni vikaan yrityksen luonnissa",
   "companyScreen-leavecompanyText": "Yrityksestä poistuminen onnistui",
   "companyScreen-leavecompanyTitle": "Poistutaan yrityksestä",
-  "companyScreen-leavecompanySure": "oletko varma että haluat poistaa yrityksen",
+  "companyScreen-leavecompanySure": "oletko varma että haluat poistaa yrityksen itseltäsi",
 
   "companyScreen-titleTwo": "Anna Admin oikeudet",
   "companyScreen-roleChange": "Roolin vaihto",
@@ -241,13 +241,17 @@
   "adminInfoText3": "Tällä sivulla voit luoda uusia työmaita tai avata olemassa olevia työmaita.",
 
   "adminInfoTitle4": "Yritys näyttö",
-  "adminInfoText4": "Tämä sivu näyttää tietoja yrityksestäsi. Jotta työntekijä voi liittyä yritykseesi, sinun pitää jakaa hänelle yrityskoodi.",
+  "adminInfoText4": "Tämä sivu näyttää tietoja yrityksestäsi. Jotta työntekijä voi liittyä yritykseesi, sinun pitää jakaa hänelle yrityskoodi. Voit antaa admin / normi käyttäjän oikeudet työntekijälle / työntekijöille painamalla työntekijän sähköpostiosoitteen vieressä olevaa nappia",
+  "adminInfoText4-2": "Käytössäsi on myös 'Tuotteet'-välilehti, jossa voit luoda oman tuotetietokannan. Voit skannata tuotteen viivakoodin 'Etsi viivakoodilla' -painikkeella tai antaa tuotteelle itse keksimäsi viivakoodin. Jos käytät oikeaa viivakoodia, tuotteen tiedot täytetään automaattisesti syötekenttiin, jolloin tuotteen haku ja muokkaaminen on nopeampaa. Tietokantasi tuotteet löytyvät 'Tuotteet'-painikkeen takaa, ja tuotetta painamalla voit siirtää sen syötekenttiin muokattavaksi.",
 
   "adminInfoTitle5": "Lisää työntekijä",
   "adminInfoText5": "Kun luot työmaan, ja työntekijä on liittynyt yritykseesi yrityskoodin avulla, voit lisätä työntekijän työmaalle. Voit tehdä tämän menemällä työmaasivulle, etsimällä kohdan työntekijät, hakemalla työntekijän ja lisäämällä hänet tietylle työmaalle.",
 
-  "adminInfoTitle6": "Ohje näyttö",
-  "adminInfoText6": "Tämä sivu sisältää erilaisia ohjeita ja oppaita. Nämä toiminnot on suunniteltu auttamaan sinua hallitsemaan ja seuraamaan työtäsi tehokkaasti.",
+  "adminInfoTitle6": "Työmaakohtaiset tuotteet",
+  "adminInfoText6": "Työmaakohtaisessa Tuotteet-välilehdessä voit lisätä tuotteen painamalla '+'-ikonia, joka vie sinut syötekenttiin. Voit myös lisätä tuotteen yrityksen tuotetietokannasta painamalla 'Tuotteet'-painiketta, joka näyttää yrityksesi saatavilla olevat tuotteet. Valitsemalla haluamasi tuotteen se siirtyy syötekenttiin, ja painamalla 'Tallenna'-painiketta tuote tallennetaan työmaalle. HUOM: Tuotteen lisääminen työmaalle yrityksen tuotetietokannasta vähentää kyseisen tuotteen määrää tietokannasta sen määrän verran, jonka lisäät työmaalle. Voit myös luoda uuden tuotteen työmaalle, jos sellaista ei vielä ole tietokannassasi.",
+
+  "adminInfoTitle7": "Ohje näyttö",
+  "adminInfoText7": "Tämä sivu sisältää erilaisia ohjeita ja oppaita. Nämä toiminnot on suunniteltu auttamaan sinua hallitsemaan ja seuraamaan työtäsi tehokkaasti.",
 
   "userInfoTitle1": "Default käyttäjän ohjeet",
   "userInfoText1": "Kun kirjaudut sisään käyttäjän tunnuksilla, voit avata vasemmasta ylänurkasta eri sivut. Seuraavat sivut ovat tällä hetkellä käytettävissä:",

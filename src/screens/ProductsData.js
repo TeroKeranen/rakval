@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#e8e8f0",
         width: "90%",
-        padding: 40,
+        padding: 20,
         borderRadius: 10,
         shadowColor: "#000",
         shadowOffset: {

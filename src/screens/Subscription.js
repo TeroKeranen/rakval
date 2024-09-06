@@ -180,13 +180,13 @@ const Subscription = () => {
 
                         <View style={styles.bulletPointContainer}>
 
-                        <View style={styles.bulletPoint} />
+                        {/* <View style={styles.bulletPoint} /> */}
                             <Text style={styles.descriptionText}>{t(productDescriptionKey)}</Text>
                         </View>
 
                         <View style={styles.bulletPointContainer}>
 
-                        <View style={styles.bulletPoint} />
+                        {/* <View style={styles.bulletPoint} /> */}
                             <Text style={styles.descriptionText}>{t(productDescriptionKeySecond)}</Text>
                         </View>
 

@@ -53,6 +53,14 @@ const InstructionsAdmin = () => {
                             />
                     </View>
 
+                    <Text style={styles.text}>{t('adminInfoText4-2')}</Text>
+                    <View style={styles.imageContainer}>
+                        <Image 
+                            style={styles.image}
+                            source={require('../../assets/ohje/4_4.png')}
+                            />
+                    </View>
+
                     <Text style={styles.title}>{t('adminInfoTitle5')}:</Text>
                     <Text style={styles.text}>{t('adminInfoText5')}</Text>
                     
@@ -65,6 +73,16 @@ const InstructionsAdmin = () => {
 
                     <Text style={styles.title}>{t('adminInfoTitle6')}:</Text>
                     <Text style={styles.text}>{t('adminInfoText6')}</Text>
+                    
+                    <View style={styles.imageContainer}>
+                        <Image 
+                            style={styles.image}
+                            source={require('../../assets/ohje/7.png')}
+                            />
+                    </View>
+
+                    <Text style={styles.title}>{t('adminInfoTitle7')}:</Text>
+                    <Text style={styles.text}>{t('adminInfoText7')}</Text>
 
                 </View>
 

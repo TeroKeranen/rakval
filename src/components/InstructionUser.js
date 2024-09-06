@@ -55,8 +55,8 @@ const InstructionUser = () => {
 
                     
 
-                    <Text style={styles.title}>{t('adminInfoTitle6')}:</Text>
-                    <Text style={styles.text}>{t('adminInfoText6')}</Text>
+                    <Text style={styles.title}>{t('adminInfoTitle7')}:</Text>
+                    <Text style={styles.text}>{t('adminInfoText7')}</Text>
 
                 </View>
 

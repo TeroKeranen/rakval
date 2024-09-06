@@ -85,8 +85,8 @@
   "companyScreen-successText": "company created successfully",
   "companyScreen-errorText": "Something went wrong during the creation of the company.",
   "companyScreen-leavecompanyText": "Successfully exited the company.",
-  "companyScreen-leavecompanyTitle": "Delete the company",
-  "companyScreen-leavecompanySure": "Are you sure you want to delete the company",
+  "companyScreen-leavecompanyTitle": "Leave the company",
+  "companyScreen-leavecompanySure": "Are you sure you want to leave the company?",
 
   "companyScreen-titleTwo": "Grant Admin Rights",
   "companyScreen-roleChange": "Role Change",
@@ -241,13 +241,17 @@
   "adminInfoText3": "On this page, you can create new worksites or open existing ones.",
 
   "adminInfoTitle4": "Company Page",
-  "adminInfoText4": "This page displays the information about your company. To allow an employee to join your company, you need to share the company code with them.",
+  "adminInfoText4": "This page displays the information about your company. To allow an employee to join your company, you need to share the company code with them. You can grant admin or regular user rights to an employee or employees by pressing the button next to their email address.",
+  "adminInfoText4-2": "You also have access to the 'Products' tab, where you can create your own product database. You can scan a product's barcode using the 'Search by Barcode' button or assign a custom barcode to a specific product. If you use a valid barcode, the product details will automatically populate the input fields, making product search and editing faster. All the products in your database can be found under the 'Products' button, and by selecting a product, you can move it to the input fields for editing.",
 
   "adminInfoTitle5": "Adding workers",
   "adminInfoText5": "When you create a worksite, and an employee has joined your company using the company code, you can add the employee to the worksite. To do this, go to the worksite page, find the section for workers, search for the employee, and add them to the specific worksite",
 
-  "adminInfoTitle6": "Instructions Page",
-  "adminInfoText6": "This page contains various instructions and guidelines.These functionalities are designed to help you manage and monitor your work efficiently.",
+  "adminInfoTitle6": "Site-specific products",
+  "adminInfoText6": "In the site-specific Products tab, you can add a product by pressing the '+' icon, which will take you to the input fields. You can also add a product from the company's product database by pressing the 'Products' button, which will display the products available in your company. By selecting the desired product, it will be moved to the input fields, and by pressing the 'Save' button, the product will be saved to the site. NOTE: Adding a product to a site from the company’s product database will deduct the quantity of that product from the database by the amount you add to the site. You can also create a new product for the site if it is not already in your database.",
+
+  "adminInfoTitle7": "Instructions Page",
+  "adminInfoText7": "This page contains various instructions and guidelines.These functionalities are designed to help you manage and monitor your work efficiently.",
 
   "userInfoTitle1": "User Instructions",
   "userInfoText1": "When you log in with user credentials, you can access different pages from the top left corner menu. The following pages are currently available:",
