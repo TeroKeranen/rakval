@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView, ImageBackground, TouchableOpacity  } from "react-native";
+import { Text, View, StyleSheet, FlatList, TextInput, SafeAreaView, ImageBackground, TouchableOpacity, Modal  } from "react-native";
 import {useContext, useEffect, useState} from 'react';
 import { Context as Autcontext} from '../context/AuthContext'
 import {Context as EventContext} from '../context/EventsContext'
@@ -15,6 +15,8 @@ import WorksiteReady from "../components/EtusivuComponents/WorksiteReady";
 import LogoImage from '../../assets/logo-color.png'
 import {futureStartTime} from '../utils/calcFutureWorksite'
 import WorkOn from "../components/EtusivuComponents/WorkOn";
+import Clocking from "../components/EtusivuComponents/Clocking";
+import StartingWork from "../components/EtusivuComponents/StartingWork";
 
 
 const Etusivu = ({navigation}) => {
@@ -27,7 +29,8 @@ const Etusivu = ({navigation}) => {
   const {state: companyState,fetchCompany} = useContext(CompanyContext);
   const [events, setEvents] = useState([]); 
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedTitle, setSelectedTitle] = useState(null); // Käytetään tätä kun valitaan mitä halutaan näkyväksi
+  const [modalVisible, setModalVisible] = useState(false); // avataan events modal
+  const [selectedContent, setSelectedContent] = useState(null); // Tila modalin sisällölle
   
   const role = state?.user?.role;
   const userId = state?.user?._id;
@@ -55,16 +58,11 @@ const Etusivu = ({navigation}) => {
   
   
   
-  
-  const handlePress = (title) => {
-    if (selectedTitle === title) {
-      setSelectedTitle(null);
-    } else {
-      setSelectedTitle(title);
-      
-    }
-  }
-  
+
+  const handleOpenModal = (contentType) => {
+    setSelectedContent(contentType);
+    setModalVisible(true); // Avaa modal
+  };
   
   
   // Haetaan AuthCOntect.js avulla tiedot käyttäjästä.
@@ -143,20 +141,9 @@ const Etusivu = ({navigation}) => {
   
 
 
-  const accordionData = [
-    { title: t('etusivuEventsButton'), content: <Events events={events} /> },
-    { title: t('etusivuReadyButton'), content: <WorksiteReady worksites={readyWorksites} title={t('ready')} /> },
-    { title: t('etusivuUnfinishedButton'), content: <WorksiteReady worksites={notReadyWorksites} title={t('unfinished')} /> },
-    { title: t('etusivuStartingdButton'), content: <WorksiteReady worksites={futureStart} title={t('starting')} /> },
-    { title: t('etusivuActive'), content: <WorkOn worksites={worksites} userRole={role} userId={userId}/> },
-    // Lisää muita otsikoita ja sisältöjä tarpeen mukaan
-  ];
 
 
-  const accordionRows = [];
-  for (let i = 0; i < accordionData.length; i += 3) {
-    accordionRows.push(accordionData.slice(i, i + 3));
-  }
+
 
 
 
@@ -174,30 +161,62 @@ const Etusivu = ({navigation}) => {
         >
         <View style={styles.overlay}>
 
+        {/* tämä on uusi*/}
+
         <View style={styles.container}>
+
+          <View style={styles.activeWork}>
+            <Text style={{color: 'white', fontSize: 20, marginTop: 10}}>{t('etusivu-activeTitle')}</Text>
+            <Clocking worksites={worksites} userRole={role} userId={userId}/>
+          </View>
+
+          <View style={styles.activeWork}>
+            <Text style={{color: 'white', fontSize: 20, marginTop: 10}}>{t('etusivu-futureworkTitle')}</Text>
+            <StartingWork futureStart={futureStart}/>
+          </View>
+
+          {/* Lisää tähän nappi, joka avaa modaalin */}
+          <View style={styles.littleButtons}>
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleOpenModal('events')}
+              >
+              <Text style={styles.buttonText}>{t('etusivuEventsButton')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleOpenModal('ready')}
+              >
+              <Text style={styles.buttonText}>{t('etusivuReadyButton')}</Text>
+            </TouchableOpacity>
+            
+            {role === "admin" || role === "superAdmin" && 
+              <TouchableOpacity style={styles.button} onPress={() => handleOpenModal('workOn')}>
+                <Text style={styles.buttonText}>{t('etusivuActive')}</Text>
+              </TouchableOpacity>}
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleOpenModal('unfinished')}
+              >
+              <Text style={styles.buttonText}>{t('etusivuUnfinishedButton')}</Text>
+            </TouchableOpacity>
+          </View>
           
-        {accordionRows.map((row, rowIndex) => (
-            <View style={styles.accContainer} key={rowIndex}>
-              {row.map((item, index) => (
-                <Accordion
-                  key={index}
-                  title={item.title}
-                  handlePress={() => handlePress(item.title)}
-                  isSelected={selectedTitle === item.title}
-                />
-              ))}
-            </View>
-          ))}
-          
-          
-          {selectedTitle ? (
-            accordionData.map((item, index) => (
-              selectedTitle === item.title && <View style={styles.test} key={index}>{item.content}</View>
-            ))
-          ) : (
-            null
-          )}
-          
+          {selectedContent === 'events' && (
+              <Events events={events} modalVisible={modalVisible} onClose={() => setModalVisible(false)} />
+            )}
+          {selectedContent === 'ready' && (
+              <WorksiteReady worksites={readyWorksites} modalVisible={modalVisible} title={t('ready')} onClose={() => setModalVisible(false)}/>
+            )}
+          {selectedContent === 'unfinished' && (
+              <WorksiteReady worksites={notReadyWorksites} modalVisible={modalVisible} title={t('unfinished')} onClose={() => setModalVisible(false)}/>
+            )}
+          {selectedContent === 'workOn' && (
+              <WorkOn worksites={worksites} userRole={role} modalVisible={modalVisible} userId={userId} onClose={() => setModalVisible(false)}/>
+            )}
+         
 
         </View>
       
@@ -212,10 +231,24 @@ const Etusivu = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-around',
     height: '100%',
   },
   test: {
     alignItems: 'center'
+  },
+  activeWork: {
+    
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  littleButtons: {
+
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
   accContainer: {
     flexDirection: 'row',
@@ -231,6 +264,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(40, 42, 54, 0.1)',  // Määritä väri ja läpinäkyvyys tarpeen mukaan
   },
+  buttonText: {
+    color: 'white',
+    fontWeight: '700'
+  },
+  button: {
+            
+    padding:20,
+    borderRadius: 10,
+    flexDirection: 'row',
+    marginTop: 15,
+    marginHorizontal: 10,
+    shadowColor: '#000000', // Varjon väri
+    shadowOffset: { width: 0, height: 4 }, // Varjon offset (suunta)
+    shadowOpacity: 1, // Varjon peittävyys
+    shadowRadius: 4, // Varjon sumeus
+    elevation: 5, // Android-varjo
+    backgroundColor: '#333644', // Tausta lisättävä, jotta varjo näkyy kunnollas Androidilla)
+    elevation: 5, // Vain Androidille
+  }
   
 });
 

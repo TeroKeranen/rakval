@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList,RefreshControl, TextInput, SafeAreaView, Dimensions, Alert } from "react-native";
+import { Text, View, StyleSheet, FlatList,RefreshControl, TextInput, SafeAreaView, Dimensions, Alert, Modal, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
 import {useContext, useEffect, useState} from 'react';
 
 import { Context as EventContext } from "../../context/EventsContext";
@@ -9,7 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 
 
-const Events = ({events}) => {
+const Events = ({events, modalVisible, onClose}) => {
 
 
   
@@ -94,170 +94,212 @@ const Events = ({events}) => {
       );
     })
 
+    const handleTouchableWithoutFeedback = () => {
+      
+      Keyboard.dismiss();
+  }
+
     return (
+      <Modal 
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={onClose}
+      >
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+
+            style={{ flex: 1 }}>
+        <SafeAreaView style={{flex:1}}>
+
         <View style={styles.mainContainer}>
-      <View style={styles.textinputContainer}>
-        <Ionicons name="options" size={25} color="white" />
-        <TextInput
-          placeholder={t('search')}
-          placeholderTextColor="white"
-          style={styles.textinput}
-          value={searchTerm}
-          onChangeText={text => setSearchTerm(text)}
-          />
-      </View>
-      <FlatList
-        
-        data={displayEvents}
-        contentContainerStyle={{paddingBottom: 200}}
-        refreshing={isRefreshing}  // Päivitysindikaattorin tila
-        onRefresh={onRefresh}      // Päivitysmetodi
-        keyExtractor={(item) => item._id}
-        renderItem={({item}) => {
-          let displayText;
 
-          switch (item.type) {
-            case 'added-marker':
-              if (currentLang === "fi") {
+        <TouchableWithoutFeedback onPress={handleTouchableWithoutFeedback}>
+          <View style={styles.textinputContainer}>
+            <Ionicons name="options" size={25} color="black" />
+            <TextInput
+              placeholder={t('search')}
+              placeholderTextColor="white"
+              style={styles.textinput}
+              value={searchTerm}
+              onChangeText={text => setSearchTerm(text)}
+              />
+          </View>
+              </TouchableWithoutFeedback>
 
-                displayText ='Lisätty merkki';
-                
-              } else {
-                displayText = 'Added marker'
-              }      
-              break;
-
-            case 'update-marker':
-              if (currentLang === "fi") {
-
-                displayText ='Merkkiä muokattu';
-                
-              } else {
-                displayText = 'Updated marker'
-              }   
+            <FlatList
               
-              break;
-            case 'work-start':
-              if (currentLang === "fi") {
-
-                displayText = 'Työ aloitettu';
+              data={displayEvents}
+              contentContainerStyle={{paddingBottom: 200}}
+              refreshing={isRefreshing}  // Päivitysindikaattorin tila
+              onRefresh={onRefresh}      // Päivitysmetodi
+              keyExtractor={(item) => item._id}
+              renderItem={({item}) => {
+                let displayText;
                 
-              } else {
-                displayText = 'Work started'
-              }
-              break;
-            case 'work-end':
-              if (currentLang === "fi") {
+                switch (item.type) {
+                  case 'added-marker':
+                    if (currentLang === "fi") {
+                      
+                      displayText ='Lisätty merkki';
+                      
+                    } else {
+                      displayText = 'Added marker'
+                    }      
+                    break;
+                    
+                    case 'update-marker':
+                      if (currentLang === "fi") {
+                        
+                        displayText ='Merkkiä muokattu';
+                        
+                      } else {
+                        displayText = 'Updated marker'
+                      }   
+                      
+                      break;
+                      case 'work-start':
+                        if (currentLang === "fi") {
+                          
+                          displayText = 'Työ aloitettu';
+                          
+                        } else {
+                          displayText = 'Work started'
+                        }
+                        break;
+                        case 'work-end':
+                    if (currentLang === "fi") {
+                      
+                      displayText = 'Työ lopetettu';
+                      
+                    } else {
+                      displayText = 'Work completed'
+                    }   
+                    
+                    break;
+                    case 'remove-marker':
+                      if (currentLang === "fi") {
+                        
+                        displayText = "Merkki poistettu";
+                        
+                      } else {
+                        displayText = 'Deleted marker'
+                      }   
+                      
+                      break;
+                      case 'added-calendarmark':
+                        if (currentLang === "fi") {
+                          
+                          displayText = "Lisätty kalenteri merkki";
+                          
+                        } else {
+                          displayText = 'Added calendar marker'
+                        }   
+                        
+                        break;
+                        case 'updated-calendarmark':
+                    if (currentLang === "fi") {
 
-                displayText = 'Työ lopetettu';
-                
-              } else {
-                displayText = 'Work completed'
-              }   
-              
-              break;
-            case 'remove-marker':
-              if (currentLang === "fi") {
+                      displayText = "Muokattu kalenteri merkki";
+                      
+                    } else {
+                      displayText = 'Updated calendar marker'
+                    }   
+                    
+                    break;
+                    case 'deleted-calendarmark':
+                      if (currentLang === "fi") {
 
-                displayText = "Merkki poistettu";
-                
-              } else {
-                displayText = 'Deleted marker'
-              }   
-              
-              break;
-            case 'added-calendarmark':
-              if (currentLang === "fi") {
-
-                displayText = "Lisätty kalenteri merkki";
-                
-              } else {
-                displayText = 'Added calendar marker'
-              }   
-              
-              break;
-            case 'updated-calendarmark':
-              if (currentLang === "fi") {
-
-                displayText = "Muokattu kalenteri merkki";
-                
-              } else {
-                displayText = 'Updated calendar marker'
-              }   
-              
-              break;
-            case 'deleted-calendarmark':
-              if (currentLang === "fi") {
-
-                displayText = "Poistettu kalenteri merkki"
-                
-              } else {
-                displayText = 'Deleted calendar marker'
-              }   
-              
-              break;
-            default:
-              displayText = item.type;
-            }
-
-            return (
-
-            <View style={styles.eventContainer}>
-
-              <View style={styles.test}>
-                <View style={styles.type}>
-                  {item.markerNumber ?
-                    <Text style={styles.text}>{displayText} ({item.markerNumber})</Text>
-                    : <Text style={styles.text}>{displayText}</Text>
+                        displayText = "Poistettu kalenteri merkki"
+                      
+                      } else {
+                        displayText = 'Deleted calendar marker'
+                      }   
+                      
+                      break;
+                      default:
+                        displayText = item.type;
                   }
                   
-                  <Text style={styles.text}>{timeStampChanger(item.timestamp)}</Text>
+                  return (
+                    
+                    <View style={styles.eventContainer}>
+
+                    
+                      <View style={styles.type}>
+                        {item.markerNumber ?
+                          <Text style={styles.text}>{displayText} ({item.markerNumber})</Text>
+                          : <Text style={styles.text}>{displayText}</Text>
+                        }
+                        
+                        <Text style={styles.text}>{timeStampChanger(item.timestamp)}</Text>
+                      </View>
+
+                      <Text style={styles.text}>{t('constructionSite')}: {item.worksite.address}</Text>
+                      {item.calendarDate && 
+                        <Text style={styles.text}>{t('date')}: {item.calendarDate}</Text>
+                      }
+                      <Text style={styles.text}>{t('user')}: {item.user?.email}</Text>
+                    
+
                 </View>
-
-                <Text style={styles.text}>{t('constructionSite')}: {item.worksite.address}</Text>
-                {item.calendarDate && 
-                  <Text style={styles.text}>{t('date')}: {item.calendarDate}</Text>
-                }
-                <Text style={styles.text}>{t('user')}: {item.user?.email}</Text>
-              </View>
-
-          </View>
-          )
-        }}
-        ListEmptyComponent={() => (
-          <View style={styles.emptyListContainer}>
-            <Text style={styles.emptyListText}>ei dataa</Text>
-          </View>
-        )}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={onRefresh}
-            tintColor="white" // Asettaa päivitysindikaattorin värin valkoiseksi
-          />
-        }
-        
-        />
+                )
+              }}
+              ListEmptyComponent={() => (
+                <View style={styles.emptyListContainer}>
+                  <Text style={styles.emptyListText}>ei dataa</Text>
+                </View>
+              )}
+              refreshControl={
+                <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}
+                tintColor="white" // Asettaa päivitysindikaattorin värin valkoiseksi
+                />
+              }
+              
+              />
         
 
-    </View>
+          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <Ionicons name="close" size={24} color="#f5f5f5" />
+          </TouchableOpacity>
+
+        </View>
+
+      </SafeAreaView>
+      </KeyboardAvoidingView>
+    </Modal>
     )
 
 }
 
 const styles = StyleSheet.create({
-    mainContainer: {
-      height: 'auto',
-      marginBottom: 70,
+  mainContainer: {
+    backgroundColor: "white",
+    borderTopLeftRadius: 20, // Pyöristetään vain yläkulmat
+    borderTopRightRadius: 20,
+    paddingVertical: 35,
+    // paddingHorizontal: 55,
+    width: "100%",
+    height: '100%',
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    text: {
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  text: {
       color: "black",
       fontSize: 16,
     },
     eventContainer: {
       alignSelf: 'center',
       backgroundColor: '#ddd4d4',
-      width: '90%',
+      width: '100%',
       marginVertical: 6,
       padding: 10,
       borderRadius: 10,
@@ -298,9 +340,17 @@ const styles = StyleSheet.create({
     },
     textinput: {
       padding: 3,
-      color: 'white',
+      color: '#000000',
       width: '100%'
-    }
+    },
+    closeButton: {
+      position: "absolute",
+      right: 0,
+      top: 0,
+      padding: 10,
+      backgroundColor: "#5656e2",
+      borderTopRightRadius: 20,
+    },
   });
 
 

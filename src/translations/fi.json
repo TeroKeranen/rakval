@@ -206,6 +206,10 @@
   "etusivuUnfinishedButton": "Keskeneräiset", 
   "etusivuStartingdButton": "Alkamassa" ,
   "etusivuActive": "Aktiivinen",
+  "etusivu-activeTitle": "Aktiivinen työ",
+  "etusivu-noActivework": "Ei työpäivää käynnissä",
+  "etusivu-futureworkTitle": "Alkavat työt",
+  "etusivu-noFuturework": "Ei tulevia työmaita",
 
   "refreshTokenLimitError" : "Olet saavuttanut työmaiden luomisen rajan",
   "refreshTokenResorceError" : "Resurssia ei löydy.",

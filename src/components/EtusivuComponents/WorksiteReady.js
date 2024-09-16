@@ -1,19 +1,34 @@
 import { useContext } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import { FlatList, Modal, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import {calculateTotaWorkTime} from '../../utils/workingHours'
 import { useTranslation } from "react-i18next";
 
 
-const WorksiteReady = ({worksites, title}) => {
+const WorksiteReady = ({worksites, title, modalVisible, onClose}) => {
 
   
     const { t } = useTranslation();
 
+
     return (
+      <Modal
+      visible={modalVisible}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={onClose}
+      >
+        <SafeAreaView style={{flex:1}}>
+
         <View style={styles.container}>
           <Text style={styles.title}>{title}</Text>
           
+          {worksites.length < 1 && (
+            <View style={styles.container}>
+
+              <Text style={{color: 'white', fontSize: 20}}> ei dataa </Text>
+            </View>
+            )}
 
           <FlatList
             data={worksites}
@@ -35,8 +50,14 @@ const WorksiteReady = ({worksites, title}) => {
               </View>
               )
             }}/>
-            
+
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color="#f5f5f5" />
+            </TouchableOpacity>
+
         </View>
+        </SafeAreaView>
+        </Modal>
       );
     
 
@@ -45,8 +66,22 @@ const WorksiteReady = ({worksites, title}) => {
 const styles = StyleSheet.create({
   container: {
     
-    width: '90%',
-    borderRadius: 5,
+    backgroundColor: "#333644",
+    borderTopLeftRadius: 20, // Pyöristetään vain yläkulmat
+    borderTopRightRadius: 20,
+    paddingVertical: 35,
+    // paddingHorizontal: 55,
+    width: "100%",
+    height: '100%',
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
     
     
   },
@@ -70,7 +105,15 @@ const styles = StyleSheet.create({
       shadowOffset: { width: 1, height: 1 },
       shadowOpacity: 0.4,
     
-  }
+  },
+  closeButton: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    padding: 10,
+    backgroundColor: "#5656e2",
+    borderTopRightRadius: 20,
+  },
 })
 
 
