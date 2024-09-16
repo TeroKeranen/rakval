@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, Animated, Easing } from "react-native";
+import { StyleSheet, Text, View, Animated, Easing, Pressable } from "react-native";
 import { useContext, useEffect, useRef, useState } from "react";
 
 import {Context as AuthContext} from '../../context/AuthContext'
 import { Context as WorksiteContext } from "../../context/WorksiteContext";
 import { useTranslation } from "react-i18next";
+import { useNavigation } from "@react-navigation/native";
 
 
 const Clocking = ({worksites, userRole="admin", userId}) => {
@@ -12,7 +13,7 @@ const Clocking = ({worksites, userRole="admin", userId}) => {
 
     const [activeTime, setActiveTime] = useState("N/A"); // Kellotusajan tila
     const [activeWorksite, setActiveWorksite] = useState(null); // Aktiivinen työmaa
-
+    const navigation = useNavigation();
     const {t} = useTranslation();
 
     const pulseAnim = useRef(new Animated.Value(1)).current; // Animaation arvo
@@ -121,7 +122,11 @@ const Clocking = ({worksites, userRole="admin", userId}) => {
       startPulse(); // Käynnistä sykintä, kun on aktiivinen työmaa
     }
   }, [activeWorksite]);
-      
+  
+
+    const handlePressable = (worksiteId) => {
+      navigation.navigate("WorksiteDetails", { worksiteId });
+    }
     
 
     if (!activeWorksite) {
@@ -133,25 +138,27 @@ const Clocking = ({worksites, userRole="admin", userId}) => {
       }
 
     return (
-    <View style={styles.container}>
-      <View style={styles.ballContainer}>
-        <Animated.View
-          style={[styles.circle, { transform: [{ scale: pulseAnim }] }]}
-        >
-          {/* Näytä laskettu kellotusaika */}
-          <Text style={styles.text}>{activeTime}</Text>
-        </Animated.View>
-      </View>
-
-        <View style={styles.textContainer}>
-          <View style={styles.textBox}>
-            
-            <Text style={styles.text}>
-              {activeWorksite.address}, {activeWorksite.city}
-            </Text>
-          </View>
+    <Pressable onPress={() => handlePressable(activeWorksite._id)} style={({pressed}) => pressed && styles.pressed}>
+      <View style={styles.container}>
+        <View style={styles.ballContainer}>
+          <Animated.View
+            style={[styles.circle, { transform: [{ scale: pulseAnim }] }]}
+            >
+            {/* Näytä laskettu kellotusaika */}
+            <Text style={styles.text}>{activeTime}</Text>
+          </Animated.View>
         </View>
-    </View>
+
+          <View style={styles.textContainer}>
+            <View style={styles.textBox}>
+              
+              <Text style={styles.text}>
+                {activeWorksite.address}, {activeWorksite.city}
+              </Text>
+            </View>
+          </View>
+      </View>
+    </Pressable>
     )
 
 }
@@ -202,7 +209,10 @@ const styles = StyleSheet.create({
       },
     text: {
         color: 'white'
-    }
+    },
+    pressed: {
+      opacity: 0.75,
+    },
 })
 
 export default Clocking;
