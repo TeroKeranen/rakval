@@ -206,6 +206,10 @@
   "etusivuUnfinishedButton": "Unfinished", 
   "etusivuStartingdButton": "Starting",
   "etusivuActive": "Active",
+  "etusivu-activeTitle": "Active work",
+  "etusivu-noActivework": "No workday in progress",
+  "etusivu-futureworkTitle": "Upcoming works",
+  "etusivu-noFuturework": "No upcoming work sites",
 
   "refreshTokenLimitError" : "You have reached the limit for creating worksites.",
   "refreshTokenResorceError" : "Resource not found.",

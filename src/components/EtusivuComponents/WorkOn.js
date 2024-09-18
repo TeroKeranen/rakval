@@ -1,10 +1,11 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, Modal, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Context as AuthContext } from "../../context/AuthContext";
 import { Context as WorksiteContext } from "../../context/WorksiteContext";
 import { useContext, useEffect, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
-const WorkOn = ({worksites, userRole="admin", userId="12344"}) => {
+const WorkOn = ({worksites, userRole="admin", userId="12344", modalVisible, onClose}) => {
 
     const {state: authState, fetchUserWithId } = useContext(AuthContext)
     const {state: worksiteState,fetchWorksites} = useContext(WorksiteContext)
@@ -81,6 +82,12 @@ const WorkOn = ({worksites, userRole="admin", userId="12344"}) => {
     }
 
     return (
+        <Modal visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={onClose}>
+        <SafeAreaView style={{flex:1}}>
+
         <View style={styles.container}>
             <Text style={styles.title}>{t('workOn')}</Text>
             <FlatList 
@@ -92,7 +99,12 @@ const WorkOn = ({worksites, userRole="admin", userId="12344"}) => {
                 keyExtractor={(worksite) => `tyomaa-${worksite.worksiteInfo._id}`}
                 
                 />
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color="#f5f5f5" />
+            </TouchableOpacity>
         </View>
+        </SafeAreaView>
+        </Modal>
         
     )
 
@@ -101,7 +113,22 @@ const WorkOn = ({worksites, userRole="admin", userId="12344"}) => {
 const styles = StyleSheet.create({
     container: {
         
-        width: '90%'
+        backgroundColor: "#333644",
+        borderTopLeftRadius: 20, // Pyöristetään vain yläkulmat
+        borderTopRightRadius: 20,
+        paddingVertical: 35,
+        // paddingHorizontal: 55,
+        width: "100%",
+        height: '100%',
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     title: {
         color: 'white',
@@ -121,7 +148,15 @@ const styles = StyleSheet.create({
       shadowRadius: 4,
       shadowOffset: { width: 1, height: 1 },
       shadowOpacity: 0.4,
-    }
+    },
+    closeButton: {
+        position: "absolute",
+        right: 0,
+        top: 0,
+        padding: 10,
+        backgroundColor: "#5656e2",
+        borderTopRightRadius: 20,
+      },
 })
 
 export default WorkOn;

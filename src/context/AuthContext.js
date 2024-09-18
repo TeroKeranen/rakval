@@ -435,7 +435,7 @@ const updateSubscription = (dispatch) => async (subscription) => {
     const userJson = await AsyncStorage.getItem('user');
     const user = JSON.parse(userJson);
     const updatedUser = {...user, subscription};
-
+    
     await AsyncStorage.setItem('user', JSON.stringify(updatedUser))
 
     dispatch({type: 'update_subscription', payload: {subscription}})

@@ -219,10 +219,10 @@ const Subscription = () => {
 
     return (
         <SafeAreaView style={{flex:1, backgroundColor: "#404558"}}>
-
-                {!activeProductIdentifier && <RestorePurchasesButton setIsLoading={setIsLoading} isLoading={isLoading}/>}
+            
 
                 <View style={styles.container}>
+                {!activeProductIdentifier && <RestorePurchasesButton setIsLoading={setIsLoading} isLoading={isLoading}/>}
                     
                     <FlatList
                         data={products}
@@ -233,6 +233,7 @@ const Subscription = () => {
                         showsHorizontalScrollIndicator={false} // Piilottaa vaakasuoran vierityspalkin
                         onScroll={handleScroll} // Kutsutaan, kun käyttäjä selaa
                         scrollEventThrottle={16} // Suorituskykyyn liittyvä asetus
+                        contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
                         />
 
                     <View style={styles.pagination}>
@@ -293,14 +294,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     productContainer: {
-        width: width, // Asetetaan tuotteen leveys näytön leveydeksi
-        height: height,
+        width: width *0.8, // Asetetaan tuotteen leveys näytön leveydeksi
+        height: height * 0.6,
+        marginHorizontal: width * 0.1,
         // justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
         backgroundColor: "#dad0d0", 
         borderColor: '#ccc',
-        borderRadius: 5,
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.45,
+        shadowRadius: 6,
+        elevation: 5,
     },
     textContainer: {
         flex:1,
@@ -385,6 +395,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: height * 0.15, // Nostaa pisteet ylemmäs
         flexDirection: 'row',
+        
+        padding: 5,
+        borderRadius: 5
     },
     dot: {
         height: 10,

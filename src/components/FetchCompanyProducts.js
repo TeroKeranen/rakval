@@ -42,9 +42,9 @@ const FetchCompanyProducts = ({products, onHandleProductSelect}) => {
                 />
 
             <View style={styles.productTitleContainer}>
-                <Text style={styles.productTitleText}>Tuote</Text>
-                <Text style={styles.productTitleText}>Määrä</Text>
-                <Text style={styles.productTitleText}>hinta</Text>
+                <Text style={styles.productTitleText}>{t('product')}</Text>
+                <Text style={styles.productTitleText}>{t('quantity')}</Text>
+                <Text style={styles.productTitleText}>{t('price')}</Text>
             </View>
 
             <FlatList
