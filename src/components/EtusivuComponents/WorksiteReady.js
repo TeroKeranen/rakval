@@ -24,9 +24,9 @@ const WorksiteReady = ({worksites, title, modalVisible, onClose}) => {
           <Text style={styles.title}>{title}</Text>
           
           {worksites.length < 1 && (
-            <View style={styles.container}>
-
-              <Text style={{color: 'white', fontSize: 20}}> ei dataa </Text>
+            
+            <View style={styles.empthyContainer}>
+              <Text style={styles.text}>{t('worksite-no-worksites')}</Text>
             </View>
             )}
 
@@ -114,6 +114,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#5656e2",
     borderTopRightRadius: 20,
   },
+  empthyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',  // Center the content horizontally
+    
+  },
+  text:{
+    color: 'white',
+    fontSize: 20,
+    
+    textAlign: 'center',
+  }
 })
 
 
