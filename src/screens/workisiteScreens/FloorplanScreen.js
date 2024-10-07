@@ -432,20 +432,26 @@ useEffect(() => {
               <Image 
               style={[{ width: '100%', height: '100%', resizeMode: 'contain' }, isSelected ? styles.selectedImage : {}]}
               // source={{ uri: `${process.env.FLOORPLAN_PHOTO_URL}${item.key}` }}
-              source={{ uri: item.signedUrl?.url || 'fallbackURL' }}
+              source={{ uri: item?.signedUrl?.url || 'fallbackURL' }}
+              onError={(e) => console.log("Image load error", e.nativeEvent.error)}
               
               onLoad={handleImageLoad}
               />
               
+              
               ) : (
                 
-                <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
-                    
-                      <Image style={[{ width: '100%', height: '100%', resizeMode: 'contain' }, isSelected ? styles.selectedImage : {}]} source={{ uri: item.signedUrl?.url }} onLoad={handleImageLoad} />
-                      
-                    
+                item.signedUrl?.url ? ( // Tarkistetaan, että signedUrl on olemassa ennen kuin renderöidään TouchableOpacity
+                  <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>
+                    <Image 
+                      style={[{ width: '100%', height: '100%', resizeMode: 'contain' }, isSelected ? styles.selectedImage : {}]} 
+                      source={{ uri: item.signedUrl?.url }}
+                      onLoad={handleImageLoad}
+                    />
                   </TouchableOpacity>
-            )
+                ) : (
+                  <Text>Image not available</Text> // Voit näyttää oletusviestin, jos kuvaa ei ole
+                ))
           }
             
               {/* <TouchableOpacity onPress={handlePress} style={styles.gestureContainer}>

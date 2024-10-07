@@ -5,6 +5,7 @@ import {Context as AuthContext} from '../../context/AuthContext'
 import { Context as WorksiteContext } from "../../context/WorksiteContext";
 import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
+import DownloadScreen from "../DownloadScreen";
 
 
 const Clocking = ({worksites, userRole="admin", userId}) => {
@@ -15,6 +16,7 @@ const Clocking = ({worksites, userRole="admin", userId}) => {
     const [activeWorksite, setActiveWorksite] = useState(null); // Aktiivinen työmaa
     const navigation = useNavigation();
     const {t} = useTranslation();
+    const [isLoading, setIsLoading] = useState(false);
 
     const pulseAnim = useRef(new Animated.Value(1)).current; // Animaation arvo
 
@@ -86,6 +88,7 @@ const Clocking = ({worksites, userRole="admin", userId}) => {
   // Päivitetään kellotusaika reaaliajassa ja työmaan tunnistus
   useEffect(() => {
     const findRunningWorksite = () => {
+      setIsLoading(true);
       const runningWorksites = worksites.reduce((acc, worksite) => {
         const activeWorkDays = worksite.workDays
           ? worksite.workDays.filter((day) => day.running)
@@ -103,15 +106,18 @@ const Clocking = ({worksites, userRole="admin", userId}) => {
       }, []);
 
       if (runningWorksites.length > 0) {
+        
         setActiveWorksite(runningWorksites[0]); // Päivitetään aktiivinen työmaa
       } else {
+        
         setActiveWorksite(null); // Ei aktiivista työmaata
         setActiveTime("N/A"); // Nollataan kellotusaika
       }
+      setIsLoading(false);
     };
 
     findRunningWorksite(); // Päivitetään aktiivinen työmaa ja kellotusaika aina kun `worksites` muuttuu
-
+    
     const interval = setInterval(findRunningWorksite, 60000); // Päivitä kerran minuutissa
 
     return () => clearInterval(interval); // Puhdista intervalli komponentin poistuessa
@@ -128,6 +134,10 @@ const Clocking = ({worksites, userRole="admin", userId}) => {
       navigation.navigate("WorksiteDetails", { worksiteId });
     }
     
+
+    if (isLoading) {
+      return <DownloadScreen message={t('loading')} />
+    }
 
     if (!activeWorksite) {
         return (

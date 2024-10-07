@@ -132,7 +132,7 @@ const MainDrawerNavigator = () => {
             <Drawer.Screen name={t("drawerScreen-worksite")} component={AdminCompanybtmTab} />
             {/* <Drawer.Screen name="työmaat" component={AdminWorksiteTabs} /> */}
             <Drawer.Screen name={t("drawerScreen-company")} component={AdminTabs} />
-            <Drawer.Screen name={t('drawerScreen-membership')} component={Subscription} />
+            {/* <Drawer.Screen name={t('drawerScreen-membership')} component={Subscription} /> */}
             <Drawer.Screen name={t('drawerScreen-instruction')} component={InstructionScreen} />
             
           </>
