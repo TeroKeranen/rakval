@@ -246,7 +246,7 @@ const Events = ({events, modalVisible, onClose}) => {
               }}
               ListEmptyComponent={() => (
                 <View style={styles.emptyListContainer}>
-                  <Text style={styles.emptyListText}>ei dataa</Text>
+                  <Text style={styles.emptyListText}>{t('worksite-no-worksites')}</Text>
                 </View>
               )}
               refreshControl={
