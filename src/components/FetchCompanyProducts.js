@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
     searchInputContainer: {
         borderWidth: 1,
         borderRadius: 5,
-        width: '100%'
+        width: '100%',
+        
 
         
       },
@@ -105,8 +106,9 @@ const styles = StyleSheet.create({
     productItem: {
         // justifyContent: 'center',
         // alignItems: 'center',
-        padding: 4,
+        padding: 8,
         borderBottomWidth: 1,
+        
 
     },
     productContainer: {

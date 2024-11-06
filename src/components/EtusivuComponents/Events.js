@@ -231,7 +231,7 @@ const Events = ({events, modalVisible, onClose}) => {
                           : <Text style={styles.text}>{displayText}</Text>
                         }
                         
-                        <Text style={styles.text}>{timeStampChanger(item.timestamp)}</Text>
+                        <Text style={styles.text}> {timeStampChanger(item.timestamp)}</Text>
                       </View>
 
                       <Text style={styles.text}>{t('constructionSite')}: {item.worksite.address}</Text>

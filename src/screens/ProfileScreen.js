@@ -143,6 +143,10 @@ const ProfileScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
+
+        <View style={styles.title}>
+          <Text style={styles.titleText}>{t('profileScreen-titleText')}</Text>
+        </View>
         
         <View >
           {/* {state.user.email ? <Text style={styles.text}>{t('email')}: {state.user.email}</Text> : null} */}
@@ -190,6 +194,15 @@ const styles = StyleSheet.create({
     color: "black",
     margin: 4,
   },
+  titleText:{
+    color: 'black',
+    fontSize: 24,
+    fontWeight: '800'
+  },
+  title: {
+    
+    alignItems: 'center'
+  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -197,6 +210,7 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     flex: 1,
+    
     backgroundColor: "#e8e8f0",
     width: '90%',
     marginVertical: 20,
