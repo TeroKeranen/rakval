@@ -33,26 +33,32 @@ const ResetRequest = ({navigation}) => {
     return (
         <SafeAreaView style={{flex: 1}}>
 
-                <View style={styles.goBack}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Ionicons name="arrow-back" size={30} color="#507ab8" />
-                    </TouchableOpacity>
-                </View>
             <View style={styles.container}>
-                <Text style={styles.title}>{t('resetRequest-title')}</Text>
-                <TextInput 
-                    placeholder={t('resetRequest-placeholder')}
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    style={styles.textinput}
-                    />
+                <View style={styles.box}>
+
+                    <View style={styles.goBack}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <Ionicons name="arrow-back" size={30} color="#507ab8" />
+                        </TouchableOpacity>
+                    </View>
+                    
+                    <View>
+                        <Text style={styles.title}>{t('resetRequest-title')}</Text>
+                        <TextInput 
+                            placeholder={t('resetRequest-placeholder')}
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            style={styles.textinput}
+                            />
+                        
+                        <TouchableOpacity onPress={handleResetRequest} style={styles.button}>
+                            <Text style={{ color: "white" }}>{t('resetRequest-button')}</Text>
+                        </TouchableOpacity>
+                    </View>
                 
-                <TouchableOpacity onPress={handleResetRequest} style={styles.button}>
-                    <Text style={{ color: "white" }}>{t('resetRequest-button')}</Text>
-                </TouchableOpacity>
-                
+                </View>
             </View>
         </SafeAreaView>
     )
@@ -70,6 +76,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 8
+      },
+      box: {
+        
+        flex: 1,
+        justifyContent: 'space-around'
       },
     textinput: {
         marginVertical: 10,
