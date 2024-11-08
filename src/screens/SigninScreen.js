@@ -66,10 +66,10 @@ const SigninScreen = ({navigation}) => {
           <NavLink text={t('signin-forgotpassword')} routeName="resetpassword" />
         </View>
 
-      </View>
         <View style={styles.languageBox}>
           <ChangeLanguage />
         </View>
+      </View>
     </ScrollView>
     
     </SafeAreaView>
