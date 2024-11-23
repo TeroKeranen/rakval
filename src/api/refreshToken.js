@@ -1,6 +1,8 @@
 import * as SecureStore from 'expo-secure-store';
 import rakval from './rakval';
+import { useNavigation } from '@react-navigation/native';
 
+const navigation = useNavigation();
 
 export const makeApiRequest = async (endpoint, method, data, dispatch) => {
   let token = await SecureStore.getItemAsync('token');
@@ -69,11 +71,9 @@ export const makeApiRequest = async (endpoint, method, data, dispatch) => {
       console.error('Error refreshing token:', error.message);
 
       // Poista tallennetut tokenit ja ohjaa kirjautumissivulle, jos refresh-token ei kelpaa
-      await SecureStore.deleteItemAsync('token');
-      await SecureStore.deleteItemAsync('refreshToken');
-      await clearUser
+      
       await clearUser(dispatch)();
-      navigate('signin'); // Ohjaa käyttäjä kirjautumaan uudelleen
+      navigation.navigate('signin'); // Ohjaa käyttäjä kirjautumaan uudelleen
       // Käsittele virhetilanne
     }
   };
