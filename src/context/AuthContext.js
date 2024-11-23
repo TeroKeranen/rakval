@@ -12,6 +12,8 @@ import { makeApiRequest} from "../api/refreshToken";
 
 const authReducer = (state, action) => {
   switch (action.type) {
+    case "clear_user":
+      return { token: null, refreshToken: null, user: null, company: null, errorMessage: "" };
     case "add_error":
       return { ...state, errorMessage: action.payload };
     case "signup":
@@ -68,6 +70,22 @@ const tryLocalSignin = dispatch => async () => {
  
 
 }
+
+const clearUser = (dispatch) => async () => {
+  try {
+    // Poista kaikki sovellukseen liittyvät tiedot
+    await SecureStore.deleteItemAsync("token");
+    await SecureStore.deleteItemAsync("refreshToken");
+    await AsyncStorage.removeItem("user");
+    await AsyncStorage.removeItem("company");
+    await AsyncStorage.clear(); // Tyhjennä mahdolliset muut tallennetut tiedot
+
+    // Dispatch "clear_user"-toiminto
+    dispatch({ type: "clear_user" });
+  } catch (error) {
+    console.error("Error clearing user data:", error);
+  }
+};
 
 // Käytetään puhdistamaan error message
 const clearErrorMessage = dispatch => () => {
@@ -492,6 +510,7 @@ export const { Provider, Context } = createDataContext(authReducer, {
     resetPasswordRequst,
     updateSubscription,
     subscriptionDatabaseUpdate,
+    clearUser
     
   }, 
   { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });

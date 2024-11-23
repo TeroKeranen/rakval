@@ -1,6 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import rakval from './rakval';
 
+
 export const makeApiRequest = async (endpoint, method, data, dispatch) => {
   let token = await SecureStore.getItemAsync('token');
   let headers = { Authorization: `Bearer ${token}` };
@@ -46,6 +47,12 @@ export const makeApiRequest = async (endpoint, method, data, dispatch) => {
     
     try {
       const refreshToken = await SecureStore.getItemAsync('refreshToken');
+
+      //uusi
+      if (!refreshToken) {
+        throw new Error('Refresh token missing');
+    }
+
       const response = await rakval.post('/refresh', { token: refreshToken });
   
       if (response.status === 200) {
@@ -58,6 +65,15 @@ export const makeApiRequest = async (endpoint, method, data, dispatch) => {
       }
     } catch (error) {
       console.error('Virhe uusittaessa access tokenia:', error);
+
+      console.error('Error refreshing token:', error.message);
+
+      // Poista tallennetut tokenit ja ohjaa kirjautumissivulle, jos refresh-token ei kelpaa
+      await SecureStore.deleteItemAsync('token');
+      await SecureStore.deleteItemAsync('refreshToken');
+      await clearUser
+      await clearUser(dispatch)();
+      navigate('signin'); // Ohjaa käyttäjä kirjautumaan uudelleen
       // Käsittele virhetilanne
     }
   };
