@@ -79,7 +79,7 @@ const clearUser = (dispatch) => async () => {
     await AsyncStorage.removeItem("user");
     await AsyncStorage.removeItem("company");
     await AsyncStorage.clear(); // Tyhjennä mahdolliset muut tallennetut tiedot
-
+    navigate('signin');
     // Dispatch "clear_user"-toiminto
     dispatch({ type: "clear_user" });
   } catch (error) {
@@ -330,7 +330,7 @@ const fetchUser = (dispatch) => async () => {
     
     dispatch({ type: 'fetch_user', payload: response.data });
   } catch (error) {
-    console.error('Virhe haettaessa käyttäjän tietoja:', error.message);
+    // console.log('Virhe haettaessa käyttäjän tietoja:', error.message);
     // Käsittele virhetilanne, esim. näyttämällä virheilmoitus
   }
 };
@@ -345,7 +345,7 @@ const fetchUserWithId = (dispatch) => {
       
       return response.data;
     } catch (error) {
-      console.error('Virhe haettaessa käyttäjän tietoja:', error);
+      // console.log('Virhe haettaessa käyttäjän tietoja:', error);
       return null; // Voit palauttaa null tai käsitellä virhettä muulla tavalla
     }
   }

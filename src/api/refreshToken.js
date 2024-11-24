@@ -1,8 +1,11 @@
 import * as SecureStore from 'expo-secure-store';
 import rakval from './rakval';
 import { useNavigation } from '@react-navigation/native';
+// import { useContext } from 'react';
+// import {Context as AuthContext} from '../context/AuthContext';
+// const navigation = useNavigation();
 
-const navigation = useNavigation();
+// const {clearUser} = useContext(AuthContext);
 
 export const makeApiRequest = async (endpoint, method, data, dispatch) => {
   let token = await SecureStore.getItemAsync('token');
@@ -66,14 +69,14 @@ export const makeApiRequest = async (endpoint, method, data, dispatch) => {
         // Käsittele virhetilanne (esim. ohjaa kirjautumissivulle)
       }
     } catch (error) {
-      console.error('Virhe uusittaessa access tokenia:', error);
+      console.log('Virhe uusittaessa access tokenia:', error);
 
-      console.error('Error refreshing token:', error.message);
-
-      // Poista tallennetut tokenit ja ohjaa kirjautumissivulle, jos refresh-token ei kelpaa
+      console.log('Error refreshing token:', error.message);
       
-      await clearUser(dispatch)();
-      navigation.navigate('signin'); // Ohjaa käyttäjä kirjautumaan uudelleen
+      // Poista tallennetut tokenit ja ohjaa kirjautumissivulle, jos refresh-token ei kelpaa
+      dispatch({type: 'clear_user', payload: ""})
+      // await clearUser(dispatch)();
+      // navigation.navigate('signin'); // Ohjaa käyttäjä kirjautumaan uudelleen
       // Käsittele virhetilanne
     }
   };
