@@ -2,12 +2,15 @@ import { useContext, useState } from "react";
 import { Alert, Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Context as AuthContext } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { ZoomIn } from "react-native-reanimated";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const ResetRequest = ({navigation}) => {
     const {t} = useTranslation();
     const {state, resetPasswordRequst} = useContext(AuthContext);
     const [email, setEmail] = useState('');
-
+    
     const handleResetRequest = async () => {
 
         if (email.includes('@')) {
@@ -26,23 +29,36 @@ const ResetRequest = ({navigation}) => {
         }
     }
 
+ 
     return (
         <SafeAreaView style={{flex: 1}}>
 
             <View style={styles.container}>
-                <Text style={styles.title}>{t('resetRequest-title')}</Text>
-                <TextInput 
-                    placeholder={t('resetRequest-placeholder')}
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    style={styles.textinput}
-                    />
+                <View style={styles.box}>
+
+                    <View style={styles.goBack}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <Ionicons name="arrow-back" size={30} color="#507ab8" />
+                        </TouchableOpacity>
+                    </View>
+                    
+                    <View>
+                        <Text style={styles.title}>{t('resetRequest-title')}</Text>
+                        <TextInput 
+                            placeholder={t('resetRequest-placeholder')}
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            style={styles.textinput}
+                            />
+                        
+                        <TouchableOpacity onPress={handleResetRequest} style={styles.button}>
+                            <Text style={{ color: "white" }}>{t('resetRequest-button')}</Text>
+                        </TouchableOpacity>
+                    </View>
                 
-                <TouchableOpacity onPress={handleResetRequest} style={styles.button}>
-                    <Text style={{ color: "white" }}>{t('resetRequest-button')}</Text>
-                </TouchableOpacity>
+                </View>
             </View>
         </SafeAreaView>
     )
@@ -60,6 +76,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 8
+      },
+      box: {
+        
+        flex: 1,
+        justifyContent: 'space-around'
       },
     textinput: {
         marginVertical: 10,
@@ -84,6 +105,10 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
       },
+      goBack: {
+        
+        padding: 4,
+      }
 })
 
 

@@ -12,6 +12,8 @@ import { makeApiRequest} from "../api/refreshToken";
 
 const authReducer = (state, action) => {
   switch (action.type) {
+    case "clear_user":
+      return { token: null, refreshToken: null, user: null, company: null, errorMessage: "" };
     case "add_error":
       return { ...state, errorMessage: action.payload };
     case "signup":
@@ -68,6 +70,22 @@ const tryLocalSignin = dispatch => async () => {
  
 
 }
+
+const clearUser = (dispatch) => async () => {
+  try {
+    // Poista kaikki sovellukseen liittyvät tiedot
+    await SecureStore.deleteItemAsync("token");
+    await SecureStore.deleteItemAsync("refreshToken");
+    await AsyncStorage.removeItem("user");
+    await AsyncStorage.removeItem("company");
+    await AsyncStorage.clear(); // Tyhjennä mahdolliset muut tallennetut tiedot
+    navigate('signin');
+    // Dispatch "clear_user"-toiminto
+    dispatch({ type: "clear_user" });
+  } catch (error) {
+    console.error("Error clearing user data:", error);
+  }
+};
 
 // Käytetään puhdistamaan error message
 const clearErrorMessage = dispatch => () => {
@@ -312,7 +330,7 @@ const fetchUser = (dispatch) => async () => {
     
     dispatch({ type: 'fetch_user', payload: response.data });
   } catch (error) {
-    console.error('Virhe haettaessa käyttäjän tietoja:', error.message);
+    // console.log('Virhe haettaessa käyttäjän tietoja:', error.message);
     // Käsittele virhetilanne, esim. näyttämällä virheilmoitus
   }
 };
@@ -327,7 +345,7 @@ const fetchUserWithId = (dispatch) => {
       
       return response.data;
     } catch (error) {
-      console.error('Virhe haettaessa käyttäjän tietoja:', error);
+      // console.log('Virhe haettaessa käyttäjän tietoja:', error);
       return null; // Voit palauttaa null tai käsitellä virhettä muulla tavalla
     }
   }
@@ -492,6 +510,7 @@ export const { Provider, Context } = createDataContext(authReducer, {
     resetPasswordRequst,
     updateSubscription,
     subscriptionDatabaseUpdate,
+    clearUser
     
   }, 
   { token: null, errorMessage: "", user: null, company: null, worksiteUser: null });

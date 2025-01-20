@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet,FlatList, ScrollView, Alert, SafeAreaView } from "react-native";
+import { Text, View, StyleSheet,FlatList, ScrollView, Alert, SafeAreaView, Dimensions } from "react-native";
 // import i18next from '../../services/i18n'
 import { useTranslation } from "react-i18next";
 
@@ -9,6 +9,7 @@ import { Context as AuthContext } from "../context/AuthContext";
 import ChangeLanguage from "../components/ChangeLanguage";
 
 
+const windowHeight = Dimensions.get('window').height;
 
 const SigninScreen = ({navigation}) => {
 
@@ -58,10 +59,16 @@ const SigninScreen = ({navigation}) => {
 
       <View style={styles.container}>
         {/* signin */}
-        <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t('signinHeader')}  onSubmit={handleSigIn} />
-        <NavLink text={t("signin-navlink-text")} routeName="signup" />
-        <NavLink text={t('signin-forgotpassword')} routeName="resetpassword" />
-        <ChangeLanguage />
+
+        <View style={styles.signInBox}>
+          <AuthForm headerText={t("signinHeader")} errorMessage={state.errorMessage} submitButtonText={t('signinHeader')}  onSubmit={handleSigIn} />
+          <NavLink text={t("signin-navlink-text")} routeName="signup" />
+          <NavLink text={t('signin-forgotpassword')} routeName="resetpassword" />
+        </View>
+
+        <View style={styles.languageBox}>
+          <ChangeLanguage />
+        </View>
       </View>
     </ScrollView>
     
@@ -72,10 +79,17 @@ const SigninScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
     padding: 40,
     justifyContent: "center",
     marginBottom: 250,
+    
   },
+  languageBox: {
+    flex: 1, 
+    marginVertical: 40,
+  },
+ 
 });
 
 export default SigninScreen;

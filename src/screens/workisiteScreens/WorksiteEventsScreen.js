@@ -59,7 +59,7 @@ const WorksiteEventsScreen = () => {
     const renderEmptyComponent = () => {
         return (
             <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>Ei dataa</Text>
+                <Text style={styles.emptyText}>{t('worksite-no-worksites')}</Text>
             </View>
         );
         

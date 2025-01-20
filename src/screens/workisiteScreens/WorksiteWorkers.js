@@ -51,10 +51,10 @@ const WorksiteWorkers = () => {
         
     },[companyState.company, authState])
 
-    useEffect(() => {
+    // useEffect(() => {
       
-      fetchSubscription(setMaxWorkers, setCurrentWorkers, currentWorkersLenght)
-    },[currentWorkersLenght])
+    //   fetchSubscription(setMaxWorkers, setCurrentWorkers, currentWorkersLenght)
+    // },[currentWorkersLenght])
 
     
     const handleSelectWorker = (workerId) => {
@@ -77,7 +77,7 @@ const WorksiteWorkers = () => {
           if (result.success && result.alreadyAdded) {
               Alert.alert(t('worksiteWorker-alreadyAddeError'));
           } else if (result.success) {
-              Alert.alert("Työntekijä lisätty onnistuneesti");
+              Alert.alert(t('worksiteWorker-addWorkerSuccess'));
               setSelecterWorker(null);
           } else {
               Alert.alert("Virhe", result.message);
