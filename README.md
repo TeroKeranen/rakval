@@ -6,9 +6,21 @@ eas build -p android --profile preview
 ```
 
 ## Build eas build development
+This project includes native libraries, so follow these instructions when making changes to the code and want to see the changes immediately.
+Your phone and the computer must be on the same network!
+
+1. Build project
 ```
-eas build --profile development --platform ios
+eas build --profile development --platform ios (You can use --platform all if you want to build for android and ios)
 ```
+2. Download the project using the QR code.
+
+3. Start the app with
+    ```
+    npm start
+    ```
+
+4. Scan QR code to open app.
 
 ## How to Build and Submit an Update to Apple Developer
 
